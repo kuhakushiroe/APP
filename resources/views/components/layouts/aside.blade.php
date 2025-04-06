@@ -7,8 +7,9 @@
         <!--begin::Brand Link-->
         <a href="/" class="brand-link">
             <!--begin::Brand Image-->
-            <img src="../../../dist/assets/img/AdminLTELogo.png" alt="AdminLTE Logo"
-                class="brand-image opacity-75 shadow" />
+            <img src="{{ asset('storage/LOGO SHE-G.png') }}" class="rounded brand-image"
+                style="background-color: white; padding: 5px;" />
+
             <!--end::Brand Image-->
             <!--begin::Brand Text-->
             <span class="brand-text fw-light">SHE-G</span>

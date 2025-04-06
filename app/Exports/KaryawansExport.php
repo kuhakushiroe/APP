@@ -15,70 +15,60 @@ class KaryawansExport implements FromCollection, WithHeadings
     {
         if (auth()->user()->hasRole('superadmin')) {
             return Karyawan::select(
-                'foto',
                 'nik',
                 'nrp',
                 'tgl_lahir',
                 'nama',
-                'jenis_kelamin',
-                'tempat_lahir',
-                'agama',
-                'gol_darah',
-                'status_perkawinan',
                 'perusahaan',
-                'kontraktor',
                 'dept',
                 'jabatan',
+                'doh',
                 'no_hp',
                 'alamat',
                 'domisili',
-                'status'
+                'status',
+                'versatility',
+                'exp_id',
+                'exp_kimper'
             )->get();
         } else {
-
             return Karyawan::select(
-                'foto',
                 'nik',
                 'nrp',
                 'tgl_lahir',
                 'nama',
-                'jenis_kelamin',
-                'tempat_lahir',
-                'agama',
-                'gol_darah',
-                'status_perkawinan',
                 'perusahaan',
-                'kontraktor',
                 'dept',
                 'jabatan',
+                'doh',
                 'no_hp',
                 'alamat',
                 'domisili',
-                'status'
+                'status',
+                'versatility',
+                'exp_id',
+                'exp_kimper'
             )->where('dept', auth()->user()->subrole)->get();
         }
     }
     public function headings(): array
     {
         return [
-            'foto',
             'nik',
             'nrp',
             'tgl_lahir',
             'nama',
-            'jenis_kelamin',
-            'tempat_lahir',
-            'agama',
-            'gol_darah',
-            'status_perkawinan',
             'perusahaan',
-            'kontraktor',
             'dept',
             'jabatan',
+            'doh',
             'no_hp',
             'alamat',
             'domisili',
-            'status'
+            'status',
+            'versatility',
+            'exp_id',
+            'exp_kimper'
         ];
     }
 }

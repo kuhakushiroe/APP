@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>{{ $title ?? 'Page Title' }}</title>
-    <link rel="icon" href="../../../dist/assets/img/AdminLTELogo.png" type="image/x-icon" />
+    <link rel="icon" href="{{ asset('storage/LOGO SHE-G.png') }}" type="image/x-icon" />
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     <!-- Scripts -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"

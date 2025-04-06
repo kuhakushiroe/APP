@@ -17,26 +17,43 @@ class KaryawanImport implements ToModel, WithHeadingRow
      */
     public function model(array $row)
     {
-        Karyawan::create([
-            'foto' => $row['foto'],
-            'nik' => $row['nik'],
-            'nrp' => $row['nrp'],
-            'tgl_lahir' => $row['tgl_lahir'],
-            'nama' => $row['nama'],
-            'jenis_kelamin' => $row['jenis_kelamin'],
-            'tempat_lahir' => $row['tempat_lahir'],
-            'agama' => $row['agama'],
-            'gol_darah' => $row['gol_darah'],
-            'status_perkawinan' => $row['status_perkawinan'],
-            'perusahaan' => $row['perusahaan'],
-            'kontraktor' => $row['kontraktor'],
-            'dept' => $row['dept'],
-            'jabatan' => $row['jabatan'],
-            'no_hp' => $row['no_hp'],
-            'alamat' => $row['alamat'],
-            'domisili' => $row['domisili'],
-            'status' => $row['status'],
-        ]);
+        if (auth()->user()->hasRole('superadmin')) {
+            Karyawan::create([
+                'nik' => $row['nik'],
+                'nrp' => $row['nrp'],
+                'doh' => $row['doh'],
+                'tgl_lahir' => $row['tgl_lahir'],
+                'nama' => $row['nama'],
+                'perusahaan' => $row['perusahaan'],
+                'dept' => $row['dept'],
+                'jabatan' => $row['jabatan'],
+                'no_hp' => $row['no_hp'],
+                'alamat' => $row['alamat'],
+                'domisili' => $row['domisili'],
+                'status' => $row['status'],
+                'versatility' => $row['versatility'],
+                'exp_id' => $row['exp_id'],
+                'exp_kimper' => $row['exp_kimper'],
+            ]);
+        } else {
+            Karyawan::create([
+                'nik' => $row['nik'],
+                'nrp' => $row['nrp'],
+                'doh' => $row['doh'],
+                'tgl_lahir' => $row['tgl_lahir'],
+                'nama' => $row['nama'],
+                'perusahaan' => $row['perusahaan'],
+                'dept' => auth()->user()->subrole,
+                'jabatan' => $row['jabatan'],
+                'no_hp' => $row['no_hp'],
+                'alamat' => $row['alamat'],
+                'domisili' => $row['domisili'],
+                'status' => $row['status'],
+                'versatility' => $row['versatility'],
+                'exp_id' => $row['exp_id'],
+                'exp_kimper' => $row['exp_kimper'],
+            ]);
+        }
         User::create([
             'name' => $row['nama'],
             'username' => $row['nrp'],

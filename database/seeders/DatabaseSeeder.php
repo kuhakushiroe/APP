@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Departments;
 use App\Models\User;
+use Carbon\Carbon;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -17,29 +18,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(100)->create();
-
+        // Departments
         Departments::insert([
-            [
-                'name_department' => 'ENGINEERING',
-                'description_department' => 'ENGINEERING',
-            ],
-            [
-                'name_department' => 'PRODUKSI',
-                'description_department' => 'PRODUKSI',
-            ],
-            [
-                'name_department' => 'FLO',
-                'description_department' => 'FLO',
-            ],
-            [
-                'name_department' => 'SHE',
-                'description_department' => 'SHE',
-            ]
+            ['name_department' => 'ENGINEERING', 'description_department' => 'ENGINEERING'],
+            ['name_department' => 'PRODUKSI', 'description_department' => 'PRODUKSI'],
+            ['name_department' => 'FLO', 'description_department' => 'FLO'],
+            ['name_department' => 'SHE', 'description_department' => 'SHE'],
         ]);
 
-        $departments = Departments::pluck('name_department')->toArray();
-
+        // User init
         User::create([
             'name' => 'Admin',
             'username' => 'admin1',
@@ -71,20 +58,34 @@ class DatabaseSeeder extends Seeder
             'subrole' => 'skd',
             'password' => Hash::make('password'),
         ]);
-        // Loop untuk membuat 100 data karyawan
-        DB::transaction(function () {
-            $faker = Faker::create(); // Sesuaikan dengan kebutuhan
+
+        // Helper untuk tanggal expired (bisa 1 tahun ke depan atau belakang)
+        function randomExpireDate()
+        {
+            $direction = rand(0, 1) ? 'add' : 'sub';
+            return Carbon::now()->$direction('1 year')->format('Y-m-d');
+        }
+
+        // Array kendaraan untuk versatility
+        $kendaraanList = ['Forklift', 'Excavator', 'Dump Truck', 'Bulldozer', 'Loader', 'Crane', 'Motor Grader', 'Skid Steer'];
+
+        // Insert 100 karyawan
+        DB::transaction(function () use ($kendaraanList) {
+            $faker = Faker::create();
+            $departments = Departments::pluck('name_department')->toArray();
 
             foreach (range(1, 100) as $index) {
-                $departments = Departments::pluck('name_department')->toArray();
-                // Generate unique NRP & NIK
-                $nrp = $faker->unique()->numerify('###########'); // 11 digit angka
-                $nik = $faker->unique()->numerify('###########'); // 11 digit angka
+                // Unique NIK dan NRP
+                $nrp = $faker->unique()->numerify('###########');
+                $nik = $faker->unique()->numerify('###########');
 
-                // Pilih subrole secara acak
+                // Subrole acak dari daftar departemen
                 $randomSubrole = $departments[array_rand($departments)];
 
-                // Insert data karyawan
+                // Ambil 3-5 kendaraan acak, pisahkan dengan koma
+                $selectedKendaraan = collect($kendaraanList)->random(rand(3, 5))->implode(', ');
+
+                // Data karyawan
                 DB::table('karyawans')->insert([
                     'nik' => $nik,
                     'nrp' => $nrp,
@@ -104,11 +105,14 @@ class DatabaseSeeder extends Seeder
                     'alamat' => $faker->address,
                     'domisili' => $faker->randomElement(['lokal', 'non lokal']),
                     'status' => $faker->randomElement(['aktif', 'non aktif']),
+                    'versatility' => $selectedKendaraan,
+                    'exp_id' => randomExpireDate(),
+                    'exp_kimper' => randomExpireDate(),
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
 
-                // Insert data user terkait
+                // Data user terkait
                 User::create([
                     'name' => $faker->name,
                     'username' => $nrp,

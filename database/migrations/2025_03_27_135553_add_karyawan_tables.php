@@ -33,6 +33,9 @@ return new class extends Migration
             $table->string('alamat')->nullable();
             $table->enum('domisili', ['lokal', 'non lokal'])->nullable();
             $table->enum('status', ['aktif', 'non aktif'])->nullable();
+            $table->text('versatility')->nullable();
+            $table->date('exp_id')->nullable();
+            $table->date('exp_kimper')->nullable();
             $table->timestamps();
         });
     }
