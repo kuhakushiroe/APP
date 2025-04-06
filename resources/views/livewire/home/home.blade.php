@@ -92,45 +92,85 @@
     </div>
 
     <script>
-        //-------------
-        // - PIE CHART -
-        //-------------
         const departments = @json($departments->pluck('name_department'));
         const colors = @json($assignedColors);
         const seriesAktif = @json($employeeCountsAktif);
         const seriesNonAktif = @json($employeeCountsNonAktif);
-        const pie_chart_options_aktif = {
-            series: seriesAktif,
-            chart: {
-                type: 'donut',
-            },
-            labels: departments,
-            dataLabels: {
-                enabled: false,
-            },
-            colors: colors,
-        };
-        const pie_chart_options_non_aktif = {
-            series: seriesNonAktif,
-            chart: {
-                type: 'donut',
-            },
-            labels: departments,
-            dataLabels: {
-                enabled: false,
-            },
-            colors: colors,
-        };
 
-        const pie_chart_aktif = new ApexCharts(document.querySelector('#pie-chart-aktif'), pie_chart_options_aktif);
-        pie_chart_aktif.render();
+        let pie_chart_aktif = null;
+        let pie_chart_non_aktif = null;
 
-        const pie_chart_non_aktif = new ApexCharts(document.querySelector('#pie-chart-non-aktif'),
-            pie_chart_options_non_aktif);
-        pie_chart_non_aktif.render();
+        function getLabelColor(theme) {
+            return theme === "dark" ? "#ffffff" : "#000000";
+        }
 
-        //-----------------
-        // - END PIE CHART -
-        //-----------------
+        function renderPieCharts(theme) {
+            const labelColor = getLabelColor(theme);
+
+            const pie_chart_options_aktif = {
+                series: seriesAktif,
+                chart: {
+                    type: 'donut',
+                },
+                labels: departments,
+                dataLabels: {
+                    enabled: false,
+                },
+                colors: colors,
+                legend: {
+                    labels: {
+                        colors: labelColor
+                    }
+                }
+            };
+
+            const pie_chart_options_non_aktif = {
+                series: seriesNonAktif,
+                chart: {
+                    type: 'donut',
+                },
+                labels: departments,
+                dataLabels: {
+                    enabled: false,
+                },
+                colors: colors,
+                legend: {
+                    labels: {
+                        colors: labelColor
+                    }
+                }
+            };
+
+            // Destroy charts if already rendered
+            if (pie_chart_aktif) pie_chart_aktif.destroy();
+            if (pie_chart_non_aktif) pie_chart_non_aktif.destroy();
+
+            // Render charts
+            pie_chart_aktif = new ApexCharts(document.querySelector('#pie-chart-aktif'), pie_chart_options_aktif);
+            pie_chart_aktif.render();
+
+            pie_chart_non_aktif = new ApexCharts(document.querySelector('#pie-chart-non-aktif'),
+                pie_chart_options_non_aktif);
+            pie_chart_non_aktif.render();
+        }
+
+        // Initial render with current theme
+        const currentTheme = document.documentElement.getAttribute("data-bs-theme") || "light";
+        renderPieCharts(currentTheme);
+
+        // Re-render charts when theme changes
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach(mutation => {
+                if (mutation.attributeName === "data-bs-theme") {
+                    const newTheme = document.documentElement.getAttribute("data-bs-theme");
+                    renderPieCharts(newTheme);
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true
+        });
     </script>
+
 </div>
