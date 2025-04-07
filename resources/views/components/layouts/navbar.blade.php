@@ -72,17 +72,18 @@
             <!--begin::User Menu Dropdown-->
             <li class="nav-item dropdown user-menu">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                    <img src="{{ asset('dist/assets/img/user2-160x160.jpg') }}" class="user-image rounded-circle shadow"
+                    <img src="{{ asset('dist/assets/img/avatar5.png') }}" class="user-image rounded-circle shadow"
                         alt="User Image" />
                     <span class="d-none d-sm-inline">{{ auth()->user()->name }}</span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                     <!--begin::User Image-->
                     <li class="user-header text-bg-primary">
-                        <img src="{{ asset('dist/assets/img/user2-160x160.jpg') }}"
+                        <img src="{{ auth()->user()->karyawan?->foto ? asset(auth()->user()->karyawan->foto) : asset('dist/assets/img/avatar5.png') }}"
                             class="rounded-circle shadow text-center" alt="User Image" />
                         <p class="text-center">
                             {{ auth()->user()->name }}
+                            <small>{{ auth()->user()->subrole }}</small>
                         </p>
                     </li>
                     <li class="user-footer">

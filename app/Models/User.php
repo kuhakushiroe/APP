@@ -65,4 +65,8 @@ class User extends Authenticatable
     {
         return in_array($this->subroles, (array) $subroles);
     }
+    public function karyawan()
+    {
+        return $this->hasOne(Karyawan::class, 'nrp', 'username');
+    }
 }

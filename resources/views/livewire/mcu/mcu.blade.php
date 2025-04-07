@@ -27,10 +27,11 @@
                         // Ambil induk (parent item)
                         $subItems = DB::table('mcu')
                             ->where('sub_id', $data->id_mcu) // Ambil subitem berdasarkan sub_id induk
-                            ->orderBy('tgl_mcu', 'desc') // Mengurutkan berdasarkan tanggal MCU
+                            ->orderBy('tgl_mcu', 'asc') // Mengurutkan berdasarkan tanggal MCU
                             ->get(); // Ambil semua subitem sebagai collection
-                        $status = $data->status_;
+                        $status = $data->statusMcu;
                         $canUpload = $status !== '';
+
                     @endphp
 
                     <div class="card card-primary card-outline mb-4">
@@ -136,8 +137,16 @@
                                                     </td>
                                                 </tr>
                                             @endforeach
+                                            @php
+                                                // Cek apakah status MCU induk sudah diverifikasi
+                                                $indukVerified = !empty($data->mcuStatus);
 
-                                            @if ($canUpload)
+                                                // Cek apakah ada subItem yang sudah diverifikasi
+                                                $subItemVerified = $subItems->contains(function ($item) {
+                                                    return !empty($item->status);
+                                                });
+                                            @endphp
+                                            @if ($canUpload && ($indukVerified || $subItemVerified))
                                                 <tr>
                                                     <td colspan="4" class="text-end">
                                                         <button class="btn btn-outline-success btn-sm"

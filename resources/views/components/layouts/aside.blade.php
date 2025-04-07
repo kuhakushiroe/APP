@@ -30,65 +30,175 @@
                     </a>
                 </li>
                 @hasAnyRole(['superadmin', 'admin', 'dokter'])
-                    @hasAnyRole('superadmin')
-                        <li class="nav-header">Master Data</li>
-                        <li class="nav-item">
-                            <a href="/users" class="nav-link @if ($routeName == 'users') active @endif">
-                                <i class="nav-icon bi bi-people"></i>
-                                <p>Users</p>
+                    {{-- MASTER DATA --}}
+                    @hasAnyRole(['superadmin', 'admin'])
+                        @php
+                            $isMasterActive = Str::startsWith($routeName, [
+                                'users',
+                                'departments',
+                                'jabatan',
+                                'perusahaan',
+                                'versatility',
+                                'karyawan',
+                            ]);
+                        @endphp
+                        <li class="nav-item {{ $isMasterActive ? 'menu-open' : '' }}">
+                            <a href="#" class="nav-link {{ $isMasterActive ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-folder"></i>
+                                <p>
+                                    Master Data
+                                    <i class="nav-arrow bi bi-chevron-right"></i>
+                                </p>
                             </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/departments" class="nav-link @if ($routeName == 'departments') active @endif">
-                                <i class="nav-icon bi bi-person-badge"></i>
-                                <p>Departments</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/jabatan" class="nav-link @if ($routeName == 'jabatan') active @endif">
-                                <i class="nav-icon bi bi-person-badge"></i>
-                                <p>Jabatan</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/perusahaan" class="nav-link @if ($routeName == 'perusahaan') active @endif">
-                                <i class="nav-icon bi bi-building"></i>
-                                <p>Perusahaan</p>
-                            </a>
-                        </li>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/versatility" class="nav-link @if ($routeName == 'versatility') active @endif">
-                                <i class="nav-icon bi bi-car-front"></i>
-                                <p>Versatility</p>
-                            </a>
+                            <ul class="nav nav-treeview">
+                                @hasAnyRole(['superadmin'])
+                                    <li class="nav-item">
+                                        <a href="/users" class="nav-link @if ($routeName == 'users') active @endif">
+                                            <i class="nav-icon bi bi-circle"></i>
+                                            <p>Users</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/departments" class="nav-link @if ($routeName == 'departments') active @endif">
+                                            <i class="nav-icon bi bi-circle"></i>
+                                            <p>Departments</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/jabatan" class="nav-link @if ($routeName == 'jabatan') active @endif">
+                                            <i class="nav-icon bi bi-circle"></i>
+                                            <p>Jabatan</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/perusahaan" class="nav-link @if ($routeName == 'perusahaan') active @endif">
+                                            <i class="nav-icon bi bi-circle"></i>
+                                            <p>Perusahaan</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/versatility" class="nav-link @if ($routeName == 'versatility') active @endif">
+                                            <i class="nav-icon bi bi-circle"></i>
+                                            <p>Versatility</p>
+                                        </a>
+                                    </li>
+                                @endhasAnyRole
+                                @hasAnyRole(['superadmin', 'admin'])
+                                    <li class="nav-item">
+                                        <a href="/karyawan" class="nav-link @if ($routeName == 'karyawan') active @endif">
+                                            <i class="nav-icon bi bi-circle"></i>
+                                            <p>Karyawan</p>
+                                        </a>
+                                    </li>
+                                @endhasAnyRole
+                            </ul>
                         </li>
                     @endhasAnyRole
-                    @hasAnyRole(['admin', 'superadmin'])
-                        <li class="nav-item">
-                            <a href="/karyawan" class="nav-link @if ($routeName == 'karyawan') active @endif">
-                                <i class="nav-icon bi bi-people"></i>
-                                <p>Karyawan</p>
+
+                    {{-- PENGAJUAN --}}
+                    @php
+                        $isPengajuanActive = Str::startsWith($routeName, ['mcu', 'id', 'kimper']);
+                    @endphp
+                    <li class="nav-item {{ $isPengajuanActive ? 'menu-open' : '' }}">
+                        <a href="#" class="nav-link {{ $isPengajuanActive ? 'active' : '' }}">
+                            <i class="nav-icon bi bi-journal-plus"></i>
+                            <p>
+                                Pengajuan
+                                <i class="nav-arrow bi bi-chevron-right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="mcu" class="nav-link @if ($routeName == 'mcu') active @endif">
+                                    <i class="nav-icon bi bi-circle"></i>
+                                    <p>MCU</p>
+                                </a>
+                            </li>
+                            @hasAnyRole(['admin', 'superadmin'])
+                                <li class="nav-item">
+                                    <a href="id" class="nav-link @if ($routeName == 'id') active @endif">
+                                        <i class="nav-icon bi bi-circle"></i>
+                                        <p>ID</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="kimper" class="nav-link @if ($routeName == 'kimper') active @endif">
+                                        <i class="nav-icon bi bi-circle"></i>
+                                        <p>KIMPER</p>
+                                    </a>
+                                </li>
+                            @endhasAnyRole
+                        </ul>
+                    </li>
+
+                    {{-- HISTORI --}}
+                    @php
+                        $isHistoriActive = Str::startsWith($routeName, ['histori-mcu']);
+                    @endphp
+                    <li class="nav-item {{ $isHistoriActive ? 'menu-open' : '' }}">
+                        <a href="#" class="nav-link {{ $isHistoriActive ? 'active' : '' }}">
+                            <i class="nav-icon bi bi-clock-history"></i>
+                            <p>
+                                Histori
+                                <i class="nav-arrow bi bi-chevron-right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="histori-mcu" class="nav-link @if ($routeName == 'histori-mcu') active @endif">
+                                    <i class="nav-icon bi bi-circle"></i>
+                                    <p>MCU</p>
+                                </a>
+                            </li>
+                            @hasAnyRole(['admin', 'superadmin'])
+                                <li class="nav-item">
+                                    <a href="id" class="nav-link @if ($routeName == 'id') active @endif">
+                                        <i class="nav-icon bi bi-circle"></i>
+                                        <p>ID</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="kimper" class="nav-link @if ($routeName == 'kimper') active @endif">
+                                        <i class="nav-icon bi bi-circle"></i>
+                                        <p>KIMPER</p>
+                                    </a>
+                                </li>
+                            @endhasAnyRole
+                        </ul>
+                    </li>
+
+                    {{-- CETAK --}}
+                    @hasAnyRole(['superadmin'])
+                        @php
+                            $isCetakActive = Str::startsWith($routeName, ['cetak']);
+                        @endphp
+                        <li class="nav-item {{ $isCetakActive ? 'menu-open' : '' }}">
+                            <a href="#" class="nav-link {{ $isCetakActive ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-printer"></i>
+                                <p>
+                                    Cetak
+                                    <i class="nav-arrow bi bi-chevron-right"></i>
+                                </p>
                             </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="karyawan" class="nav-link @if ($routeName == 'karyawan') active @endif">
+                                        <i class="nav-icon bi bi-circle"></i>
+                                        <p>ID</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="karyawan" class="nav-link @if ($routeName == 'karyawan') active @endif">
+                                        <i class="nav-icon bi bi-circle"></i>
+                                        <p>KIMPER</p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     @endhasAnyRole
-                    @hasAnyRole(['dokter', 'admin', 'superadmin'])
-                        <li class="nav-header">Pengajuan</li>
-                        <li class="nav-item">
-                            <a href="mcu" class="nav-link @if ($routeName == 'mcu') active @endif">
-                                <i class="nav-icon bi bi-hospital"></i>
-                                <p>MCU</p>
-                            </a>
-                        </li>
-                        <li class="nav-header">Histori</li>
-                        <li class="nav-item">
-                            <a href="histori-mcu" class="nav-link @if ($routeName == 'histori-mcu') active @endif">
-                                <i class="nav-icon bi bi-hospital"></i>
-                                <p>MCU</p>
-                            </a>
-                        </li>
-                    @endhasAnyRole
+
                 @endhasAnyRole
+
             </ul>
             <!--end::Sidebar Menu-->
         </nav>
