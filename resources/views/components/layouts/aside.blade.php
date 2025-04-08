@@ -103,7 +103,7 @@
 
                     {{-- PENGAJUAN --}}
                     @php
-                        $isPengajuanActive = Str::startsWith($routeName, ['mcu', 'id', 'kimper']);
+                        $isPengajuanActive = Str::startsWith($routeName, ['mcu', 'pengajuan-id', 'pengajuan-kimper']);
                     @endphp
                     <li class="nav-item {{ $isPengajuanActive ? 'menu-open' : '' }}">
                         <a href="#" class="nav-link {{ $isPengajuanActive ? 'active' : '' }}">
@@ -122,14 +122,14 @@
                             </li>
                             @hasAnyRole(['admin', 'superadmin'])
                                 <li class="nav-item">
-                                    <a href="id" class="nav-link @if ($routeName == 'id') active @endif">
-                                        <i class="nav-icon bi {{ iconActive('id', 'circle') }}"></i>
+                                    <a href="pengajuan-id" class="nav-link @if ($routeName == 'pengajuan-id') active @endif">
+                                        <i class="nav-icon bi {{ iconActive('pengajuan-id', 'circle') }}"></i>
                                         <p>ID</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="kimper" class="nav-link @if ($routeName == 'kimper') active @endif">
-                                        <i class="nav-icon bi {{ iconActive('kimper', 'circle') }}"></i>
+                                    <a href="pengajuan-kimper" class="nav-link @if ($routeName == 'pengajuan-kimper') active @endif">
+                                        <i class="nav-icon bi {{ iconActive('pengajuan-kimper', 'circle') }}"></i>
                                         <p>KIMPER</p>
                                     </a>
                                 </li>
@@ -139,7 +139,7 @@
 
                     {{-- HISTORI --}}
                     @php
-                        $isHistoriActive = Str::startsWith($routeName, ['histori-mcu']);
+                        $isHistoriActive = Str::startsWith($routeName, ['histori-mcu', 'histori-id', 'histori-kimper']);
                     @endphp
                     <li class="nav-item {{ $isHistoriActive ? 'menu-open' : '' }}">
                         <a href="#" class="nav-link {{ $isHistoriActive ? 'active' : '' }}">
@@ -158,14 +158,14 @@
                             </li>
                             @hasAnyRole(['admin', 'superadmin'])
                                 <li class="nav-item">
-                                    <a href="id" class="nav-link @if ($routeName == 'id') active @endif">
-                                        <i class="nav-icon bi {{ iconActive('id', 'circle') }}"></i>
+                                    <a href="histori-id" class="nav-link @if ($routeName == 'histori-id') active @endif">
+                                        <i class="nav-icon bi {{ iconActive('histori-id', 'circle') }}"></i>
                                         <p>ID</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="kimper" class="nav-link @if ($routeName == 'kimper') active @endif">
-                                        <i class="nav-icon bi {{ iconActive('kimper', 'circle') }}"></i>
+                                    <a href="histori-kimper" class="nav-link @if ($routeName == 'histori-kimper') active @endif">
+                                        <i class="nav-icon bi {{ iconActive('histori-kimper', 'circle') }}"></i>
                                         <p>KIMPER</p>
                                     </a>
                                 </li>
@@ -202,7 +202,6 @@
                             </ul>
                         </li>
                     @endhasAnyRole
-
                 @endhasAnyRole
             </ul>
             <!--end::Sidebar Menu-->

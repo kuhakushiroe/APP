@@ -3,12 +3,16 @@
 use App\Http\Controllers\ExportKaryawans;
 use App\Http\Controllers\McuCetak;
 use App\Livewire\Departments\Departments;
+use App\Livewire\Histori\Id as HistoriId;
+use App\Livewire\Histori\Kimper as HistoriKimper;
 use App\Livewire\Histori\Mcu\Mcu as McuMcu;
 use App\Livewire\Home\Home;
 use App\Livewire\Jabatan\Jabatan;
 use App\Livewire\Karyawan\Karyawan;
 use App\Livewire\Mcu\Mcu;
 use App\Livewire\Page\Notfound;
+use App\Livewire\Pengajuan\Id;
+use App\Livewire\Pengajuan\Kimper;
 use App\Livewire\Perusahaan\Perusahaan;
 use App\Livewire\Users\Users;
 use App\Livewire\Versatility\Versatility;
@@ -27,6 +31,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('perusahaan', Perusahaan::class)->name('perusahaan');
         Route::get('jabatan', Jabatan::class)->name('jabatan');
         Route::get('versatility', Versatility::class)->name('versatility');
+    });
+    Route::group(['middleware' => ['role:superadmin,admin']], function () {
+        Route::get('pengajuan-id', Id::class)->name('pengajuan-id');
+        Route::get('pengajuan-kimper', Kimper::class)->name('pengajuan-kimper');
+        Route::get('histori-id', HistoriId::class)->name('histori-id');
+        Route::get('histori-kimper', HistoriKimper::class)->name('histori-kimper');
     });
     Route::group(['middleware' => ['role:superadmin,dokter']], function () {
         Route::get('cetak-mcu/{id}', [McuCetak::class, 'cetak']);

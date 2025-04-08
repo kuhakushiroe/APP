@@ -272,7 +272,7 @@ class Karyawan extends Component
     }
     public function render()
     {
-        if (auth()->user()->hasRole('superadmin')) {
+        if (auth()->user()->hasRole('superadmin') || auth()->user()->subrole == 'SHE') {
             $karyawans = ModelsKaryawan::whereAny(['nik', 'nrp', 'nama', 'status', 'dept'], 'LIKE', '%' . $this->search . '%')
                 ->orderByRaw("status = 'non aktif' ASC")
                 ->paginate(10)
