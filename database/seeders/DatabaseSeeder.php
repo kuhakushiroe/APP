@@ -67,7 +67,29 @@ class DatabaseSeeder extends Seeder
         }
 
         // Array kendaraan untuk versatility
-        $kendaraanList = ['Forklift', 'Excavator', 'Dump Truck', 'Bulldozer', 'Loader', 'Crane', 'Motor Grader', 'Skid Steer'];
+        $kendaraanList = [
+            'HINO 500',
+            'SCANIA P380',
+            'MERCY 2528 RMC',
+            'QUESTER',
+            'IVECO 6824',
+            'D85 SS',
+            'D155 A',
+            'D375 A',
+            'PC200',
+            'PC200 LA',
+            'PC200 DF',
+            'PC300',
+            'PC400',
+            'PC500',
+            'PC850',
+            'PC1250',
+            'PC2000',
+            'CAT 395 DL',
+            'HD 465',
+            'HD 785',
+            'CAT 777/E'
+        ];
 
         // Insert 100 karyawan
         DB::transaction(function () use ($kendaraanList) {

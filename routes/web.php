@@ -1,7 +1,9 @@
 <?php
 
+use App\Exports\checklistExport;
 use App\Http\Controllers\ExportKaryawans;
 use App\Http\Controllers\McuCetak;
+use App\Imports\checklistImport;
 use App\Livewire\Departments\Departments;
 use App\Livewire\Histori\Id as HistoriId;
 use App\Livewire\Histori\Kimper as HistoriKimper;
@@ -44,6 +46,18 @@ Route::group(['middleware' => ['auth']], function () {
     });
 });
 
+Route::get('/try-export', function () {
+    return Excel::download(new checklistExport, 'data-karyawan' . date('Y-m-d') . time() . '.xlsx');
+});
+Route::get('/try-import', function () {
+    $filePath = storage_path('app/public/try-import.xlsx');
+    try {
+        Excel::import(new checklistImport, $filePath);
+        return '✅ Import berhasil dari storage!';
+    } catch (\Exception $e) {
+        return '❌ Gagal import: ' . $e->getMessage();
+    }
+});
 Route::get('/notfound/{page}', Notfound::class);
 Route::group(['middleware' => ['guest']], function () {
     Route::get('/login', function () {
