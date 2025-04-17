@@ -15,23 +15,27 @@ class checklistImport implements ToCollection
     public function collection(Collection $rows)
     {
         // Ambil row ke-2 untuk nama unit kendaraan
-        $unitHeaderRow = $rows[1]; // index 1 = baris ke-2 Excel
+        $unitHeaderRow = $rows[2]; // index 1 = baris ke-2 Excel
 
         // Ambil nama kolom kendaraan mulai dari kolom ke-4 (index 3)
         $unitList = [];
         foreach ($unitHeaderRow as $key => $value) {
-            if ($key >= 3 && !empty($value)) {
+            if ($key >= 31 && !empty($value)) {
                 $unitList[$key] = strtolower(str_replace(' ', '_', trim($value))); // Contoh: "Hino 500" => "hino_500"
             }
         }
 
         // Loop dari baris ke-3 ke bawah (index 2 dan seterusnya)
-        for ($i = 2; $i < count($rows); $i++) {
+        for ($i = 3; $i < count($rows); $i++) {
             $row = $rows[$i];
-
-            $nrp  = $row[1];
-            $nik  = $row[2];
-            $nama = $row[3];
+            $nrp  = $row[5];
+            $gol_darah = $row[6];
+            $nama = $row[7];
+            $perusahaan = $row[8];
+            $kontraktor = $row[9];
+            $dept = $row[10];
+            $jabatan = $row[11];
+            $nik = $row[12];
 
             // Deteksi kendaraan baru (bernilai "F")
             $kendaraan = [];
@@ -64,11 +68,15 @@ class checklistImport implements ToCollection
                         'updated_at' => now(),
                     ]);
                 }
-
                 // Update karyawan
                 $karyawan->update([
                     'nik' => $nik,
                     'nama' => $nama,
+                    'gol_darah' => $gol_darah,
+                    'perusahaan' => $perusahaan,
+                    'kontraktor' => $kontraktor,
+                    'dept' => $dept,
+                    'jabatan' => $jabatan,
                     'versatility' => implode(',', $combined),
                 ]);
             } else {
@@ -77,6 +85,11 @@ class checklistImport implements ToCollection
                     'nrp' => $nrp,
                     'nik' => $nik,
                     'nama' => $nama,
+                    'gol_darah' => $gol_darah,
+                    'perusahaan' => $perusahaan,
+                    'kontraktor' => $kontraktor,
+                    'dept' => $dept,
+                    'jabatan' => $jabatan,
                     'doh' => now()->format('Y-m-d'),
                     'versatility' => implode(',', $newKendaraan),
                 ]);

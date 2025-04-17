@@ -20,6 +20,7 @@ use App\Livewire\Users\Users;
 use App\Livewire\Versatility\Versatility;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Maatwebsite\Excel\Facades\Excel;
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/', Home::class)->name('home');
@@ -50,7 +51,7 @@ Route::get('/try-export', function () {
     return Excel::download(new checklistExport, 'data-karyawan' . date('Y-m-d') . time() . '.xlsx');
 });
 Route::get('/try-import', function () {
-    $filePath = storage_path('app/public/try-import.xlsx');
+    $filePath = storage_path('app/public/try-import2.xlsx');
     try {
         Excel::import(new checklistImport, $filePath);
         return '✅ Import berhasil dari storage!';
