@@ -273,6 +273,8 @@ class Mcu extends Component
                     'status_' => 'open',
                     'status' => $this->status,
                     'tgl_verifikasi' => $this->tgl_verifikasi, // Use Laravel's `now()` helper for current date
+                    'keterangan_mcu' => $this->keterangan_mcu,
+                    'saran_mcu' => $this->saran_mcu,
                 ]);
             } else {
                 $mcu->update([
@@ -280,6 +282,8 @@ class Mcu extends Component
                     'status_' => 'close',
                     'status' => $this->status,
                     'tgl_verifikasi' => $this->tgl_verifikasi, // Use Laravel's `now()` helper for current date
+                    'keterangan_mcu' => $this->keterangan_mcu,
+                    'saran_mcu' => $this->saran_mcu,
                 ]);
             }
             if ($indukmcu) {

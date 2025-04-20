@@ -8,10 +8,12 @@
     @else
         <div class="row">
             <div class="col-md-3">
-                <button class="btn btn-dark btn-sm" wire:click="open">
-                    <span class="bi bi-plus-square"></span>
-                    &nbsp;Mcu
-                </button>
+                @hasAnyRole(['admin', 'superadmin'])
+                    <button class="btn btn-dark btn-sm" wire:click="open">
+                        <span class="bi bi-plus-square"></span>
+                        &nbsp;Mcu
+                    </button>
+                @endhasanyrole
             </div>
             <div class="col-md-6">
                 &nbsp;
@@ -29,11 +31,18 @@
                             ->where('sub_id', $data->id_mcu) // Ambil subitem berdasarkan sub_id induk
                             ->orderBy('tgl_mcu', 'asc') // Mengurutkan berdasarkan tanggal MCU
                             ->get(); // Ambil semua subitem sebagai collection
-                        $status = $data->statusMcu;
-                        $canUpload = $status !== '';
 
+                        // Cek apakah induk sudah diverifikasi
+                        $indukVerified = !empty($data->mcuStatus);
+
+                        // Cek apakah semua subitem sudah diverifikasi (atau tidak ada subitem sama sekali)
+                        $allSubVerified = $subItems->every(function ($item) {
+                            return !empty($item->status);
+                        });
+
+                        // Hanya bisa upload jika induk sudah diverifikasi dan semua subitem juga sudah diverifikasi
+                        $canUpload = $indukVerified && $allSubVerified;
                     @endphp
-
                     <div class="card card-primary card-outline mb-4">
                         <div class="card-header">
                             <div class="card-title">
@@ -89,7 +98,7 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>File Pengajuan MCU</th>
-                                                <th>Tanggal MCU</th>
+                                                <th>Tgl MCU</th>
                                                 <th>Hasil</th>
                                             </tr>
                                         </thead>
@@ -104,14 +113,30 @@
                                                 <td>{{ $data->tgl_mcu }}</td>
                                                 <td>
                                                     @if (empty($data->mcuStatus))
-                                                        <button class="btn btn-outline-warning btn-sm"
-                                                            wire:click="verifikasi({{ $data->id_mcu }})">
-                                                            <span class="bi bi-file-check"></span>
-                                                            Verifikasi
-                                                        </button>
+                                                        @if (auth()->user()->role === 'dokter' && auth()->user()->subrole == 'verifikator')
+                                                            <button class="btn btn-outline-warning btn-sm"
+                                                                wire:click="verifikasi({{ $data->id_mcu }})">
+                                                                <span class="bi bi-file-check"></span>
+                                                                Verifikasi
+                                                            </button>
+                                                        @else
+                                                            -
+                                                        @endif
                                                     @else
                                                         {{ $data->mcuStatus }}
                                                     @endif
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-end">-</td>
+                                                <td colspan="3">
+                                                    Hasil:
+                                                    <br>
+                                                    <b>{{ $data->saran_mcu }}</b>
+                                                    <br>
+                                                    <small>~{{ $data->keterangan_mcu }}~</small>
+                                                    <br>
+                                                    <small>~{{ $data->tgl_verifikasi }}~</small>
                                                 </td>
                                             </tr>
                                             @php $row = 2; @endphp
@@ -126,36 +151,46 @@
                                                     <td>{{ $item->tgl_mcu }}</td>
                                                     <td>
                                                         @if (empty($item->status))
-                                                            <button class="btn btn-outline-warning btn-sm"
-                                                                wire:click="verifikasi({{ $item->id }})">
-                                                                <span class="bi bi-file-check"></span>
-                                                                Verifikasi
-                                                            </button>
+                                                            @if (auth()->user()->role === 'dokter' && auth()->user()->subrole == 'verifikator')
+                                                                <button class="btn btn-outline-warning btn-sm"
+                                                                    wire:click="verifikasi({{ $item->id }})">
+                                                                    <span class="bi bi-file-check"></span>
+                                                                    Verifikasi
+                                                                </button>
+                                                            @else
+                                                                -
+                                                            @endif
                                                         @else
                                                             {{ $item->status }}
                                                         @endif
                                                     </td>
                                                 </tr>
-                                            @endforeach
-                                            @php
-                                                // Cek apakah status MCU induk sudah diverifikasi
-                                                $indukVerified = !empty($data->mcuStatus);
-
-                                                // Cek apakah ada subItem yang sudah diverifikasi
-                                                $subItemVerified = $subItems->contains(function ($item) {
-                                                    return !empty($item->status);
-                                                });
-                                            @endphp
-                                            @if ($canUpload && ($indukVerified || $subItemVerified))
                                                 <tr>
-                                                    <td colspan="4" class="text-end">
-                                                        <button class="btn btn-outline-success btn-sm"
-                                                            wire:click="uploadMCU({{ $data->id_mcu }})">
-                                                            <span class="bi bi-plus"></span>
-                                                            Upload MCU
-                                                        </button>
+                                                    <td class="text-end">-</td>
+                                                    <td colspan="3">
+                                                        Hasil:
+                                                        <br>
+                                                        <b>{{ $item->saran_mcu }}</b>
+                                                        <br>
+                                                        <small>~{{ $item->keterangan_mcu }}~</small>
+                                                        <br>
+                                                        <small>~{{ $item->tgl_verifikasi }}~</small>
                                                     </td>
                                                 </tr>
+                                            @endforeach
+                                            @if ($canUpload)
+                                                <tr>
+                                                    <td colspan="4" class="text-end">
+                                                        @hasAnyRole(['admin', 'superadmin'])
+                                                            <button class="btn btn-outline-danger btn-sm"
+                                                                wire:click="uploadMCU({{ $data->id_mcu }})">
+                                                                <span class="bi bi-plus"></span>
+                                                                Upload MCU
+                                                            </button>
+                                                        @endhasanyrole
+                                                    </td>
+                                                </tr>
+                                            @else
                                             @endif
                                         </tbody>
                                     </table>
@@ -169,8 +204,6 @@
                         &nbsp;No data
                     </div>
                 @endforelse
-
-
             </div>
         </div>
         {{ $mcus->appends(['search' => $search])->links() }}

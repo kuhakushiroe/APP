@@ -57,7 +57,8 @@
                             @elseif ($status && $status !== 'FIT')
                                 <div class="form-group">
                                     <label for="keterangan_mcu">Keterangan / Catatan</label>
-                                    <textarea class="form-control form-control-sm @error('keterangan_mcu') is-invalid @enderror" wire:model="catatan_mcu"></textarea>
+                                    <textarea class="form-control form-control-sm @error('keterangan_mcu') is-invalid @enderror"
+                                        wire:model="keterangan_mcu"></textarea>
                                     @error('keterangan_mcu')
                                         <span class="invalid-feedback"
                                             role="alert"><strong>{{ $message }}</strong></span>
