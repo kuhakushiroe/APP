@@ -25,4 +25,12 @@ class McuCetak extends Controller
             ->setPaper('a4', 'landscape');
         return $pdf->stream('mcu-' . $carimcu->nik . '-' . date('Y-m-d') . '.pdf');
     }
+    public function cetakSub($id)
+    {
+        $carimcu = Mcu::join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')->where('mcu.id', $id)->first();
+        $pdf = Pdf::loadView('cetak.mcu-sub', ['id' => $id,])
+            ->set_option('dpi', '96')
+            ->setPaper('a4', 'landscape');
+        return $pdf->stream('mcu-' . $carimcu->nik . '-' . date('Y-m-d') . '.pdf');
+    }
 }

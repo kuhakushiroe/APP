@@ -43,6 +43,7 @@ Route::group(['middleware' => ['auth']], function () {
     });
     Route::group(['middleware' => ['role:superadmin,dokter']], function () {
         Route::get('cetak-mcu/{id}', [McuCetak::class, 'cetak']);
+        Route::get('cetak-mcu-sub/{id}', [McuCetak::class, 'cetakSub']);
         Route::get('cetak-skd/{id}', [McuCetak::class, 'skd']);
     });
 });

@@ -24,6 +24,7 @@ class Mcu extends Component
     public $formUpload = false;
     public $id_mcu, $sub_id, $proveder, $nrp, $nama, $tgl_mcu, $gol_darah, $jenis_kelamin, $file_mcu;
     public $no_dokumen, $status = '', $keterangan_mcu, $saran_mcu, $tgl_verifikasi, $exp_mcu;
+    public $riwayat_rokok, $BB, $TB, $LP, $BMI, $Laseq, $reqtal_touche, $sistol, $diastol, $OD_jauh, $OS_jauh, $OD_dekat, $OS_dekat, $butawarna, $gdp, $gd_2_jpp, $ureum, $creatine, $asamurat, $sgot, $sgpt, $hbsag, $anti_hbs, $kolesterol, $hdl, $ldl, $tg, $darah_rutin, $napza, $urin, $ekg, $rontgen, $audiometri, $spirometri, $tredmil_test, $widal_test, $routin_feces, $kultur_feces;
     public $caridatakaryawan = [];
     public $carikaryawan = [];
 
@@ -134,9 +135,20 @@ class Mcu extends Component
     public function uploadMCU($id_mcu)
     {
         $this->formUpload = true;
-        $carimcu = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus')
-            ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
-            ->where('mcu.id', $id_mcu)->first();
+        $ceksubmcu = ModelsMcu::where('sub_id', $id_mcu)->first();
+
+        if ($ceksubmcu) {
+            $carimcu = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus')
+                ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
+                ->where('mcu.sub_id', $id_mcu)
+                ->orderBy('mcu.created_at', 'desc')
+                ->first();
+        } else {
+            $carimcu = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus')
+                ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
+                ->orderBy('mcu.created_at', 'desc')
+                ->where('mcu.id', $id_mcu)->first();
+        }
         $this->nrp = $carimcu->id_karyawan;
         $this->sub_id = $carimcu->sub_id ? $carimcu->sub_id : $id_mcu;
         $this->no_dokumen = $carimcu->no_dokumen;
@@ -147,6 +159,46 @@ class Mcu extends Component
         $this->status = $carimcu->mcuStatus;
         $this->id_mcu = $id_mcu;
         $this->proveder = $carimcu->proveder;
+
+        $this->riwayat_rokok = $carimcu->riwayat_rokok;
+        $this->BB = $carimcu->BB;
+        $this->TB = $carimcu->TB;
+        $this->LP = $carimcu->LP;
+        $this->BMI = $carimcu->BMI;
+        $this->Laseq = $carimcu->Laseq;
+        $this->reqtal_touche = $carimcu->reqtal_touche;
+        $this->sistol = $carimcu->sistol;
+        $this->diastol = $carimcu->diastol;
+        $this->OD_jauh = $carimcu->OD_jauh;
+        $this->OS_jauh = $carimcu->OS_jauh;
+        $this->OD_dekat = $carimcu->OD_dekat;
+        $this->OS_dekat = $carimcu->OS_dekat;
+        $this->butawarna = $carimcu->butawarna;
+        $this->gdp = $carimcu->gdp;
+        $this->gd_2_jpp = $carimcu->gd_2_jpp;
+        $this->ureum = $carimcu->ureum;
+        $this->creatine = $carimcu->creatine;
+        $this->asamurat = $carimcu->asamurat;
+        $this->sgot = $carimcu->sgot;
+        $this->sgpt = $carimcu->sgpt;
+        $this->hbsag = $carimcu->hbsag;
+        $this->anti_hbs = $carimcu->anti_hbs;
+        $this->kolesterol = $carimcu->kolesterol;
+        $this->hdl = $carimcu->hdl;
+        $this->ldl = $carimcu->ldl;
+        $this->tg = $carimcu->tg;
+        $this->darah_rutin = $carimcu->darah_rutin;
+        $this->napza = $carimcu->napza;
+        $this->urin = $carimcu->urin;
+        $this->ekg = $carimcu->ekg;
+        $this->rontgen = $carimcu->rontgen;
+        $this->audiometri = $carimcu->audiometri;
+        $this->spirometri = $carimcu->spirometri;
+        $this->tredmil_test = $carimcu->tredmil_test;
+        $this->widal_test = $carimcu->widal_test;
+        $this->routin_feces = $carimcu->routin_feces;
+        $this->kultur_feces = $carimcu->kultur_feces;
+
         $this->tgl_verifikasi = date('Y-m-d');
         $this->exp_mcu = now()->addMonth(6)->format('Y-m-d');
     }
@@ -201,6 +253,44 @@ class Mcu extends Component
                 'tgl_mcu' => $this->tgl_mcu,
                 'gol_darah' => $this->gol_darah,
                 'file_mcu' => $filePath, // Store the file path, not the file object
+                'riwayat_rokok' => $this->riwayat_rokok,
+                'BB' => $this->BB,
+                'TB' => $this->TB,
+                'LP' => $this->LP,
+                'BMI' => $this->BMI,
+                'Laseq' => $this->Laseq,
+                'reqtal_touche' => $this->reqtal_touche,
+                'sistol' => $this->sistol,
+                'diastol' => $this->diastol,
+                'OD_jauh' => $this->OD_jauh,
+                'OS_jauh' => $this->OS_jauh,
+                'OD_dekat' => $this->OD_dekat,
+                'OS_dekat' => $this->OS_dekat,
+                'butawarna' => $this->butawarna,
+                'gdp' => $this->gdp,
+                'gd_2_jpp' => $this->gd_2_jpp,
+                'ureum' => $this->ureum,
+                'creatine' => $this->creatine,
+                'asamurat' => $this->asamurat,
+                'sgot' => $this->sgot,
+                'sgpt' => $this->sgpt,
+                'hbsag' => $this->hbsag,
+                'anti_hbs' => $this->anti_hbs,
+                'kolesterol' => $this->kolesterol,
+                'hdl' => $this->hdl,
+                'ldl' => $this->ldl,
+                'tg' => $this->tg,
+                'darah_rutin' => $this->darah_rutin,
+                'napza' => $this->napza,
+                'urin' => $this->urin,
+                'ekg' => $this->ekg,
+                'rontgen' => $this->rontgen,
+                'audiometri' => $this->audiometri,
+                'spirometri' => $this->spirometri,
+                'tredmil_test' => $this->tredmil_test,
+                'widal_test' => $this->widal_test,
+                'routin_feces' => $this->routin_feces,
+                'kultur_feces' => $this->kultur_feces,
             ]
         );
 
@@ -234,7 +324,46 @@ class Mcu extends Component
         $this->file_mcu = $carimcu->file_mcu;
         $this->status = $carimcu->mcuStatus;
         $this->id_mcu = $id_mcu;
+        $this->riwayat_rokok = $carimcu->riwayat_rokok;
+        $this->BB = $carimcu->BB;
+        $this->TB = $carimcu->TB;
+        $this->LP = $carimcu->LP;
+        $this->BMI = $carimcu->BMI;
+        $this->Laseq = $carimcu->Laseq;
+        $this->reqtal_touche = $carimcu->reqtal_touche;
+        $this->sistol = $carimcu->sistol;
+        $this->diastol = $carimcu->diastol;
+        $this->OD_jauh = $carimcu->OD_jauh;
+        $this->OS_jauh = $carimcu->OS_jauh;
+        $this->OD_dekat = $carimcu->OD_dekat;
+        $this->OS_dekat = $carimcu->OS_dekat;
+        $this->butawarna = $carimcu->butawarna;
+        $this->gdp = $carimcu->gdp;
+        $this->gd_2_jpp = $carimcu->gd_2_jpp;
+        $this->ureum = $carimcu->ureum;
+        $this->creatine = $carimcu->creatine;
+        $this->asamurat = $carimcu->asamurat;
+        $this->sgot = $carimcu->sgot;
+        $this->sgpt = $carimcu->sgpt;
+        $this->hbsag = $carimcu->hbsag;
+        $this->anti_hbs = $carimcu->anti_hbs;
+        $this->kolesterol = $carimcu->kolesterol;
+        $this->hdl = $carimcu->hdl;
+        $this->ldl = $carimcu->ldl;
+        $this->tg = $carimcu->tg;
+        $this->darah_rutin = $carimcu->darah_rutin;
+        $this->napza = $carimcu->napza;
+        $this->urin = $carimcu->urin;
+        $this->ekg = $carimcu->ekg;
+        $this->rontgen = $carimcu->rontgen;
+        $this->audiometri = $carimcu->audiometri;
+        $this->spirometri = $carimcu->spirometri;
+        $this->tredmil_test = $carimcu->tredmil_test;
+        $this->widal_test = $carimcu->widal_test;
+        $this->routin_feces = $carimcu->routin_feces;
+        $this->kultur_feces = $carimcu->kultur_feces;
         $this->tgl_verifikasi = date('Y-m-d');
+
         $this->exp_mcu = now()->addMonth(6)->format('Y-m-d');
     }
     public function storeVerifikasi()
@@ -274,6 +403,44 @@ class Mcu extends Component
                     'status' => $this->status,
                     'tgl_verifikasi' => $this->tgl_verifikasi, // Use Laravel's `now()` helper for current date
                     'keterangan_mcu' => $this->keterangan_mcu,
+                    'riwayat_rokok' => $this->riwayat_rokok,
+                    'BB' => $this->BB,
+                    'TB' => $this->TB,
+                    'LP' => $this->LP,
+                    'BMI' => $this->BMI,
+                    'Laseq' => $this->Laseq,
+                    'reqtal_touche' => $this->reqtal_touche,
+                    'sistol' => $this->sistol,
+                    'diastol' => $this->diastol,
+                    'OD_jauh' => $this->OD_jauh,
+                    'OS_jauh' => $this->OS_jauh,
+                    'OD_dekat' => $this->OD_dekat,
+                    'OS_dekat' => $this->OS_dekat,
+                    'butawarna' => $this->butawarna,
+                    'gdp' => $this->gdp,
+                    'gd_2_jpp' => $this->gd_2_jpp,
+                    'ureum' => $this->ureum,
+                    'creatine' => $this->creatine,
+                    'asamurat' => $this->asamurat,
+                    'sgot' => $this->sgot,
+                    'sgpt' => $this->sgpt,
+                    'hbsag' => $this->hbsag,
+                    'anti_hbs' => $this->anti_hbs,
+                    'kolesterol' => $this->kolesterol,
+                    'hdl' => $this->hdl,
+                    'ldl' => $this->ldl,
+                    'tg' => $this->tg,
+                    'darah_rutin' => $this->darah_rutin,
+                    'napza' => $this->napza,
+                    'urin' => $this->urin,
+                    'ekg' => $this->ekg,
+                    'rontgen' => $this->rontgen,
+                    'audiometri' => $this->audiometri,
+                    'spirometri' => $this->spirometri,
+                    'tredmil_test' => $this->tredmil_test,
+                    'widal_test' => $this->widal_test,
+                    'routin_feces' => $this->routin_feces,
+                    'kultur_feces' => $this->kultur_feces,
                     'saran_mcu' => $this->saran_mcu,
                 ]);
             } else {
@@ -283,6 +450,44 @@ class Mcu extends Component
                     'status' => $this->status,
                     'tgl_verifikasi' => $this->tgl_verifikasi, // Use Laravel's `now()` helper for current date
                     'keterangan_mcu' => $this->keterangan_mcu,
+                    'riwayat_rokok' => $this->riwayat_rokok,
+                    'BB' => $this->BB,
+                    'TB' => $this->TB,
+                    'LP' => $this->LP,
+                    'BMI' => $this->BMI,
+                    'Laseq' => $this->Laseq,
+                    'reqtal_touche' => $this->reqtal_touche,
+                    'sistol' => $this->sistol,
+                    'diastol' => $this->diastol,
+                    'OD_jauh' => $this->OD_jauh,
+                    'OS_jauh' => $this->OS_jauh,
+                    'OD_dekat' => $this->OD_dekat,
+                    'OS_dekat' => $this->OS_dekat,
+                    'butawarna' => $this->butawarna,
+                    'gdp' => $this->gdp,
+                    'gd_2_jpp' => $this->gd_2_jpp,
+                    'ureum' => $this->ureum,
+                    'creatine' => $this->creatine,
+                    'asamurat' => $this->asamurat,
+                    'sgot' => $this->sgot,
+                    'sgpt' => $this->sgpt,
+                    'hbsag' => $this->hbsag,
+                    'anti_hbs' => $this->anti_hbs,
+                    'kolesterol' => $this->kolesterol,
+                    'hdl' => $this->hdl,
+                    'ldl' => $this->ldl,
+                    'tg' => $this->tg,
+                    'darah_rutin' => $this->darah_rutin,
+                    'napza' => $this->napza,
+                    'urin' => $this->urin,
+                    'ekg' => $this->ekg,
+                    'rontgen' => $this->rontgen,
+                    'audiometri' => $this->audiometri,
+                    'spirometri' => $this->spirometri,
+                    'tredmil_test' => $this->tredmil_test,
+                    'widal_test' => $this->widal_test,
+                    'routin_feces' => $this->routin_feces,
+                    'kultur_feces' => $this->kultur_feces,
                     'saran_mcu' => $this->saran_mcu,
                 ]);
             }

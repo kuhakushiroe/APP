@@ -207,18 +207,22 @@
                             ->orderBy('tgl_mcu', 'desc')
                             ->first();
                     @endphp
-                    {{ $indukquery->status . ' , ' }}<br>
-                    @php
-                        $subquery = DB::table('mcu')
-                            ->where('sub_id', $query->sub_id)
-                            ->orderBy('tgl_mcu', 'desc')
-                            ->get();
-                    @endphp
-                    @forelse ($subquery as $data)
-                        {{ $data->status . ' , ' }}<br>
-                    @empty
-                        -
-                    @endforelse
+                    @if ($query->sub_id !== null)
+                        {{ $query->status . ' , ' . $query->keterangan_mcu }}<br>
+                        @php
+                            $subquery = DB::table('mcu')
+                                ->where('sub_id', $query->sub_id)
+                                ->orderBy('tgl_mcu', 'desc')
+                                ->get();
+                        @endphp
+                        @forelse ($subquery as $data)
+                            {{ $data->status . ' , ' . $data->keterangan_mcu }}<br>
+                        @empty
+                            -
+                        @endforelse
+                    @else
+                        {{ $query->status . ' , ' . $data->keterangan_mcu }}<br>
+                    @endif
                 </td>
             </tr>
             <tr>
@@ -228,7 +232,18 @@
             </tr>
             <tr>
                 <td style="width: 10%;">&nbsp;</td>
-                <td colspan="3" style="text-align: left;">{{ $query->saran_mcu ?? '' }}</td>
+                <td colspan="3" style="text-align: left;">
+                    @if ($query->sub_id !== null)
+                        {{ $query->saran_mcu }}<br>
+                        @forelse ($subquery as $data)
+                            {{ $data->saran_mcu . ' ,' }}<br>
+                        @empty
+                            -
+                        @endforelse
+                    @else
+                        {{ $query->saran_mcu }}<br>
+                    @endif
+                </td>
             </tr>
             <tr>
                 <td colspan="4" style="text-align: left;">

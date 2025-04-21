@@ -16,6 +16,54 @@
                     <div class="card-body">
                         <div class="form-group">
                             <input type="hidden" class="form-control form-control-sm" wire:model="sub_id" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="riwayat_rokok"
+                                readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="BB" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="TB" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="LP" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="BMI" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="Laseq" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="reqtal_touche"
+                                readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="sistol" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="diastol" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="OD_jauh" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="OS_jauh" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="OD_dekat" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="OS_dekat" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="butawarna" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="gdp" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="gd_2_jpp" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="ureum" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="creatine" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="asamurat" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="sgot" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="sgpt" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="hbsag" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="anti_hbs" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="kolesterol" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="hdl" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="ldl" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="tg" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="darah_rutin"
+                                readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="napza" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="urin" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="ekg" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="rontgen" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="audiometri"
+                                readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="spirometri"
+                                readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="tredmil_test"
+                                readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="widal_test"
+                                readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="routin_feces"
+                                readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="kultur_feces"
+                                readonly>
+
                             <label for="browser">NRP:</label>
                             <input class="form-control form-control-sm @error('nrp') is-invalid @enderror"
                                 list="browsers" name="browser" id="browser" wire:model.live='nrp'

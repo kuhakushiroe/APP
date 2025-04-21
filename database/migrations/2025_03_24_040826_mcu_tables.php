@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('BB')->nullable();
             $table->string('TB')->nullable();
             $table->string('LP')->nullable();
+            $table->string('BMI')->nullable();
             $table->string('Laseq')->nullable();
             $table->string('reqtal_touche')->nullable();
             $table->string('sistol')->nullable();

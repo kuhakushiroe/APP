@@ -136,7 +136,14 @@
                                                     <br>
                                                     <small>~{{ $data->keterangan_mcu }}~</small>
                                                     <br>
-                                                    <small>~{{ $data->tgl_verifikasi }}~</small>
+                                                    <small>~{{ $data->tgl_verifikasi }}~</small><br>
+                                                    @if (!empty($data->mcuStatus))
+                                                        <a href="cetak-mcu-sub/{{ $data->id_mcu }}" target="_blank"
+                                                            class="btn btn-outline-warning btn-sm">
+                                                            <span class="bi bi-download"></span>
+                                                            Download Verifikasi {{ $data->mcuStatus }}
+                                                        </a>
+                                                    @endif
                                                 </td>
                                             </tr>
                                             @php $row = 2; @endphp
@@ -174,7 +181,14 @@
                                                         <br>
                                                         <small>~{{ $item->keterangan_mcu }}~</small>
                                                         <br>
-                                                        <small>~{{ $item->tgl_verifikasi }}~</small>
+                                                        <small>~{{ $item->tgl_verifikasi }}~</small><br>
+                                                        @if (!empty($item->status))
+                                                            <a href="cetak-mcu-sub/{{ $item->id }}" target="_blank"
+                                                                class="btn btn-outline-warning btn-sm">
+                                                                <span class="bi bi-download"></span>
+                                                                Download Verifikasi {{ $item->status }}
+                                                            </a>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach
