@@ -43,7 +43,7 @@
                         // Hanya bisa upload jika induk sudah diverifikasi dan semua subitem juga sudah diverifikasi
                         $canUpload = $indukVerified && $allSubVerified;
                     @endphp
-                    <div class="card card-primary card-outline mb-4">
+                    <div class="card card-primary card-outline mb-4" wire:poll.5s>
                         <div class="card-header">
                             <div class="card-title">
                                 {{ $data->nama }}
@@ -113,14 +113,22 @@
                                                 <td>{{ $data->tgl_mcu }}</td>
                                                 <td>
                                                     @if (empty($data->mcuStatus))
-                                                        @if (auth()->user()->role === 'dokter' && auth()->user()->subrole == 'verifikator')
-                                                            <button class="btn btn-outline-warning btn-sm"
-                                                                wire:click="verifikasi({{ $data->id_mcu }})">
-                                                                <span class="bi bi-file-check"></span>
-                                                                Verifikasi
-                                                            </button>
+                                                        @if (empty($data->paramedik))
+                                                            @if (auth()->user()->role === 'dokter' && in_array(auth()->user()->subrole, ['paramedik']))
+                                                                <button class="btn btn-outline-warning btn-sm"
+                                                                    wire:click="verifikasi({{ $data->id_mcu }})">
+                                                                    <span class="bi bi-file-check"></span>
+                                                                    Verifikasi Paramedik
+                                                                </button>
+                                                            @endif
                                                         @else
-                                                            -
+                                                            @if (auth()->user()->role === 'dokter' && in_array(auth()->user()->subrole, ['verifikator']))
+                                                                <button class="btn btn-outline-warning btn-sm"
+                                                                    wire:click="verifikasi({{ $data->id_mcu }})">
+                                                                    <span class="bi bi-file-check"></span>
+                                                                    Verifikasi Dokter
+                                                                </button>
+                                                            @endif
                                                         @endif
                                                     @else
                                                         {{ $data->mcuStatus }}
@@ -158,11 +166,15 @@
                                                     <td>{{ $item->tgl_mcu }}</td>
                                                     <td>
                                                         @if (empty($item->status))
-                                                            @if (auth()->user()->role === 'dokter' && auth()->user()->subrole == 'verifikator')
+                                                            @if (auth()->user()->role === 'dokter' && in_array(auth()->user()->subrole, ['verifikator', 'paramedik']))
                                                                 <button class="btn btn-outline-warning btn-sm"
                                                                     wire:click="verifikasi({{ $item->id }})">
                                                                     <span class="bi bi-file-check"></span>
-                                                                    Verifikasi
+                                                                    @if (auth()->user()->subrole == 'paramedik')
+                                                                        Verifikasi Paramedik
+                                                                    @else
+                                                                        Verifikasi Dokter
+                                                                    @endif
                                                                 </button>
                                                             @else
                                                                 -

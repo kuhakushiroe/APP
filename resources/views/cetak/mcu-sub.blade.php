@@ -216,12 +216,13 @@
                                 ->get();
                         @endphp
                         @forelse ($subquery as $data)
-                            {{ $data->status . ' , ' . $data->keterangan_mcu }}<br>
+                            {{ $data->status . ' , ' . $data->keterangan_mcu }}<small>{{ $data->tgl_verifikasi }}</small><br>
                         @empty
                             -
                         @endforelse
                     @else
-                        {{ $query->status . ' , ' . $data->keterangan_mcu }}<br>
+                        {{ $query->status . ' , ' . $query->keterangan_mcu }}
+                        <small>{{ $query->tgl_verifikasi }}</small><br>
                     @endif
                 </td>
             </tr>

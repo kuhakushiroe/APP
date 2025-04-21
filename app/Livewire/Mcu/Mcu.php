@@ -5,6 +5,7 @@ namespace App\Livewire\Mcu;
 use App\Models\Karyawan;
 use App\Models\Mcu as ModelsMcu;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Title;
@@ -369,18 +370,20 @@ class Mcu extends Component
     public function storeVerifikasi()
     {
         $mcu = ModelsMcu::find($this->id_mcu);
-        $this->validate(
-            [
-                'no_dokumen' => 'required',
-                'status' => 'required',
-                'tgl_verifikasi' => 'required',
-            ],
-            [
-                'no_dokumen.required' => 'No Dokumen harus diisi.',
-                'status.required' => 'Status harus diisi.',
-                'tgl_verifikasi.required' => 'Tanggal Verifikasi harus diisi.',
-            ]
-        );
+        if (auth()->user()->subrole === 'dokter') {
+            $this->validate(
+                [
+                    'no_dokumen' => 'required',
+                    'status' => 'required',
+                    'tgl_verifikasi' => 'required',
+                ],
+                [
+                    'no_dokumen.required' => 'No Dokumen harus diisi.',
+                    'status.required' => 'Status harus diisi.',
+                    'tgl_verifikasi.required' => 'Tanggal Verifikasi harus diisi.',
+                ]
+            );
+        }
         $indukmcu = ModelsMcu::where('id', $mcu->sub_id)->where('sub_id', NULL)->first();
         if ($this->status == 'FIT') {
             $mcu->update([
@@ -442,6 +445,7 @@ class Mcu extends Component
                     'routin_feces' => $this->routin_feces,
                     'kultur_feces' => $this->kultur_feces,
                     'saran_mcu' => $this->saran_mcu,
+                    'paramedik' => auth()->user()->username,
                 ]);
             } else {
                 $mcu->update([
@@ -489,6 +493,7 @@ class Mcu extends Component
                     'routin_feces' => $this->routin_feces,
                     'kultur_feces' => $this->kultur_feces,
                     'saran_mcu' => $this->saran_mcu,
+                    'paramedik' => auth()->user()->username,
                 ]);
             }
             if ($indukmcu) {

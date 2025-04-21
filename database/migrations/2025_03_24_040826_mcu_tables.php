@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('tgl_verifikasi')->nullable();
             $table->string('status')->nullable();
             $table->string('verifikator')->nullable();
+            $table->string('paramedik')->nullable();
             $table->enum('riwayat_rokok', ['Ya', 'Tidak'])->default('Tidak');
             $table->string('BB')->nullable();
             $table->string('TB')->nullable();

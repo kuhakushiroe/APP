@@ -58,6 +58,14 @@ class DatabaseSeeder extends Seeder
             'subrole' => 'skd',
             'password' => Hash::make('password'),
         ]);
+        User::create([
+            'name' => 'paramedik',
+            'username' => 'paramedik',
+            'email' => 'paramedik@example.com',
+            'role' => 'dokter',
+            'subrole' => 'paramedik',
+            'password' => Hash::make('password'),
+        ]);
 
         // Helper untuk tanggal expired (bisa 1 tahun ke depan atau belakang)
         function randomExpireDate()
