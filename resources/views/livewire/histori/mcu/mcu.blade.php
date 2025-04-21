@@ -27,7 +27,7 @@
                         </td>
                         <td>{{ $data->dept }} / {{ $data->jabatan }}</td>
                         <td>
-                            @if ($data->mcuStatus == 'FIT')
+                            @if ($data->mcuStatus == 'FIT' || $data->mcuStatus == 'FIT WITH NOTE')
                                 <a href="cetak-mcu/{{ $data->id_mcu }}" target="_blank"
                                     class="btn btn-outline-warning btn-sm">
                                     <span class="bi bi-download"></span>

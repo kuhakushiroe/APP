@@ -370,138 +370,116 @@ class Mcu extends Component
     public function storeVerifikasi()
     {
         $mcu = ModelsMcu::find($this->id_mcu);
-        if (auth()->user()->subrole === 'dokter') {
+        if (auth()->user()->subrole === 'verifikator') {
             $this->validate(
                 [
-                    'no_dokumen' => 'required',
                     'status' => 'required',
                     'tgl_verifikasi' => 'required',
                 ],
                 [
-                    'no_dokumen.required' => 'No Dokumen harus diisi.',
                     'status.required' => 'Status harus diisi.',
                     'tgl_verifikasi.required' => 'Tanggal Verifikasi harus diisi.',
                 ]
             );
-        }
-        $indukmcu = ModelsMcu::where('id', $mcu->sub_id)->where('sub_id', NULL)->first();
-        if ($this->status == 'FIT') {
-            $mcu->update([
-                'no_dokumen' => $this->no_dokumen,
-                'status_' => 'close',
-                'status' => $this->status,
-                'tgl_verifikasi' => $this->tgl_verifikasi,
-                'exp_mcu' => $this->exp_mcu, // Use Laravel's `now()` helper for current date
-            ]);
-            if ($indukmcu) {
-                $indukmcu->update([
+            $indukmcu = ModelsMcu::where('id', $mcu->sub_id)->where('sub_id', NULL)->first();
+            if ($this->status == 'FIT' || $this->status == 'FIT WITH NOTE') {
+                $mcu->update([
+                    'no_dokumen' => $this->no_dokumen,
                     'status_' => 'close',
+                    'status' => $this->status,
+                    'tgl_verifikasi' => $this->tgl_verifikasi,
+                    'exp_mcu' => $this->exp_mcu, // Use Laravel's `now()` helper for current date
+                    'keterangan_mcu' => $this->keterangan_mcu,
+                    'saran_mcu' => $this->saran_mcu,
                 ]);
+                if ($indukmcu) {
+                    $indukmcu->update([
+                        'status_' => 'close',
+                    ]);
+                }
+            } else {
+                if (empty($mcu->sub_id)) {
+                    $mcu->update([
+                        'no_dokumen' => $this->no_dokumen,
+                        'status_' => 'open',
+                        'status' => $this->status,
+                        'tgl_verifikasi' => $this->tgl_verifikasi, // Use Laravel's `now()` helper for current date
+                        'keterangan_mcu' => $this->keterangan_mcu,
+                        'saran_mcu' => $this->saran_mcu,
+                    ]);
+                } else {
+                    $mcu->update([
+                        'no_dokumen' => $this->no_dokumen,
+                        'status_' => 'close',
+                        'status' => $this->status,
+                        'tgl_verifikasi' => $this->tgl_verifikasi, // Use Laravel's `now()` helper for current date
+                        'keterangan_mcu' => $this->keterangan_mcu,
+                        'saran_mcu' => $this->saran_mcu,
+                    ]);
+                }
+                if ($indukmcu) {
+                    $indukmcu->update([
+                        'status_' => 'open',
+                        'status' => $this->status,
+                    ]);
+                }
             }
         } else {
-            if (empty($mcu->sub_id)) {
-                $mcu->update([
-                    'no_dokumen' => $this->no_dokumen,
-                    'status_' => 'open',
-                    'status' => $this->status,
-                    'tgl_verifikasi' => $this->tgl_verifikasi, // Use Laravel's `now()` helper for current date
-                    'keterangan_mcu' => $this->keterangan_mcu,
-                    'riwayat_rokok' => $this->riwayat_rokok,
-                    'BB' => $this->BB,
-                    'TB' => $this->TB,
-                    'LP' => $this->LP,
-                    'BMI' => $this->BMI,
-                    'Laseq' => $this->Laseq,
-                    'reqtal_touche' => $this->reqtal_touche,
-                    'sistol' => $this->sistol,
-                    'diastol' => $this->diastol,
-                    'OD_jauh' => $this->OD_jauh,
-                    'OS_jauh' => $this->OS_jauh,
-                    'OD_dekat' => $this->OD_dekat,
-                    'OS_dekat' => $this->OS_dekat,
-                    'butawarna' => $this->butawarna,
-                    'gdp' => $this->gdp,
-                    'gd_2_jpp' => $this->gd_2_jpp,
-                    'ureum' => $this->ureum,
-                    'creatine' => $this->creatine,
-                    'asamurat' => $this->asamurat,
-                    'sgot' => $this->sgot,
-                    'sgpt' => $this->sgpt,
-                    'hbsag' => $this->hbsag,
-                    'anti_hbs' => $this->anti_hbs,
-                    'kolesterol' => $this->kolesterol,
-                    'hdl' => $this->hdl,
-                    'ldl' => $this->ldl,
-                    'tg' => $this->tg,
-                    'darah_rutin' => $this->darah_rutin,
-                    'napza' => $this->napza,
-                    'urin' => $this->urin,
-                    'ekg' => $this->ekg,
-                    'rontgen' => $this->rontgen,
-                    'audiometri' => $this->audiometri,
-                    'spirometri' => $this->spirometri,
-                    'tredmil_test' => $this->tredmil_test,
-                    'widal_test' => $this->widal_test,
-                    'routin_feces' => $this->routin_feces,
-                    'kultur_feces' => $this->kultur_feces,
-                    'saran_mcu' => $this->saran_mcu,
-                    'paramedik' => auth()->user()->username,
-                ]);
-            } else {
-                $mcu->update([
-                    'no_dokumen' => $this->no_dokumen,
-                    'status_' => 'close',
-                    'status' => $this->status,
-                    'tgl_verifikasi' => $this->tgl_verifikasi, // Use Laravel's `now()` helper for current date
-                    'keterangan_mcu' => $this->keterangan_mcu,
-                    'riwayat_rokok' => $this->riwayat_rokok,
-                    'BB' => $this->BB,
-                    'TB' => $this->TB,
-                    'LP' => $this->LP,
-                    'BMI' => $this->BMI,
-                    'Laseq' => $this->Laseq,
-                    'reqtal_touche' => $this->reqtal_touche,
-                    'sistol' => $this->sistol,
-                    'diastol' => $this->diastol,
-                    'OD_jauh' => $this->OD_jauh,
-                    'OS_jauh' => $this->OS_jauh,
-                    'OD_dekat' => $this->OD_dekat,
-                    'OS_dekat' => $this->OS_dekat,
-                    'butawarna' => $this->butawarna,
-                    'gdp' => $this->gdp,
-                    'gd_2_jpp' => $this->gd_2_jpp,
-                    'ureum' => $this->ureum,
-                    'creatine' => $this->creatine,
-                    'asamurat' => $this->asamurat,
-                    'sgot' => $this->sgot,
-                    'sgpt' => $this->sgpt,
-                    'hbsag' => $this->hbsag,
-                    'anti_hbs' => $this->anti_hbs,
-                    'kolesterol' => $this->kolesterol,
-                    'hdl' => $this->hdl,
-                    'ldl' => $this->ldl,
-                    'tg' => $this->tg,
-                    'darah_rutin' => $this->darah_rutin,
-                    'napza' => $this->napza,
-                    'urin' => $this->urin,
-                    'ekg' => $this->ekg,
-                    'rontgen' => $this->rontgen,
-                    'audiometri' => $this->audiometri,
-                    'spirometri' => $this->spirometri,
-                    'tredmil_test' => $this->tredmil_test,
-                    'widal_test' => $this->widal_test,
-                    'routin_feces' => $this->routin_feces,
-                    'kultur_feces' => $this->kultur_feces,
-                    'saran_mcu' => $this->saran_mcu,
-                    'paramedik' => auth()->user()->username,
-                ]);
-            }
-            if ($indukmcu) {
-                $indukmcu->update([
-                    'status_' => 'open',
-                    'status' => $this->status,
-                ]);
-            }
+            $this->validate(
+                [
+                    'no_dokumen' => 'required',
+                ],
+                [
+                    'no_dokumen.required' => 'No Dokumen harus diisi.',
+                ]
+            );
+            $mcu->update([
+                'no_dokumen' => $this->no_dokumen,
+                'status_' => 'open',
+                'status' => $this->status,
+                'tgl_verifikasi' => $this->tgl_verifikasi, // Use Laravel's `now()` helper for current date
+                'keterangan_mcu' => $this->keterangan_mcu,
+                'riwayat_rokok' => $this->riwayat_rokok,
+                'BB' => $this->BB,
+                'TB' => $this->TB,
+                'LP' => $this->LP,
+                'BMI' => $this->BMI,
+                'Laseq' => $this->Laseq,
+                'reqtal_touche' => $this->reqtal_touche,
+                'sistol' => $this->sistol,
+                'diastol' => $this->diastol,
+                'OD_jauh' => $this->OD_jauh,
+                'OS_jauh' => $this->OS_jauh,
+                'OD_dekat' => $this->OD_dekat,
+                'OS_dekat' => $this->OS_dekat,
+                'butawarna' => $this->butawarna,
+                'gdp' => $this->gdp,
+                'gd_2_jpp' => $this->gd_2_jpp,
+                'ureum' => $this->ureum,
+                'creatine' => $this->creatine,
+                'asamurat' => $this->asamurat,
+                'sgot' => $this->sgot,
+                'sgpt' => $this->sgpt,
+                'hbsag' => $this->hbsag,
+                'anti_hbs' => $this->anti_hbs,
+                'kolesterol' => $this->kolesterol,
+                'hdl' => $this->hdl,
+                'ldl' => $this->ldl,
+                'tg' => $this->tg,
+                'darah_rutin' => $this->darah_rutin,
+                'napza' => $this->napza,
+                'urin' => $this->urin,
+                'ekg' => $this->ekg,
+                'rontgen' => $this->rontgen,
+                'audiometri' => $this->audiometri,
+                'spirometri' => $this->spirometri,
+                'tredmil_test' => $this->tredmil_test,
+                'widal_test' => $this->widal_test,
+                'routin_feces' => $this->routin_feces,
+                'kultur_feces' => $this->kultur_feces,
+                'saran_mcu' => $this->saran_mcu,
+                'paramedik' => auth()->user()->username,
+            ]);
         }
 
         $jenis = $this->id_mcu ? 'Verifikasi' : 'Tambah';

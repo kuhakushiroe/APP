@@ -20,7 +20,8 @@
                             <label for="no_dokumen">No Dokumen MCU</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('no_dokumen') is-invalid @enderror"
-                                wire:model="no_dokumen" placeholder="No Dokumen">
+                                wire:model="no_dokumen" placeholder="No Dokumen"
+                                @if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('no_dokumen')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -29,7 +30,8 @@
                             <label for="riwayat_rokok">Riwayat Rokok</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('riwayat_rokok') is-invalid @enderror"
-                                wire:model="riwayat_rokok" placeholder="Riwayat Rokok">
+                                wire:model="riwayat_rokok"
+                                placeholder="Riwayat Rokok"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('riwayat_rokok')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -42,7 +44,7 @@
                         <div class="col-sm-2">
                             <label for="BB">BB</label>
                             <input type="text" class="form-control form-control-sm @error('BB') is-invalid @enderror"
-                                wire:model="BB" placeholder="BB">
+                                wire:model="BB" placeholder="BB"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('BB')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -51,7 +53,7 @@
                         <div class="col-sm-2">
                             <label for="TB">TB</label>
                             <input type="text" class="form-control form-control-sm @error('TB') is-invalid @enderror"
-                                wire:model="TB" placeholder="TB">
+                                wire:model="TB" placeholder="TB"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('TB')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -60,7 +62,7 @@
                         <div class="col-sm-2">
                             <label for="LP">LP</label>
                             <input type="text" class="form-control form-control-sm @error('LP') is-invalid @enderror"
-                                wire:model="LP" placeholder="LP">
+                                wire:model="LP" placeholder="LP"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('LP')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -70,7 +72,7 @@
                             <label for="BMI">BMI</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('BMI') is-invalid @enderror" wire:model="BMI"
-                                placeholder="BMI">
+                                placeholder="BMI"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('BMI')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -80,7 +82,8 @@
                             <label for="Laseq">Laseq</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('Laseq') is-invalid @enderror"
-                                wire:model="Laseq" placeholder="Laseq">
+                                wire:model="Laseq"
+                                placeholder="Laseq"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('Laseq')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -90,7 +93,8 @@
                             <label for="reqtal_touche">Reqtal Touche</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('reqtal_touche') is-invalid @enderror"
-                                wire:model="reqtal_touche" placeholder="Reqtal Touche">
+                                wire:model="reqtal_touche"
+                                placeholder="Reqtal Touche"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('reqtal_touche')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -104,7 +108,8 @@
                             <label for="sistol">Sistol</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('sistol') is-invalid @enderror"
-                                wire:model="sistol" placeholder="Sistol">
+                                wire:model="sistol"
+                                placeholder="Sistol"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('sistol')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -113,7 +118,8 @@
                             <label for="diastol">Diastol</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('diastol') is-invalid @enderror"
-                                wire:model="diastol" placeholder="Diastol">
+                                wire:model="diastol"
+                                placeholder="Diastol"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('diastol')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -127,7 +133,8 @@
                             <label for="OD_jauh">OD Jauh</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('OD_jauh') is-invalid @enderror"
-                                wire:model="OD_jauh" placeholder="OD Jauh">
+                                wire:model="OD_jauh"
+                                placeholder="OD Jauh"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('OD_jauh')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -137,7 +144,8 @@
                             <label for="OS_jauh">OS Jauh</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('OS_jauh') is-invalid @enderror"
-                                wire:model="OS_jauh" placeholder="OS Jauh">
+                                wire:model="OS_jauh"
+                                placeholder="OS Jauh"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('OS_jauh')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -152,7 +160,8 @@
                             <label for="OD_dekat">OD Dekat</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('OD_dekat') is-invalid @enderror"
-                                wire:model="OD_dekat" placeholder="OD Dekat">
+                                wire:model="OD_dekat"
+                                placeholder="OD Dekat"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('OD_dekat')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -162,7 +171,8 @@
                             <label for="OS_dekat">OS Dekat</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('OS_dekat') is-invalid @enderror"
-                                wire:model="OS_dekat" placeholder="OS Dekat">
+                                wire:model="OS_dekat"
+                                placeholder="OS Dekat"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('OS_dekat')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -175,7 +185,8 @@
                             <label for="butawarna">Buta Warna</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('butawarna') is-invalid @enderror"
-                                wire:model="butawarna" placeholder="Buta Warna">
+                                wire:model="butawarna"
+                                placeholder="Buta Warna"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('butawarna')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -188,7 +199,7 @@
                             <label for="gdp">GDP</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('gdp') is-invalid @enderror"
-                                wire:model="gdp" placeholder="GDP">
+                                wire:model="gdp" placeholder="GDP"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('gdp')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -198,7 +209,8 @@
                             <label for="gd_2_jpp">GD 2 JPP</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('gd_2_jpp') is-invalid @enderror"
-                                wire:model="gd_2_jpp" placeholder="GD 2 JPP">
+                                wire:model="gd_2_jpp"
+                                placeholder="GD 2 JPP"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('gd_2_jpp')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -211,7 +223,8 @@
                             <label for="ureum">Ureum</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('ureum') is-invalid @enderror"
-                                wire:model="ureum" placeholder="Ureum">
+                                wire:model="ureum"
+                                placeholder="Ureum"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('ureum')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -221,7 +234,8 @@
                             <label for="creatine">Creatine</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('creatine') is-invalid @enderror"
-                                wire:model="creatine" placeholder="Creatine">
+                                wire:model="creatine"
+                                placeholder="Creatine"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('creatine')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -231,7 +245,8 @@
                             <label for="asamurat">Asam Urat</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('asamurat') is-invalid @enderror"
-                                wire:model="asamurat" placeholder="Asam Urat">
+                                wire:model="asamurat"
+                                placeholder="Asam Urat"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('asamurat')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -245,7 +260,8 @@
                             <label for="sgot">SGOT</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('sgot') is-invalid @enderror"
-                                wire:model="sgot" placeholder="SGOT">
+                                wire:model="sgot"
+                                placeholder="SGOT"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('sgot')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -255,7 +271,8 @@
                             <label for="sgpt">SGPT</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('sgpt') is-invalid @enderror"
-                                wire:model="sgpt" placeholder="SGPT">
+                                wire:model="sgpt"
+                                placeholder="SGPT"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('sgpt')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -265,7 +282,8 @@
                             <label for="hbsag">HBsAg</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('hbsag') is-invalid @enderror"
-                                wire:model="hbsag" placeholder="HBsAg">
+                                wire:model="hbsag"
+                                placeholder="HBsAg"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('hbsag')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -275,7 +293,8 @@
                             <label for="anti_hbs">Anti HBs</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('anti_hbs') is-invalid @enderror"
-                                wire:model="anti_hbs" placeholder="Anti HBs">
+                                wire:model="anti_hbs"
+                                placeholder="Anti HBs"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('anti_hbs')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -288,7 +307,8 @@
                             <label for="kolesterol">Kolesterol</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('kolesterol') is-invalid @enderror"
-                                wire:model="kolesterol" placeholder="Kolesterol">
+                                wire:model="kolesterol"
+                                placeholder="Kolesterol"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('kolesterol')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -298,7 +318,7 @@
                             <label for="hdl">HDL</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('hdl') is-invalid @enderror"
-                                wire:model="hdl" placeholder="HDL">
+                                wire:model="hdl" placeholder="HDL"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('hdl')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -308,7 +328,7 @@
                             <label for="ldl">LDL</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('ldl') is-invalid @enderror"
-                                wire:model="ldl" placeholder="LDL">
+                                wire:model="ldl" placeholder="LDL"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('ldl')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -318,7 +338,7 @@
                             <label for="tg">TG</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('tg') is-invalid @enderror"
-                                wire:model="tg" placeholder="TG">
+                                wire:model="tg" placeholder="TG"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('tg')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -328,7 +348,8 @@
                             <label for="darah_rutin">Darah Rutin</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('darah_rutin') is-invalid @enderror"
-                                wire:model="darah_rutin" placeholder="Darah Rutin">
+                                wire:model="darah_rutin"
+                                placeholder="Darah Rutin"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('darah_rutin')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -338,7 +359,8 @@
                             <label for="napza">NAPZA</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('napza') is-invalid @enderror"
-                                wire:model="napza" placeholder="NAPZA">
+                                wire:model="napza"
+                                placeholder="NAPZA"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('napza')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -348,7 +370,8 @@
                             <label for="urin">Urin</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('urin') is-invalid @enderror"
-                                wire:model="urin" placeholder="Urin">
+                                wire:model="urin"
+                                placeholder="Urin"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('urin')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -358,7 +381,7 @@
                             <label for="ekg">EKG</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('ekg') is-invalid @enderror"
-                                wire:model="ekg" placeholder="EKG">
+                                wire:model="ekg" placeholder="EKG"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('ekg')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -368,7 +391,8 @@
                             <label for="rontgen">Rontgen</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('rontgen') is-invalid @enderror"
-                                wire:model="rontgen" placeholder="Rontgen">
+                                wire:model="rontgen"
+                                placeholder="Rontgen"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('rontgen')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -378,7 +402,8 @@
                             <label for="audiometri">Audiometri</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('audiometri') is-invalid @enderror"
-                                wire:model="audiometri" placeholder="Audiometri">
+                                wire:model="audiometri"
+                                placeholder="Audiometri"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('audiometri')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -388,7 +413,8 @@
                             <label for="spirometri">Spirometri</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('spirometri') is-invalid @enderror"
-                                wire:model="spirometri" placeholder="Spirometri">
+                                wire:model="spirometri"
+                                placeholder="Spirometri"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('spirometri')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -398,7 +424,8 @@
                             <label for="tredmil_test">Treadmill Test</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('tredmil_test') is-invalid @enderror"
-                                wire:model="tredmil_test" placeholder="Treadmill Test">
+                                wire:model="tredmil_test"
+                                placeholder="Treadmill Test"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('tredmil_test')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -408,7 +435,8 @@
                             <label for="widal_test">Widal Test</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('widal_test') is-invalid @enderror"
-                                wire:model="widal_test" placeholder="Widal Test">
+                                wire:model="widal_test"
+                                placeholder="Widal Test"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('widal_test')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -418,7 +446,8 @@
                             <label for="routin_feces">Routin Feces</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('routin_feces') is-invalid @enderror"
-                                wire:model="routin_feces" placeholder="Routin Feces">
+                                wire:model="routin_feces"
+                                placeholder="Routin Feces"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('routin_feces')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -428,7 +457,8 @@
                             <label for="kultur_feces">Kultur Feces</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('kultur_feces') is-invalid @enderror"
-                                wire:model="kultur_feces" placeholder="Kultur Feces">
+                                wire:model="kultur_feces"
+                                placeholder="Kultur Feces"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
                             @error('kultur_feces')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror

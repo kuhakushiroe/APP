@@ -120,6 +120,13 @@
                                                                     <span class="bi bi-file-check"></span>
                                                                     Verifikasi Paramedik
                                                                 </button>
+                                                            @else
+                                                                <button class="btn btn-warning btn-sm" type="button"
+                                                                    disabled>
+                                                                    <span class="spinner-border spinner-border-sm"
+                                                                        aria-hidden="true"></span>
+                                                                    <span role="status">Paramedik</span>
+                                                                </button>
                                                             @endif
                                                         @else
                                                             @if (auth()->user()->role === 'dokter' && in_array(auth()->user()->subrole, ['verifikator']))
@@ -127,6 +134,13 @@
                                                                     wire:click="verifikasi({{ $data->id_mcu }})">
                                                                     <span class="bi bi-file-check"></span>
                                                                     Verifikasi Dokter
+                                                                </button>
+                                                            @else
+                                                                <button class="btn btn-warning btn-sm" type="button"
+                                                                    disabled>
+                                                                    <span class="spinner-border spinner-border-sm"
+                                                                        aria-hidden="true"></span>
+                                                                    <span role="status">Dokter</span>
                                                                 </button>
                                                             @endif
                                                         @endif
@@ -166,18 +180,36 @@
                                                     <td>{{ $item->tgl_mcu }}</td>
                                                     <td>
                                                         @if (empty($item->status))
-                                                            @if (auth()->user()->role === 'dokter' && in_array(auth()->user()->subrole, ['verifikator', 'paramedik']))
-                                                                <button class="btn btn-outline-warning btn-sm"
-                                                                    wire:click="verifikasi({{ $item->id }})">
-                                                                    <span class="bi bi-file-check"></span>
-                                                                    @if (auth()->user()->subrole == 'paramedik')
+                                                            @if (empty($item->paramedik))
+                                                                @if (in_array(auth()->user()->subrole, ['paramedik']))
+                                                                    <button class="btn btn-outline-warning btn-sm"
+                                                                        wire:click="verifikasi({{ $item->id }})">
+                                                                        <span class="bi bi-file-check"></span>
                                                                         Verifikasi Paramedik
-                                                                    @else
-                                                                        Verifikasi Dokter
-                                                                    @endif
-                                                                </button>
+                                                                    </button>
+                                                                @else
+                                                                    <button class="btn btn-warning btn-sm"
+                                                                        type="button" disabled>
+                                                                        <span class="spinner-border spinner-border-sm"
+                                                                            aria-hidden="true"></span>
+                                                                        <span role="status">Paramedik</span>
+                                                                    </button>
+                                                                @endif
                                                             @else
-                                                                -
+                                                                @if (in_array(auth()->user()->subrole, ['verifikator']))
+                                                                    <button class="btn btn-outline-warning btn-sm"
+                                                                        wire:click="verifikasi({{ $item->id }})">
+                                                                        <span class="bi bi-file-check"></span>
+                                                                        Verifikasi Dokter
+                                                                    </button>
+                                                                @else
+                                                                    <button class="btn btn-warning btn-sm"
+                                                                        type="button" disabled>
+                                                                        <span class="spinner-border spinner-border-sm"
+                                                                            aria-hidden="true"></span>
+                                                                        <span role="status">Dokter</span>
+                                                                    </button>
+                                                                @endif
                                                             @endif
                                                         @else
                                                             {{ $item->status }}
