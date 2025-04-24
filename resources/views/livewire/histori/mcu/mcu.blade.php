@@ -13,6 +13,7 @@
         <table class="table table-striped">
             <thead>
                 <tr>
+                    <th>NRP</th>
                     <th>Nama</th>
                     <th>Dept / Posisi</th>
                     <th>Hasil</th>
@@ -22,6 +23,9 @@
             <tbody>
                 @forelse ($historimcus as $data)
                     <tr>
+                        <td>
+                            {{ $data->nrp }}
+                        </td>
                         <td>
                             {{ $data->nama }}
                         </td>
@@ -41,12 +45,12 @@
                             @endif
                         </td>
                         <td>
-                            {{ $data->exp_mcu }}
+                            {{ \Carbon\Carbon::parse($data->exp_mcu)->locale('id')->translatedFormat('l, d F Y') }}
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4">
+                        <td colspan="5">
                             <div class="alert alert-danger">
                                 <span class="bi bi-exclamation-circle"></span>
                                 &nbsp;No data

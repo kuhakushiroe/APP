@@ -176,7 +176,7 @@
                     {{-- CETAK --}}
                     @hasAnyRole(['superadmin'])
                         @php
-                            $isCetakActive = Str::startsWith($routeName, ['cetak']);
+                            $isCetakActive = Str::startsWith($routeName, ['cetak', 'id-karyawan', 'kimper-karyawan']);
                         @endphp
                         <li class="nav-item {{ $isCetakActive ? 'menu-open' : '' }}">
                             <a href="#" class="nav-link {{ $isCetakActive ? 'active' : '' }}">
@@ -188,14 +188,14 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="karyawan" class="nav-link @if ($routeName == 'karyawan') active @endif">
-                                        <i class="nav-icon bi {{ iconActive('karyawan', 'circle') }}"></i>
+                                    <a href="cetak-id" class="nav-link @if ($routeName == 'id-karyawan') active @endif">
+                                        <i class="nav-icon bi {{ iconActive('id-karyawan', 'circle') }}"></i>
                                         <p>ID</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="karyawan" class="nav-link @if ($routeName == 'karyawan') active @endif">
-                                        <i class="nav-icon bi {{ iconActive('karyawan', 'circle') }}"></i>
+                                    <a href="cetak-kimper" class="nav-link @if ($routeName == 'kimper-karyawan') active @endif">
+                                        <i class="nav-icon bi {{ iconActive('kimper-karyawan', 'circle') }}"></i>
                                         <p>KIMPER</p>
                                     </a>
                                 </li>

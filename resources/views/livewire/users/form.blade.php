@@ -43,7 +43,7 @@
                                 <option value="admin">Admin</option>
                                 <option value="karyawan">Karyawan</option>
                                 <option value="dokter">Dokter</option>
-                                <option value="she">She</option>
+                                <option value="she">SHE</option>
                                 <option value="pimpinan">Pimpinan Dept</option>
                             </select>
                             @error('role')

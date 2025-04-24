@@ -96,70 +96,34 @@
         </div>
     </div>
     <div style="margin: 0cm 0cm 0cm 1.2cm">
-        Berikut hasil pemeriksaan Medical Check Up yang dilakukan pada tanggal 9 Januari 2024:
+        Berikut hasil pemeriksaan Medical Check Up yang dilakukan pada tanggal
+        {{ \Carbon\Carbon::parse($query->tgl_mcu)->locale('id')->translatedFormat('d F Y') }}
         <div style="padding: 0cm 0cm 0cm 0.6cm">
-            <table width="100%">
-                <tr>
-                    <td width="38%">1. Kadar Gula Darah</td>
-                    <td>: 101 mg/dL</td>
-                </tr>
-                <tr>
-                    <td>2. Pemeriksaan Mata</td>
-                    <td>: dalam batas normal</td>
-                </tr>
-                <tr>
-                    <td>3. Audiometri</td>
-                    <td>: dalam batas normal</td>
-                </tr>
-                <tr>
-                    <td>4. EKG</td>
-                    <td>: dalam batas normal</td>
-                </tr>
-                <tr>
-                    <td>5. Treadmill</td>
-                    <td>: -</td>
-                </tr>
-                <tr>
-                    <td>Hasil Follow Up</td>
-                    <td>: -</td>
-                </tr>
-                <tr>
-                    <td>6. Tinggi Badan</td>
-                    <td>: 160,4 cm</td>
-                </tr>
-                <tr>
-                    <td>Berat Badan</td>
-                    <td>: 63,1 Kg</td>
-                </tr>
-                <tr>
-                    <td>Tekanan Darah</td>
-                    <td>: 108/82 mmHg</td>
-                </tr>
-                <tr>
-                    <td>Buta Warna</td>
-                    <td>: Negatif</td>
-                </tr>
-                <tr>
-                    <td>Riwayat Penyakit</td>
-                    <td>
-                        Kehilangan Kesadaran: TIDAK<br>
-                        Epilepsi: TIDAK
-                    </td>
-                </tr>
-            </table>
+            {{ $query->keterangan_mcu }}
         </div>
     </div>
     <div style="margin: 0cm 0cm 0cm 1.2cm">
-        <p class="mt-3"><b>Berdasarkan hasil pemeriksaan MCU di atas dapat dinyatakan: <u>FIT</u>.</b></p>
-        Surat keterangan ini untuk keperluan administrasi pengajuan ID Card & KIMPER berlaku sampai dengan 9
-        Januari Atas perhatian dan kerjasamanya saya mengucapkan terima kasih.
+        Setelah dilakukan pemeriksaan:
+        <div style="padding: 0cm 0cm 0cm 0.6cm">
+            {{ $query->saran_mcu }}
+        </div>
+    </div>
+    <div style="margin: 0cm 0cm 0cm 1.2cm">
+        <p class="mt-3"><b>Berdasarkan hasil pemeriksaan MCU di atas dapat dinyatakan:
+                <u>{{ $query->status }}</u>.</b>
+        </p>
+        Surat keterangan ini untuk keperluan administrasi pengajuan ID Card & KIMPER berlaku sampai dengan
+        {{ \Carbon\Carbon::parse($query->exp_mcu)->locale('id')->translatedFormat('l, d F Y') }} Atas perhatian dan
+        kerjasamanya saya mengucapkan terima kasih.
     </div>
     <div class="text-right mt-5">
         <table width="100%">
             <tr>
                 <td width="70%">&nbsp;</td>
                 <td width="30%">
-                    <p>Meulaboh, 18 Februari 2024</p>
+                    <p>Meulaboh,
+                        {{ \Carbon\Carbon::parse($query->tgl_verifikasi)->locale('id')->translatedFormat('l, d F Y') }}
+                    </p>
                     <p>Dokter Yang Memeriksa</p>
                     <img src="{{ public_path('storage/Dokter 1.jpeg') }}" alt="" width="100px">
                     {{-- <p><b>dr. Muhammad Reza Wardana</b></p>

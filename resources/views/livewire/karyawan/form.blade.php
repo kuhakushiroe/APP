@@ -176,10 +176,10 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="kontraktor">Kontraktor</label>
+                            <label for="kontraktor">Mitra Perusahaan</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('kontraktor') is-invalid @enderror"
-                                wire:model="kontraktor" placeholder="Kontraktor">
+                                wire:model="kontraktor" placeholder="Mitra Perusahaan">
                             @error('kontraktor')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror

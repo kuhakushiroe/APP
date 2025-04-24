@@ -392,6 +392,8 @@ class Mcu extends Component
                     'keterangan_mcu' => $this->keterangan_mcu,
                     'saran_mcu' => $this->saran_mcu,
                 ]);
+                Karyawan::where('nrp', $mcu->id_karyawan)
+                    ->update(['exp_mcu' => $this->exp_mcu]);
                 if ($indukmcu) {
                     $indukmcu->update([
                         'status_' => 'close',

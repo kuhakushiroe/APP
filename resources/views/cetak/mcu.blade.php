@@ -207,7 +207,11 @@
                             ->orderBy('tgl_mcu', 'desc')
                             ->first();
                     @endphp
-                    {{ $indukquery->status . ' , ' }}<br>
+                    @if ($indukquery)
+                        {{ $indukquery->status . ' , ' }}<br>
+                    @else
+                        {{ $query->keterangan_mcu }}
+                    @endif
                     @php
                         $subquery = DB::table('mcu')
                             ->where('sub_id', $query->sub_id)

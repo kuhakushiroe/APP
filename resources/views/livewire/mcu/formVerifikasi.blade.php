@@ -505,6 +505,23 @@
                                             role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
                                 </div>
+                                <div class="col-md-12">
+                                    <label for="keterangan_mcu">Hasil:</label>
+                                    <textarea class="form-control form-control-sm @error('keterangan_mcu') is-invalid @enderror"
+                                        wire:model="keterangan_mcu"></textarea>
+                                    @error('keterangan_mcu')
+                                        <span class="invalid-feedback"
+                                            role="alert"><strong>{{ $message }}</strong></span>
+                                    @enderror
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="saran_mcu">Setelah Dilakukan Pemeriksaan</label>
+                                    <textarea class="form-control form-control-sm @error('saran_mcu') is-invalid @enderror" wire:model="saran_mcu"></textarea>
+                                    @error('saran_mcu')
+                                        <span class="invalid-feedback"
+                                            role="alert"><strong>{{ $message }}</strong></span>
+                                    @enderror
+                                </div>
                             @elseif ($status && $status !== 'FIT')
                                 <div class="col-md-12">
                                     <label for="keterangan_mcu">Keterangan / Catatan / Temuan</label>

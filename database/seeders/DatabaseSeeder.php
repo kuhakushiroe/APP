@@ -28,6 +28,14 @@ class DatabaseSeeder extends Seeder
 
         // User init
         User::create([
+            'name' => 'SHE',
+            'username' => 'she',
+            'email' => 'she@example.com',
+            'role' => 'she',
+            'subrole' => '',
+            'password' => Hash::make('password'),
+        ]);
+        User::create([
             'name' => 'Admin',
             'username' => 'admin1',
             'email' => 'admin@example.com',
@@ -84,24 +92,24 @@ class DatabaseSeeder extends Seeder
             'SANY STC 750',
             'SANY STC 60T',
             'ISUZU ELF HYVA/HB60E2',
-            'HINO 260 Ti',
-            'HINO 500',
-            'SCANIA P380',
+            'SCANIA P380 CRANE',
             'NISSAN',
             'FUSO',
             'TADANO 50 T',
             'BOMAG 211 D 40',
             'SAKAI SV 526',
-            'HINO 260 Ti',
-            'MERCY 2528 RMC',
-            'HINO 500',
-            'HINO 500',
-            'SCANIA P380',
-            'MERCY 2528 RMC',
+            'HINO 260 Ti LUBE',
+            'HINO 260 Ti CRANE',
+            'MERCY 2528 RMC LUBE',
+            'SCANIA P380 WATER',
+            'MERCY 2528 RMC WATER',
             'QUESTER',
             'IVECO 6824',
-            'MERCY 2528 RMC',
-            'HINO 500',
+            'MERCY 2528 RMC FUEL',
+            'HINO 500 WATER',
+            'HINO 500 LUBE',
+            'HINO 500 FUEL',
+            'HINO 500 CRANE',
             'D 85 SS',
             'D 155 A',
             'D 375 A',
@@ -127,7 +135,7 @@ class DatabaseSeeder extends Seeder
             'DT NISSAN CWB',
             'DT MERCY 4040 K',
             'DT MERCY 4845 K',
-            'DT QUESTER',
+            'DT QUESTER DUMP TRUCK',
             'MG 511',
             'MG 705 A',
             'MG 825 A',
@@ -135,15 +143,22 @@ class DatabaseSeeder extends Seeder
             'Forklift FD 50X',
             'MERLO 27-10',
             'MANITOU MHT-X 860L',
-            'DT QUESTER',
+            'DT QUESTER OTHERS',
             'LOWBOY SCANIA R580',
             'DRILLING MACHINE 254 KS',
             'DRILLING MACHINE 245KS',
         ];
 
+        foreach ($kendaraanList as $item) {
+            DB::table('versatility')->insert([
+                'versatility' => $item,
+                'description' => '-'
+            ]);
+        }
+
         // Insert 100 karyawan
         DB::transaction(function () use ($kendaraanList) {
-            $faker = Faker::create();
+            $faker = Faker::create('id_ID');
             $departments = Departments::pluck('name_department')->toArray();
 
             foreach (range(1, 100) as $index) {
