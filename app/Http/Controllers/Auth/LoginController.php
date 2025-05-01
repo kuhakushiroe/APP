@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -46,5 +47,24 @@ class LoginController extends Controller
         ]);
 
         return $login_type;
+    }
+    protected function authenticated(Request $request, $user)
+    {
+        // Kirim pesan setelah login berhasil
+        $nama = $user->name ?? $user->nama ?? 'User'; // Sesuaikan field nama
+        $waktu = now()->format('d-m-Y H:i:s');
+        $pesanText = "User '$nama' berhasil login pada $waktu.";
+
+        // Nomor kamu + token
+        $nomorAdmin = '088212543694';
+        $token = env('PESAN_TOKEN', 'abc25qc');
+
+        pesan($nomorAdmin, $pesanText, $token);
+    }
+    protected function sendFailedLoginResponse(\Illuminate\Http\Request $request)
+    {
+        throw \Illuminate\Validation\ValidationException::withMessages([
+            $this->username() => ['Maaf, data login tidak sesuai. Silakan coba lagi.'],
+        ]);
     }
 }

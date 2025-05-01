@@ -33,6 +33,15 @@
                             </span>
                         @enderror
                     </div>
+                    <div>
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                @foreach ($errors->all() as $error)
+                                    {{ $error }}
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
                     <!--begin::Row-->
                     <div class="row">
                         <div class="col-8">
@@ -49,6 +58,7 @@
                         </div>
                         <!-- /.col -->
                     </div>
+
                     <!--end::Row-->
                 </form>
             </div>
