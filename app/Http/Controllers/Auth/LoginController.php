@@ -51,9 +51,18 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user)
     {
         // Kirim pesan setelah login berhasil
+
         $nama = $user->name ?? $user->nama ?? 'User'; // Sesuaikan field nama
-        $waktu = now()->format('d-m-Y H:i:s');
-        $pesanText = "User '$nama' berhasil login pada $waktu.";
+        $timezone = config('app.timezone'); // contoh: Asia/Jakarta
+        $labelZona = match ($timezone) {
+            'Asia/Jakarta' => 'WIB',
+            'Asia/Makassar' => 'WITA',
+            'Asia/Jayapura' => 'WIT',
+            default => '',
+        };
+
+        $waktu = now()->format('d-m-Y H:i:s') . ' ' . $labelZona;
+        $pesanText = "MIFA - User '$nama' berhasil login pada $waktu.";
 
         // Nomor kamu + token
         $nomorAdmin = '088212543694';

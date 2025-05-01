@@ -3,8 +3,6 @@
 if (!function_exists('pesan')) {
     function pesan($nohp, $pesan, $token)
     {
-        date_default_timezone_set('Asia/Shanghai');
-
         $tokenValid = env('PESAN_TOKEN', 'abc25qc'); // Simpan di .env kalau mau
 
         if (empty($nohp)) {
@@ -37,4 +35,3 @@ if (!function_exists('pesan')) {
         return ['success' => true, 'response' => $response];
     }
 }
-    
