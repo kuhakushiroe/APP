@@ -22,8 +22,11 @@ class DatabaseSeeder extends Seeder
         Departments::insert([
             ['name_department' => 'ENGINEERING', 'description_department' => 'ENGINEERING'],
             ['name_department' => 'PRODUKSI', 'description_department' => 'PRODUKSI'],
-            ['name_department' => 'FLO', 'description_department' => 'FLO'],
+            ['name_department' => 'FALOG', 'description_department' => 'FALOG'],
             ['name_department' => 'SHE', 'description_department' => 'SHE'],
+            ['name_department' => 'COE', 'description_department' => 'COE'],
+            ['name_department' => 'PLANT', 'description_department' => 'PLANT'],
+            ['name_department' => 'HCGA', 'description_department' => 'HCGA'],
         ]);
 
         // User init
@@ -149,10 +152,11 @@ class DatabaseSeeder extends Seeder
             'DRILLING MACHINE 245KS',
         ];
 
-        foreach ($kendaraanList as $item) {
+        foreach ($kendaraanList as $item => $value) {
             DB::table('versatility')->insert([
-                'versatility' => $item,
-                'description' => '-'
+                'versatility' => $value,
+                'description' => '-',
+                'code_versatility' => $item + 1,
             ]);
         }
 

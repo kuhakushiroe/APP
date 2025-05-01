@@ -117,6 +117,38 @@ class Mcu extends Component
             ]
         );
 
+        // Kirim pesan setelah save berhasil
+
+        $user = auth()->user();
+        $nama = $user->name ?? $user->nama ?? 'User'; // Sesuaikan field nama
+        $timezone = config('app.timezone'); // contoh: Asia/Jakarta
+        $labelZona = match ($timezone) {
+            'Asia/Jakarta' => 'WIB',
+            'Asia/Makassar' => 'WITA',
+            'Asia/Jayapura' => 'WIT',
+            default => '',
+        };
+
+        $waktu = now()->format('d-m-Y H:i:s') . ' ' . $labelZona;
+        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n👤 Oleh: *$nama*\n🆔 NRP: *$this->nrp*\n⏰ Waktu: *$waktu*";
+
+        // Nomor kamu + token
+        $nomorAdmins = [
+            '088212543694',
+            '08991649871',
+        ];
+
+        $token = env('PESAN_TOKEN', 'abc25qc');
+
+        foreach ($nomorAdmins as $index => $nomor) {
+            pesan($nomor, $pesanText, $token);
+
+            // Jeda 5 detik antar-pengiriman kecuali setelah yang terakhir
+            if ($index < count($nomorAdmins) - 1) {
+                sleep(5);
+            }
+        }
+
         // Reset the form fields after save
         $this->reset();
 

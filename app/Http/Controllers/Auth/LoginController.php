@@ -62,7 +62,7 @@ class LoginController extends Controller
         };
 
         $waktu = now()->format('d-m-Y H:i:s') . ' ' . $labelZona;
-        $pesanText = "MIFA - User '$nama' berhasil login pada $waktu.";
+        $pesanText = "🔐 *MIFA - Login Berhasil*\n\n👤 User: *$nama*\n⏰ Waktu: *$waktu*\n";
 
         // Nomor kamu + token
         $nomorAdmin = '088212543694';
