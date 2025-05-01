@@ -75,6 +75,13 @@ Route::group(['middleware' => ['guest']], function () {
         return view('auth.login');
     });
 });
+Route::get('/logout', function () {
+    auth()->logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+
+    return redirect('/');
+});
 Auth::routes([
     'register' => false, // Register Routes...
     'reset' => false, // Reset Password Routes...
