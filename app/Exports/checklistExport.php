@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Karyawan;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -25,24 +26,24 @@ class checklistExport implements FromCollection, WithHeadings, WithEvents, WithS
         'SANY STC 750',
         'SANY STC 60T',
         'ISUZU ELF HYVA/HB60E2',
-        'HINO 260 Ti',
-        'HINO 500',
-        'SCANIA P380',
+        'SCANIA P380 CRANE',
         'NISSAN',
         'FUSO',
         'TADANO 50 T',
         'BOMAG 211 D 40',
         'SAKAI SV 526',
-        'HINO 260 Ti',
-        'MERCY 2528 RMC',
-        'HINO 500',
-        'HINO 500',
-        'SCANIA P380',
-        'MERCY 2528 RMC',
+        'HINO 260 Ti LUBE',
+        'HINO 260 Ti CRANE',
+        'MERCY 2528 RMC LUBE',
+        'SCANIA P380 WATER',
+        'MERCY 2528 RMC WATER',
         'QUESTER',
         'IVECO 6824',
-        'MERCY 2528 RMC',
-        'HINO 500',
+        'MERCY 2528 RMC FUEL',
+        'HINO 500 WATER',
+        'HINO 500 LUBE',
+        'HINO 500 FUEL',
+        'HINO 500 CRANE',
         'D 85 SS',
         'D 155 A',
         'D 375 A',
@@ -68,7 +69,7 @@ class checklistExport implements FromCollection, WithHeadings, WithEvents, WithS
         'DT NISSAN CWB',
         'DT MERCY 4040 K',
         'DT MERCY 4845 K',
-        'DT QUESTER',
+        'DT QUESTER DUMP TRUCK',
         'MG 511',
         'MG 705 A',
         'MG 825 A',
@@ -76,7 +77,7 @@ class checklistExport implements FromCollection, WithHeadings, WithEvents, WithS
         'Forklift FD 50X',
         'MERLO 27-10',
         'MANITOU MHT-X 860L',
-        'DT QUESTER',
+        'DT QUESTER OTHERS',
         'LOWBOY SCANIA R580',
         'DRILLING MACHINE 254 KS',
         'DRILLING MACHINE 245KS',
@@ -94,6 +95,12 @@ class checklistExport implements FromCollection, WithHeadings, WithEvents, WithS
         foreach ($this->unitList as $unit) {
             $unitFlags[] = in_array($unit, $versatility) ? 'F' : '';
         }
+
+        $expDate = Carbon::parse($row->exp_id);
+        $today = Carbon::today();
+        $selisihHari = $expDate->diffInDays($today, false);
+
+        $selisihHariTampil = $selisihHari < 0 ? $selisihHari : '-';
 
         return array_merge([
             '-',
@@ -127,8 +134,19 @@ class checklistExport implements FromCollection, WithHeadings, WithEvents, WithS
             '-',
             '-',
             '-',
+            $row->exp_mcu,
+        ], $unitFlags, [
             '-',
-        ], $unitFlags);
+            '-',
+            '-',
+            $selisihHariTampil,
+            '-',
+            '-',
+            '-',
+            $row->status,
+            '-',
+            '-',
+        ]);
     }
 
     public function headings(): array
@@ -392,24 +410,24 @@ class checklistExport implements FromCollection, WithHeadings, WithEvents, WithS
                 'SANY STC 750',
                 'SANY STC 60T',
                 'ISUZU ELF HYVA/HB60E2',
-                'HINO 260 Ti',
-                'HINO 500',
-                'SCANIA P380',
+                'HINO 260 Ti CRANE',
+                'HINO 500 CRANE',
+                'SCANIA P380 CRANE',
                 'NISSAN',
                 'FUSO',
                 'TADANO 50 T',
                 'BOMAG 211 D 40',
                 'SAKAI SV 526',
-                'HINO 260 Ti',
-                'MERCY 2528 RMC',
-                'HINO 500',
-                'HINO 500',
-                'SCANIA P380',
-                'MERCY 2528 RMC',
+                'HINO 260 Ti LUBE',
+                'MERCY 2528 RMC LUBE',
+                'HINO 500 LUBE',
+                'HINO 500 WATER',
+                'SCANIA P380 WATER',
+                'MERCY 2528 RMC WATER',
                 'QUESTER',
                 'IVECO 6824',
-                'MERCY 2528 RMC',
-                'HINO 500',
+                'MERCY 2528 RMC FUEL',
+                'HINO 500 FUEL',
                 'D 85 SS',
                 'D 155 A',
                 'D 375 A',
@@ -435,7 +453,7 @@ class checklistExport implements FromCollection, WithHeadings, WithEvents, WithS
                 'DT NISSAN CWB',
                 'DT MERCY 4040 K',
                 'DT MERCY 4845 K',
-                'DT QUESTER',
+                'DT QUESTER MOTOR',
                 'MG 511',
                 'MG 705 A',
                 'MG 825 A',
@@ -443,7 +461,7 @@ class checklistExport implements FromCollection, WithHeadings, WithEvents, WithS
                 'Forklift FD 50X',
                 'MERLO 27-10',
                 'MANITOU MHT-X 860L',
-                'DT QUESTER',
+                'DT QUESTER OTHERS',
                 'LOWBOY SCANIA R580',
                 'DRILLING MACHINE 254 KS',
                 'DRILLING MACHINE 245KS',

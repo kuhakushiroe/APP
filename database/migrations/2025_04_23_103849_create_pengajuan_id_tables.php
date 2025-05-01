@@ -32,13 +32,17 @@ return new class extends Migration
             $table->enum('status_upload_ktp', [0, 1])->nullable();
             $table->string('catatan_upload_ktp')->nullable();
 
+            $table->string('upload_bpjs_kes')->nullable();
+            $table->enum('status_upload_bpjs_kes', [0, 1])->nullable();
+            $table->string('catatan_upload_bpjs_kes')->nullable();
+
+            $table->string('upload_bpjs_ker')->nullable();
+            $table->enum('status_upload_bpjs_ker', [0, 1])->nullable();
+            $table->string('catatan_upload_bpjs_ker')->nullable();
+
             $table->string('upload_skd')->nullable();
             $table->enum('status_upload_skd', [0, 1])->nullable();
             $table->string('catatan_upload_skd')->nullable();
-
-            $table->string('upload_bpjs')->nullable();
-            $table->enum('status_upload_bpjs', [0, 1])->nullable();
-            $table->string('catatan_upload_bpjs')->nullable();
 
             $table->enum('status_pengajuan', [0, 1, 2])->nullable();
             $table->date('tgl_induksi')->nullable();

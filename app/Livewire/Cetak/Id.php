@@ -16,7 +16,7 @@ class Id extends Component
     #[Title('Cetak ID')]
     public function render()
     {
-        if (auth()->user()->hasRole('superadmin') || auth()->user()->subrole == 'SHE') {
+        if (in_array(auth()->user()->role, ['superadmin', 'she'])) {
             $karyawans = Karyawan::whereAny(['nik', 'nrp', 'nama', 'status', 'dept'], 'LIKE', '%' . $this->search . '%')
                 ->orderByRaw("status = 'non aktif' ASC")
                 ->paginate(10)

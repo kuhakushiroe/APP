@@ -3,6 +3,7 @@
 namespace App\Livewire\Karyawan;
 
 use App\Exports\KaryawansExport;
+use App\Imports\checklistImport;
 use App\Imports\KaryawanImport;
 use App\Models\Departments;
 use App\Models\Jabatan;
@@ -29,9 +30,10 @@ class Karyawan extends Component
     protected $updatesQueryString = ['search'];
     public $form = false;
     public $formImport = false;
+    public $formImportCek = false;
     public $id_karyawan, $foto, $fotolama, $nik, $nrp, $doh, $tgl_lahir, $nama, $jenis_kelamin;
     public $tempat_lahir, $agama, $gol_darah, $status_perkawinan, $perusahaan;
-    public $kontraktor, $dept, $jabatan, $no_hp, $alamat, $domisili, $status = 'aktif', $file;
+    public $kontraktor, $dept, $jabatan, $no_hp, $alamat, $domisili, $status = 'aktif', $file, $fileCek;
     public function open()
     {
         if (auth()->user()->hasRole('admin')) {
@@ -195,6 +197,18 @@ class Karyawan extends Component
     {
         $this->formImport = true;
     }
+    public function closeImport()
+    {
+        $this->formImport = false;
+    }
+    public function openImportCek()
+    {
+        $this->formImportCek = true;
+    }
+    public function closeImportCek()
+    {
+        $this->formImportCek = false;
+    }
     public function import()
     {
         $excel = app(Excel::class);
@@ -233,6 +247,37 @@ class Karyawan extends Component
         // Reset the file input after the import
         $this->reset('file');
     }
+    public function importCek()
+    {
+        $excel = app(Excel::class);
+        $this->validate([
+            'fileCek' => 'required|file|mimes:xlsx,xls',
+        ]);
+        try {
+            $excel->import(new checklistImport, $this->fileCek);
+            $this->dispatch(
+                'alert',
+                type: 'success',
+                title: 'Berhasil',
+                text: 'Berhasil Import Karyawan',
+                position: 'center',
+                confirm: true,
+                redirect: '/karyawan',
+            );
+            return;
+        } catch (\Exception $e) {
+            $this->dispatch(
+                'alert',
+                type: 'error',
+                title: 'Gagal',
+                text: 'Gagal Import Karyawan',
+                position: 'center',
+                confirm: true,
+                redirect: '/karyawan',
+            );
+            return;
+        }
+    }
     public function export()
     {
         $excel = app(Excel::class);
@@ -270,9 +315,10 @@ class Karyawan extends Component
     {
         $this->resetPage();
     }
+
     public function render()
     {
-        if (auth()->user()->hasRole('superadmin') || auth()->user()->subrole == 'SHE') {
+        if (in_array(auth()->user()->role, ['superadmin', 'she'])) {
             $karyawans = ModelsKaryawan::whereAny(['nik', 'nrp', 'nama', 'status', 'dept'], 'LIKE', '%' . $this->search . '%')
                 ->orderByRaw("status = 'non aktif' ASC")
                 ->paginate(10)

@@ -3,7 +3,7 @@
         @include('livewire.karyawan.form')
     @else
         <div class="row pt-2">
-            <div class="col-md-3">
+            <div class="col-md-12">
                 <button class="btn btn-dark btn-sm" wire:click="open">
                     <span class="bi bi-plus-square"></span>
                     &nbsp;Karyawan
@@ -19,22 +19,49 @@
                         &nbsp;Import
                     </button>
                 @endif
+                <a href="{{ route('try-export') }}" class="btn btn-success btn-sm">
+                    <span class="bi bi-download"></span>
+                    &nbsp;Export Model Cheklist
+                </a>
+                @if ($formImportCek)
+                @else
+                    <button class="btn btn-warning btn-sm" wire:click="openImportCek">
+                        <span class="bi bi-upload"></span>
+                        &nbsp;Import By Cek
+                    </button>
+                @endif
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 pt-2">
                 @if ($formImport)
                     <form wire:submit.prevent="import">
                         <div class="input-group">
                             <input type="file" class="form-control @error('file') is-invalid @enderror"
                                 wire:model="file">
                             <button class="btn btn-outline-secondary" type="submit">Upload</button>
+                            <button class="btn btn-outline-danger" type="reset"
+                                wire:click.prevent="closeImport">Batal</button>
                             @error('file')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
                         </div>
                     </form>
                 @endif
+                @if ($formImportCek)
+                    <form wire:submit.prevent="importCek">
+                        <div class="input-group">
+                            <input type="file" class="form-control @error('fileCek') is-invalid @enderror"
+                                wire:model="fileCek">
+                            <button class="btn btn-outline-secondary" type="submit">Upload</button>
+                            <button class="btn btn-outline-danger" type="reset"
+                                wire:click.prevent="closeImportCek">Batal</button>
+                            @error('fileCek')
+                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
+                        </div>
+                    </form>
+                @endif
             </div>
-            <div class="col-md-3">
+            <div class="col-md-12">
                 <input type="text"class="form-control form-control-sm" placeholder="Search" wire:model.live="search">
             </div>
         </div>

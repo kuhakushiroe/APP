@@ -5,8 +5,6 @@
     <title>{{ $title ?? 'Dashboard' }}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>{{ $title ?? 'Page Title' }}</title>
     <link rel="icon" href="{{ asset('storage/LOGO SHE-G.png') }}" type="image/x-icon" />
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     <!-- Scripts -->
@@ -30,10 +28,8 @@
 
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
     <div class="app-wrapper">
-        <!--begin::Header-->
-        @include('components.layouts.navbar')
-        <!--end::Header-->
-        @include('components.layouts.aside')
+        <livewire:layouts.navbar />
+        <livewire:layouts.sidebar />
         <main class="app-main">
             <div class="app-content-header">
                 <!--begin::Container-->
@@ -66,7 +62,7 @@
                 <!--end::Container-->
             </div>
         </main>
-        @include('components.layouts.footer')
+        <livewire:layouts.footer />
     </div>
     <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/browser/overlayscrollbars.browser.es6.min.js"
         integrity="sha256-dghWARbRe2eLlIJ56wNB+b760ywulqK3DzZYEpsg2fQ=" crossorigin="anonymous"></script>
@@ -81,7 +77,7 @@
     <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
     <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
     <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
-    <script>
+    {{-- <script>
         const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
         const Default = {
             scrollbarTheme: 'os-theme-light',
@@ -180,7 +176,7 @@
                 });
             }
         });
-    </script>
+    </script> --}}
 
     @livewireScripts
 </body>

@@ -74,8 +74,7 @@ class Id extends Component
             $rules['upload_id_lama'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
         }
         if ($this->jenis_pengajuan_id === 'baru') {
-            $rules['upload_id_lama'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
-            $rules['upload_foto'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
+            $rules['upload_foto'] = 'required|mimes:jpeg,png,jpg,gif|max:10240';
             $rules['upload_ktp'] =  'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
             $rules['upload_skd'] =  'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
             $rules['upload_bpjs'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
@@ -84,6 +83,7 @@ class Id extends Component
         $messages = [
             'required' => 'Kolom :attribute harus diisi.',
             'mimes' => 'Format file :attribute harus JPEG, PNG, JPG, GIF, atau PDF.',
+            'upload_foto.mimes' => 'Format file Foto harus berupa gambar (JPEG, PNG, JPG, atau GIF).',
             'max' => 'Ukuran file :attribute maksimal 10MB.',
         ];
         $this->validate($rules, $messages);
@@ -195,7 +195,7 @@ class Id extends Component
 
         if ($pengajuan->status_upload_foto == '0') {
             $this->validate([
-                'upload_foto' => 'required|file|mimes:pdf,jpg,png|max:10240'
+                'upload_foto' => 'required|file|mimes:jpg,png|max:10240'
             ]);
             $fotoPath = $this->upload_foto->storeAs($folderPath, "{$nrp}_foto_{$idPengajuan}_revisi" . time() . ".{$this->upload_foto->getClientOriginalExtension()}", 'public');
             $data['upload_foto'] = $fotoPath;
@@ -369,7 +369,7 @@ class Id extends Component
         $carifoto = Karyawan::where('nrp', $this->nrp)
             ->where('status', 'aktif')
             ->first();
-        if (auth()->user()->role === 'superadmin') {
+        if (in_array(auth()->user()->role, ['superadmin', 'she'])) {
             $pengajuanid = DB::table('pengajuan_id')
                 ->select('pengajuan_id.*', 'karyawans.*', 'pengajuan_id.id as id_pengajuan')
                 ->join('karyawans', 'karyawans.nrp', '=', 'pengajuan_id.nrp')

@@ -232,7 +232,11 @@
             </tr>
             <tr>
                 <td style="width: 10%;">&nbsp;</td>
-                <td colspan="3" style="text-align: left;">{{ $query->saran_mcu ?? '' }}</td>
+                <td colspan="3" style="text-align: left;">
+                    @if ($data->status !== 'FIT')
+                        {{ $query->saran_mcu ?? '' }}
+                    @endif
+                </td>
             </tr>
             <tr>
                 <td colspan="4" style="text-align: left;">

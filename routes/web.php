@@ -38,7 +38,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('jabatan', Jabatan::class)->name('jabatan');
         Route::get('versatility', Versatility::class)->name('versatility');
     });
-    Route::group(['middleware' => ['role:superadmin,admin']], function () {
+    Route::group(['middleware' => ['role:superadmin,admin,she']], function () {
         Route::get('pengajuan-id', Id::class)->name('pengajuan-id');
         Route::get('pengajuan-kimper', Kimper::class)->name('pengajuan-kimper');
         Route::get('histori-id', HistoriId::class)->name('histori-id');
@@ -57,7 +57,8 @@ Route::group(['middleware' => ['auth']], function () {
 
 Route::get('/try-export', function () {
     return Excel::download(new checklistExport, 'data-karyawan' . date('Y-m-d') . time() . '.xlsx');
-});
+})->name('try-export');
+
 Route::get('/try-import', function () {
     $filePath = storage_path('app/public/try-import2.xlsx');
     try {
@@ -67,6 +68,7 @@ Route::get('/try-import', function () {
         return '❌ Gagal import: ' . $e->getMessage();
     }
 });
+
 Route::get('/notfound/{page}', Notfound::class);
 Route::group(['middleware' => ['guest']], function () {
     Route::get('/login', function () {
