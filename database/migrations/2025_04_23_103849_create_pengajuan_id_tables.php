@@ -24,6 +24,11 @@ return new class extends Migration
             $table->enum('status_upload_request', [0, 1])->nullable();
             $table->string('catatan_upload_request')->nullable();
 
+            $table->string('upload_induksi')->nullable();
+            $table->enum('status_upload_induksi', [0, 1])->nullable();
+            $table->string('catatan_upload_induksi')->nullable();
+            $table->date('tgl_induksi')->nullable();
+
             $table->string('upload_foto')->nullable();
             $table->enum('status_upload_foto', [0, 1])->nullable();
             $table->string('catatan_upload_foto')->nullable();
@@ -44,8 +49,11 @@ return new class extends Migration
             $table->enum('status_upload_skd', [0, 1])->nullable();
             $table->string('catatan_upload_skd')->nullable();
 
+            $table->string('upload_spdk')->nullable();
+            $table->enum('status_upload_spdk', [0, 1])->nullable();
+            $table->string('catatan_upload_spdk')->nullable();
+
             $table->enum('status_pengajuan', [0, 1, 2])->nullable();
-            $table->date('tgl_induksi')->nullable();
             $table->date('tgl_pengajuan')->nullable();
             $table->date('exp_id')->nullable();
 

@@ -58,6 +58,7 @@ return new class extends Migration
             $table->string('catatan_upload_bpjs')->nullable();
 
             $table->text('versatility')->nullable();
+
             $table->enum('status_pengajuan', [0, 1, 2])->nullable();
             $table->date('tgl_pengajuan')->nullable();
             $table->date('exp_kimper')->nullable();

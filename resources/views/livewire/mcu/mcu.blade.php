@@ -88,7 +88,9 @@
                                         <tr>
                                             <td>Tanggal Pengajuan</td>
                                             <td>:</td>
-                                            <td>{{ $data->tgl_mcu }}</td>
+                                            <td>
+                                                {{ \Carbon\Carbon::parse($data->tgl_mcu)->locale('id')->isoFormat('D MMMM YYYY') }}
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td>Status</td>
@@ -112,26 +114,89 @@
                                                 <td>1</td>
                                                 <td>
                                                     <a href="{{ Storage::url($data->file_mcu) }}" target="_blank">
-                                                        <span class="bi bi-file-earmark-arrow-down"></span> Download
+                                                        <span class="bi bi-file-earmark-arrow-down"></span> File MCU
                                                     </a>
                                                 </td>
-                                                <td>{{ $data->tgl_mcu }}</td>
+                                                <td>
+                                                    {{ \Carbon\Carbon::parse($data->tgl_mcu)->locale('id')->isoFormat('D MMMM YYYY') }}
+                                                </td>
                                                 <td>
                                                     @if (empty($data->mcuStatus))
                                                         @if (empty($data->paramedik))
                                                             @if (auth()->user()->role === 'dokter' && in_array(auth()->user()->subrole, ['paramedik']))
-                                                                <button class="btn btn-outline-warning btn-sm"
-                                                                    wire:click="verifikasi({{ $data->id_mcu }})">
-                                                                    <span class="bi bi-file-check"></span>
-                                                                    Verifikasi Paramedik
-                                                                </button>
+                                                                <form action=""
+                                                                    wire:submit.prevent="kirimStatusFileMCU({{ $data->id_mcu }})">
+                                                                    @if ($data->status_file_mcu == null)
+                                                                        <select
+                                                                            wire:model.live="status_file_mcu.{{ $data->id_mcu }}"
+                                                                            class="form-control form-control-sm @error('status_file_mcu.' . $data->id_mcu) is-invalid @enderror">
+                                                                            <option value="">-Pilih Status-
+                                                                            </option>
+                                                                            <option value="0">Diterima</option>
+                                                                            <option value="1">Ditolak</option>
+                                                                        </select>
+                                                                        @error('status_file_mcu.' . $data->id_mcu)
+                                                                            <span class="invalid-feedback" role="alert">
+                                                                                <strong>{{ $message }}</strong>
+                                                                            </span>
+                                                                        @enderror
+
+                                                                        @if ($status_file_mcu[$data->id_mcu] == 1)
+                                                                            {{-- Memastikan bahwa status sudah "Ditolak" --}}
+                                                                            <textarea wire:model="catatan_file_mcu.{{ $data->id_mcu }}" class="form-control form-control-sm "
+                                                                                placeholder="Tulis Catatan"></textarea>
+                                                                            @error('catatan_file_mcu.' . $data->id_mcu)
+                                                                                <span class="invalid-feedback"
+                                                                                    role="alert"><strong>{{ $message }}</strong></span>
+                                                                            @enderror
+                                                                        @endif
+                                                                        <div
+                                                                            class="d-grid
+                                                                        gap-2">
+                                                                            <button type="submit"
+                                                                                class="btn btn-danger btn-sm">
+                                                                                <span class="bi bi-send"></span> Kirim
+                                                                            </button>
+                                                                        </div>
+                                                                    @else
+                                                                        @if ($data->status_file_mcu == 1)
+                                                                            <button
+                                                                                class="btn btn-outline-warning btn-sm"
+                                                                                disabled>
+                                                                                <span
+                                                                                    class="spinner-border spinner-border-sm"></span>
+                                                                                Upload Ulang
+                                                                            </button>
+                                                                        @else
+                                                                            <button
+                                                                                class="btn btn-outline-warning btn-sm"
+                                                                                wire:click="verifikasi({{ $data->id_mcu }})">
+                                                                                <span class="bi bi-file-check"></span>
+                                                                                Verifikasi Paramedik
+                                                                            </button>
+                                                                        @endif
+                                                                    @endif
+                                                                </form>
                                                             @else
-                                                                <button class="btn btn-warning btn-sm" type="button"
-                                                                    disabled>
-                                                                    <span class="spinner-border spinner-border-sm"
-                                                                        aria-hidden="true"></span>
-                                                                    <span role="status">Paramedik</span>
-                                                                </button>
+                                                                @if ($data->status_file_mcu == 1)
+                                                                    <span class="text-danger">
+                                                                        "{{ $data->catatan_file_mcu }}"
+                                                                        @hasAnyRole(['admin', 'superadmin'])
+                                                                            <button class="btn btn-warning btn-sm"
+                                                                                wire:click="edit({{ $data->id_mcu }})">
+                                                                                <span class="bi bi-upload"></span>
+                                                                                &nbsp;Ulangi Upload Mcu
+                                                                            </button>
+                                                                        @endhasanyrole
+                                                                    </span>
+                                                                @else
+                                                                    <button class="btn btn-warning btn-sm"
+                                                                        type="button" disabled>
+                                                                        <span class="spinner-border spinner-border-sm"
+                                                                            aria-hidden="true"></span>
+                                                                        <span role="status">Paramedik</span>
+                                                                    </button>
+                                                                @endif
                                                             @endif
                                                         @else
                                                             @if (auth()->user()->role === 'dokter' && in_array(auth()->user()->subrole, ['verifikator']))
@@ -157,14 +222,14 @@
                                             <tr>
                                                 <td class="text-end">-</td>
                                                 <td colspan="3">
-                                                    Hasil:
-                                                    <br>
-                                                    <b>{{ $data->saran_mcu }}</b>
-                                                    <br>
-                                                    <small>~{{ $data->keterangan_mcu }}~</small>
-                                                    <br>
-                                                    <small>~{{ $data->tgl_verifikasi }}~</small><br>
                                                     @if (!empty($data->mcuStatus))
+                                                        Hasil:
+                                                        <br>
+                                                        <b>{{ $data->saran_mcu }}</b>
+                                                        <br>
+                                                        <small>~{{ $data->keterangan_mcu }}~</small>
+                                                        <br>
+                                                        <small>~{{ $data->tgl_verifikasi }}~</small><br>
                                                         <a href="cetak-mcu-sub/{{ $data->id_mcu }}" target="_blank"
                                                             class="btn btn-outline-warning btn-sm">
                                                             <span class="bi bi-download"></span>
@@ -179,7 +244,7 @@
                                                     <td>{{ $row++ }}</td>
                                                     <td>
                                                         <a href="{{ Storage::url($item->file_mcu) }}" target="_blank">
-                                                            <span class="bi bi-file-earmark-arrow-down"></span> Download
+                                                            <span class="bi bi-file-earmark-arrow-down"></span> File MCU
                                                         </a>
                                                     </td>
                                                     <td>{{ $item->tgl_mcu }}</td>
@@ -224,14 +289,14 @@
                                                 <tr>
                                                     <td class="text-end">-</td>
                                                     <td colspan="3">
-                                                        Hasil:
-                                                        <br>
-                                                        <b>{{ $item->saran_mcu }}</b>
-                                                        <br>
-                                                        <small>~{{ $item->keterangan_mcu }}~</small>
-                                                        <br>
-                                                        <small>~{{ $item->tgl_verifikasi }}~</small><br>
                                                         @if (!empty($item->status))
+                                                            Hasil:
+                                                            <br>
+                                                            <b>{{ $item->saran_mcu }}</b>
+                                                            <br>
+                                                            <small>~{{ $item->keterangan_mcu }}~</small>
+                                                            <br>
+                                                            <small>~{{ \Carbon\Carbon::parse($item->tgl_verifikasi)->locale('id')->isoFormat('D MMMM YYYY') }}~</small><br>
                                                             <a href="cetak-mcu-sub/{{ $item->id }}" target="_blank"
                                                                 class="btn btn-outline-warning btn-sm">
                                                                 <span class="bi bi-download"></span>

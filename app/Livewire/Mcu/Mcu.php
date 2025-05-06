@@ -28,6 +28,8 @@ class Mcu extends Component
     public $riwayat_rokok, $BB, $TB, $LP, $BMI, $Laseq, $reqtal_touche, $sistol, $diastol, $OD_jauh, $OS_jauh, $OD_dekat, $OS_dekat, $butawarna, $gdp, $gd_2_jpp, $ureum, $creatine, $asamurat, $sgot, $sgpt, $hbsag, $anti_hbs, $kolesterol, $hdl, $ldl, $tg, $darah_rutin, $napza, $urin, $ekg, $rontgen, $audiometri, $spirometri, $tredmil_test, $widal_test, $routin_feces, $kultur_feces;
     public $caridatakaryawan = [];
     public $carikaryawan = [];
+    public $status_file_mcu = [];
+    public $catatan_file_mcu = [];
 
     #[Title('MCU')]
     public function updatedNrp($value)
@@ -47,6 +49,25 @@ class Mcu extends Component
     {
         $this->form = true;
     }
+    public function edit($id_mcu)
+    {
+        $this->form = true;
+        $cariMcu = ModelsMcu::find($id_mcu);
+        $this->id_mcu = $cariMcu->id;
+        $this->nrp = $cariMcu->id_karyawan;
+        $this->proveder = $cariMcu->proveder;
+        $this->tgl_mcu = $cariMcu->tgl_mcu;
+        $caridatakaryawan = Karyawan::where('nrp', $cariMcu->id_karyawan)
+            ->where('status', 'aktif')
+            ->first();
+        if ($caridatakaryawan) {
+            $this->gol_darah = $caridatakaryawan->gol_darah;
+            $this->jenis_kelamin = $caridatakaryawan->jenis_kelamin;
+        } else {
+            $this->gol_darah = null;
+            $this->jenis_kelamin = null; // Reset field if NIK is not found
+        }
+    }
     public function close()
     {
         $this->form = false;
@@ -54,6 +75,12 @@ class Mcu extends Component
     }
     public function mount()
     {
+        $cariMcu = ModelsMcu::where('paramedik', '=', NULL)->get();
+        // dd($cariMcu);
+        foreach ($cariMcu as $item) {
+            $this->status_file_mcu[$item->id] = $item->status_file_mcu;
+            $this->catatan_file_mcu[$item->id] = $item->catatan_file_mcu;
+        }
         $this->carikaryawan = Karyawan::select('nrp', 'nama')
             ->where('status', 'aktif')
             ->get();
@@ -87,9 +114,11 @@ class Mcu extends Component
             'file_mcu.max' => 'Ukuran file maksimal 10MB.',
         ]);
 
+        $datakaryawan = Karyawan::where('nrp', $this->nrp)->first();
+        $folderDept = strtoupper($datakaryawan->dept);
+        $folderKaryawan = strtoupper($datakaryawan->nrp . '-' . $datakaryawan->nama . '-' . $datakaryawan->dept . '-' . $datakaryawan->jabatan);
         // Define the folder path where the file will be stored
-        $folderPath = $this->nrp . '/pengajuan-mcu';
-
+        $folderPath = $folderDept . '/' . $folderKaryawan . '/MCU';
         // Check if folder exists, if not, create it
         if (!Storage::exists($folderPath)) {
             Storage::makeDirectory($folderPath); // Create the directory if it doesn't exist
@@ -98,56 +127,76 @@ class Mcu extends Component
         // Handle the file upload for 'file_mcu'
         if ($this->file_mcu) {
             // Store the file in the specific folder
-            $filePath = $this->file_mcu->store($folderPath, 'public');
+            if (!empty($this->id_mcu)) {
+                $filePath = $this->file_mcu->storeAs($folderPath, $folderKaryawan . "-MCU-REVISI-" . time() . ".{$this->file_mcu->getClientOriginalExtension()}", 'public');
+            } else {
+                $filePath = $this->file_mcu->storeAs($folderPath, $folderKaryawan . "-MCU-" . time() . ".{$this->file_mcu->getClientOriginalExtension()}", 'public');
+            }
+            // $filePath = $this->file_mcu->store($folderPath, 'public');
         } else {
             $filePath = null; // Handle the case where no file is uploaded (optional)
         }
 
-        // Update or create the MCU record
-        ModelsMcu::updateOrCreate(
-            ['id' => $this->id_mcu], // Assuming id_mcu is the primary key
-            [
-                'id_karyawan' => $this->nrp,
-                'proveder' => $this->proveder,
-                'tgl_mcu' => $this->tgl_mcu,
-                'gol_darah' => $this->gol_darah,
-                'file_mcu' => $filePath,
-                'status' => $this->status,
-                'tgl_verifikasi' => $this->tgl_verifikasi, // Store the file path, not the file object
-            ]
-        );
+        if ($this->id_mcu) {
+            ModelsMcu::updateOrCreate(
+                ['id' => $this->id_mcu], // Assuming id_mcu is the primary key
+                [
+                    'id_karyawan' => $this->nrp,
+                    'proveder' => $this->proveder,
+                    'tgl_mcu' => $this->tgl_mcu,
+                    'gol_darah' => $this->gol_darah,
+                    'file_mcu' => $filePath,
+                    'status_file_mcu' => NULL,
+                    'status' => $this->status,
+                    'tgl_verifikasi' => $this->tgl_verifikasi, // Store the file path, not the file object
+                ]
+            );
+        } else {
+            ModelsMcu::updateOrCreate(
+                ['id' => $this->id_mcu], // Assuming id_mcu is the primary key
+                [
+                    'id_karyawan' => $this->nrp,
+                    'proveder' => $this->proveder,
+                    'tgl_mcu' => $this->tgl_mcu,
+                    'gol_darah' => $this->gol_darah,
+                    'file_mcu' => $filePath,
+                    'status' => $this->status,
+                    'tgl_verifikasi' => $this->tgl_verifikasi, // Store the file path, not the file object
+                ]
+            );
+        }
 
         // Kirim pesan setelah save berhasil
 
-        $user = auth()->user();
-        $nama = $user->name ?? $user->nama ?? 'User'; // Sesuaikan field nama
-        $timezone = config('app.timezone'); // contoh: Asia/Jakarta
-        $labelZona = match ($timezone) {
-            'Asia/Jakarta' => 'WIB',
-            'Asia/Makassar' => 'WITA',
-            'Asia/Jayapura' => 'WIT',
-            default => '',
-        };
+        // $user = auth()->user();
+        // $nama = $user->name ?? $user->nama ?? 'User'; // Sesuaikan field nama
+        // $timezone = config('app.timezone'); // contoh: Asia/Jakarta
+        // $labelZona = match ($timezone) {
+        //     'Asia/Jakarta' => 'WIB',
+        //     'Asia/Makassar' => 'WITA',
+        //     'Asia/Jayapura' => 'WIT',
+        //     default => '',
+        // };
 
-        $waktu = now()->format('d-m-Y H:i:s') . ' ' . $labelZona;
-        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n👤 Oleh: *$nama*\n🆔 NRP: *$this->nrp*\n⏰ Waktu: *$waktu*";
+        // $waktu = now()->format('d-m-Y H:i:s') . ' ' . $labelZona;
+        // $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n👤 Oleh: *$nama*\n🆔 NRP: *$this->nrp*\n⏰ Waktu: *$waktu*";
 
-        // Nomor kamu + token
-        $nomorAdmins = [
-            '088212543694',
-            '08991649871',
-        ];
+        // // Nomor kamu + token
+        // $nomorAdmins = [
+        //     '088212543694',
+        //     '08991649871',
+        // ];
 
-        $token = env('PESAN_TOKEN', 'abc25qc');
+        // $token = env('PESAN_TOKEN', 'abc25qc');
 
-        foreach ($nomorAdmins as $index => $nomor) {
-            pesan($nomor, $pesanText, $token);
+        // foreach ($nomorAdmins as $index => $nomor) {
+        //     pesan($nomor, $pesanText, $token);
 
-            // Jeda 5 detik antar-pengiriman kecuali setelah yang terakhir
-            if ($index < count($nomorAdmins) - 1) {
-                sleep(5);
-            }
-        }
+        //     // Jeda 5 detik antar-pengiriman kecuali setelah yang terakhir
+        //     if ($index < count($nomorAdmins) - 1) {
+        //         sleep(5);
+        //     }
+        // }
 
         // Reset the form fields after save
         $this->reset();
@@ -164,6 +213,70 @@ class Mcu extends Component
             redirect: '/mcu',
         );
         return;
+    }
+    public function kirimStatusFileMCU($id_mcu)
+    {
+        // Validasi input
+        $this->validate([
+            "status_file_mcu.$id_mcu" => 'required|in:0,1',  // Status harus 0 (Diterima) atau 1 (Ditolak)
+            "catatan_file_mcu.$id_mcu" => 'nullable|string|max:255',  // Catatan harus string, maksimal 255 karakter
+        ]);
+
+        // Ambil data status dan catatan berdasarkan ID MCU
+        $status = $this->status_file_mcu[$id_mcu] ?? null;
+        $catatan = $this->catatan_file_mcu[$id_mcu] ?? null;
+
+        // Validasi tambahan: jika status adalah "Ditolak", pastikan catatan ada
+        if ($status == 1 && empty($catatan)) {
+            $this->dispatch(
+                'alert',
+                type: 'error',
+                title: 'Error',
+                text: 'Error, Catatan harus diisi ketika status diubah menjadi "Ditolak" pada MCU',
+                position: 'center',
+                confirm: true,
+                redirect: '/mcu',
+            );
+            return;
+        }
+
+        // Ambil data MCU berdasarkan ID
+        $mcu = ModelsMcu::find($id_mcu);
+
+        if ($mcu) {
+            // Update status file MCU dan catatan jika ada
+            $mcu->status_file_mcu = $status;
+            $mcu->catatan_file_mcu = $catatan;
+            // Simpan perubahan
+            $mcu->save();
+
+            // Berikan pesan sukses
+            $this->dispatch(
+                'alert',
+                type: 'success',
+                title: 'Berhasil',
+                text: 'Berhasil mengirim status MCU',
+                position: 'center',
+                confirm: true,
+                redirect: '/mcu',
+            );
+            return;
+
+            // Reset input setelah kirim
+            $this->status_file_mcu[$id_mcu] = null;
+            $this->catatan_file_mcu[$id_mcu] = null;
+        } else {
+            $this->dispatch(
+                'alert',
+                type: 'error',
+                title: 'Error',
+                text: 'Gagal mengirim MCU tidak ditemukan',
+                position: 'center',
+                confirm: true,
+                redirect: '/mcu',
+            );
+            return;
+        }
     }
     public function uploadMCU($id_mcu)
     {

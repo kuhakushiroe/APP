@@ -16,7 +16,11 @@ return new class extends Migration
             $table->id();
             $table->string('sub_id')->nullable();
             $table->string('id_karyawan');
+
             $table->string('file_mcu')->nullable();
+            $table->enum('status_file_mcu', [0, 1])->nullable();
+            $table->string('catatan_file_mcu')->nullable();
+
             $table->enum('gol_darah', ['A', 'B', 'AB', 'O'])->nullable();
             $table->string('no_dokumen')->nullable();
             $table->string('proveder')->nullable();
@@ -25,7 +29,12 @@ return new class extends Migration
             $table->string('tgl_verifikasi')->nullable();
             $table->string('status')->nullable();
             $table->string('verifikator')->nullable();
+
+
             $table->string('paramedik')->nullable();
+            $table->enum('paramedik_status', [0, 1])->nullable();
+            $table->text('paramedik_catatan')->nullable();
+
             $table->enum('riwayat_rokok', ['Ya', 'Tidak'])->default('Tidak');
             $table->string('BB')->nullable();
             $table->string('TB')->nullable();

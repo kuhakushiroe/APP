@@ -9,7 +9,11 @@
                         <button class="btn btn-outline-danger btn-sm" wire:click="close">
                             <span class="bi bi-arrow-left"></span>
                         </button>
-                        Pengajuan MCU
+                        @if ($id_mcu)
+                            Pengajuan Ulang MCU
+                        @else
+                            Pengajuan MCU
+                        @endif
                     </div>
                 </div>
                 <form wire:submit.prevent="store">
