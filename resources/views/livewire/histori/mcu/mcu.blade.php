@@ -16,6 +16,7 @@
                     <th>NRP</th>
                     <th>Nama</th>
                     <th>Dept / Posisi</th>
+                    <th>File MCU</th>
                     <th>Hasil</th>
                     <th>Exp MCU</th>
                 </tr>
@@ -31,11 +32,30 @@
                         </td>
                         <td>{{ $data->dept }} / {{ $data->jabatan }}</td>
                         <td>
+                            @php
+                                $subItems = DB::table('mcu')
+                                    ->whereAny(['id', 'sub_id'], 'like', $data->sub_id)
+                                    ->where('id', '!=', $data->id_mcu)
+                                    ->orderBy('tgl_mcu', 'asc') // Mengurutkan berdasarkan tanggal MCU
+                                    ->get();
+                            @endphp
+                            @foreach ($subItems as $item)
+                                <a class="btn btn-outline-primary btn-sm" href="{{ Storage::url($item->file_mcu) }}"
+                                    target="_blank">
+                                    <span class="bi bi-file-earmark-arrow-down"></span> File MCU
+                                </a>
+                            @endforeach
+                            <a class="btn btn-outline-primary btn-sm" href="{{ Storage::url($data->file_mcu) }}"
+                                target="_blank">
+                                <span class="bi bi-file-earmark-arrow-down"></span> File MCU Final
+                            </a>
+                        </td>
+                        <td>
                             @if ($data->mcuStatus == 'FIT' || $data->mcuStatus == 'FIT WITH NOTE')
                                 <a href="cetak-mcu/{{ $data->id_mcu }}" target="_blank"
                                     class="btn btn-outline-warning btn-sm">
                                     <span class="bi bi-download"></span>
-                                    Download Verifikasi {{ $data->mcuStatus }}
+                                    Download Verifikasi Final {{ $data->mcuStatus }}
                                 </a>
                                 <a href="cetak-skd/{{ $data->id_mcu }}" class="btn btn-outline-success btn-sm"
                                     target="_blank">

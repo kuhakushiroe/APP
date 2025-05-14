@@ -464,82 +464,90 @@
                             @enderror
                         </div>
                         @if (auth()->user()->role === 'dokter' && in_array(auth()->user()->subrole, ['verifikator']))
-                            <div class="col-12">
-                                <fieldset>Kesimpulan</fieldset>
-                                <hr>
-                            </div>
                             <div class="col-sm">
-                                <label for="status">Status</label>
-                                <select name="" wire:model.live="status"
-                                    class="form-control form-control-sm @error('status') is-invalid @enderror">
+                                <label for="paramedik_status">Validasi</label>
+                                <select wire:model.live="paramedik_status"
+                                    class="form-control form-control-sm @error('paramedik_status') is-invalid @enderror">
                                     <option value="">Pilih Status</option>
-                                    <option value="FIT">FIT</option>
-                                    <option value="FIT WITH NOTE">FIT WITH NOTE</option>
-                                    <option value="FOLLOW UP">FOLLOW UP</option>
-                                    <option value="TEMPORARY UNFIT">TEMPORARY UNFIT</option>
-                                    <option value="UNFIT">UNFIT</option>
+                                    <option value="0">Tolak</option>
+                                    <option value="1">Terima</option>
                                 </select>
-                                @error('status')
+                                @error('paramedik_status')
                                     <span class="invalid-feedback"
                                         role="alert"><strong>{{ $message }}</strong></span>
                                 @enderror
                             </div>
-                            <div class="col-sm">
-                                <label for="tgl_verifikasi">Tanggal Verifikasi</label>
-                                <input type="date"
-                                    class="form-control form-control-sm @error('tgl_verifikasi') is-invalid @enderror"
-                                    wire:model="tgl_verifikasi">
-                                @error('tgl_verifikasi')
-                                    <span class="invalid-feedback"
-                                        role="alert"><strong>{{ $message }}</strong></span>
-                                @enderror
-                            </div>
-                            @if ($status === 'FIT')
+                            @if ($paramedik_status == null)
+                            @elseif($paramedik_status == 0)
                                 <div class="col-sm">
-                                    <label for="exp_mcu">Exp MCU</label>
+                                    <label for="paramedik_catatan">Keterangan</label>
+                                    <textarea class="form-control form-control-sm @error('paramedik_catatan') is-invalid @enderror"
+                                        wire:model='paramedik_catatan' placeholder="Keterangan Di Tolak"></textarea>
+                                    @error('paramedik_catatan')
+                                        <span class="invalid-feedback"
+                                            role="alert"><strong>{{ $message }}</strong></span>
+                                    @enderror
+                                </div>
+                            @else
+                                <div class="col-12">
+                                    <fieldset>Kesimpulan</fieldset>
+                                    <hr>
+                                </div>
+                                <div class="col-sm">
+                                    <label for="status">Status</label>
+                                    <select name="" wire:model.live="status"
+                                        class="form-control form-control-sm @error('status') is-invalid @enderror">
+                                        <option value="">Pilih Status</option>
+                                        <option value="FIT">FIT</option>
+                                        <option value="FIT WITH NOTE">FIT WITH NOTE</option>
+                                        <option value="FOLLOW UP">FOLLOW UP</option>
+                                        <option value="TEMPORARY UNFIT">TEMPORARY UNFIT</option>
+                                        <option value="UNFIT">UNFIT</option>
+                                    </select>
+                                    @error('status')
+                                        <span class="invalid-feedback"
+                                            role="alert"><strong>{{ $message }}</strong></span>
+                                    @enderror
+                                </div>
+                                <div class="col-sm">
+                                    <label for="tgl_verifikasi">Tanggal Verifikasi</label>
                                     <input type="date"
-                                        class="form-control form-control-sm @error('exp_mcu') is-invalid @enderror"
-                                        wire:model="exp_mcu">
-                                    @error('exp_mcu')
+                                        class="form-control form-control-sm @error('tgl_verifikasi') is-invalid @enderror"
+                                        wire:model="tgl_verifikasi">
+                                    @error('tgl_verifikasi')
                                         <span class="invalid-feedback"
                                             role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
                                 </div>
-                                <div class="col-md-12">
-                                    <label for="keterangan_mcu">Hasil:</label>
-                                    <textarea class="form-control form-control-sm @error('keterangan_mcu') is-invalid @enderror"
-                                        wire:model="keterangan_mcu"></textarea>
-                                    @error('keterangan_mcu')
-                                        <span class="invalid-feedback"
-                                            role="alert"><strong>{{ $message }}</strong></span>
-                                    @enderror
-                                </div>
-                                <div class="col-md-12">
-                                    <label for="saran_mcu">Setelah Dilakukan Pemeriksaan</label>
-                                    <textarea class="form-control form-control-sm @error('saran_mcu') is-invalid @enderror" wire:model="saran_mcu"></textarea>
-                                    @error('saran_mcu')
-                                        <span class="invalid-feedback"
-                                            role="alert"><strong>{{ $message }}</strong></span>
-                                    @enderror
-                                </div>
-                            @elseif ($status && $status !== 'FIT')
-                                <div class="col-md-12">
-                                    <label for="keterangan_mcu">Keterangan / Catatan / Temuan</label>
-                                    <textarea class="form-control form-control-sm @error('keterangan_mcu') is-invalid @enderror"
-                                        wire:model="keterangan_mcu"></textarea>
-                                    @error('keterangan_mcu')
-                                        <span class="invalid-feedback"
-                                            role="alert"><strong>{{ $message }}</strong></span>
-                                    @enderror
-                                </div>
-                                <div class="col-md-12">
-                                    <label for="saran_mcu">Saran / Tindakan</label>
-                                    <textarea class="form-control form-control-sm @error('saran_mcu') is-invalid @enderror" wire:model="saran_mcu"></textarea>
-                                    @error('saran_mcu')
-                                        <span class="invalid-feedback"
-                                            role="alert"><strong>{{ $message }}</strong></span>
-                                    @enderror
-                                </div>
+                                @if ($status)
+                                    <div class="col-sm">
+                                        <label for="exp_mcu">Exp MCU</label>
+                                        <input type="date"
+                                            class="form-control form-control-sm @error('exp_mcu') is-invalid @enderror"
+                                            wire:model="exp_mcu">
+                                        @error('exp_mcu')
+                                            <span class="invalid-feedback"
+                                                role="alert"><strong>{{ $message }}</strong></span>
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="keterangan_mcu">Keterangan / Hasil / Catatan / Temuan:</label>
+                                        <textarea class="form-control form-control-sm @error('keterangan_mcu') is-invalid @enderror"
+                                            wire:model="keterangan_mcu"></textarea>
+                                        @error('keterangan_mcu')
+                                            <span class="invalid-feedback"
+                                                role="alert"><strong>{{ $message }}</strong></span>
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="saran_mcu">Saran & tindakan yang harus dilakukan:</label>
+                                        <textarea class="form-control form-control-sm @error('saran_mcu') is-invalid @enderror" wire:model="saran_mcu"></textarea>
+                                        @error('saran_mcu')
+                                            <span class="invalid-feedback"
+                                                role="alert"><strong>{{ $message }}</strong></span>
+                                        @enderror
+                                    </div>
+                                @endif
                             @endif
                         @endif
                         <div class="form-group pt-2">

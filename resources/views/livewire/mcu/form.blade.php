@@ -44,6 +44,10 @@
                             @enderror
                         </div>
                         <div class="form-group">
+                            <label>Nama:</label>
+                            <input class="form-control form-control-sm" list="browsers" wire:model='nama' readonly>
+                        </div>
+                        <div class="form-group">
                             <label for="file_mcu">File MCU</label>
                             <input type="file"
                                 class="form-control form-control-sm @error('file_mcu') is-invalid @enderror"

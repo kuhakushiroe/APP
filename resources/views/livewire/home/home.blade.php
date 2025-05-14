@@ -110,7 +110,7 @@
             const pie_chart_options_aktif = {
                 series: seriesAktif,
                 chart: {
-                    type: 'donut',
+                    type: 'pie',
                 },
                 labels: departments,
                 dataLabels: {
@@ -127,7 +127,7 @@
             const pie_chart_options_non_aktif = {
                 series: seriesNonAktif,
                 chart: {
-                    type: 'donut',
+                    type: 'pie',
                 },
                 labels: departments,
                 dataLabels: {

@@ -124,24 +124,23 @@
                                                     @if (empty($data->mcuStatus))
                                                         @if (empty($data->paramedik))
                                                             @if (auth()->user()->role === 'dokter' && in_array(auth()->user()->subrole, ['paramedik']))
-                                                                <form action=""
-                                                                    wire:submit.prevent="kirimStatusFileMCU({{ $data->id_mcu }})">
-                                                                    @if ($data->status_file_mcu == null)
+                                                                @if ($data->status_file_mcu === null)
+                                                                    <form action=""
+                                                                        wire:submit.prevent="kirimStatusFileMCU({{ $data->id_mcu }})">
                                                                         <select
                                                                             wire:model.live="status_file_mcu.{{ $data->id_mcu }}"
                                                                             class="form-control form-control-sm @error('status_file_mcu.' . $data->id_mcu) is-invalid @enderror">
                                                                             <option value="">-Pilih Status-
                                                                             </option>
-                                                                            <option value="0">Diterima</option>
-                                                                            <option value="1">Ditolak</option>
+                                                                            <option value="1">Diterima</option>
+                                                                            <option value="0">Ditolak</option>
                                                                         </select>
                                                                         @error('status_file_mcu.' . $data->id_mcu)
                                                                             <span class="invalid-feedback" role="alert">
                                                                                 <strong>{{ $message }}</strong>
                                                                             </span>
                                                                         @enderror
-
-                                                                        @if ($status_file_mcu[$data->id_mcu] == 1)
+                                                                        @if ($status_file_mcu[$data->id_mcu] == '0')
                                                                             {{-- Memastikan bahwa status sudah "Ditolak" --}}
                                                                             <textarea wire:model="catatan_file_mcu.{{ $data->id_mcu }}" class="form-control form-control-sm "
                                                                                 placeholder="Tulis Catatan"></textarea>
@@ -158,27 +157,35 @@
                                                                                 <span class="bi bi-send"></span> Kirim
                                                                             </button>
                                                                         </div>
+
+                                                                    </form>
+                                                                @else
+                                                                    @if ($data->status_file_mcu == '0')
+                                                                        <button class="btn btn-outline-warning btn-sm"
+                                                                            disabled>
+                                                                            <span
+                                                                                class="spinner-border spinner-border-sm"></span>
+                                                                            Upload Ulang
+                                                                        </button>
+                                                                    @elseif ($data->status_file_mcu == '1')
+                                                                        <span
+                                                                            class="text-danger">{{ $data->paramedik_catatan ?? '' }}</span>
+                                                                        <button class="btn btn-outline-warning btn-sm"
+                                                                            wire:click="verifikasi({{ $data->id_mcu }})">
+                                                                            <span class="bi bi-file-check"></span>
+                                                                            Verifikasi Paramedik
+                                                                        </button>
                                                                     @else
-                                                                        @if ($data->status_file_mcu == 1)
-                                                                            <button
-                                                                                class="btn btn-outline-warning btn-sm"
-                                                                                disabled>
-                                                                                <span
-                                                                                    class="spinner-border spinner-border-sm"></span>
-                                                                                Upload Ulang
-                                                                            </button>
-                                                                        @else
-                                                                            <button
-                                                                                class="btn btn-outline-warning btn-sm"
-                                                                                wire:click="verifikasi({{ $data->id_mcu }})">
-                                                                                <span class="bi bi-file-check"></span>
-                                                                                Verifikasi Paramedik
-                                                                            </button>
-                                                                        @endif
+                                                                        <button class="btn btn-outline-warning btn-sm"
+                                                                            wire:click="verifikasi({{ $data->id_mcu }})">
+                                                                            <span class="bi bi-file-check"></span>
+                                                                            Verifikasi Paramedik
+                                                                        </button>
                                                                     @endif
-                                                                </form>
+                                                                @endif
                                                             @else
-                                                                @if ($data->status_file_mcu == 1)
+                                                                {{-- ADMIN LEVEL --}}
+                                                                @if ($data->status_file_mcu == '0')
                                                                     <span class="text-danger">
                                                                         "{{ $data->catatan_file_mcu }}"
                                                                         @hasAnyRole(['admin', 'superadmin'])
@@ -190,6 +197,36 @@
                                                                         @endhasanyrole
                                                                     </span>
                                                                 @else
+                                                                    @if ($data->status_file_mcu == '1')
+                                                                        <span
+                                                                            class="text-danger">{{ $data->paramedik_catatan ?? '' }}</span>
+                                                                        <button class="btn btn-warning btn-sm"
+                                                                            type="button" disabled>
+                                                                            <span
+                                                                                class="spinner-border spinner-border-sm"
+                                                                                aria-hidden="true"></span>
+                                                                            <span role="status">Paramedik</span>
+                                                                        </button>
+                                                                    @else
+                                                                        <button class="btn btn-warning btn-sm"
+                                                                            type="button" disabled>
+                                                                            <span
+                                                                                class="spinner-border spinner-border-sm"
+                                                                                aria-hidden="true"></span>
+                                                                            <span role="status">Paramedik</span>
+                                                                        </button>
+                                                                    @endif
+                                                                @endif
+                                                            @endif
+                                                        @else
+                                                            @if (auth()->user()->role === 'dokter' && in_array(auth()->user()->subrole, ['verifikator']))
+                                                                @if ($data->paramedik_status == '1' || $data->paramedik_status == null)
+                                                                    <button class="btn btn-outline-warning btn-sm"
+                                                                        wire:click="verifikasi({{ $data->id_mcu }})">
+                                                                        <span class="bi bi-file-check"></span>
+                                                                        Verifikasi Dokter
+                                                                    </button>
+                                                                @else
                                                                     <button class="btn btn-warning btn-sm"
                                                                         type="button" disabled>
                                                                         <span class="spinner-border spinner-border-sm"
@@ -197,21 +234,24 @@
                                                                         <span role="status">Paramedik</span>
                                                                     </button>
                                                                 @endif
-                                                            @endif
-                                                        @else
-                                                            @if (auth()->user()->role === 'dokter' && in_array(auth()->user()->subrole, ['verifikator']))
-                                                                <button class="btn btn-outline-warning btn-sm"
-                                                                    wire:click="verifikasi({{ $data->id_mcu }})">
-                                                                    <span class="bi bi-file-check"></span>
-                                                                    Verifikasi Dokter
-                                                                </button>
                                                             @else
-                                                                <button class="btn btn-warning btn-sm" type="button"
-                                                                    disabled>
-                                                                    <span class="spinner-border spinner-border-sm"
-                                                                        aria-hidden="true"></span>
-                                                                    <span role="status">Dokter</span>
-                                                                </button>
+                                                                @if ($data->paramedik_status == '0')
+                                                                    <span class="text-danger">
+                                                                        "{{ $data->paramedik_catatan }}"
+                                                                    </span>
+                                                                    <button class="btn btn-outline-warning btn-sm"
+                                                                        wire:click="verifikasi({{ $data->id_mcu }})">
+                                                                        <span class="bi bi-file-check"></span>
+                                                                        Verifikasi Paramedik
+                                                                    </button>
+                                                                @else
+                                                                    <button class="btn btn-warning btn-sm"
+                                                                        type="button" disabled>
+                                                                        <span class="spinner-border spinner-border-sm"
+                                                                            aria-hidden="true"></span>
+                                                                        <span role="status">Dokter</span>
+                                                                    </button>
+                                                                @endif
                                                             @endif
                                                         @endif
                                                     @else
@@ -251,34 +291,143 @@
                                                     <td>
                                                         @if (empty($item->status))
                                                             @if (empty($item->paramedik))
-                                                                @if (in_array(auth()->user()->subrole, ['paramedik']))
-                                                                    <button class="btn btn-outline-warning btn-sm"
-                                                                        wire:click="verifikasi({{ $item->id }})">
-                                                                        <span class="bi bi-file-check"></span>
-                                                                        Verifikasi Paramedik
-                                                                    </button>
+                                                                @if (auth()->user()->role === 'dokter' && in_array(auth()->user()->subrole, ['paramedik']))
+                                                                    @if ($item->status_file_mcu === null)
+                                                                        <form action=""
+                                                                            wire:submit.prevent="kirimStatusFileMCU({{ $item->id }})">
+                                                                            <select
+                                                                                wire:model.live="status_file_mcu.{{ $item->id }}"
+                                                                                class="form-control form-control-sm @error('status_file_mcu.' . $item->id) is-invalid @enderror">
+                                                                                <option value="">-Pilih Status-
+                                                                                </option>
+                                                                                <option value="1">Diterima
+                                                                                </option>
+                                                                                <option value="0">Ditolak</option>
+                                                                            </select>
+                                                                            @error('status_file_mcu.' . $item->id)
+                                                                                <span class="invalid-feedback"
+                                                                                    role="alert">
+                                                                                    <strong>{{ $message }}</strong>
+                                                                                </span>
+                                                                            @enderror
+                                                                            @if ($status_file_mcu[$item->id] == '0')
+                                                                                {{-- Memastikan bahwa status sudah "Ditolak" --}}
+                                                                                <textarea wire:model="catatan_file_mcu.{{ $item->id }}" class="form-control form-control-sm "
+                                                                                    placeholder="Tulis Catatan"></textarea>
+                                                                                @error('catatan_file_mcu.' . $item->id)
+                                                                                    <span class="invalid-feedback"
+                                                                                        role="alert"><strong>{{ $message }}</strong></span>
+                                                                                @enderror
+                                                                            @endif
+                                                                            <div
+                                                                                class="d-grid
+                                                                        gap-2">
+                                                                                <button type="submit"
+                                                                                    class="btn btn-danger btn-sm">
+                                                                                    <span class="bi bi-send"></span>
+                                                                                    Kirim
+                                                                                </button>
+                                                                            </div>
+
+                                                                        </form>
+                                                                    @else
+                                                                        @if ($item->status_file_mcu == '0')
+                                                                            <button
+                                                                                class="btn btn-outline-warning btn-sm"
+                                                                                disabled>
+                                                                                <span
+                                                                                    class="spinner-border spinner-border-sm"></span>
+                                                                                Upload Ulang
+                                                                            </button>
+                                                                        @elseif ($item->status_file_mcu == '1')
+                                                                            <span
+                                                                                class="text-danger">{{ $item->paramedik_catatan ?? '' }}</span>
+                                                                            <button
+                                                                                class="btn btn-outline-warning btn-sm"
+                                                                                wire:click="verifikasi({{ $item->id }})">
+                                                                                <span class="bi bi-file-check"></span>
+                                                                                Verifikasi Paramedik
+                                                                            </button>
+                                                                        @else
+                                                                            <button
+                                                                                class="btn btn-outline-warning btn-sm"
+                                                                                wire:click="verifikasi({{ $item->id }})">
+                                                                                <span class="bi bi-file-check"></span>
+                                                                                Verifikasi Paramedik
+                                                                            </button>
+                                                                        @endif
+                                                                    @endif
                                                                 @else
-                                                                    <button class="btn btn-warning btn-sm"
-                                                                        type="button" disabled>
-                                                                        <span class="spinner-border spinner-border-sm"
-                                                                            aria-hidden="true"></span>
-                                                                        <span role="status">Paramedik</span>
-                                                                    </button>
+                                                                    {{-- ADMIN LEVEL --}}
+                                                                    @if ($item->status_file_mcu == '0')
+                                                                        <span class="text-danger">
+                                                                            "{{ $item->catatan_file_mcu }}"
+                                                                            @hasAnyRole(['admin', 'superadmin'])
+                                                                                <button class="btn btn-warning btn-sm"
+                                                                                    wire:click="edit({{ $item->id }})">
+                                                                                    <span class="bi bi-upload"></span>
+                                                                                    &nbsp;Ulangi Upload Mcu
+                                                                                </button>
+                                                                            @endhasanyrole
+                                                                        </span>
+                                                                    @else
+                                                                        @if ($item->status_file_mcu == '1')
+                                                                            <span
+                                                                                class="text-danger">{{ $item->paramedik_catatan ?? '' }}</span>
+                                                                            <button class="btn btn-warning btn-sm"
+                                                                                type="button" disabled>
+                                                                                <span
+                                                                                    class="spinner-border spinner-border-sm"
+                                                                                    aria-hidden="true"></span>
+                                                                                <span role="status">Paramedik</span>
+                                                                            </button>
+                                                                        @else
+                                                                            <button class="btn btn-warning btn-sm"
+                                                                                type="button" disabled>
+                                                                                <span
+                                                                                    class="spinner-border spinner-border-sm"
+                                                                                    aria-hidden="true"></span>
+                                                                                <span role="status">Paramedik</span>
+                                                                            </button>
+                                                                        @endif
+                                                                    @endif
                                                                 @endif
                                                             @else
-                                                                @if (in_array(auth()->user()->subrole, ['verifikator']))
-                                                                    <button class="btn btn-outline-warning btn-sm"
-                                                                        wire:click="verifikasi({{ $item->id }})">
-                                                                        <span class="bi bi-file-check"></span>
-                                                                        Verifikasi Dokter
-                                                                    </button>
+                                                                @if (auth()->user()->role === 'dokter' && in_array(auth()->user()->subrole, ['verifikator']))
+                                                                    @if ($item->paramedik_status == '1' || $item->paramedik_status == null)
+                                                                        <button class="btn btn-outline-warning btn-sm"
+                                                                            wire:click="verifikasi({{ $item->id }})">
+                                                                            <span class="bi bi-file-check"></span>
+                                                                            Verifikasi Dokter
+                                                                        </button>
+                                                                    @else
+                                                                        <button class="btn btn-warning btn-sm"
+                                                                            type="button" disabled>
+                                                                            <span
+                                                                                class="spinner-border spinner-border-sm"
+                                                                                aria-hidden="true"></span>
+                                                                            <span role="status">Paramedik</span>
+                                                                        </button>
+                                                                    @endif
                                                                 @else
-                                                                    <button class="btn btn-warning btn-sm"
-                                                                        type="button" disabled>
-                                                                        <span class="spinner-border spinner-border-sm"
-                                                                            aria-hidden="true"></span>
-                                                                        <span role="status">Dokter</span>
-                                                                    </button>
+                                                                    @if ($item->paramedik_status == '0')
+                                                                        <span class="text-danger">
+                                                                            "{{ $item->paramedik_catatan }}"
+                                                                        </span>
+                                                                        <button class="btn btn-outline-warning btn-sm"
+                                                                            wire:click="verifikasi({{ $item->id }})">
+                                                                            <span class="bi bi-file-check"></span>
+                                                                            Verifikasi Paramedik
+                                                                        </button>
+                                                                    @else
+                                                                        <button class="btn btn-warning btn-sm"
+                                                                            type="button" disabled>
+                                                                            <span
+                                                                                class="spinner-border spinner-border-sm"
+                                                                                aria-hidden="true"></span>
+                                                                            <span role="status">Dokter</span>
+                                                                        </button>
+                                                                    @endif
                                                                 @endif
                                                             @endif
                                                         @else
@@ -297,7 +446,8 @@
                                                             <small>~{{ $item->keterangan_mcu }}~</small>
                                                             <br>
                                                             <small>~{{ \Carbon\Carbon::parse($item->tgl_verifikasi)->locale('id')->isoFormat('D MMMM YYYY') }}~</small><br>
-                                                            <a href="cetak-mcu-sub/{{ $item->id }}" target="_blank"
+                                                            <a href="cetak-mcu-sub/{{ $item->id }}"
+                                                                target="_blank"
                                                                 class="btn btn-outline-warning btn-sm">
                                                                 <span class="bi bi-download"></span>
                                                                 Download Verifikasi {{ $item->status }}
@@ -306,7 +456,7 @@
                                                     </td>
                                                 </tr>
                                             @endforeach
-                                            @if ($canUpload)
+                                            @if ($canUpload && in_array(auth()->user()->role, ['admin', 'superadmin']))
                                                 <tr>
                                                     <td colspan="4" class="text-end">
                                                         @hasAnyRole(['admin', 'superadmin'])
