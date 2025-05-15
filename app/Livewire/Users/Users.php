@@ -3,6 +3,7 @@
 namespace App\Livewire\Users;
 
 use App\Models\Departments;
+use App\Models\Karyawan;
 use App\Models\User;
 use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -96,7 +97,9 @@ class Users extends Component
 
     public function delete(int $id)
     {
-        User::find($id)->delete();
+        $user = User::find($id);
+        Karyawan::where('nrp', $user->username)->update(['status' => 'non aktif']);
+        $user->delete();
     }
     public function deleteConfirm($id)
     {
@@ -114,7 +117,7 @@ class Users extends Component
     {
         // Mencari data yang sudah di-soft delete dengan menggunakan withTrashed()
         $user = User::withTrashed()->find($id);
-
+        Karyawan::where('nrp', $user->username)->update(['status' => 'aktif']);
         if ($user) {
             // Mengembalikan data yang telah di-soft delete
             $user->restore();

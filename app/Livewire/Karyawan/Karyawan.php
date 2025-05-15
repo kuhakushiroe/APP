@@ -292,15 +292,26 @@ class Karyawan extends Component
     }
     public function aktif(int $id)
     {
-        ModelsKaryawan::where('id', $id)->update([
+        $karyawan = ModelsKaryawan::where('id', $id);
+        $karyawan->update([
             'status' => 'non aktif',
         ]);
+        User::where('username', $karyawan->first()->nrp)->delete();
     }
     public function nonAktif(int $id)
     {
-        ModelsKaryawan::where('id', $id)->update([
+        $karyawan = ModelsKaryawan::where('id', $id);
+        $karyawan->update([
             'status' => 'aktif',
         ]);
+        $user = User::withTrashed()->where('username', $karyawan->first()->nrp);
+
+        if ($user) {
+            // Mengembalikan data yang telah di-soft delete
+            $user->restore();
+        } else {
+            // Menangani jika data tidak ditemukan
+        }
     }
 
     public function deleteConfirm($id)
