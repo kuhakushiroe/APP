@@ -25,16 +25,18 @@
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
                         </div>
-                        <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text"
-                                class="form-control form-control-sm
-                    @error('username') is-invalid @enderror"
-                                wire:model="username" placeholder="Username">
-                            @error('username')
-                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                            @enderror
-                        </div>
+                        @if (empty($id_user))
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text"
+                                    class="form-control form-control-sm @error('username') is-invalid @enderror"
+                                    wire:model="username" placeholder="Username">
+                                @error('username')
+                                    <span class="invalid-feedback"
+                                        role="alert"><strong>{{ $message }}</strong></span>
+                                @enderror
+                            </div>
+                        @endif
                         <div class="form-group">
                             <label for="role">Role / Level</label>
                             <select class="form-control form-control-sm @error('role') is-invalid @enderror"
@@ -88,6 +90,16 @@
                     @error('email') is-invalid @enderror"
                                 wire:model="email" placeholder="email">
                             @error('email')
+                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="wa">No. Handphone</label>
+                            <input type="wa"
+                                class="form-control form-control-sm
+                    @error('wa') is-invalid @enderror"
+                                wire:model="wa" placeholder="wa">
+                            @error('wa')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
                         </div>
