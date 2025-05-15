@@ -131,26 +131,8 @@ class Mcu extends Component
             $filePath = null; // Handle the case where no file is uploaded (optional)
         }
 
-        $user = auth()->user();
-        $nama = $user->name ?? $user->nama ?? 'User'; // Sesuaikan field nama
-        $timezone = config('app.timezone'); // contoh: Asia/Jakarta
-        $labelZona = match ($timezone) {
-            'Asia/Jakarta' => 'WIB',
-            'Asia/Makassar' => 'WITA',
-            'Asia/Jayapura' => 'WIT',
-            default => '',
-        };
-        $waktu = now()->format('d-m-Y H:i:s') . ' ' . $labelZona;
-
-        // Nomor kamu + token
-        $nomorAdmins = [
-            '088212543694', //Arifin
-            '085954590940', //yazid
-            //'08991649871',
-        ];
-
-        $token = env('PESAN_TOKEN', 'abc25qc');
-
+        $infoKaryawan = getInfoKaryawanByNrp($this->nrp);
+        // Store the file path, not the file object
         if ($this->id_mcu) {
             ModelsMcu::updateOrCreate(
                 ['id' => $this->id_mcu], // Assuming id_mcu is the primary key
@@ -165,7 +147,7 @@ class Mcu extends Component
                     'tgl_verifikasi' => $this->tgl_verifikasi, // Store the file path, not the file object
                 ]
             );
-            $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n👤 Oleh: *$nama*\n🆔 NRP: *$this->nrp*\n*Upload File Ulang*\n⏰ Waktu: *$waktu*";
+            $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n*Upload File Revisi*";
         } else {
             ModelsMcu::updateOrCreate(
                 ['id' => $this->id_mcu], // Assuming id_mcu is the primary key
@@ -180,14 +162,13 @@ class Mcu extends Component
                     'tgl_verifikasi' => $this->tgl_verifikasi, // Store the file path, not the file object
                 ]
             );
-            $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n👤 Oleh: *$nama*\n🆔 NRP: *$this->nrp*\n⏰ Waktu: *$waktu*";
+            $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*";
         }
 
-        // Kirim pesan setelah save berhasil
-        foreach ($nomorAdmins as $index => $nomor) {
-            pesan($nomor, $pesanText, $token);
-            // Jeda 5 detik antar-pengiriman kecuali setelah yang terakhir
-            if ($index < count($nomorAdmins) - 1) {
+        $info = getUserInfo();
+        foreach ($info['nomorAdmins'] as $i => $nomor) {
+            pesan($nomor, $pesanText, $info['token']);
+            if ($i < count($info['nomorAdmins']) - 1) {
                 sleep(5);
             }
         }
@@ -235,8 +216,7 @@ class Mcu extends Component
 
         // Ambil data MCU berdasarkan ID
         $mcu = ModelsMcu::find($id_mcu);
-        $nrp = $mcu->id_karyawan;
-
+        $infoKaryawan = getInfoKaryawanByNrp($mcu->id_karyawan);
         if ($mcu) {
             // Update status file MCU dan catatan jika ada
             $mcu->status_file_mcu = $status;
@@ -244,36 +224,15 @@ class Mcu extends Component
             // Simpan perubahan
             $mcu->save();
 
-            $user = auth()->user();
-            $nama = $user->name ?? $user->nama ?? 'User'; // Sesuaikan field nama
-            $timezone = config('app.timezone'); // contoh: Asia/Jakarta
-            $labelZona = match ($timezone) {
-                'Asia/Jakarta' => 'WIB',
-                'Asia/Makassar' => 'WITA',
-                'Asia/Jayapura' => 'WIT',
-                default => '',
-            };
-
-            $waktu = now()->format('d-m-Y H:i:s') . ' ' . $labelZona;
+            $info = getUserInfo();
             if ($status == 1) {
-                $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n👤 Oleh: *$nama*\n🆔 NRP: *$nrp*\n Status File MCU: *Diterima - $catatan*\n⏰ Waktu: *$waktu*";
+                $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n*$infoKaryawan*\n Status File MCU: *Diterima*";
             } else {
-                $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n👤 Oleh: *$nama*\n🆔 NRP: *$nrp*\n Status File MCU: *Ditolak - $catatan*\n⏰ Waktu: *$waktu*";
+                $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n*$infoKaryawan*\n Status File MCU: *Ditolak - $catatan*";
             }
-
-            // Nomor kamu + token
-            $nomorAdmins = [
-                '088212543694', //Arifin
-                '085954590940', //yazid
-                //'08991649871',
-            ];
-
-            $token = env('PESAN_TOKEN', 'abc25qc');
-
-            foreach ($nomorAdmins as $index => $nomor) {
-                pesan($nomor, $pesanText, $token);
-                // Jeda 5 detik antar-pengiriman kecuali setelah yang terakhir
-                if ($index < count($nomorAdmins) - 1) {
+            foreach ($info['nomorAdmins'] as $i => $nomor) {
+                pesan($nomor, $pesanText, $info['token']);
+                if ($i < count($info['nomorAdmins']) - 1) {
                     sleep(5);
                 }
             }
@@ -468,36 +427,16 @@ class Mcu extends Component
             ]
         );
 
-        $user = auth()->user();
-        $nama = $user->name ?? $user->nama ?? 'User'; // Sesuaikan field nama
-        $timezone = config('app.timezone'); // contoh: Asia/Jakarta
-        $labelZona = match ($timezone) {
-            'Asia/Jakarta' => 'WIB',
-            'Asia/Makassar' => 'WITA',
-            'Asia/Jayapura' => 'WIT',
-            default => '',
-        };
+        $info = getUserInfo();
+        $infoKaryawan = getInfoKaryawanByNrp($this->nrp);
 
-        $waktu = now()->format('d-m-Y H:i:s') . ' ' . $labelZona;
-        $pesanText = "📢 *MIFA-TEST NOTIF - Follow Up MCU*\n\n👤 Oleh: *$nama*\n🆔 NRP: *$this->nrp*\n⏰ Waktu: *$waktu*";
-
-        // Nomor kamu + token
-        $nomorAdmins = [
-            '088212543694', //Arifin
-            '085954590940', //yazid
-            //'08991649871',
-        ];
-
-        $token = env('PESAN_TOKEN', 'abc25qc');
-
-        foreach ($nomorAdmins as $index => $nomor) {
-            pesan($nomor, $pesanText, $token);
-            // Jeda 5 detik antar-pengiriman kecuali setelah yang terakhir
-            if ($index < count($nomorAdmins) - 1) {
+        $pesanText = "📢 *MIFA-TEST NOTIF - Follow Up MCU*\n\n\n*$infoKaryawan*\n";
+        foreach ($info['nomorAdmins'] as $i => $nomor) {
+            pesan($nomor, $pesanText, $info['token']);
+            if ($i < count($info['nomorAdmins']) - 1) {
                 sleep(5);
             }
         }
-
         // Reset the form fields after save
         $this->reset();
 
@@ -571,27 +510,10 @@ class Mcu extends Component
     }
     public function storeVerifikasi()
     {
-
-        $user = auth()->user();
-        $nama = $user->name ?? $user->nama ?? 'User'; // Sesuaikan field nama
-        $timezone = config('app.timezone'); // contoh: Asia/Jakarta
-        $labelZona = match ($timezone) {
-            'Asia/Jakarta' => 'WIB',
-            'Asia/Makassar' => 'WITA',
-            'Asia/Jayapura' => 'WIT',
-            default => '',
-        };
-        // Nomor kamu + token
-        $nomorAdmins = [
-            '088212543694', //Arifin
-            '085954590940', //yazid
-            //'08991649871',
-        ];
-        $token = env('PESAN_TOKEN', 'abc25qc');
-        $waktu = now()->format('d-m-Y H:i:s') . ' ' . $labelZona;
-
+        $info = getUserInfo();
         $mcu = ModelsMcu::find($this->id_mcu);
         $nrp = $mcu->id_karyawan;
+        $infoKaryawan = getInfoKaryawanByNrp($nrp);
         if (auth()->user()->subrole === 'verifikator') {
             $this->validate(
                 [
@@ -610,14 +532,8 @@ class Mcu extends Component
                         'paramedik_catatan.required' => 'Catatan harus diisi.',
                     ]
                 );
-                $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n👤 Oleh: *$nama*\n🆔 NRP: *$nrp*\n Status File MCU: *ditolak*\n⏰ Waktu: *$waktu*";
-                foreach ($nomorAdmins as $index => $nomor) {
-                    pesan($nomor, $pesanText, $token);
-                    // Jeda 5 detik antar-pengiriman kecuali setelah yang terakhir
-                    if ($index < count($nomorAdmins) - 1) {
-                        sleep(5);
-                    }
-                }
+                $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n Inputan data MCU: *ditolak* \nKeterangan: *$this->paramedik_catatan*\n";
+
                 $mcu->update([
                     'tgl_verifikasi' => $this->tgl_verifikasi,
                     'verifikator' => auth()->user()->username,
@@ -638,14 +554,7 @@ class Mcu extends Component
                 );
                 $indukmcu = ModelsMcu::where('id', $mcu->sub_id)->where('sub_id', NULL)->first();
                 if ($this->status == 'FIT' || $this->status == 'FIT WITH NOTE') {
-                    $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n👤 Oleh: *$nama*\n🆔 NRP: *$nrp*\n Hasil MCU: *$this->status*\n⏰ Waktu: *$waktu*";
-                    foreach ($nomorAdmins as $index => $nomor) {
-                        pesan($nomor, $pesanText, $token);
-                        // Jeda 5 detik antar-pengiriman kecuali setelah yang terakhir
-                        if ($index < count($nomorAdmins) - 1) {
-                            sleep(5);
-                        }
-                    }
+
                     $mcu->update([
                         'no_dokumen' => $this->no_dokumen,
                         'status_' => 'close',
@@ -665,16 +574,10 @@ class Mcu extends Component
                             'status_' => 'close',
                         ]);
                     }
+                    $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n Hasil MCU: *$this->status*\n";
                 } else {
                     if (empty($mcu->sub_id)) {
-                        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n👤 Oleh: *$nama*\n🆔 NRP: *$nrp*\n Hasil MCU: *$this->status*\n⏰ Waktu: *$waktu*";
-                        foreach ($nomorAdmins as $index => $nomor) {
-                            pesan($nomor, $pesanText, $token);
-                            // Jeda 5 detik antar-pengiriman kecuali setelah yang terakhir
-                            if ($index < count($nomorAdmins) - 1) {
-                                sleep(5);
-                            }
-                        }
+
                         $mcu->update([
                             'no_dokumen' => $this->no_dokumen,
                             'status_' => 'open',
@@ -686,15 +589,9 @@ class Mcu extends Component
                             'paramedik_status' => $this->paramedik_status,
                             'paramedik_catatan' => $this->paramedik_catatan
                         ]);
+                        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n Hasil MCU: *$this->status*\n";
                     } else {
-                        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n👤 Oleh: *$nama*\n🆔 NRP: *$nrp*\n Hasil MCU: *$this->status*\n⏰ Waktu: *$waktu*";
-                        foreach ($nomorAdmins as $index => $nomor) {
-                            pesan($nomor, $pesanText, $token);
-                            // Jeda 5 detik antar-pengiriman kecuali setelah yang terakhir
-                            if ($index < count($nomorAdmins) - 1) {
-                                sleep(5);
-                            }
-                        }
+
                         $mcu->update([
                             'no_dokumen' => $this->no_dokumen,
                             'status_' => 'close',
@@ -706,6 +603,7 @@ class Mcu extends Component
                             'paramedik_status' => $this->paramedik_status,
                             'paramedik_catatan' => $this->paramedik_catatan
                         ]);
+                        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n Hasil MCU: *$this->status*\n";
                     }
                     if ($indukmcu) {
                         $indukmcu->update([
@@ -724,14 +622,12 @@ class Mcu extends Component
                     'no_dokumen.required' => 'No Dokumen harus diisi.',
                 ]
             );
-            $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n👤 Oleh: *$nama*\n🆔 NRP: *$nrp*\n *Paramedik Input Hasil MCU* \n⏰ Waktu: *$waktu*";
-            foreach ($nomorAdmins as $index => $nomor) {
-                pesan($nomor, $pesanText, $token);
-                // Jeda 5 detik antar-pengiriman kecuali setelah yang terakhir
-                if ($index < count($nomorAdmins) - 1) {
-                    sleep(5);
-                }
+            if (empty($mcu->paramedik_catatan)) {
+                $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n *Paramedik Input Hasil MCU* \n";
+            } else {
+                $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n *Paramedik Input Ulang Hasil MCU*\n";
             }
+
             $mcu->update([
                 'no_dokumen' => $this->no_dokumen,
                 'status_' => 'open',
@@ -783,6 +679,12 @@ class Mcu extends Component
             ]);
         }
 
+        foreach ($info['nomorAdmins'] as $i => $nomor) {
+            pesan($nomor, $pesanText, $info['token']);
+            if ($i < count($info['nomorAdmins']) - 1) {
+                sleep(5);
+            }
+        }
         $jenis = $this->id_mcu ? 'Verifikasi' : 'Tambah';
         $this->dispatch(
             'alert',

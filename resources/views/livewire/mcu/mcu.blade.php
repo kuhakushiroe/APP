@@ -170,6 +170,7 @@
                                                                     @elseif ($data->status_file_mcu == '1')
                                                                         <span
                                                                             class="text-danger">{{ $data->paramedik_catatan ?? '' }}</span>
+                                                                        <br>
                                                                         <button class="btn btn-outline-warning btn-sm"
                                                                             wire:click="verifikasi({{ $data->id_mcu }})">
                                                                             <span class="bi bi-file-check"></span>
@@ -199,7 +200,7 @@
                                                                 @else
                                                                     @if ($data->status_file_mcu == '1')
                                                                         <span
-                                                                            class="text-danger">{{ $data->paramedik_catatan ?? '' }}</span>
+                                                                            class="text-danger">{{ $data->paramedik_catatan ?? '' }}</span><br>
                                                                         <button class="btn btn-warning btn-sm"
                                                                             type="button" disabled>
                                                                             <span
@@ -341,7 +342,7 @@
                                                                             </button>
                                                                         @elseif ($item->status_file_mcu == '1')
                                                                             <span
-                                                                                class="text-danger">{{ $item->paramedik_catatan ?? '' }}</span>
+                                                                                class="text-danger">{{ $item->paramedik_catatan ?? '' }}</span><br>
                                                                             <button
                                                                                 class="btn btn-outline-warning btn-sm"
                                                                                 wire:click="verifikasi({{ $item->id }})">
@@ -373,7 +374,7 @@
                                                                     @else
                                                                         @if ($item->status_file_mcu == '1')
                                                                             <span
-                                                                                class="text-danger">{{ $item->paramedik_catatan ?? '' }}</span>
+                                                                                class="text-danger">{{ $item->paramedik_catatan ?? '' }}</span><br>
                                                                             <button class="btn btn-warning btn-sm"
                                                                                 type="button" disabled>
                                                                                 <span
@@ -413,7 +414,7 @@
                                                                     @if ($item->paramedik_status == '0')
                                                                         <span class="text-danger">
                                                                             "{{ $item->paramedik_catatan }}"
-                                                                        </span>
+                                                                        </span><br>
                                                                         <button class="btn btn-outline-warning btn-sm"
                                                                             wire:click="verifikasi({{ $item->id }})">
                                                                             <span class="bi bi-file-check"></span>

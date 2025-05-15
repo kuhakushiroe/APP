@@ -27,7 +27,9 @@ use Maatwebsite\Excel\Facades\Excel;
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/', Home::class)->name('home');
-    Route::get('karyawan', Karyawan::class)->name('karyawan');
+    Route::group(['middleware' => ['role:superadmin,admin,she']], function () {
+        Route::get('karyawan', Karyawan::class)->name('karyawan');
+    });
     Route::get('mcu', Mcu::class)->name('mcu');
     Route::get('histori-mcu', McuMcu::class)->name('histori-mcu');
     Route::group(['middleware' => ['role:superadmin']], function () {
