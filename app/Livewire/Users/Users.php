@@ -57,11 +57,15 @@ class Users extends Component
             'name' => $this->name,
             'username' => $this->username,
             'email' => $this->email,
-            'password' => Hash::make($this->password),  // Hash password
             'role' => $this->role,
             'subrole' => $this->subrole,
             'wa' => $this->wa,
         ];
+
+        // Jika password tidak kosong, hash password tersebut
+        if (!empty($this->password)) {
+            $userData['password'] = Hash::make($this->password);  // Hash password jika ada
+        }
 
         // Simpan atau update user data, gunakan updateOrCreate jika ingin mengupdate berdasarkan id
         User::updateOrCreate([
@@ -144,7 +148,7 @@ class Users extends Component
         $this->role = $user->role;
         $this->subrole = $user->subrole;
         $this->id_user = $user->id; // Tidak perlu menampilkan atau menyertakan password saat edit
-        $this->wa= $user->wa;
+        $this->wa = $user->wa;
 
         // Set flag form menjadi true jika tidak ada redirect
         $this->form = true;

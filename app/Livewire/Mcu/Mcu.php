@@ -744,16 +744,27 @@ class Mcu extends Component
         $carifoto = Karyawan::where('nrp', $this->nrp)
             ->where('status', 'aktif')
             ->first();
-        $mcus = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu', 'mcu.status as mcuStatus')
-            ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
-            ->whereAny(['karyawans.nrp', 'karyawans.nama'], 'like', '%' . $this->search . '%')
-            ->where('mcu.status_', '=', "open")
-            ->where('mcu.sub_id', NULL)
-            ->orderBy('mcu.tgl_mcu', 'desc')
-            ->paginate(10)
-            ->withQueryString();
+        if (in_array(auth()->user()->role, ['superadmin', 'dokter', 'she'])) {
+            $mcus = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu', 'mcu.status as mcuStatus')
+                ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
+                ->whereAny(['karyawans.nrp', 'karyawans.nama'], 'like', '%' . $this->search . '%')
+                ->where('mcu.status_', '=', "open")
+                ->where('mcu.sub_id', NULL)
+                ->orderBy('mcu.tgl_mcu', 'desc')
+                ->paginate(10)
+                ->withQueryString();
+        } else {
+            $mcus = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu', 'mcu.status as mcuStatus')
+                ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
+                ->whereAny(['karyawans.nrp', 'karyawans.nama'], 'like', '%' . $this->search . '%')
+                ->where('mcu.status_', '=', "open")
+                ->where('mcu.sub_id', NULL)
+                ->where('karyawans.dept', auth()->user()->subrole)
+                ->orderBy('mcu.tgl_mcu', 'desc')
+                ->paginate(10)
+                ->withQueryString();
+        }
 
-        $cariMcu = ModelsMcu::all();
         foreach ($mcus as $data) {
             if (!isset($this->status_file_mcu[$data->id_mcu])) {
                 $this->status_file_mcu[$data->id_mcu] = '';  // Nilai default untuk status
