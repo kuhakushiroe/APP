@@ -19,6 +19,7 @@ use App\Livewire\Page\Notfound;
 use App\Livewire\Pengajuan\Id;
 use App\Livewire\Pengajuan\Kimper;
 use App\Livewire\Perusahaan\Perusahaan;
+use App\Livewire\Profil\Password;
 use App\Livewire\Users\Users;
 use App\Livewire\Versatility\Versatility;
 use Illuminate\Support\Facades\Auth;
@@ -30,6 +31,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['middleware' => ['role:superadmin,admin,she']], function () {
         Route::get('karyawan', Karyawan::class)->name('karyawan');
     });
+    Route::get('profil', Password::class)->name('profil');
     Route::get('mcu', Mcu::class)->name('mcu');
     Route::get('histori-mcu', McuMcu::class)->name('histori-mcu');
     Route::group(['middleware' => ['role:superadmin']], function () {
