@@ -26,6 +26,7 @@
                         <th>Role</th>
                         <th>Sub Role</th>
                         <th>Email</th>
+                        <th>No. Handphone</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -63,6 +64,7 @@
                             <td>{{ $user->role }}</td>
                             <td>{{ $user->subrole }}</td>
                             <td>{{ $user->email }}</td>
+                            <td>{{ $user->wa }}</td>
                         </tr>
                     @endforeach
                 </tbody>

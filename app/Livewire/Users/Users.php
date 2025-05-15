@@ -19,7 +19,7 @@ class Users extends Component
     #[Title('Users')]
     public $search = '';
     public $form = false;
-    public $username, $name, $email, $password, $role, $subrole, $id_user;
+    public $username, $name, $email, $password, $role, $subrole, $id_user, $wa;
     public function open()
     {
         $this->form = true;
@@ -38,6 +38,7 @@ class Users extends Component
             'password' => $this->id_user ? 'nullable' : 'required',  // Password wajib diisi saat store
             'role' => 'required',
             'subrole' => 'required_if:role,admin',
+            'wa' => 'required',
         ], [
             'name.required' => 'Name Harus Diisi',
             'username.required' => 'Username Harus Diisi',
@@ -48,6 +49,7 @@ class Users extends Component
             'password.required' => 'Password Harus Diisi',
             'role.required' => 'Role Harus Diisi',
             'subrole.required_if' => 'Subrole Harus Diisi jika Role adalah Admin',
+            'wa.required' => 'No Handphone Harus Diisi dengan format nomor',
         ]);
 
         // Jika password tidak kosong, hash password tersebut
@@ -57,7 +59,8 @@ class Users extends Component
             'email' => $this->email,
             'password' => Hash::make($this->password),  // Hash password
             'role' => $this->role,
-            'subrole' => $this->subrole
+            'subrole' => $this->subrole,
+            'wa' => $this->wa,
         ];
 
         // Simpan atau update user data, gunakan updateOrCreate jika ingin mengupdate berdasarkan id
@@ -123,7 +126,7 @@ class Users extends Component
     {
         // Cek apakah user memiliki role 'superadmin', jika iya redirect ke halaman /notfound/users
         if (auth()->user()->hasRole('superadmin')) {
-            return redirect()->to('/notfound/users');
+            $this->open();
         }
 
         // Ambil data pengguna berdasarkan ID
@@ -141,6 +144,7 @@ class Users extends Component
         $this->role = $user->role;
         $this->subrole = $user->subrole;
         $this->id_user = $user->id; // Tidak perlu menampilkan atau menyertakan password saat edit
+        $this->wa= $user->wa;
 
         // Set flag form menjadi true jika tidak ada redirect
         $this->form = true;
