@@ -70,6 +70,21 @@
                                 @enderror
                             </div>
                         @endif
+                        @if ($role === 'dokter')
+                            <div class="form-group">
+                                <label for="subrole">Sub Role</label>
+                                <select class="form-control form-control-sm @error('subrole') is-invalid @enderror"
+                                    wire:model.live="subrole">
+                                    <option value="">Pilih Sub Role</option>
+                                    <option value="verifikator">Dokter</option>
+                                    <option value="paramedik">Paramedik</option>
+                                </select>
+                                @error('subrole')
+                                    <span class="invalid-feedback"
+                                        role="alert"><strong>{{ $message }}</strong></span>
+                                @enderror
+                            </div>
+                        @endif
                         @if (empty($id_user))
                             <div class="form-group">
                                 <label for="password">Password</label>
