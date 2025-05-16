@@ -50,25 +50,14 @@ class LoginController extends Controller
     }
     protected function authenticated(Request $request, $user)
     {
-        // Kirim pesan setelah login berhasil
-
-        $nama = $user->name ?? $user->nama ?? 'User'; // Sesuaikan field nama
-        $timezone = config('app.timezone'); // contoh: Asia/Jakarta
-        $labelZona = match ($timezone) {
-            'Asia/Jakarta' => 'WIB',
-            'Asia/Makassar' => 'WITA',
-            'Asia/Jayapura' => 'WIT',
-            default => '',
-        };
-
-        $waktu = now()->format('d-m-Y H:i:s') . ' ' . $labelZona;
-        $pesanText = "🔐 *MIFA - Login Berhasil*\n\n👤 User: *$nama*\n⏰ Waktu: *$waktu*\n";
-
-        // Nomor kamu + token
-        $nomorAdmin = '088212543694';
-        $token = env('PESAN_TOKEN', 'abc25qc');
-
-        pesan($nomorAdmin, $pesanText, $token);
+        $info = getUserInfo(); // Ambil data user & waktu dari helper
+        $pesanText = "🔐 *MIFA - Login Berhasil*\n\n";
+        foreach ($info['nomorAdmins'] as $i => $nomor) {
+            pesan($nomor, $pesanText, $info['token']);
+            if ($i < count($info['nomorAdmins']) - 1) {
+                sleep(1);
+            }
+        }
     }
     protected function sendFailedLoginResponse(\Illuminate\Http\Request $request)
     {

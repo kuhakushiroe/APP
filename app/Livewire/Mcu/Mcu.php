@@ -169,7 +169,7 @@ class Mcu extends Component
         foreach ($info['nomorAdmins'] as $i => $nomor) {
             pesan($nomor, $pesanText, $info['token']);
             if ($i < count($info['nomorAdmins']) - 1) {
-                sleep(5);
+                sleep(1);
             }
         }
 
@@ -233,7 +233,7 @@ class Mcu extends Component
             foreach ($info['nomorAdmins'] as $i => $nomor) {
                 pesan($nomor, $pesanText, $info['token']);
                 if ($i < count($info['nomorAdmins']) - 1) {
-                    sleep(5);
+                    sleep(1);
                 }
             }
             // Reset input setelah kirim
@@ -434,7 +434,7 @@ class Mcu extends Component
         foreach ($info['nomorAdmins'] as $i => $nomor) {
             pesan($nomor, $pesanText, $info['token']);
             if ($i < count($info['nomorAdmins']) - 1) {
-                sleep(5);
+                sleep(1);
             }
         }
         // Reset the form fields after save
@@ -682,7 +682,7 @@ class Mcu extends Component
         foreach ($info['nomorAdmins'] as $i => $nomor) {
             pesan($nomor, $pesanText, $info['token']);
             if ($i < count($info['nomorAdmins']) - 1) {
-                sleep(5);
+                sleep(1);
             }
         }
         $jenis = $this->id_mcu ? 'Verifikasi' : 'Tambah';
