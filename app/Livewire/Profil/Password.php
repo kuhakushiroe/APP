@@ -3,8 +3,9 @@
 namespace App\Livewire\Profil;
 
 use App\Models\User;
-use Livewire\Attributes\Title;
 use Livewire\Component;
+use Livewire\Attributes\Title;
+use Illuminate\Support\Facades\Hash;
 
 class Password extends Component
 {
@@ -13,9 +14,26 @@ class Password extends Component
     public $search = '';
     public $form = false;
     public $id_user;
+    public $password;
 
 
-    public function UpdatePassword() {}
+    public function UpdatePassword() {
+        $user = User::find($this->id_user);
+        $user->update([
+            'password' => Hash::make($this->password)
+        ]);
+
+        $this->dispatch(
+            'alert',
+            type: 'success',
+            title: 'Berhasil',
+            text: 'Anda Berhasil Edit Password',
+            position: 'center',
+            confirm: true,
+            redirect: '/logout',
+        );
+
+    }
 
     public function render()
     {

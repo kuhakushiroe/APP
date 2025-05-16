@@ -12,7 +12,7 @@
                 <form wire:submit.prevent="UpdatePassword">
                     <div class="card-body">
                         <div class="form-group">
-                            <input type="text" class="form-control form-control-sm" wire:model="id_user">
+                            <input type="hidden" class="form-control form-control-sm" wire:model="id_user">
                             <label for="password">Password</label>
                             <input type="password"
                                 class="form-control form-control-sm
