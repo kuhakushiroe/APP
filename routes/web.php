@@ -19,6 +19,7 @@ use App\Livewire\Page\Notfound;
 use App\Livewire\Pengajuan\Id;
 use App\Livewire\Pengajuan\Kimper;
 use App\Livewire\Perusahaan\Perusahaan;
+use App\Livewire\Profil\Password;
 use App\Livewire\Users\Users;
 use App\Livewire\Versatility\Versatility;
 use Illuminate\Support\Facades\Auth;
@@ -27,6 +28,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/', Home::class)->name('home');
+    Route::get('profil', Password::class)->name('profil');
     Route::group(['middleware' => ['role:superadmin,admin,she']], function () {
         Route::get('karyawan', Karyawan::class)->name('karyawan');
     });

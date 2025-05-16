@@ -20,6 +20,7 @@ class Users extends Component
     #[Title('Users')]
     public $search = '';
     public $form = false;
+    public $edit_Password=false;
     public $username, $name, $email, $password, $role, $subrole, $id_user, $wa;
     public function open()
     {
@@ -101,6 +102,8 @@ class Users extends Component
         Karyawan::where('nrp', $user->username)->update(['status' => 'non aktif']);
         $user->delete();
     }
+
+
     public function deleteConfirm($id)
     {
         $this->dispatch(
@@ -108,11 +111,15 @@ class Users extends Component
             id: $id
         );
     }
+
+
     public function restoreAll()
     {
         // Mengembalikan semua data yang di-soft delete
         User::withTrashed()->restore();
     }
+
+
     public function restore(int $id)
     {
         // Mencari data yang sudah di-soft delete dengan menggunakan withTrashed()
@@ -125,12 +132,15 @@ class Users extends Component
             // Menangani jika data tidak ditemukan
         }
     }
+
+
     public function mount()
     {
         $this->close();
     }
     public function edit($id)
     {
+        $this->edit_Password = false;
         // Cek apakah user memiliki role 'superadmin', jika iya redirect ke halaman /notfound/users
         if (auth()->user()->hasRole('superadmin')) {
             $this->open();
@@ -155,6 +165,38 @@ class Users extends Component
 
         // Set flag form menjadi true jika tidak ada redirect
         $this->form = true;
+    }
+
+    public function editPassword($id_user)
+    {
+        if  (auth()->user()->hasRole('superadmin')) {
+            $this->open();
+        }
+        $user = User::find($id_user);
+        $this->edit_Password = true;
+        $this->id_user = $id_user;
+        $this->form = true;
+
+
+    }
+
+    public function updatePassword(){
+        $user = User::find($this->id_user);
+        $user->update([
+            'password' => Hash::make($this->password)
+        ]);
+
+        $this->close();
+
+        $this->dispatch(
+            'alert',
+            type: 'success',
+            title: 'Berhasil',
+            text: 'Berhasil Edit Password User',
+            position: 'center',
+            confirm: true,
+            redirect: '/users',
+        );
     }
 
 
