@@ -9,13 +9,13 @@ use Illuminate\Support\Facades\Hash;
 
 class Password extends Component
 {
-
     #[Title('Password')]
     public $search = '';
     public $form = false;
     public $id_user;
     public $password;
 
+<<<<<<< HEAD
 
     public function UpdatePassword() {
         $user = User::find($this->id_user);
@@ -34,6 +34,9 @@ class Password extends Component
         );
 
     }
+=======
+    public function UpdatePassword() {}
+>>>>>>> 388ab1302713720e97dd5dcb933ac75ba8477d10
 
     public function render()
     {
