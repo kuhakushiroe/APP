@@ -39,11 +39,6 @@
                                             wire:click="editPassword({{ $user->id }})">
                                             <span class="bi bi-gear"></span>
                                         </button>
-                                    @elseif (auth()->user()->role !== 'superadmin')
-                                        <button class="btn btn-outline-warning btn-sm"
-                                            wire:click="editPassword({{ $user->id }})">
-                                            <span class="bi bi-gear"></span>
-                                        </button>
                                     @endif
                                     <button class="btn btn-outline-warning btn-sm" wire:click="edit({{ $user->id }})">
                                         <span class="bi bi-pencil"></span>
