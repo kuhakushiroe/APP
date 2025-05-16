@@ -15,8 +15,6 @@ class Password extends Component
     public $id_user;
     public $password;
 
-<<<<<<< HEAD
-
     public function UpdatePassword() {
         $user = User::find($this->id_user);
         $user->update([
@@ -34,9 +32,7 @@ class Password extends Component
         );
 
     }
-=======
-    public function UpdatePassword() {}
->>>>>>> 388ab1302713720e97dd5dcb933ac75ba8477d10
+
 
     public function render()
     {
