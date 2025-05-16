@@ -34,7 +34,12 @@
                         <tr>
                             <td>
                                 @hasAnyRole(['superadmin', 'admin'])
-                                    @if (auth()->user()->role !== 'superadmin' || auth()->user()->id === $user->id)
+                                    @if (auth()->user()->role === 'superadmin' && ($user->id === auth()->user()->id || $user->role !== 'superadmin'))
+                                        <button class="btn btn-outline-warning btn-sm"
+                                            wire:click="editPassword({{ $user->id }})">
+                                            <span class="bi bi-gear"></span>
+                                        </button>
+                                    @elseif (auth()->user()->role !== 'superadmin')
                                         <button class="btn btn-outline-warning btn-sm"
                                             wire:click="editPassword({{ $user->id }})">
                                             <span class="bi bi-gear"></span>
