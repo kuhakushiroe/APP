@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Profil;
 
+use App\Models\User;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
@@ -11,10 +12,20 @@ class Password extends Component
     #[Title('Password')]
     public $search = '';
     public $form = false;
-    public $username, $name, $email, $password, $role, $subrole, $id_user, $wa;
+    public $id_user;
+
+
+    public function UpdatePassword(){
+
+
+    }
+
     public function render()
     {
-
-        return view('livewire.profil.password');
+        $user = User::where('username',auth()->user()->username)->first();
+        $this->id_user = auth()->user()->id;
+        return view('livewire.profil.password', [
+            'user' => $user
+        ]);
     }
 }
