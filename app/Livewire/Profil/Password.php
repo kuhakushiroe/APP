@@ -15,17 +15,14 @@ class Password extends Component
     public $id_user;
 
 
-    public function UpdatePassword(){
-
-
-    }
+    public function UpdatePassword() {}
 
     public function render()
     {
-        $user = User::where('username',auth()->user()->username)->first();
-        $this->id_user = auth()->user()->id;
+        $user = User::where('username', auth()->user()->username)->first();
+        $this->id_user = $user->id;
         return view('livewire.profil.password', [
-            'user' => $user
+            'user' => $user, //buat bahan nanti jika ada ubah nomor hp nama dll
         ]);
     }
 }
