@@ -32,6 +32,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['middleware' => ['role:superadmin,admin,she']], function () {
         Route::get('karyawan', Karyawan::class)->name('karyawan');
     });
+    Route::get('profil', Password::class)->name('profil');
     Route::get('mcu', Mcu::class)->name('mcu');
     Route::get('histori-mcu', McuMcu::class)->name('histori-mcu');
     Route::group(['middleware' => ['role:superadmin']], function () {
