@@ -87,6 +87,9 @@
                         </p>
                     </li>
                     <li class="user-footer">
+                        <a href="{{ route('profil') }}" class="btn btn-default btn-flat float-start">
+                            <span class="bi bi-gear"></span> Ganti Password
+                        </a>
                         <a href="{{ route('logout') }}" class="btn btn-default btn-flat float-end">
                             <span class="bi bi-box-arrow-right"></span> Logout
                         </a>
