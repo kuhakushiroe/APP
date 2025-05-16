@@ -64,6 +64,7 @@
                                     wire:model.live="role">
                                     <option value="">Pilih Role</option>
                                     <option value="admin">Admin</option>
+                                    <option value="superadmin">Superadmin</option>
                                     <option value="karyawan">Karyawan</option>
                                     <option value="dokter">Dokter</option>
                                     <option value="she">SHE</option>

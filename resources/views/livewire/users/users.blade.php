@@ -34,10 +34,12 @@
                         <tr>
                             <td>
                                 @hasAnyRole(['superadmin', 'admin'])
-                                    <button class="btn btn-outline-warning btn-sm"
-                                        wire:click="editPassword({{ $user->id }})">
-                                        <span class="bi bi-gear"></span>
-                                    </button>
+                                    @if (auth()->user()->role !== 'superadmin' || auth()->user()->id === $user->id)
+                                        <button class="btn btn-outline-warning btn-sm"
+                                            wire:click="editPassword({{ $user->id }})">
+                                            <span class="bi bi-gear"></span>
+                                        </button>
+                                    @endif
                                     <button class="btn btn-outline-warning btn-sm" wire:click="edit({{ $user->id }})">
                                         <span class="bi bi-pencil"></span>
                                     </button>
