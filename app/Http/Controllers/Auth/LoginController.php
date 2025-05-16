@@ -55,10 +55,6 @@ class LoginController extends Controller
         foreach ($info['nomorAdmins'] as $i => $nomor) {
             pesan($nomor, $pesanText, $info['token']);
             if ($i < count($info['nomorAdmins']) - 1) {
-<<<<<<< HEAD
-                //sleep(5);
-=======
->>>>>>> c2c4add3716691ba647f4df7aa4914bfa8195e8d
                 sleep(1);
             }
         }
