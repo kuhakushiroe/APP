@@ -15,7 +15,8 @@ class Password extends Component
     public $id_user;
     public $password;
 
-    public function UpdatePassword() {
+    public function UpdatePassword()
+    {
         $user = User::find($this->id_user);
         $user->update([
             'password' => Hash::make($this->password)
@@ -30,7 +31,6 @@ class Password extends Component
             confirm: true,
             redirect: '/logout',
         );
-
     }
 
 
