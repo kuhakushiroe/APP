@@ -8,12 +8,10 @@ use Livewire\Component;
 
 class Password extends Component
 {
-
     #[Title('Password')]
     public $search = '';
     public $form = false;
     public $id_user;
-
 
     public function UpdatePassword() {}
 
