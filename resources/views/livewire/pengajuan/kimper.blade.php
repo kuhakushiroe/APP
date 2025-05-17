@@ -1,6 +1,35 @@
 <div>
-    @include('livewire.pengajuan.form-kimper')
+    @if ($form)
+        @include('livewire.pengajuan.form-kimper')
+    @else
+        <button wire:click='open' class="btn btn-outline-success btn-sm">
+            <span class="bi bi-plus"></span> Kimper
+        </button>
+    @endif
+
     @forelse ($kimpers as $data)
+        <div class="card">
+            <div class="card-header">
+                NRP: {{ $data->nrp }}
+            </div>
+            <div class="card-body">
+                <table>
+                    <thead>
+                        <tr>
+                            <td>Dokumen</td>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                Dokumen : {{ $data->jenis_pengajuan_kimper }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     @empty
     @endforelse
 </div>

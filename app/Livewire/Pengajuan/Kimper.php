@@ -6,6 +6,7 @@ use App\Models\Karyawan;
 use App\Models\ModelPengajuanKimper;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Illuminate\Support\Facades\Storage;
 
 class Kimper extends Component
 {
@@ -23,7 +24,8 @@ class Kimper extends Component
         'foto' => null,
         'ktp' => null,
         'skd' => null,
-        'bpjs' => null,
+        'bpjs_kes' => null,
+        'bpjs_ker' => null
     ];
 
     // Status untuk setiap upload
@@ -37,7 +39,9 @@ class Kimper extends Component
         'foto' => null,
         'ktp' => null,
         'skd' => null,
-        'bpjs' => null,
+        'bpjs_kes' => null,
+        'bpjs_ker' => null
+
     ];
 
     // Catatan untuk setiap upload
@@ -108,42 +112,53 @@ class Kimper extends Component
             'foto',
             'ktp',
             'skd',
-            'bpjs'
+            'bpjs_kes',
+            'bpjs_ker'
         ], null);
     }
     public function store()
     {
         // Validasi dasar
-        $this->validate([
-            'nrp' => [
-                'required',
-                function ($attribute, $value, $fail) {
-                    $karyawan = Karyawan::where('nrp', $value)->first();
-                    if (!$karyawan) {
-                        $fail('NRP tidak ditemukan dalam data karyawan.');
-                    } elseif (!$karyawan->exp_mcu) {
-                        $fail('Tanggal MCU belum diisi / Belum Memiliki MCU.');
-                    } elseif ($karyawan->status === 'non aktif') {
-                        $fail('Status Karyawan Non Aktif');
-                    } elseif ($karyawan->exp_mcu < now()) {
-                        $fail('MCU sudah kadaluarsa.');
-                    } elseif ($karyawan->exp_id < now() || $karyawan->exp_id === null) {
-                        $fail('ID sudah kadaluarsa.');
-                    }
-                },
-            ],
-            'jenis_pengajuan_kimper' => 'required|integer',
-            'upload.*' => 'nullable|file|max:10240', // max 10MB per file
-        ]);
+        $this->validate(
+    [
+        'nrp' => [
+            'required',
+            function ($attribute, $value, $fail) {
+                $karyawan = Karyawan::where('nrp', $value)->first();
+                if (!$karyawan) {
+                    $fail('NRP tidak ditemukan dalam data karyawan.');
+                } elseif (!$karyawan->exp_mcu) {
+                    $fail('Tanggal MCU belum diisi / Belum Memiliki MCU.');
+                } elseif ($karyawan->status === 'non aktif') {
+                    $fail('Status Karyawan Non Aktif');
+                } elseif ($karyawan->exp_mcu < now()) {
+                    $fail('MCU sudah kadaluarsa.');
+                } elseif ($karyawan->exp_id < now() || $karyawan->exp_id === null) {
+                    $fail('ID sudah kadaluarsa.');
+                }
+            },
+        ],
+    'jenis_pengajuan_kimper' => 'required',
+    'jenis_sim' => 'nullable|string',
+    ]
+);
+
+        $datakaryawan = Karyawan::where('nrp', $this->nrp)->first();
+        $folderDept = strtoupper($datakaryawan->dept);
+        $folderKaryawan = strtoupper($datakaryawan->nrp . '-' . $datakaryawan->nama . '-' . $datakaryawan->dept . '-' . $datakaryawan->jabatan);
+        // Define the folder path where the file will be stored
+        $folderPath = $folderDept . '/' . $folderKaryawan . '/pengajuan-kimper';
+        // Check if folder exists, if not, create it
+        if (!Storage::exists($folderPath)) {
+            Storage::makeDirectory($folderPath); // Create the directory if it doesn't exist
+        }
 
         // Simpan file upload dan ganti nilainya dengan path
         foreach ($this->upload as $key => $file) {
             if ($file) {
-                $this->upload[$key] = $file->storeAs(
-                    'uploads/' . $key,
-                    $this->nrp . '_' . time() . '_' . $file->getClientOriginalName(),
-                    'public'
-                );
+                $extension = $file->getClientOriginalExtension();
+        $filename = $folderKaryawan . "-{$key}-" . time() . "." . $extension;
+                $this->upload[$key] = $file->storeAs($folderPath, $filename, 'public');
             } else {
                 $this->upload[$key] = null;
             }
@@ -169,10 +184,10 @@ class Kimper extends Component
             'upload_foto' => $this->upload['foto'],
             'upload_ktp' => $this->upload['ktp'],
             'upload_skd' => $this->upload['skd'],
-            'upload_bpjs' => $this->upload['bpjs'],
+            'upload_bpjs_kes' => $this->upload['bpjs_kes'],
+            'upload_bpjs_ker' => $this->upload['bpjs_ker'],
         ]);
 
-        $this->resetForm();
         $this->dispatch(
             'alert',
             type: 'success',
@@ -182,6 +197,8 @@ class Kimper extends Component
             confirm: true,
             redirect: '/pengajuan-kimper',
         );
+
+        $this->resetForm();
     }
 
     #[Title('Kimper')]

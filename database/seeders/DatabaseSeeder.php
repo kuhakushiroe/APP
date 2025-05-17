@@ -199,6 +199,7 @@ class DatabaseSeeder extends Seeder
                     'versatility' => $selectedKendaraan,
                     'exp_id' => randomExpireDate(),
                     'exp_kimper' => randomExpireDate(),
+                    'exp_mcu' => randomExpireDate(),
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);

@@ -17,7 +17,7 @@ class Id extends Component
 {
     use WithFileUploads, WithPagination, WithoutUrlPagination;
     public $form = false;
-    public $carikaryawan, $nrp, $nama, $jenis_pengajuan_id, $upload_id_lama, $status_upload_id_lama, $catatan_upload_id_lama, $upload_request, $status_upload_request, $catatan_upload_request, $upload_foto, $status_upload_foto, $catatan_upload_foto, $upload_ktp, $status_upload_ktp, $catatan_upload_ktp, $upload_skd, $status_upload_skd, $catatan_upload_skd, $upload_bpjs, $status_upload_bpjs, $catatan_upload_bpjs, $status_pengajuan, $tgl_pengajuan, $exp_id;
+    public $carikaryawan, $nrp, $nama, $jenis_pengajuan_id, $upload_id_lama, $status_upload_id_lama, $catatan_upload_id_lama, $upload_request, $status_upload_request, $catatan_upload_request, $upload_foto, $status_upload_foto, $catatan_upload_foto, $upload_ktp, $status_upload_ktp, $catatan_upload_ktp, $upload_skd, $status_upload_skd, $catatan_upload_skd, $upload_bpjs_kes, $status_upload_bpjs, $catatan_upload_bpjs, $status_pengajuan, $tgl_pengajuan, $exp_id;
     public $expired_id = [];
     public $tgl_induksi = [];
     public $info_nama, $info_dept, $info_jabatan, $info_mcu, $info_id, $info_kimper;
@@ -88,7 +88,7 @@ class Id extends Component
             $rules['upload_foto'] = 'required|mimes:jpeg,png,jpg,gif|max:10240';
             $rules['upload_ktp'] =  'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
             $rules['upload_skd'] =  'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
-            $rules['upload_bpjs'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
+            $rules['upload_bpjs_kes'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
         }
 
         $messages = [
@@ -128,7 +128,7 @@ class Id extends Component
             $fotoPath = $this->upload_foto->storeAs($folderPath, "{$nrp}_foto_{$idPengajuan}.{$this->upload_foto->getClientOriginalExtension()}", 'public');
             $ktpPath = $this->upload_ktp->storeAs($folderPath, "{$nrp}_ktp_{$idPengajuan}.{$this->upload_ktp->getClientOriginalExtension()}", 'public');
             $skdPath = $this->upload_skd->storeAs($folderPath, "{$nrp}_skd_{$idPengajuan}.{$this->upload_skd->getClientOriginalExtension()}", 'public');
-            $bpjsPath = $this->upload_bpjs->storeAs($folderPath, "{$nrp}_bpjs_{$idPengajuan}.{$this->upload_bpjs->getClientOriginalExtension()}", 'public');
+            $bpjsPath = $this->upload_bpjs_kes->storeAs($folderPath, "{$nrp}_bpjs_{$idPengajuan}.{$this->upload_bpjs_kes->getClientOriginalExtension()}", 'public');
         }
 
         if ($this->jenis_pengajuan_id === 'baru') {
@@ -137,7 +137,7 @@ class Id extends Component
                 'upload_foto' => $fotoPath,
                 'upload_ktp' => $ktpPath,
                 'upload_skd' => $skdPath,
-                'upload_bpjs' => $bpjsPath,
+                'upload_bpjs_kes' => $bpjsPath,
                 'upload_id_lama' => $idLamaPath,
             ]);
         }
@@ -146,13 +146,13 @@ class Id extends Component
             $fotoPath = $caridatalama->upload_foto ?? null;
             $ktpPath = $caridatalama->upload_ktp ?? null;
             $skdPath = $caridatalama->upload_skd ?? null;
-            $bpjsPath = $caridatalama->upload_bpjs ?? null;
+            $bpjsPath = $caridatalama->upload_bpjs_kes ?? null;
             $pengajuan->update([
                 'upload_request' => $requestPath,
                 'upload_foto' => $fotoPath,
                 'upload_ktp' => $ktpPath,
                 'upload_skd' => $skdPath,
-                'upload_bpjs' => $bpjsPath,
+                'upload_bpjs_kes' => $bpjsPath,
                 'upload_id_lama' => $idLamaPath,
             ]);
         }

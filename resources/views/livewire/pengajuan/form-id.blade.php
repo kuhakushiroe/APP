@@ -159,11 +159,11 @@
                             </div>
                             <div class="col-4">
                                 <div class="form-group">
-                                    <label for="upload_bpjs" class="form-label">Upload BPJS</label>
+                                    <label for="upload_bpjs_kes" class="form-label">Upload BPJS Kesehatan</label>
                                     <input
-                                        class="form-control form-control-sm @error('upload_bpjs') is-invalid @enderror"
-                                        type="file" id="upload_bpjs" wire:model='upload_bpjs'>
-                                    @error('upload_bpjs')
+                                        class="form-control form-control-sm @error('upload_bpjs_kes') is-invalid @enderror"
+                                        type="file" id="upload_bpjs_kes" wire:model='upload_bpjs_kes'>
+                                    @error('upload_bpjs_kes')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>

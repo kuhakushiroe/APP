@@ -95,7 +95,7 @@
                                     <span class="bi bi-file-earmark-pdf"></span>
                                     Skd
                                 </a>
-                                <a href="{{ asset('storage/' . $pengajuan->upload_bpjs) }}" target="_blank"
+                                <a href="{{ asset('storage/' . $pengajuan->upload_bpjs_kes) }}" target="_blank"
                                     class="btn btn-primary btn-sm">
                                     <span class="bi bi-file-earmark-pdf"></span>
                                     Bpjs
@@ -107,7 +107,7 @@
                                     $pengajuan->status_upload_foto == '0' ||
                                     $pengajuan->status_upload_ktp == '0' ||
                                     $pengajuan->status_upload_skd == '0' ||
-                                    $pengajuan->status_upload_bpjs == '0') &&
+                                    $pengajuan->status_upload_bpjs_kes == '0') &&
                                     in_array(auth()->user()->role, ['admin', 'superadmin']))
                                 <div class="alert alert-warning">
                                     <form wire:submit.prevent="updateUpload({{ $pengajuan->id_pengajuan }})">
@@ -194,18 +194,19 @@
                                                 </div>
                                             </div>
                                         @endif
-                                        @if ($pengajuan->status_upload_bpjs == '0')
+                                        @if ($pengajuan->status_upload_bpjs_kes == '0')
                                             <div class="col-12">
                                                 <div class="form-group">
-                                                    <label for="upload_bpjs" class="form-label">Upload BPJS</label>
+                                                    <label for="upload_bpjs_kes" class="form-label">Upload BPJS</label>
                                                     <input
-                                                        class="form-control form-control-sm @error('upload_bpjs') is-invalid @enderror"
-                                                        type="file" id="upload_bpjs" wire:model='upload_bpjs'>
-                                                    @error('upload_bpjs')
+                                                        class="form-control form-control-sm @error('upload_bpjs_kes') is-invalid @enderror"
+                                                        type="file" id="upload_bpjs_kes"
+                                                        wire:model='upload_bpjs_kes'>
+                                                    @error('upload_bpjs_kes')
                                                         <span class="text-danger">{{ $message }}</span>
                                                     @enderror
                                                     <div class="text-danger">
-                                                        {{ $pengajuan->catatan_upload_bpjs }}
+                                                        {{ $pengajuan->catatan_upload_bpjs_kes }}
                                                     </div>
                                                 </div>
                                             </div>
@@ -224,7 +225,7 @@
                                         $pengajuan->status_upload_foto,
                                         $pengajuan->status_upload_ktp,
                                         $pengajuan->status_upload_skd,
-                                        $pengajuan->status_upload_bpjs,
+                                        $pengajuan->status_upload_bpjs_kes,
                                     ]) ||
                                     in_array(0, [
                                         $pengajuan->status_upload_request,
@@ -232,7 +233,7 @@
                                         $pengajuan->status_upload_foto,
                                         $pengajuan->status_upload_ktp,
                                         $pengajuan->status_upload_skd,
-                                        $pengajuan->status_upload_bpjs,
+                                        $pengajuan->status_upload_bpjs_kes,
                                     ]);
                             @endphp
                             @if ($isIncomplete && in_array(auth()->user()->role, ['she', 'superadmin']))
@@ -313,15 +314,15 @@
                                                         </td>
                                                     </tr>
                                                 @endif
-                                                @if ($pengajuan->status_upload_bpjs == null)
+                                                @if ($pengajuan->status_upload_bpjs_kes == null)
                                                     <tr>
                                                         <td>BPJS</td>
-                                                        <td><input type="radio" wire:model="status_upload_bpjs"
+                                                        <td><input type="radio" wire:model="status_upload_bpjs_kes"
                                                                 value="1" class="form-check-input"></td>
-                                                        <td><input type="radio" wire:model="status_upload_bpjs"
+                                                        <td><input type="radio" wire:model="status_upload_bpjs_kes"
                                                                 value="0" class="form-check-input"></td>
                                                         <td>
-                                                            <textarea wire:model="catatan_upload_bpjs" class="form-control"></textarea>
+                                                            <textarea wire:model="catatan_upload_bpjs_kes" class="form-control"></textarea>
                                                         </td>
                                                     </tr>
                                                 @endif
