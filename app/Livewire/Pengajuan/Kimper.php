@@ -120,28 +120,28 @@ class Kimper extends Component
     {
         // Validasi dasar
         $this->validate(
-    [
-        'nrp' => [
-            'required',
-            function ($attribute, $value, $fail) {
-                $karyawan = Karyawan::where('nrp', $value)->first();
-                if (!$karyawan) {
-                    $fail('NRP tidak ditemukan dalam data karyawan.');
-                } elseif (!$karyawan->exp_mcu) {
-                    $fail('Tanggal MCU belum diisi / Belum Memiliki MCU.');
-                } elseif ($karyawan->status === 'non aktif') {
-                    $fail('Status Karyawan Non Aktif');
-                } elseif ($karyawan->exp_mcu < now()) {
-                    $fail('MCU sudah kadaluarsa.');
-                } elseif ($karyawan->exp_id < now() || $karyawan->exp_id === null) {
-                    $fail('ID sudah kadaluarsa.');
-                }
-            },
-        ],
-    'jenis_pengajuan_kimper' => 'required',
-    'jenis_sim' => 'nullable|string',
-    ]
-);
+            [
+                'nrp' => [
+                    'required',
+                    function ($attribute, $value, $fail) {
+                        $karyawan = Karyawan::where('nrp', $value)->first();
+                        if (!$karyawan) {
+                            $fail('NRP tidak ditemukan dalam data karyawan.');
+                        } elseif (!$karyawan->exp_mcu) {
+                            $fail('Tanggal MCU belum diisi / Belum Memiliki MCU.');
+                        } elseif ($karyawan->status === 'non aktif') {
+                            $fail('Status Karyawan Non Aktif');
+                        } elseif ($karyawan->exp_mcu < now()) {
+                            $fail('MCU sudah kadaluarsa.');
+                        } elseif ($karyawan->exp_id < now() || $karyawan->exp_id === null) {
+                            $fail('ID sudah kadaluarsa.');
+                        }
+                    },
+                ],
+                'jenis_pengajuan_kimper' => 'required',
+                'jenis_sim' => 'nullable|string',
+            ]
+        );
 
         $datakaryawan = Karyawan::where('nrp', $this->nrp)->first();
         $folderDept = strtoupper($datakaryawan->dept);
@@ -157,7 +157,7 @@ class Kimper extends Component
         foreach ($this->upload as $key => $file) {
             if ($file) {
                 $extension = $file->getClientOriginalExtension();
-        $filename = $folderKaryawan . "-{$key}-" . time() . "." . $extension;
+                $filename = $folderKaryawan . "-{$key}-" . time() . "." . $extension;
                 $this->upload[$key] = $file->storeAs($folderPath, $filename, 'public');
             } else {
                 $this->upload[$key] = null;
@@ -207,7 +207,9 @@ class Kimper extends Component
         $carifoto = Karyawan::where('nrp', $this->nrp)
             ->where('status', 'aktif')
             ->first();
-        $kimpers = ModelPengajuanKimper::where('status_pengajuan', 0)->get();
+        $kimpers = ModelPengajuanKimper::where('status_pengajuan', 0)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
         return view('livewire.pengajuan.kimper', [
             'kimpers' => $kimpers,
             'carifoto' => $carifoto

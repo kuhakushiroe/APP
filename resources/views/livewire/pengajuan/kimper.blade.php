@@ -31,5 +31,8 @@
             </div>
         </div>
     @empty
+        <div class="alert alert-danger">
+            <span class="bi bi-info-circle"></span> Tidak ada data
+        </div>
     @endforelse
 </div>
