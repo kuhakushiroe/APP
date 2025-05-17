@@ -166,8 +166,11 @@
                 <table style="width: 100%">
                     <tr>
                         <td>
-                            @if (!empty($karyawans->foto))
-                                <img src="{{ public_path('/storage/' . $karyawans->foto) }}" class="profile-pic">
+                            @php
+                                $carifoto = DB::table('pengajuan_id')->where('nrp', $karyawans->nrp)->first();
+                            @endphp
+                            @if ($carifoto)
+                                <img src="{{ public_path('/storage/' . $carifoto->upload_foto) }}" class="profile-pic">
                             @else
                                 <img src="{{ public_path('/storage/fotos/6408045201970004wHqpIXoAJOqwyVXNrU0IJsVewkhMrNJxgxm0jbAa.jpg') }}"
                                     class="profile-pic">

@@ -7,6 +7,7 @@ use App\Models\Mcu as ModelsMcu;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -109,13 +110,15 @@ class Mcu extends Component
         ]);
 
         $datakaryawan = Karyawan::where('nrp', $this->nrp)->first();
-        $folderDept = strtoupper($datakaryawan->dept);
-        $folderKaryawan = strtoupper($datakaryawan->nrp . '-' . $datakaryawan->nama . '-' . $datakaryawan->dept . '-' . $datakaryawan->jabatan);
-        // Define the folder path where the file will be stored
+        $folderDept = strtoupper(Str::slug($datakaryawan->dept, '_'));
+        $folderKaryawan = strtoupper(Str::slug(
+            $datakaryawan->nrp . '-' . $datakaryawan->nama . '-' . $datakaryawan->dept . '-' . $datakaryawan->jabatan,
+            '_'
+        ));
         $folderPath = $folderDept . '/' . $folderKaryawan . '/MCU';
-        // Check if folder exists, if not, create it
-        if (!Storage::exists($folderPath)) {
-            Storage::makeDirectory($folderPath); // Create the directory if it doesn't exist
+
+        if (!Storage::disk('public')->exists($folderPath)) {
+            Storage::disk('public')->makeDirectory($folderPath);
         }
 
         // Handle the file upload for 'file_mcu'

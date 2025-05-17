@@ -81,7 +81,8 @@ class DatabaseSeeder extends Seeder
         // Helper untuk tanggal expired (bisa 1 tahun ke depan atau belakang)
         function randomExpireDate()
         {
-            $direction = rand(0, 1) ? 'add' : 'sub';
+            //$direction = rand(0, 1) ? 'add' : 'sub';
+            $direction = rand(0, 1) ? 'add' : 'add';
             return Carbon::now()->$direction('1 year')->format('Y-m-d');
         }
 

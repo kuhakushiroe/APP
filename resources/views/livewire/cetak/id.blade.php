@@ -4,6 +4,14 @@
         <table class="table table-hover">
             <thead>
                 <tr>
+                    <td colspan="12">
+                        <input type="text" class="form-control form-control-sm" wire:model.live="search"
+                            placeholder="Search">
+                    </td>
+                </tr>
+            </thead>
+            <thead>
+                <tr>
                     <th style="width: 10px">#</th>
                     <th>Status</th>
                     <th>Foto</th>
@@ -11,15 +19,10 @@
                     <th>NRP</th>
                     <th>Nama</th>
                     <th>Jenis Kelamin</th>
-                    <th>Tempat Lahir</th>
-                    <th>Agama</th>
-                    <th>Gol. Darah</th>
-                    <th>Status Perkawinan</th>
                     <th>Perusahaan</th>
                     <th>Departemen</th>
                     <th>Jabatan</th>
                     <th>No HP</th>
-                    <th>Alamat</th>
                     <th>Domisili</th>
                 </tr>
             </thead>
@@ -27,13 +30,30 @@
                 @forelse ($karyawans as $index => $datakaryawan)
                     <tr @if ($datakaryawan->status == 'non aktif') class="table-danger" @endif>
                         <td>
-                            @if ($datakaryawan->status == 'aktif' && $datakaryawan->exp_id > NOW())
-                                <a href="cetak-kartu/{{ $datakaryawan->nrp }}" target="_blank"
-                                    class="btn btn-warning btn-sm" rel="noopener noreferrer">
+                            @php
+                                $caripengajuan = DB::table('pengajuan_id')->where('nrp', $datakaryawan->nrp)->first();
+                                if ($caripengajuan) {
+                                    $cetak = $caripengajuan->status_pengajuan;
+                                    $exp_id = $caripengajuan->exp_id;
+                                } else {
+                                    $cetak = '0';
+                                    $exp_id = null;
+                                }
+                            @endphp
+                            @if ($cetak === '2' && $exp_id > NOW() && $exp_id !== null)
+                                @if ($datakaryawan->status == 'aktif' && $datakaryawan->exp_id > NOW())
+                                    <a href="cetak-kartu/{{ $datakaryawan->nrp }}" target="_blank"
+                                        class="btn btn-primary btn-sm" rel="noopener noreferrer">
+                                        <span class="bi bi-printer"></span> Cetak
+                                    </a>
+                                @else
+                                    -
+                                @endif
+                            @else
+                                <a href="#" target="_blank" class="btn btn-secondary btn-sm disabled"
+                                    rel="noopener noreferrer">
                                     <span class="bi bi-printer"></span> Cetak
                                 </a>
-                            @else
-                                -
                             @endif
                         </td>
                         <td>{{ $datakaryawan->status }}</td>
@@ -49,20 +69,15 @@
                         <td>{{ $datakaryawan->nrp }}</td>
                         <td>{{ $datakaryawan->nama }}</td>
                         <td>{{ $datakaryawan->jenis_kelamin }}</td>
-                        <td>{{ $datakaryawan->tempat_lahir }}</td>
-                        <td>{{ $datakaryawan->agama }}</td>
-                        <td>{{ $datakaryawan->gol_darah }}</td>
-                        <td>{{ $datakaryawan->status_perkawinan }}</td>
                         <td>{{ $datakaryawan->perusahaan }}</td>
                         <td>{{ $datakaryawan->dept }}</td>
                         <td>{{ $datakaryawan->jabatan }}</td>
                         <td>{{ $datakaryawan->no_hp }}</td>
-                        <td>{{ $datakaryawan->alamat }}</td>
                         <td>{{ $datakaryawan->domisili }}</td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="16">
+                        <td colspan="12">
                             <div class="alert alert-danger">
                                 <span class="bi bi-exclamation-circle"></span>
                                 &nbsp;No data

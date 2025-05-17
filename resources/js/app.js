@@ -13,7 +13,11 @@ window.addEventListener('alert', (event) => {
     }).then((result) => {
         if (result.isConfirmed) {
             // Lakukan redirect di sini
-            window.location.href = data.redirect;
+            if(data.tab){
+                window.open(data.redirect, '_blank');
+            }else{
+                window.location.href = data.redirect;
+            }
         }
     });
 });

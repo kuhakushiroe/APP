@@ -2,7 +2,16 @@
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\Karyawan;
+use Illuminate\Support\Facades\Storage;
 
+function cekFile($path)
+{
+    if ($path && Storage::disk('public')->exists($path)) {
+        return $path . "ada";
+    } else {
+        return $path . "tidak ada";
+    }
+}
 if (!function_exists('getInfoKaryawanByNrp')) {
     function getInfoKaryawanByNrp($nrp): ?string
     {

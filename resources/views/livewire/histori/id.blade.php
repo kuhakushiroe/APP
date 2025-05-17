@@ -6,6 +6,14 @@
                     <table class="table table-hover table-bordered">
                         <thead>
                             <tr>
+                                <td colspan="4">
+                                    <input type="text" class="form-control form-control-sm" wire:model.live="search"
+                                        placeholder="Search">
+                                </td>
+                            </tr>
+                        </thead>
+                        <thead>
+                            <tr>
                                 <th>NRP</th>
                                 <th>NAMA</th>
                                 <th>JENIS</th>
@@ -19,38 +27,35 @@
                                     <td>{{ $pengajuan->nama }}</td>
                                     <td>{{ $pengajuan->jenis_pengajuan_id }}</td>
                                     <td>
-                                        <a href="{{ asset('storage/' . $pengajuan->upload_request) }}" target="_blank"
-                                            class="btn btn-primary btn-sm">
-                                            <span class="bi bi-file-earmark-pdf"></span>
-                                            Form Request
-                                        </a>
-                                        @if ($pengajuan->jenis_pengajuan_id === 'perpanjangan')
-                                            <a href="{{ asset('storage/' . $pengajuan->upload_id_lama) }}"
-                                                target="_blank" class="btn btn-primary btn-sm">
-                                                <span class="bi bi-file-earmark-pdf"></span>
-                                                ID Lama
-                                            </a>
-                                        @endif
-                                        <a href="{{ asset('storage/' . $pengajuan->upload_foto) }}" target="_blank"
-                                            class="btn btn-primary btn-sm">
-                                            <span class="bi bi-file-earmark-pdf"></span>
-                                            Foto
-                                        </a>
-                                        <a href="{{ asset('storage/' . $pengajuan->upload_ktp) }}" target="_blank"
-                                            class="btn btn-primary btn-sm">
-                                            <span class="bi bi-file-earmark-pdf"></span>
-                                            Ktp
-                                        </a>
-                                        <a href="{{ asset('storage/' . $pengajuan->upload_skd) }}" target="_blank"
-                                            class="btn btn-primary btn-sm">
-                                            <span class="bi bi-file-earmark-pdf"></span>
-                                            Skd
-                                        </a>
-                                        <a href="{{ asset('storage/' . $pengajuan->upload_bpjs) }}" target="_blank"
-                                            class="btn btn-primary btn-sm">
-                                            <span class="bi bi-file-earmark-pdf"></span>
-                                            Bpjs
-                                        </a>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            @php
+                                                $dokumenLinks = [
+                                                    'upload_request' => 'Form Request',
+                                                    'upload_induksi' => 'Form Induksi',
+                                                    'upload_foto' => 'Foto',
+                                                    'upload_ktp' => 'KTP',
+                                                    'upload_skd' => 'SKD',
+                                                    'upload_bpjs_kes' => 'BPJS Kesehatan',
+                                                    'upload_bpjs_ker' => 'BPJS Ketenagakerjaan',
+                                                    'upload_spdk' => 'SPDK',
+                                                ];
+
+                                                if ($pengajuan->jenis_pengajuan_id === 'perpanjangan') {
+                                                    $dokumenLinks = ['upload_id_lama' => 'ID Lama'] + $dokumenLinks;
+                                                }
+                                            @endphp
+
+                                            @foreach ($dokumenLinks as $field => $label)
+                                                @if (!empty($pengajuan->$field))
+                                                    <a href="{{ asset('storage/' . $pengajuan->$field) }}"
+                                                        target="_blank" class="btn btn-primary btn-sm">
+                                                        <span class="bi bi-file-earmark-pdf"></span>
+                                                        {{ $label }}
+                                                    </a>
+                                                @endif
+                                            @endforeach
+                                        </div>
+
                                     </td>
                                 </tr>
                             @endforeach
