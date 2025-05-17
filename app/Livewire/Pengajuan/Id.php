@@ -20,6 +20,8 @@ class Id extends Component
     public $carikaryawan, $nrp, $nama, $jenis_pengajuan_id, $upload_id_lama, $status_upload_id_lama, $catatan_upload_id_lama, $upload_request, $status_upload_request, $catatan_upload_request, $upload_foto, $status_upload_foto, $catatan_upload_foto, $upload_ktp, $status_upload_ktp, $catatan_upload_ktp, $upload_skd, $status_upload_skd, $catatan_upload_skd, $upload_bpjs, $status_upload_bpjs, $catatan_upload_bpjs, $status_pengajuan, $tgl_pengajuan, $exp_id;
     public $expired_id = [];
     public $tgl_induksi = [];
+    public $info_nama, $info_dept, $info_jabatan, $info_mcu, $info_id, $info_kimper;
+
     #[Title('ID')]
 
     public function open()
@@ -34,17 +36,26 @@ class Id extends Component
     {
         $caridatakaryawan = Karyawan::where('nrp', $value)
             ->where('status', 'aktif')
-            ->where('exp_mcu', '>', date('Y-m-d'))
             ->first();
         if ($caridatakaryawan) {
-            $this->nama = $caridatakaryawan->nama;
+            $this->info_nama = $caridatakaryawan->nama;
+            $this->info_dept = $caridatakaryawan->dept;
+            $this->info_jabatan = $caridatakaryawan->jabatan;
             $this->nrp = $caridatakaryawan->nrp;
+            $this->info_mcu = $caridatakaryawan->exp_mcu;
+            $this->info_id = $caridatakaryawan->exp_id;
+            $this->info_kimper = $caridatakaryawan->exp_kimper;
             $this->jenis_pengajuan_id = ($caridatakaryawan->exp_id === null || $caridatakaryawan->exp_id > now())
                 ? 'baru'
                 : 'perpanjangan';
         } else {
-            $this->nama = null;
-            $this->jenis_pengajuan_id = null; // Reset field if NIK is not found
+            $this->info_nama = null;
+            $this->info_dept = null;
+            $this->info_jabatan = null;
+            $this->info_mcu = null;
+            $this->info_id = null;
+            $this->info_kimper = null;
+            $this->jenis_pengajuan_id = null;  // Reset field if NIK is not found
         }
     }
     public function store()

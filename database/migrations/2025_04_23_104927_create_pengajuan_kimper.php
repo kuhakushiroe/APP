@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('pengajuan_kimper', function (Blueprint $table) {
             $table->id();
             $table->string('nrp');
-            $table->enum('jenis_pengajuan_id', ['baru', 'penambahan', 'penghapusan', 'perpanjangan']);
+            $table->enum('jenis_pengajuan_kimper', ['baru', 'penambahan', 'penghapusan', 'perpanjangan']);
 
             $table->string('upload_id')->nullable();
             $table->enum('status_upload_id', [0, 1])->nullable();

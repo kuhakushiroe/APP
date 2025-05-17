@@ -8,19 +8,7 @@
                 </div>
                 <div class="card-body">
                     <form class="row g-3">
-                        <div class="col-2">
-                            @if ($carifoto)
-                                @if (!empty($carifoto->foto))
-                                    <label>Foto:</label>
-                                    <br>
-                                    <img src="{{ Storage::url($carifoto->foto) }}" alt="Foto" class="img-fluid"
-                                        style="max-width: 100px; max-height: 150px;">
-                                @else
-                                @endif
-                                <br>
-                            @endif
-                        </div>
-                        <div class="col-5">
+                        <div class="col-12">
                             <div class="form-group">
                                 <label for="NRP">NRP:</label>
                                 <input class="form-control form-control-sm @error('nrp') is-invalid @enderror"
@@ -30,14 +18,69 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="col-5">
-                            <label for="Nama">Nama:</label>
-                            <input class="form-control form-control-sm @error('Nama') is-invalid @enderror"
-                                wire:model='nama' placeholder="Masukkan Nama" disabled>
-                            @error('Nama')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
+                        @if ($nrp)
+                            <div class="alert alert-info" role="alert">
+                                @if ($carifoto)
+                                    <h4 class="alert-heading">Detail NRP:</h4>
+                                    @if (!empty($carifoto->foto))
+                                        <label>Foto:</label>
+                                        <br>
+                                        <img src="{{ Storage::url($carifoto->foto) }}" alt="Foto" class="img-fluid"
+                                            style="max-width: 100px; max-height: 150px;">
+                                        <br>
+                                    @endif
+                                    <li>{{ $nrp }}</li>
+                                    <li>{{ $info_nama }} | {{ $info_dept }} / {{ $info_jabatan }}</li>
+                                    <li>
+                                        EXP MCU :
+                                        @if ($info_mcu)
+                                            @php $tgl = \Carbon\Carbon::parse($info_mcu); @endphp
+                                            @if ($tgl->isPast())
+                                                <span style="color: red">
+                                                    kadaluarsa sejak {{ $tgl->translatedFormat('d F Y') }}
+                                                </span>
+                                            @else
+                                                <span>{{ $tgl->translatedFormat('d F Y') }}</span>
+                                            @endif
+                                        @else
+                                            <span style="color: red">-belum memiliki-</span>
+                                        @endif
+                                    </li>
+                                    <li>
+                                        EXP ID :
+                                        @if ($info_id)
+                                            @php $tgl = \Carbon\Carbon::parse($info_id); @endphp
+                                            @if ($tgl->isPast())
+                                                <span style="color: red">
+                                                    kadaluarsa sejak {{ $tgl->translatedFormat('d F Y') }}
+                                                </span>
+                                            @else
+                                                <span>{{ $tgl->translatedFormat('d F Y') }}</span>
+                                            @endif
+                                        @else
+                                            <span style="color: red">-belum memiliki-</span>
+                                        @endif
+                                    </li>
+                                    {{-- <li>
+                                        EXP KIMPER :
+                                        @if ($info_kimper)
+                                            @php $tgl = \Carbon\Carbon::parse($info_kimper); @endphp
+                                            @if ($tgl->isPast())
+                                                <span style="color: red">
+                                                    kadaluarsa sejak {{ $tgl->translatedFormat('d F Y') }}
+                                                </span>
+                                            @else
+                                                <span>{{ $tgl->translatedFormat('d F Y') }}</span>
+                                            @endif
+                                        @else
+                                            <span style="color: red">-belum memiliki-</span>
+                                        @endif
+                                    </li> --}}
+                                @else
+                                    <h4 class="alert-heading">-Tidak ada data-</h4>
+                                @endif
+                            </div>
+                        @endif
                         <div class="col-12">
                             <div class="form-group">
                                 <label for="Jenis Pengajuan">Jenis Pengajuan:</label>
