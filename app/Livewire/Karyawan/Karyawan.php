@@ -34,6 +34,8 @@ class Karyawan extends Component
     public $id_karyawan, $foto, $fotolama, $nik, $nrp, $doh, $tgl_lahir, $nama, $jenis_kelamin;
     public $tempat_lahir, $agama, $gol_darah, $status_perkawinan, $perusahaan;
     public $kontraktor, $dept, $jabatan, $no_hp, $alamat, $domisili, $status = 'aktif', $file, $fileCek;
+    public $dataKaryawan = [];
+    public $lihatdetail = false;
     public function open()
     {
         if (auth()->user()->hasRole('admin')) {
@@ -44,6 +46,8 @@ class Karyawan extends Component
     public function close()
     {
         $this->form = false;
+        $this->lihatdetail = false;
+        $this->reset();
     }
     public function edit($id)
     {
@@ -327,6 +331,42 @@ class Karyawan extends Component
         $this->resetPage();
     }
 
+    public function detail($id){
+        $karyawan = ModelsKaryawan::find($id);
+        $this->dataKaryawan =[
+
+            //Data Pribadi dan Data Karyawan
+            'nik' => $karyawan->nik,
+            'nrp' => $karyawan->nrp,
+            'doh' => $karyawan->doh,
+            'tgl_lahir' => $karyawan->tgl_lahir,
+            'nama' => $karyawan->nama,
+            'jenis_kelamin' => $karyawan->jenis_kelamin,
+            'tempat_lahir' => $karyawan->tempat_lahir,
+            'agama' => $karyawan->agama,
+            'gol_darah' => $karyawan->gol_darah,
+            'status_perkawinan' => $karyawan->status_perkawinan,
+            'perusahaan' => $karyawan->perusahaan,
+            'kontraktor' => $karyawan->kontraktor,
+            'dept' => $karyawan->dept,
+            'jabatan' => $karyawan->jabatan,
+            'no_hp' => $karyawan->no_hp,
+            'alamat' => $karyawan->alamat,
+            'domisili' => $karyawan->domisili,
+            'status' => $karyawan->status,
+
+            //Kimper
+            'exp_id' => $karyawan->exp_id,
+            'exp_kimper' => $karyawan->exp_kimper,
+            'exp_mcu' => $karyawan->exp_mcu,
+            'exp_simpol' => $karyawan->exp_simpo,
+
+
+        ];
+        $this->lihatdetail = true;
+
+    }
+
     public function render()
     {
         if (in_array(auth()->user()->role, ['superadmin', 'she'])) {
@@ -346,4 +386,6 @@ class Karyawan extends Component
         $jabatans = Jabatan::all();
         return view('livewire.karyawan.karyawan', compact('karyawans', 'departments', 'jabatans', 'perusahaans'));
     }
+
+
 }

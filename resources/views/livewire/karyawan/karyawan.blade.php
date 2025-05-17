@@ -1,6 +1,8 @@
 <div>
     @if ($form)
         @include('livewire.karyawan.form')
+    @elseif ($lihatdetail)
+        @include('livewire.karyawan.detail')
     @else
         <div class="row pt-2">
             <div class="col-md-12">
