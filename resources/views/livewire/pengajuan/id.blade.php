@@ -1,5 +1,5 @@
 <div>
-    @if ($form)
+    @if (!$form)
         @include('livewire.pengajuan.form-id')
     @else
         @hasAnyRole(['superadmin', 'admin'])
@@ -344,12 +344,6 @@
                                     </a>
                                 @else
                                     <form wire:submit.prevent="prosesCetak('{{ $pengajuan->id_pengajuan }}')">
-                                        <label>Tgl Induksi</label>
-                                        <input type="date" class="form-control form-control-sm"
-                                            wire:model="tgl_induksi.{{ $pengajuan->id_pengajuan }}">
-                                        @error("tgl_induksi.{$pengajuan->id_pengajuan}")
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
                                         <label>Expired ID</label>
                                         <input type="date" class="form-control form-control-sm"
                                             wire:model="expired_id.{{ $pengajuan->id_pengajuan }}">

@@ -168,11 +168,56 @@
                                     @enderror
                                 </div>
                             </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="upload_bpjs_ker" class="form-label">Upload BPJS Ketenagakerjaan</label>
+                                    <input
+                                        class="form-control form-control-sm @error('upload_bpjs_ker') is-invalid @enderror"
+                                        type="file" id="upload_bpjs_ker" wire:model='upload_bpjs_ker'>
+                                    @error('upload_bpjs_ker')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label>Tgl Induksi</label>
+                                    <input type="date"
+                                        class="form-control form-control-sm @error('tgl_induksi') is-invalid @enderror"
+                                        wire:model="tgl_induksi">
+                                    @error('tgl_induksi')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="upload_induksi" class="form-label">Upload Induksi</label>
+                                    <input
+                                        class="form-control form-control-sm @error('upload_induksi') is-invalid @enderror"
+                                        type="file" id="upload_induksi" wire:model='upload_induksi'>
+                                    @error('upload_induksi')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="upload_spdk" class="form-label">Upload SPDK</label>
+                                    <input
+                                        class="form-control form-control-sm @error('upload_spdk') is-invalid @enderror"
+                                        type="file" id="upload_spdk" wire:model='upload_spdk'>
+                                    @error('upload_spdk')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
                         @endif
                         <div class="col-12">
                             <div class="form-group">
                                 <label for="tgl pengajuan" class="form-label">Tanggal Pengajuan</label>
-                                <input class="form-control form-control-sm @error('tgl_pengajuan') is-invalid @enderror"
+                                <input
+                                    class="form-control form-control-sm @error('tgl_pengajuan') is-invalid @enderror"
                                     type="date" wire:model='tgl_pengajuan'>
                                 @error('tgl_pengajuan')
                                     <span class="text-danger">{{ $message }}</span>
