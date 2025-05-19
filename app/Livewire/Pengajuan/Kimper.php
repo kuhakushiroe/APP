@@ -2,61 +2,26 @@
 
 namespace App\Livewire\Pengajuan;
 
-use App\Models\Karyawan;
-use App\Models\ModelPengajuanKimper;
-use Livewire\Attributes\Title;
 use Livewire\Component;
+use App\Models\Karyawan;
+use Livewire\WithPagination;
+use Livewire\Attributes\Title;
+use App\Models\ModelPengajuanKimper;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Features\SupportFileUploads\WithFileUploads;
+use Livewire\WithoutUrlPagination;
 
 class Kimper extends Component
 {
+    use WithFileUploads, WithPagination, WithoutUrlPagination;
     public $id_pengajuan, $nrp, $jenis_pengajuan_kimper, $jenis_sim, $versatility, $status_pengajuan, $tgl_pengajuan, $exp_kimper;
     public $form = false;
+    public $catatan_upload_id = [], $catatan_upload_kimper_lama = [], $catatan_upload_request = [], $catatan_upload_sim = [], $catatan_upload_ertifikat = [], $catatan_upload_lpo = [], $catatan_upload_foto = [], $catatan_upload_ktp = [], $catatan_upload_skd = [], $catatan_upload_bpjs_kes = [], $catatan_upload_bpjs_ker = [];
+    public $status_upload_id = [], $status_upload_kimper = [], $status_upload_request = [], $status_upload_sim = [], $status_upload_sertifikat = [], $status_upload_lpo = [], $status_upload_foto = [], $status_upload_ktp = [], $status_upload_skd = [], $status_upload_bpjs_kes = [], $status_upload_bpjs_ker = [];
+    public $upload_id, $upload_kimper_lama, $upload_request, $upload_sim, $upload_sertifikat, $upload_lpo, $upload_foto, $upload_ktp, $upload_skd, $upload_bpjs_kes, $upload_bpjs_ker;
     public $info_nama, $info_dept, $info_jabatan, $info_mcu, $info_id, $info_kimper;
-    // Upload files
-    public $upload = [
-        'id' => null,
-        'kimper_lama' => null,
-        'request' => null,
-        'sim' => null,
-        'sertifikat' => null,
-        'lpo' => null,
-        'foto' => null,
-        'ktp' => null,
-        'skd' => null,
-        'bpjs_kes' => null,
-        'bpjs_ker' => null
-    ];
 
-    // Status untuk setiap upload
-    public $status_upload = [
-        'id' => null,
-        'kimper_lama' => null,
-        'request' => null,
-        'sim' => null,
-        'sertifikat' => null,
-        'lpo' => null,
-        'foto' => null,
-        'ktp' => null,
-        'skd' => null,
-        'bpjs_kes' => null,
-        'bpjs_ker' => null
 
-    ];
-
-    // Catatan untuk setiap upload
-    public $catatan_upload = [
-        'id' => null,
-        'kimper_lama' => null,
-        'request' => null,
-        'sim' => null,
-        'sertifikat' => null,
-        'lpo' => null,
-        'foto' => null,
-        'ktp' => null,
-        'skd' => null,
-        'bpjs' => null,
-    ];
     public function open()
     {
         $this->form = true;
@@ -143,50 +108,121 @@ class Kimper extends Component
             ]
         );
 
+        if ($this->jenis_pengajuan_kimper == 'baru') {
+            $rules['upload_foto'] = 'required|mimes:jpeg,png,jpg,gif|max:10240';
+            $rules['upload_ktp'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
+            $rules['upload_skd'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
+            $rules['upload_bpjs_kes'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
+            $rules['upload_bpjs_ker'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
+        }
+
+        if ($this->jenis_pengajuan_kimper == 'perpanjangan') {
+            $rules['upload_kimper_lama'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
+        }
+
+        if ($this->jenis_pengajuan_kimper == "tambah") {
+            $rules['jenis_sim'] = 'required';
+            $rules['no_sim'] = 'required';
+        }
+
+        $messages = [
+            'required' => 'Kolom :attribute harus diisi.',
+            'mimes' => 'Format file :attribute harus JPEG, PNG, JPG, GIF, atau PDF.',
+            'upload_foto.mimes' => 'Format file Foto harus berupa gambar (JPEG, PNG, JPG, atau GIF).',
+            'max' => 'Ukuran file :attribute maksimal 10MB.',
+        ];
+        $this->validate($rules, $messages);
+
+        $pengajuan = ModelPengajuanKimper::create([
+            'nrp' => $this->nrp,
+            'jenis_pengajuan_kimper' => $this->jenis_pengajuan_kimper,
+            'jenis_sim' => $this->jenis_sim,
+            'tgl_pengajuan' => $this->tgl_pengajuan,
+            'status_pengajuan' => '0',
+        ]);
+
+
         $datakaryawan = Karyawan::where('nrp', $this->nrp)->first();
         $folderDept = strtoupper($datakaryawan->dept);
         $folderKaryawan = strtoupper($datakaryawan->nrp . '-' . $datakaryawan->nama . '-' . $datakaryawan->dept . '-' . $datakaryawan->jabatan);
         // Define the folder path where the file will be stored
-        $folderPath = $folderDept . '/' . $folderKaryawan . '/pengajuan-kimper';
+        $folderPath = $folderDept . '/' . $folderKaryawan . '/PENGAJUAN-KIMPER';
         // Check if folder exists, if not, create it
-        if (!Storage::exists($folderPath)) {
-            Storage::makeDirectory($folderPath); // Create the directory if it doesn't exist
+        if (!Storage::disk('public')->exists($folderPath)) {
+            Storage::disk('public')->makeDirectory($folderPath);
         }
 
-        // Simpan file upload dan ganti nilainya dengan path
-        foreach ($this->upload as $key => $file) {
-            if ($file) {
-                $extension = $file->getClientOriginalExtension();
-                $filename = $folderKaryawan . "-{$key}-" . time() . "." . $extension;
-                $this->upload[$key] = $file->storeAs($folderPath, $filename, 'public');
-            } else {
-                $this->upload[$key] = null;
-            }
+        $requestPath = $this->upload_request->storeAs($folderPath, $folderKaryawan . "-REQUEST-" . time() . ".{$this->upload_request->getClientOriginalExtension()}", 'public');
+
+
+        // Optional jika perpanjangan
+        $kimperLamaPath = null;
+        if ($this->jenis_pengajuan_kimper === 'perpanjangan' && $this->upload_kimper_lama) {
+            $kimperLamaPath = $this->upload_kimper_lama->storeAs($folderPath, $folderKaryawan . "-KIMPER LAMA-" . time() . ".{$this->upload_kimper_lama->getClientOriginalExtension()}", 'public');
+        }
+        if ($this->jenis_pengajuan_kimper === 'baru') {
+            $lpoPath = $this->upload_lpo->storeAs($folderPath, $folderKaryawan . "-LOKASI-" . time() . ".{$this->upload_lpo->getClientOriginalExtension()}", 'public');
+            $sertifikatPath = $this->upload_sertifikat->storeAs($folderPath, $folderKaryawan . "-SERTIFIKAT-" . time() . ".{$this->upload_sertifikat->getClientOriginalExtension()}", 'public');
+            $simPath = $this->upload_sim->storeAs($folderPath, $folderKaryawan . "-SIM-" . time() . ".{$this->upload_sim->getClientOriginalExtension()}", 'public');
+            $idPath = $this->upload_id->storeAs($folderPath, $folderKaryawan . "-ID-" . time() . ".{$this->upload_id->getClientOriginalExtension()}", 'public');
+            $fotoPath = $this->upload_foto->storeAs($folderPath, $folderKaryawan . "-FOTO-" . time() . ".{$this->upload_foto->getClientOriginalExtension()}", 'public');
+            $ktpPath = $this->upload_ktp->storeAs($folderPath, $folderKaryawan . "-KTP-" . time() . ".{$this->upload_ktp->getClientOriginalExtension()}", 'public');
+            $skdPath = $this->upload_skd->storeAs($folderPath, $folderKaryawan . "-SKD-" . time() . ".{$this->upload_skd->getClientOriginalExtension()}", 'public');
+            $bpjsKes = $this->upload_bpjs_kes->storeAs($folderPath, $folderKaryawan . "-BPJS KESEHATAN-" . time() . ".{$this->upload_bpjs_kes->getClientOriginalExtension()}", 'public');
+            $bpjsKer = $this->upload_bpjs_ker->storeAs($folderPath, $folderKaryawan . "-BPJS KETENAGAKERJAAN-" . time() . ".{$this->upload_bpjs_ker->getClientOriginalExtension()}", 'public');
         }
 
-        // Simpan data ke tabel pengajuan
-        ModelPengajuanKimper::create([
-            'nrp' => $this->nrp,
-            'jenis_pengajuan_kimper' => $this->jenis_pengajuan_kimper,
-            'jenis_sim' => $this->jenis_sim,
-            'versatility' => $this->versatility,
-            'status_pengajuan' => 0,
-            'tgl_pengajuan' => now(),
-            'exp_kimper' => $this->exp_kimper,
+        if ($this->jenis_pengajuan_kimper === 'baru') {
+            $pengajuan->update([
+                'upload_request' => $requestPath,
+                'upload_foto' => $fotoPath,
+                'upload_ktp' => $ktpPath,
+                'upload_skd' => $skdPath,
+                'upload_bpjs_kes' => $bpjsKes,
+                'upload_bpjs_ker' => $bpjsKer,
+                'upload_kimper_lama' => $kimperLamaPath,
+                'upload_lpo' => $lpoPath,
+                'upload_sertifikat' => $sertifikatPath,
+                'upload_sim' => $simPath,
+                'upload_id' => $idPath
 
-            // Uploads
-            'upload_id' => $this->upload['id'],
-            'upload_kimper_lama' => $this->upload['kimper_lama'],
-            'upload_request' => $this->upload['request'],
-            'upload_sim' => $this->upload['sim'],
-            'upload_sertifikat' => $this->upload['sertifikat'],
-            'upload_lpo' => $this->upload['lpo'],
-            'upload_foto' => $this->upload['foto'],
-            'upload_ktp' => $this->upload['ktp'],
-            'upload_skd' => $this->upload['skd'],
-            'upload_bpjs_kes' => $this->upload['bpjs_kes'],
-            'upload_bpjs_ker' => $this->upload['bpjs_ker'],
-        ]);
+            ]);
+        }
+        if ($this->jenis_pengajuan_kimper === 'perpanjangan') {
+            $caridatalama = ModelPengajuanKimper::where('nrp', $this->nrp)->orderBy('created_at', 'desc')->first();
+            $requestPath = $caridatalama->upload_request ?? null;
+            $fotoPath = $caridatalama->upload_foto ?? null;
+            $ktpPath = $caridatalama->upload_ktp ?? null;
+            $skdPath = $caridatalama->upload_skd ?? null;
+            $bpjsKes = $caridatalama->upload_bpjs_kes ?? null;
+            $bpjsKer = $caridatalama->upload_bpjs_ker ?? null;
+            $kimperLamaPath = $caridatalama->upload_kimper_lama ?? null;
+            $lpoPath = $caridatalama->upload_lpo ?? null;
+            $sertifikatPath = $caridatalama->upload_sertifikat ?? null;
+            $simPath = $caridatalama->upload_sim ?? null;
+            $idPath = $caridatalama->upload_id ?? null;
+
+
+            $pengajuan->update([
+                'upload_request' => $requestPath,
+                'upload_foto' => $fotoPath,
+                'upload_ktp' => $ktpPath,
+                'upload_skd' => $skdPath,
+                'upload_bpjs_kes' => $bpjsKes,
+                'upload_bpjs_ker' => $bpjsKer,
+                'upload_kimper_lama' => $kimperLamaPath,
+                'upload_lpo' => $lpoPath,
+                'upload_sertifikat' => $sertifikatPath,
+                'upload_sim' => $simPath,
+                'upload_id' => $idPath
+
+
+            ]);
+        }
+        // 3. Update data pengajuan dengan path file
+
+        $this->reset();
+
 
         $this->dispatch(
             'alert',
@@ -197,8 +233,6 @@ class Kimper extends Component
             confirm: true,
             redirect: '/pengajuan-kimper',
         );
-
-        $this->resetForm();
     }
 
     #[Title('Kimper')]

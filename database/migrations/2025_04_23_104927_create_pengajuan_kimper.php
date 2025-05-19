@@ -30,12 +30,20 @@ return new class extends Migration
 
             $table->enum('jenis_sim', ['A', 'B', 'B1', 'B1 UMUM', 'B2', 'B2 UMUM',])->nullable();
             $table->string('upload_sim')->nullable();
+            $table->string('no_sim')->nullable();
             $table->enum('status_upload_sim', [0, 1])->nullable();
             $table->string('catatan_upload_sim')->nullable();
 
             $table->string('upload_sertifikat')->nullable();
             $table->enum('status_upload_sertifikat', [0, 1])->nullable();
             $table->string('catatan_upload_sertifikat')->nullable();
+            $table->string('nilai_tes_rambu')->nullable();
+            $table->string('nilai_tes_teori')->nullable();
+            $table->string('nilai_tes_p2h')->nullable();
+            $table->string('nilai_tes_praktek')->nullable();
+            $table->string('ddt')->nullable();
+            $table->string('hasil_evaluasi_tes_kimper')->nullable();
+
 
             $table->string('upload_lpo')->nullable();
             $table->enum('status_upload_lpo', [0, 1])->nullable();

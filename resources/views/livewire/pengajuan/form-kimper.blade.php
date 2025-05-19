@@ -4,7 +4,7 @@
             <div class="card card-primary card-outline mb-4">
                 <div class="card-header">
 
-                    <h4 class="card-title">Tambah Pengajua Kimper</h4>
+                    <h4 class="card-title">Tambah Pengajuan Kimper</h4>
                 </div>
                 <div class="card-body">
                     <form action="" wire:submit.prevent="store">
@@ -98,29 +98,42 @@
                             @enderror
                         </div>
 
-                        <!-- File Upload Fields -->
-                        @foreach ([
-        'id' => 'ID',
-        'kimper_lama' => 'Kimper Lama',
-        'request' => 'Form Request',
-        'sim' => 'SIM',
-        'lpo' => 'LPO',
-        'foto' => 'Foto',
-        'ktp' => 'KTP',
-        'skd' => 'SKD',
-        'bpjs_kes' => 'BPJS Kesehatan',
-        'bpjs_ker' => 'BPJS Ketenagakerjaan',
-    ] as $key => $label)
-                            <div class="form-group">
-                                <label for="upload_{{ $key }}">{{ $label }}</label>
-                                <input type="file"
-                                    class="form-control form-control-sm @error('upload.' . $key) is-invalid @enderror"
-                                    wire:model="upload.{{ $key }}">
-                                @error('upload.' . $key)
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        @endforeach
+                        <div class="form-group">
+                            <label for="upload_id" class="form-label">Upload ID</label>
+                            <input class="form-control form-control-sm @error('upload_id') is-invalid @enderror"
+                                type="file" id="upload_id" wire:model.live='upload_id'>
+                            @error('upload_id')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label for="upload_kimper_lama" class="form-label">Upload Kimper Lama</label>
+                            <input
+                                class="form-control form-control-sm @error('upload_kimper_lama') is-invalid @enderror"
+                                type="file" id="upload_kimper_lama" wire:model.live='upload_kimper_lama'>
+                            @error('upload_kimper_lama')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label for="upload_request" class="form-label">Upload Form Request</label>
+                            <input class="form-control form-control-sm @error('upload_request') is-invalid @enderror"
+                                type="file" id="upload_request" wire:model.live='upload_request'>
+                            @error('upload_request')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label for="upload_sim" class="form-label">Upload SIM</label>
+                            <input class="form-control form-control-sm @error('upload_sim') is-invalid @enderror"
+                                type="file" id="upload_sim" wire:model.live='upload_sim'>
+                            @error('upload_sim')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
 
                         <!-- Jenis SIM -->
                         <div class="form-group">
@@ -140,6 +153,83 @@
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
+
+                        <div class="form-group">
+                            <label for="upload_sertifikat" class="form-label">Upload Sertifikat</label>
+                            <input class="form-control form-control-sm @error('upload_sertifikat') is-invalid @enderror"
+                                type="file" id="upload_sertifikat" wire:model.live='upload_sertifikat'>
+                            @error('upload_sertifikat')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label for="upload_lpo" class="form-label">Upload LPO</label>
+                            <input class="form-control form-control-sm @error('upload_lpo') is-invalid @enderror"
+                                type="file" id="upload_lpo" wire:model.live='upload_lpo'>
+                            @error('upload_lpo')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label for="upload_foto" class="form-label">Upload Foto</label>
+                            <input class="form-control form-control-sm @error('upload_foto') is-invalid @enderror"
+                                type="file" id="upload_foto" wire:model.live='upload_foto'>
+                            @error('upload_foto')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label for="upload_ktp" class="form-label">Upload KTP</label>
+                            <input class="form-control form-control-sm @error('upload_ktp') is-invalid @enderror"
+                                type="file" id="upload_ktp" wire:model.live='upload_ktp'>
+                            @error('upload_ktp')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label for="upload_skd" class="form-label">Upload SKD</label>
+                            <input class="form-control form-control-sm @error('upload_skd') is-invalid @enderror"
+                                type="file" id="upload_skd" wire:model.live='upload_skd'>
+                            @error('upload_skd')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label for="upload_bpjs_kes" class="form-label">Upload BPJS Kesehatan</label>
+                            <input class="form-control form-control-sm @error('upload_bpjs_kes') is-invalid @enderror"
+                                type="file" id="upload_bpjs_kes" wire:model.live='upload_bpjs_kes'>
+                            @error('upload_bpjs_kes')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label for="upload_bpjs_ker" class="form-label">Upload BPJS Ketenagakerjaan</label>
+                            <input class="form-control form-control-sm @error('upload_bpjs_ker') is-invalid @enderror"
+                                type="file" id="upload_bpjs_ker" wire:model.live='upload_bpjs_ker'>
+                            @error('upload_bpjs_ker')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="upload_bpjs_ker" class="form-label">Upload BPJS Ketenagakerjaan</label>
+                            <input class="form-control form-control-sm @error('upload_bpjs_ker') is-invalid @enderror"
+                                type="file" id="upload_bpjs_ker" wire:model.live='upload_bpjs_ker'>
+                            @error('upload_bpjs_ker')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+
+
+
 
                         <button class="btn btn-outline-danger btn-sm" wire:click="close">Close</button>
                         <button type="submit" class="btn btn-primary btn-sm">Submit</button>
