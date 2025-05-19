@@ -63,6 +63,41 @@
                                 </td>
                             </tr>
                         </table>
+                        <div class="alert alert-primary mt-3">
+                            <div class="row g-2">
+                                @php
+                                    $files = [
+                                        'Form Request' => $data->upload_request,
+                                        'Foto' => $data->upload_foto,
+                                        'KTP' => $data->upload_ktp,
+                                        'SKD' => $data->upload_skd,
+                                        'BPJS Kesehatan' => $data->upload_bpjs_kes,
+                                        'BPJS Ketenagakerjaan' => $data->upload_bpjs_ker,
+                                        'Kimper Lama' => $data->upload_kimper_lama,
+                                        'Jenis Sim' => $data->upload_jenis_sim,
+                                    ];
+
+                                    if ($data->jenis_pengajuan_id === 'perpanjangan') {
+                                        $files = ['ID Lama' => $data->upload_id_lama] + $files;
+                                    }
+                                @endphp
+
+                                @foreach ($files as $label => $file)
+                                    <div class="col-6 col-md-4 col-lg-3">
+                                        @if ($file && ($label !== 'Foto' || cekFile('/' . $file)))
+                                            <a href="{{ asset('storage/' . $file) }}" target="_blank"
+                                                class="btn btn-primary btn-sm w-100">
+                                                <i class="bi bi-file-earmark-pdf"></i> {{ $label }}
+                                            </a>
+                                        @else
+                                            <a href="#" class="btn btn-danger btn-sm w-100 disabled">
+                                                <i class="bi bi-file-earmark-pdf"></i> {{ $label }}
+                                            </a>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

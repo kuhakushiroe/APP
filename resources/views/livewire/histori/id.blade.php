@@ -38,6 +38,7 @@
                                                     'upload_bpjs_kes' => 'BPJS Kesehatan',
                                                     'upload_bpjs_ker' => 'BPJS Ketenagakerjaan',
                                                     'upload_spdk' => 'SPDK',
+                                                    'upload_id' => 'ID',
                                                 ];
 
                                                 if ($pengajuan->jenis_pengajuan_id === 'perpanjangan') {
@@ -50,6 +51,12 @@
                                                     <a href="{{ asset('storage/' . $pengajuan->$field) }}"
                                                         target="_blank" class="btn btn-primary btn-sm">
                                                         <span class="bi bi-file-earmark-pdf"></span>
+                                                        {{ $label }}
+                                                    </a>
+                                                @elseif(!empty($pengajuan->$field))
+                                                    <a href="{{ asset('storage/' . $pengajuan->$field) }}"
+                                                        target="_blank" class="btn btn-primary btn-sm disabled">
+                                                        <span class="bi bi-file-earmark-pdf "></span>
                                                         {{ $label }}
                                                     </a>
                                                 @endif
