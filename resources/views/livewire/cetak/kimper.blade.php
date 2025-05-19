@@ -31,13 +31,15 @@
                     <tr @if ($datakaryawan->status == 'non aktif') class="table-danger" @endif>
                         <td>
                             @php
-                                $caripengajuan = DB::table('pengajuan_id')->where('nrp', $datakaryawan->nrp)->first();
+                                $caripengajuan = DB::table('pengajuan_kimper')
+                                    ->where('nrp', $datakaryawan->nrp)
+                                    ->first();
                                 if ($caripengajuan) {
                                     $cetak = $caripengajuan->status_pengajuan;
-                                    $exp_id = $caripengajuan->exp_id;
+                                    $exp_kimper = $caripengajuan->exp_kimper;
                                 } else {
                                     $cetak = '0';
-                                    $exp_id = null;
+                                    $exp_kimper = null;
                                 }
                             @endphp
                             @if ($cetak === '2' && $exp_kimper > NOW() && $exp_kimper !== null)

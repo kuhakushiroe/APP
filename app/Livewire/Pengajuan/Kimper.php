@@ -227,7 +227,7 @@ class Kimper extends Component
         $carifoto = Karyawan::where('nrp', $this->nrp)
             ->where('status', 'aktif')
             ->first();
-        $kimpers = ModelPengajuanKimper::where('status_pengajuan', '!=', '3')->paginate(10);
+        $kimpers = ModelPengajuanKimper::where('status_pengajuan', '!=', '2')->paginate(10);
         return view('livewire.pengajuan.kimper', [
             'kimpers' => $kimpers,
             'carifoto' => $carifoto
