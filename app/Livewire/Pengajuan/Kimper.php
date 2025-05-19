@@ -66,20 +66,6 @@ class Kimper extends Component
         $this->status_pengajuan = null;
         $this->tgl_pengajuan = null;
         $this->exp_kimper = null;
-
-        $this->upload = array_fill_keys([
-            'id',
-            'kimper_lama',
-            'request',
-            'sim',
-            'sertifikat',
-            'lpo',
-            'foto',
-            'ktp',
-            'skd',
-            'bpjs_kes',
-            'bpjs_ker'
-        ], null);
     }
     public function store()
     {
@@ -241,9 +227,7 @@ class Kimper extends Component
         $carifoto = Karyawan::where('nrp', $this->nrp)
             ->where('status', 'aktif')
             ->first();
-        $kimpers = ModelPengajuanKimper::where('status_pengajuan', 0)
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+        $kimpers = ModelPengajuanKimper::where('status_pengajuan', '!=', '3')->paginate(10);
         return view('livewire.pengajuan.kimper', [
             'kimpers' => $kimpers,
             'carifoto' => $carifoto
