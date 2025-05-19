@@ -30,6 +30,8 @@ class Kimper extends Component
                 ->paginate(10)
                 ->withQueryString();
         }
-        return view('livewire.cetak.kimper');
+        return view('livewire.cetak.kimper', [
+            'karyawans' => $karyawans
+        ]);
     }
 }

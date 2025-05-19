@@ -6,6 +6,7 @@ use App\Http\Controllers\ExportKaryawans;
 use App\Http\Controllers\McuCetak;
 use App\Imports\checklistImport;
 use App\Livewire\Cetak\Id as CetakId;
+use App\Livewire\Cetak\Kimper as CetakKimper;
 use App\Livewire\CetakKartuID;
 use App\Livewire\Departments\Departments;
 use App\Livewire\Histori\Id as HistoriId;
@@ -51,6 +52,7 @@ Route::group(['middleware' => ['auth']], function () {
     });
     Route::group(['middleware' => ['role:superadmin,she']], function () {
         Route::get('cetak-id', CetakId::class)->name('id-karyawan');
+        Route::get('cetak-kimper', CetakKimper::class)->name('kimper-karyawan');
         Route::get('cetak-kartu/{id}', [CetakKartuController::class, 'cetak']);
         Route::get('cetak-kartu-kimper/{id}', [CetakKartuController::class, 'cetakKimper']);
     });
