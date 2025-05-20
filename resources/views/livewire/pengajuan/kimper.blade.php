@@ -10,7 +10,7 @@
             </button>
             <div class="row pt-2">
                 <div class="col-md-12">
-                    <input type="text"class="form-control form-control-sm" placeholder="Search" wire:model.live="search">
+                    <input type="text"class="form-control form-control-sm" placeholder="Search" wire:model="search">
                 </div>
             </div>
         @endhasanyrole
@@ -133,6 +133,8 @@
                                     in_array(auth()->user()->role, ['admin', 'superadmin']))
                                 <div class="alert alert-warning">
                                     <form wire:submit.prevent="updateUpload({{ $pengajuan->id_pengajuan }})">
+                                        {{ $pengajuan->id_pengajuan }}
+                                        {{ $pengajuan->status_upload_request }}
                                         @if ($pengajuan->status_upload_request == '0')
                                             <div class="col-12">
                                                 <div class="form-group">
@@ -156,7 +158,7 @@
                                                     <label for="upload_id" class="form-label">Upload ID Aktif</label>
                                                     <input
                                                         class="form-control form-control-sm @error('upload_id') is-invalid @enderror"
-                                                        type="file" id="upload_id" wire:model.live='upload_id'>
+                                                        type="file" id="upload_id" wire:model='upload_id'>
                                                     @error('upload_id')
                                                         <span class="text-danger">{{ $message }}</span>
                                                     @enderror
@@ -169,10 +171,10 @@
                                         @if ($pengajuan->status_upload_sim == '0')
                                             <div class="col-12">
                                                 <div class="form-group">
-                                                    <label for="upload_sim" class="form-label">Upload ID Aktif</label>
+                                                    <label for="upload_sim" class="form-label">Upload SIM</label>
                                                     <input
                                                         class="form-control form-control-sm @error('upload_sim') is-invalid @enderror"
-                                                        type="file" id="upload_sim" wire:model.live='upload_sim'>
+                                                        type="file" id="upload_sim" wire:model='upload_sim'>
                                                     @error('upload_sim')
                                                         <span class="text-danger">{{ $message }}</span>
                                                     @enderror
@@ -190,7 +192,7 @@
                                                     <input
                                                         class="form-control form-control-sm @error('upload_kimper_lama') is-invalid @enderror"
                                                         type="file" id="upload_kimper_lama"
-                                                        wire:model.live='upload_kimper_lama'>
+                                                        wire:model='upload_kimper_lama'>
                                                     @error('upload_kimper_lama')
                                                         <span class="text-danger">{{ $message }}</span>
                                                     @enderror
@@ -332,7 +334,6 @@
                                     in_array(null, [
                                         $pengajuan->status_upload_request,
                                         $pengajuan->status_upload_id,
-                                        $pengajuan->status_upload_kimper_lama,
                                         $pengajuan->status_upload_sim,
                                         $pengajuan->status_upload_foto,
                                         $pengajuan->status_upload_ktp,
@@ -345,7 +346,6 @@
                                     in_array(0, [
                                         $pengajuan->status_upload_request,
                                         $pengajuan->status_upload_id,
-                                        $pengajuan->status_upload_kimper_lama,
                                         $pengajuan->status_upload_sim,
                                         $pengajuan->status_upload_foto,
                                         $pengajuan->status_upload_ktp,
@@ -357,10 +357,7 @@
                                     ]);
 
                                 // Tambahkan pengecekan ID Lama jika jenis pengajuan adalah perpanjangan
-                                if (
-                                    $pengajuan->jenis_pengajuan_kimper === 'perpanjangan' ||
-                                    $pengajuan->jenis_pengajuan_kimper === 'penambahan'
-                                ) {
+                                if ($pengajuan->jenis_pengajuan_kimper === 'perpanjangan') {
                                     $isIncomplete =
                                         $isIncomplete ||
                                         $pengajuan->status_upload_kimper_lama === null ||
@@ -573,6 +570,21 @@
                                                     @endif
                                                 </tbody>
                                             </table>
+                                        @else
+                                            @if ($pengajuan->jenis_pengajuan_kimper === 'perpanjangan')
+                                                <form
+                                                    wire:submit.prevent="prosesCetak('{{ $pengajuan->id_pengajuan }}')">
+                                                    <label>Expired Kimper</label>
+                                                    <input type="date" class="form-control form-control-sm"
+                                                        wire:model="expired_kimper.{{ $pengajuan->id_pengajuan }}">
+                                                    @error("expired_kimper.{$pengajuan->id_pengajuan}")
+                                                        <small class="text-danger">{{ $message }}</small>
+                                                    @enderror
+                                                    <button type="submit" class="btn btn-danger btn-sm">
+                                                        Lanjut Proses Cetak <span class="bi bi-arrow-right"></span>
+                                                    </button>
+                                                </form>
+                                            @endif
                                         @endif
                                     @endif
                                 @endif

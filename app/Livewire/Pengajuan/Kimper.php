@@ -382,6 +382,14 @@ class Kimper extends Component
             $data['upload_request'] = $requestPath;
             $data['status_upload_request'] = NULL;
         }
+        if ($pengajuan->status_upload_sim == '0') {
+            $this->validate([
+                'upload_sim' => 'required|file|mimes:pdf,jpg,png|max:10240'
+            ]);
+            $simPath = $this->upload_sim->storeAs($folderPath, $folderKaryawan . "-SIM-REVISI-" . time() . ".{$this->upload_sim->getClientOriginalExtension()}", 'public');
+            $data['upload_sim'] = $simPath;
+            $data['status_upload_sim'] = NULL;
+        }
         if ($pengajuan->status_upload_id == '0') {
             $this->validate([
                 'upload_id' => 'required|file|mimes:pdf,jpg,png|max:10240'
@@ -561,7 +569,6 @@ class Kimper extends Component
             $id = $item->id_pengajuan;
             $this->catatan_upload_id[$id] = $item->catatan_upload_id;
             $this->catatan_upload_sim[$id] = $item->catatan_upload_sim;
-            $this->catatan_upload_kimper_lama[$id] = $item->catatan_upload_kimper_lama;
             $this->catatan_upload_request[$id] = $item->catatan_upload_request;
             $this->catatan_upload_foto[$id] = $item->catatan_upload_foto;
             $this->catatan_upload_ktp[$id] = $item->catatan_upload_ktp;
@@ -571,22 +578,21 @@ class Kimper extends Component
             $this->catatan_upload_lpo[$id] = $item->catatan_upload_lpo;
             $this->catatan_upload_sertifikat[$id] = $item->catatan_upload_sertifikat;
 
-            $this->status_upload_id[$id] = $item->status_upload_id;
-            $this->status_upload_sim[$id] = $item->status_upload_sim;
-            $this->status_upload_kimper_lama[$id] = $item->status_upload_kimper_lama;
-            $this->status_upload_request[$id] = $item->status_upload_request;
-            $this->status_upload_foto[$id] = $item->status_upload_foto;
-            $this->status_upload_ktp[$id] = $item->status_upload_ktp;
-            $this->status_upload_skd[$id] = $item->status_upload_skd;
-            $this->status_upload_bpjs_kes[$id] = $item->status_upload_bpjs_kes;
-            $this->status_upload_bpjs_ker[$id] = $item->status_upload_bpjs_ker;
-            $this->status_upload_lpo[$id] = $item->status_upload_lpo;
-            $this->status_upload_sertifikat[$id] = $item->status_upload_sertifikat;
+            $this->status_upload_id[$id] = $item->status_upload_id ?? '1';
+            $this->status_upload_sim[$id] = $item->status_upload_sim  ?? '1';
+            $this->status_upload_request[$id] = $item->status_upload_request ?? '1';
+            $this->status_upload_foto[$id] = $item->status_upload_foto ?? '1';
+            $this->status_upload_ktp[$id] = $item->status_upload_ktp ?? '1';
+            $this->status_upload_skd[$id] = $item->status_upload_skd ?? '1';
+            $this->status_upload_bpjs_kes[$id] = $item->status_upload_bpjs_kes ?? '1';
+            $this->status_upload_bpjs_ker[$id] = $item->status_upload_bpjs_ker ?? '1';
+            $this->status_upload_lpo[$id] = $item->status_upload_lpo ?? '1';
+            $this->status_upload_sertifikat[$id] = $item->status_upload_sertifikat ?? '1';
 
             // Khusus ID Lama hanya jika jenis pengajuan perpanjangan
             if ($item->jenis_pengajuan_kimper === 'perpanjangan' || $item->jenis_pengajuan_kimper === 'penambahan') {
                 $this->catatan_upload_kimper_lama[$id] = $item->catatan_upload_kimper_lama;
-                $this->status_upload_kimper_lama[$id] = $item->status_upload_kimper_lama;
+                $this->status_upload_kimper_lama[$id] = $item->status_upload_kimper_lama ?? '1';
             }
         }
 
