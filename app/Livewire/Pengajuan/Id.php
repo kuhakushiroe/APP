@@ -394,7 +394,7 @@ class Id extends Component
         ];
 
         // Tambahkan "ID Lama" jika jenis pengajuan adalah Perpanjangan
-        if (strtolower($this->jenis_pengajuan_id) === 'perpanjangan') {
+        if (strtolower($pengajuan->jenis_pengajuan_id) === 'perpanjangan') {
             $statusList = ['ID Lama' => ['status' => $this->status_upload_id_lama[$id] ?? $pengajuan->status_upload_id_lama, 'catatan' => $this->catatan_upload_id_lama[$id] ?? null]] + $statusList;
         }
 
