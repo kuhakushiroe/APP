@@ -127,7 +127,8 @@
                                     $pengajuan->status_upload_skd == '0' ||
                                     $pengajuan->status_upload_lpo == '0' ||
                                     $pengajuan->status_upload_bpjs_kes == '0' ||
-                                    $pengajuan->status_upload_bpjs_ker == '0') &&
+                                    $pengajuan->status_upload_bpjs_ker == '0' ||
+                                    $pengajuan->status_upload_sertifikat == '0') &&
                                     in_array(auth()->user()->role, ['admin', 'superadmin']))
                                 <div class="alert alert-warning">
                                     <form wire:submit.prevent="updateUpload({{ $pengajuan->id_pengajuan }})">
