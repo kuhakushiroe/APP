@@ -448,7 +448,7 @@ class Kimper extends Component
             $this->validate([
                 'upload_lpo' => 'required|file|mimes:pdf,jpg,png|max:10240'
             ]);
-            $lpoPath = $this->upload_upload_lpo->storeAs($folderPath, $folderKaryawan . "-LPO-REVISI-" . time() . ".{$this->upload_upload_lpo->getClientOriginalExtension()}", 'public');
+            $lpoPath = $this->upload_lpo->storeAs($folderPath, $folderKaryawan . "-LPO-REVISI-" . time() . ".{$this->upload_lpo->getClientOriginalExtension()}", 'public');
             $data['upload_lpo'] = $lpoPath;
             $data['status_upload_lpo'] = NULL;
         }
