@@ -94,6 +94,7 @@
                                             'Kimper Lama' => $pengajuan->upload_kimper_lama,
                                             'Sim' => $pengajuan->upload_sim,
                                             'Sertifikat' => $pengajuan->upload_sertifikat,
+                                            'Lpo' => $pengajuan->upload_lpo,
                                         ];
 
                                         if ($pengajuan->jenis_pengajuan_kimper === 'perpanjangan') {
@@ -124,6 +125,7 @@
                                     $pengajuan->status_upload_foto == '0' ||
                                     $pengajuan->status_upload_ktp == '0' ||
                                     $pengajuan->status_upload_skd == '0' ||
+                                    $pengajuan->status_upload_lpo == '0' ||
                                     $pengajuan->status_upload_bpjs_kes == '0' ||
                                     $pengajuan->status_upload_bpjs_ker == '0') &&
                                     in_array(auth()->user()->role, ['admin', 'superadmin']))
