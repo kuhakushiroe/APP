@@ -315,6 +315,7 @@
                                     in_array(null, [
                                         $pengajuan->status_upload_request,
                                         $pengajuan->status_upload_id,
+                                        $pengajuan->status_upload_sim,
                                         $pengajuan->status_upload_foto,
                                         $pengajuan->status_upload_ktp,
                                         $pengajuan->status_upload_skd,
@@ -326,6 +327,7 @@
                                     in_array(0, [
                                         $pengajuan->status_upload_request,
                                         $pengajuan->status_upload_id,
+                                        $pengajuan->status_upload_sim,
                                         $pengajuan->status_upload_foto,
                                         $pengajuan->status_upload_ktp,
                                         $pengajuan->status_upload_skd,
@@ -346,6 +348,7 @@
                             @if (
                                 ($pengajuan->status_upload_request == '0' ||
                                     $pengajuan->status_upload_id == '0' ||
+                                    $pengajuan->status_upload_sim == '0' ||
                                     $pengajuan->status_upload_foto == '0' ||
                                     $pengajuan->status_upload_ktp == '0' ||
                                     $pengajuan->status_upload_skd == '0' ||
@@ -372,6 +375,7 @@
                                                         $dokumenList = [
                                                             'upload_request' => 'Form Request',
                                                             'upload_id' => 'ID Aktif',
+                                                            'upload_sim' => 'SIM',
                                                             'upload_foto' => 'Foto',
                                                             'upload_ktp' => 'KTP',
                                                             'upload_skd' => 'SKD',

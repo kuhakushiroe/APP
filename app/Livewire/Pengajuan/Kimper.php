@@ -318,6 +318,7 @@ class Kimper extends Component
         $pengajuan->update([
             'status_upload_request'     => $this->status_upload_request[$id] ?? $pengajuan->status_upload_request,
             'status_upload_id'          => $this->status_upload_id[$id] ?? $pengajuan->status_upload_id,
+            'status_upload_sim'          => $this->status_upload_sim[$id] ?? $pengajuan->status_upload_sim,
             'status_upload_kimper_lama'     => $this->status_upload_kimper_lama[$id] ?? $pengajuan->status_upload_kimper_lama,
             'status_upload_foto'        => $this->status_upload_foto[$id] ?? $pengajuan->status_upload_foto,
             'status_upload_ktp'         => $this->status_upload_ktp[$id] ?? $pengajuan->status_upload_ktp,
@@ -329,6 +330,7 @@ class Kimper extends Component
 
             'catatan_upload_request'    => $this->catatan_upload_request[$id] ?? null,
             'catatan_upload_id'         => $this->catatan_upload_id[$id] ?? $pengajuan->catatan_upload_id,
+            'catatan_upload_sim'         => $this->catatan_upload_sim[$id] ?? $pengajuan->catatan_upload_sim,
             'catatan_upload_kimper_lama'    => $this->catatan_upload_kimper_lama[$id] ?? null,
             'catatan_upload_foto'       => $this->catatan_upload_foto[$id] ?? null,
             'catatan_upload_ktp'        => $this->catatan_upload_ktp[$id] ?? null,
@@ -558,6 +560,7 @@ class Kimper extends Component
         foreach ($kimpers as $item) {
             $id = $item->id_pengajuan;
             $this->catatan_upload_id[$id] = $item->catatan_upload_id;
+            $this->catatan_upload_sim[$id] = $item->catatan_upload_sim;
             $this->catatan_upload_kimper_lama[$id] = $item->catatan_upload_kimper_lama;
             $this->catatan_upload_request[$id] = $item->catatan_upload_request;
             $this->catatan_upload_foto[$id] = $item->catatan_upload_foto;
@@ -569,6 +572,7 @@ class Kimper extends Component
             $this->catatan_upload_sertifikat[$id] = $item->catatan_upload_sertifikat;
 
             $this->status_upload_id[$id] = $item->status_upload_id;
+            $this->status_upload_sim[$id] = $item->status_upload_sim;
             $this->status_upload_kimper_lama[$id] = $item->status_upload_kimper_lama;
             $this->status_upload_request[$id] = $item->status_upload_request;
             $this->status_upload_foto[$id] = $item->status_upload_foto;
