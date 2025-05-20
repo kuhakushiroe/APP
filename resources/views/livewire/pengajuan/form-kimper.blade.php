@@ -216,28 +216,13 @@
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
-
-
-                        <div class="form-group">
-                            <label for="upload_bpjs_ker" class="form-label">Upload BPJS Ketenagakerjaan</label>
-                            <input class="form-control form-control-sm @error('upload_bpjs_ker') is-invalid @enderror"
-                                type="file" id="upload_bpjs_ker" wire:model.live='upload_bpjs_ker'>
-                            @error('upload_bpjs_ker')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                        <div class="form-group pt-2">
+                            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                            <button class="btn btn-outline-danger btn-sm" wire:click="close">Close</button>
                         </div>
-
-
-
-
-
-                        <button class="btn btn-outline-danger btn-sm" wire:click="close">Close</button>
-                        <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
 </div>

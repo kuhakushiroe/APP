@@ -7,6 +7,7 @@ use App\Models\Karyawan;
 use Livewire\WithPagination;
 use Livewire\Attributes\Title;
 use App\Models\ModelPengajuanKimper;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 use Livewire\WithoutUrlPagination;
@@ -16,6 +17,7 @@ class Kimper extends Component
     use WithFileUploads, WithPagination, WithoutUrlPagination;
     public $id_pengajuan, $nrp, $jenis_pengajuan_kimper, $jenis_sim, $versatility, $status_pengajuan, $tgl_pengajuan, $exp_kimper;
     public $form = false;
+    public $search = '';
     public $catatan_upload_id = [], $catatan_upload_kimper_lama = [], $catatan_upload_request = [], $catatan_upload_sim = [], $catatan_upload_ertifikat = [], $catatan_upload_lpo = [], $catatan_upload_foto = [], $catatan_upload_ktp = [], $catatan_upload_skd = [], $catatan_upload_bpjs_kes = [], $catatan_upload_bpjs_ker = [];
     public $status_upload_id = [], $status_upload_kimper = [], $status_upload_request = [], $status_upload_sim = [], $status_upload_sertifikat = [], $status_upload_lpo = [], $status_upload_foto = [], $status_upload_ktp = [], $status_upload_skd = [], $status_upload_bpjs_kes = [], $status_upload_bpjs_ker = [];
     public $upload_id, $upload_kimper_lama, $upload_request, $upload_sim, $upload_sertifikat, $upload_lpo, $upload_foto, $upload_ktp, $upload_skd, $upload_bpjs_kes, $upload_bpjs_ker;
@@ -227,7 +229,16 @@ class Kimper extends Component
         $carifoto = Karyawan::where('nrp', $this->nrp)
             ->where('status', 'aktif')
             ->first();
-        $kimpers = ModelPengajuanKimper::where('status_pengajuan', '!=', '2')->paginate(10);
+        if (in_array(auth()->user()->role, ['superadmin', 'she'])) {
+            $kimpers = DB::table('pengajuan_kimper')
+                ->select('pengajuan_kimper.*', 'karyawans.*', 'pengajuan_kimper.id as id_pengajuan')
+                ->join('karyawans', 'karyawans.nrp', '=', 'pengajuan_kimper.nrp')
+                ->whereAny(['karyawans.nik', 'karyawans.nrp', 'karyawans.nama'], 'LIKE', '%' . $this->search . '%')
+                ->where('pengajuan_kimper.status_pengajuan', '!=', '2')
+                ->orderBy('pengajuan_kimper.created_at', 'desc')
+                ->paginate(10);
+        }
+
         return view('livewire.pengajuan.kimper', [
             'kimpers' => $kimpers,
             'carifoto' => $carifoto

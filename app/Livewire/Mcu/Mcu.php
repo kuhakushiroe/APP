@@ -175,6 +175,12 @@ class Mcu extends Component
                 sleep(1);
             }
         }
+        foreach ($info['nomorParamedik'] as $i => $nomor) {
+            pesan($nomor, $pesanText, $info['token']);
+            if ($i < count($info['nomorParamedik']) - 1) {
+                sleep(1);
+            }
+        }
 
         // Reset the form fields after save
 
@@ -229,13 +235,19 @@ class Mcu extends Component
 
             $info = getUserInfo();
             if ($status == 1) {
-                $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n*$infoKaryawan*\n Status File MCU: *Diterima*";
+                $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n*$infoKaryawan*\n Status File MCU: *Diterima* Proses Dokter";
             } else {
                 $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n*$infoKaryawan*\n Status File MCU: *Ditolak - $catatan*";
             }
             foreach ($info['nomorAdmins'] as $i => $nomor) {
                 pesan($nomor, $pesanText, $info['token']);
                 if ($i < count($info['nomorAdmins']) - 1) {
+                    sleep(1);
+                }
+            }
+            foreach ($info['nomorDokter'] as $i => $nomor) {
+                pesan($nomor, $pesanText, $info['token']);
+                if ($i < count($info['nomorDokter']) - 1) {
                     sleep(1);
                 }
             }
@@ -440,6 +452,13 @@ class Mcu extends Component
                 sleep(1);
             }
         }
+        foreach ($info['nomorParamedik'] as $i => $nomor) {
+            pesan($nomor, $pesanText, $info['token']);
+            if ($i < count($info['nomorParamedik']) - 1) {
+                sleep(1);
+            }
+        }
+
         // Reset the form fields after save
         $this->reset();
 
@@ -544,6 +563,12 @@ class Mcu extends Component
                     'paramedik_status' => $this->paramedik_status,
                     'paramedik_catatan' => $this->paramedik_catatan
                 ]);
+                foreach ($info['nomorParamedik'] as $i => $nomor) {
+                    pesan($nomor, $pesanText, $info['token']);
+                    if ($i < count($info['nomorParamedik']) - 1) {
+                        sleep(1);
+                    }
+                }
             } else {
                 $this->validate(
                     [
@@ -557,7 +582,6 @@ class Mcu extends Component
                 );
                 $indukmcu = ModelsMcu::where('id', $mcu->sub_id)->where('sub_id', NULL)->first();
                 if ($this->status == 'FIT' || $this->status == 'FIT WITH NOTE') {
-
                     $mcu->update([
                         'no_dokumen' => $this->no_dokumen,
                         'status_' => 'close',
@@ -594,7 +618,6 @@ class Mcu extends Component
                         ]);
                         $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n Hasil MCU: *$this->status*\n";
                     } else {
-
                         $mcu->update([
                             'no_dokumen' => $this->no_dokumen,
                             'status_' => 'close',
@@ -680,14 +703,20 @@ class Mcu extends Component
                 'paramedik_catatan' => $this->paramedik_catatan,
                 'paramedik_status' => NULL,
             ]);
+            foreach ($info['nomorDokter'] as $i => $nomor) {
+                pesan($nomor, $pesanText, $info['token']);
+                if ($i < count($info['nomorDokter']) - 1) {
+                    sleep(1);
+                }
+            }
         }
-
         foreach ($info['nomorAdmins'] as $i => $nomor) {
             pesan($nomor, $pesanText, $info['token']);
             if ($i < count($info['nomorAdmins']) - 1) {
                 sleep(1);
             }
         }
+
         $jenis = $this->id_mcu ? 'Verifikasi' : 'Tambah';
         $this->dispatch(
             'alert',

@@ -52,12 +52,12 @@ class LoginController extends Controller
     {
         $info = getUserInfo(); // Ambil data user & waktu dari helper
         $pesanText = "🔐 *MIFA - Login Berhasil*\n\n";
-        foreach ($info['nomorAdmins'] as $i => $nomor) {
-            pesan($nomor, $pesanText, $info['token']);
-            if ($i < count($info['nomorAdmins']) - 1) {
-                sleep(1);
-            }
-        }
+        // foreach ($info['nomorAdmins'] as $i => $nomor) {
+        //     pesan($nomor, $pesanText, $info['token']);
+        //     if ($i < count($info['nomorAdmins']) - 1) {
+        //         sleep(1);
+        //     }
+        // }
     }
     protected function sendFailedLoginResponse(\Illuminate\Http\Request $request)
     {

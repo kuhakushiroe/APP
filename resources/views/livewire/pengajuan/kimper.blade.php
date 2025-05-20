@@ -74,11 +74,11 @@
                                         'BPJS Kesehatan' => $data->upload_bpjs_kes,
                                         'BPJS Ketenagakerjaan' => $data->upload_bpjs_ker,
                                         'Kimper Lama' => $data->upload_kimper_lama,
-                                        'Jenis Sim' => $data->upload_jenis_sim,
+                                        'Sim' => $data->upload_sim,
                                     ];
 
-                                    if ($data->jenis_pengajuan_id === 'perpanjangan') {
-                                        $files = ['ID Lama' => $data->upload_id_lama] + $files;
+                                    if ($data->jenis_pengajuan_kimper === 'perpanjangan') {
+                                        $files = ['ID Lama' => $data->upload_kimper_lama] + $files;
                                     }
                                 @endphp
 
