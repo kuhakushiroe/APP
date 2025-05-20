@@ -121,6 +121,7 @@
                             @if (
                                 ($pengajuan->status_upload_request == '0' ||
                                     $pengajuan->status_upload_id == '0' ||
+                                    $pengajuan->status_upload_sim == '0' ||
                                     $pengajuan->status_upload_kimper_lama == '0' ||
                                     $pengajuan->status_upload_foto == '0' ||
                                     $pengajuan->status_upload_ktp == '0' ||
@@ -161,6 +162,22 @@
                                                     @enderror
                                                     <div class="text-danger">
                                                         {{ $pengajuan->catatan_upload_id }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                        @if ($pengajuan->status_upload_sim == '0')
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label for="upload_sim" class="form-label">Upload ID Aktif</label>
+                                                    <input
+                                                        class="form-control form-control-sm @error('upload_sim') is-invalid @enderror"
+                                                        type="file" id="upload_sim" wire:model.live='upload_sim'>
+                                                    @error('upload_sim')
+                                                        <span class="text-danger">{{ $message }}</span>
+                                                    @enderror
+                                                    <div class="text-danger">
+                                                        {{ $pengajuan->catatan_upload_sim }}
                                                     </div>
                                                 </div>
                                             </div>
@@ -315,6 +332,7 @@
                                     in_array(null, [
                                         $pengajuan->status_upload_request,
                                         $pengajuan->status_upload_id,
+                                        $pengajuan->status_upload_kimper_lama,
                                         $pengajuan->status_upload_sim,
                                         $pengajuan->status_upload_foto,
                                         $pengajuan->status_upload_ktp,
@@ -327,6 +345,7 @@
                                     in_array(0, [
                                         $pengajuan->status_upload_request,
                                         $pengajuan->status_upload_id,
+                                        $pengajuan->status_upload_kimper_lama,
                                         $pengajuan->status_upload_sim,
                                         $pengajuan->status_upload_foto,
                                         $pengajuan->status_upload_ktp,
@@ -348,6 +367,7 @@
                             @if (
                                 ($pengajuan->status_upload_request == '0' ||
                                     $pengajuan->status_upload_id == '0' ||
+                                    $pengajuan->status_upload_kimper_lama == '0' ||
                                     $pengajuan->status_upload_sim == '0' ||
                                     $pengajuan->status_upload_foto == '0' ||
                                     $pengajuan->status_upload_ktp == '0' ||
