@@ -168,6 +168,7 @@ class Mcu extends Component
             $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*";
         }
 
+        //function Proses kirim pesan
         $info = getUserInfo();
         foreach ($info['nomorAdmins'] as $i => $nomor) {
             pesan($nomor, $pesanText, $info['token']);

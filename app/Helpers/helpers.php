@@ -45,7 +45,7 @@ if (!function_exists('getUserInfo')) {
             'nomorAdmins' => [
                 '088212543694', //saya
                 //'082266012957' // mas anton
-                //'085954590940', // yazid
+                '085954590940', // yazid
             ],
             'nomorParamedik' => [
                 //'085879793321', //masbondan

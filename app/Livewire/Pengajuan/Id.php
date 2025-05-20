@@ -188,9 +188,23 @@ class Id extends Component
                 'upload_induksi' => $induksiPath,
             ]);
         }
+
+        $infoKaryawan = getInfoKaryawanByNrp($this->nrp);
+        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan ID*\n\n\n*$this->jenis_pengajuan_id*\n\n\n$infoKaryawan\n\n\n";
         // 3. Update data pengajuan dengan path file
 
         $this->reset();
+
+        //function Proses kirim pesan
+        $info = getUserInfo();
+        foreach ($info['nomorAdmins'] as $i => $nomor) {
+            pesan($nomor, $pesanText, $info['token']);
+            if ($i < count($info['nomorAdmins']) - 1) {
+                sleep(1);
+            }
+        }
+
+
         // Determine whether it's an edit or a new entry
         $this->dispatch(
             'alert',
@@ -339,6 +353,11 @@ class Id extends Component
             'catatan_upload_induksi'    => $this->catatan_upload_induksi[$id] ?? null,
             'catatan_upload_spdk'       => $this->catatan_upload_spdk[$id] ?? null,
         ]);
+
+
+
+        $infoKaryawan = getInfoKaryawanByNrp($this->nrp);
+        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan ID*\n\n\n*$this->jenis_pengajuan_id*\n\n\n$infoKaryawan\n\n\n";
 
         $this->dispatch(
             'alert',
