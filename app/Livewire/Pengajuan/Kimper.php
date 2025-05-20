@@ -188,7 +188,7 @@ class Kimper extends Component
         );
 
         if ($this->jenis_pengajuan_kimper == 'baru') {
-            $rules['upload_id'] = 'required|mimes:jpeg,png,jpg,gif|max:10240';
+            $rules['upload_id'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
             $rules['upload_lpo'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
             $rules['upload_sertifikat'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
         }
