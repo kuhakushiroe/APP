@@ -236,7 +236,7 @@ class Kimper extends Component
         }
 
         $requestPath = $this->upload_request->storeAs($folderPath, $folderKaryawan . "-REQUEST-" . time() . ".{$this->upload_request->getClientOriginalExtension()}", 'public');
-        $lpoPath = $this->upload_lpo->storeAs($folderPath, $folderKaryawan . "-LOKASI-" . time() . ".{$this->upload_lpo->getClientOriginalExtension()}", 'public');
+        $lpoPath = $this->upload_lpo->storeAs($folderPath, $folderKaryawan . "-LPO-" . time() . ".{$this->upload_lpo->getClientOriginalExtension()}", 'public');
         $sertifikatPath = $this->upload_sertifikat->storeAs($folderPath, $folderKaryawan . "-SERTIFIKAT-" . time() . ".{$this->upload_sertifikat->getClientOriginalExtension()}", 'public');
         $simPath = $this->upload_sim->storeAs($folderPath, $folderKaryawan . "-SIM-" . time() . ".{$this->upload_sim->getClientOriginalExtension()}", 'public');
 
@@ -246,7 +246,7 @@ class Kimper extends Component
             $kimperLamaPath = $this->upload_kimper_lama->storeAs($folderPath, $folderKaryawan . "-KIMPER LAMA-" . time() . ".{$this->upload_kimper_lama->getClientOriginalExtension()}", 'public');
         }
         if ($this->jenis_pengajuan_kimper === 'baru') {
-            $idPath = $this->upload_id->storeAs($folderPath, $folderKaryawan . "-ID-" . time() . ".{$this->upload_id->getClientOriginalExtension()}", 'public');
+            $idPath = $this->upload_id->storeAs($folderPath, $folderKaryawan . "-ID-AKTIF-" . time() . ".{$this->upload_id->getClientOriginalExtension()}", 'public');
         }
 
         if ($this->jenis_pengajuan_kimper === 'baru') {
@@ -384,7 +384,7 @@ class Kimper extends Component
             $this->validate([
                 'upload_id' => 'required|file|mimes:pdf,jpg,png|max:10240'
             ]);
-            $idPath = $this->upload_id->storeAs($folderPath, $folderKaryawan . "-ID LAMA-REVISI-" . time() . ".{$this->upload_id->getClientOriginalExtension()}", 'public');
+            $idPath = $this->upload_id->storeAs($folderPath, $folderKaryawan . "-ID AKTIF-REVISI-" . time() . ".{$this->upload_id->getClientOriginalExtension()}", 'public');
             $data['upload_id'] = $idPath;
             $data['status_upload_id'] = NULL;
         }
@@ -392,7 +392,7 @@ class Kimper extends Component
             $this->validate([
                 'upload_kimper_lama' => 'required|file|mimes:pdf,jpg,png|max:10240'
             ]);
-            $kimperLamaPath = $this->upload_kimper_lama->storeAs($folderPath, $folderKaryawan . "-ID LAMA-REVISI-" . time() . ".{$this->upload_kimper_lama->getClientOriginalExtension()}", 'public');
+            $kimperLamaPath = $this->upload_kimper_lama->storeAs($folderPath, $folderKaryawan . "-KIMPER LAMA-REVISI-" . time() . ".{$this->upload_kimper_lama->getClientOriginalExtension()}", 'public');
             $data['upload_kimper_lama'] = $kimperLamaPath;
             $data['status_upload_kimper_lama'] = NULL;
         }
@@ -440,16 +440,16 @@ class Kimper extends Component
             $this->validate([
                 'upload_sertifikat' => 'required|file|mimes:pdf,jpg,png|max:10240'
             ]);
-            $sertifikatPath = $this->upload_sertifikat->storeAs($folderPath, $folderKaryawan . "-BPJS KESEHATAN-REVISI-" . time() . ".{$this->upload_sertifikat->getClientOriginalExtension()}", 'public');
+            $sertifikatPath = $this->upload_sertifikat->storeAs($folderPath, $folderKaryawan . "-SERTIFIKAT-REVISI-" . time() . ".{$this->upload_sertifikat->getClientOriginalExtension()}", 'public');
             $data['upload_sertifikat'] = $sertifikatPath;
             $data['status_upload_sertifikat'] = NULL;
         }
         if ($pengajuan->status_upload_lpo == '0') {
             $this->validate([
-                'upload_upload_lpo' => 'required|file|mimes:pdf,jpg,png|max:10240'
+                'upload_lpo' => 'required|file|mimes:pdf,jpg,png|max:10240'
             ]);
-            $lpoPath = $this->upload_upload_lpo->storeAs($folderPath, $folderKaryawan . "-BPJS KETENAGAKERJAAN-REVISI-" . time() . ".{$this->upload_upload_lpo->getClientOriginalExtension()}", 'public');
-            $data['upload_upload_lpo'] = $lpoPath;
+            $lpoPath = $this->upload_upload_lpo->storeAs($folderPath, $folderKaryawan . "-LPO-REVISI-" . time() . ".{$this->upload_upload_lpo->getClientOriginalExtension()}", 'public');
+            $data['upload_lpo'] = $lpoPath;
             $data['status_upload_lpo'] = NULL;
         }
 
