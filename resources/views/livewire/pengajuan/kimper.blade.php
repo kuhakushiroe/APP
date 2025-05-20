@@ -357,7 +357,10 @@
                                     ]);
 
                                 // Tambahkan pengecekan ID Lama jika jenis pengajuan adalah perpanjangan
-                                if ($pengajuan->jenis_pengajuan_kimper === 'perpanjangan') {
+                                if (
+                                    $pengajuan->jenis_pengajuan_kimper === 'perpanjangan' ||
+                                    $pengajuan->jenis_pengajuan_kimper === 'penambahan'
+                                ) {
                                     $isIncomplete =
                                         $isIncomplete ||
                                         $pengajuan->status_upload_kimper_lama === null ||
