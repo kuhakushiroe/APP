@@ -354,10 +354,48 @@ class Id extends Component
             'catatan_upload_spdk'       => $this->catatan_upload_spdk[$id] ?? null,
         ]);
 
-
-
         $infoKaryawan = getInfoKaryawanByNrp($this->nrp);
         $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan ID*\n\n\n*$this->jenis_pengajuan_id*\n\n\n$infoKaryawan\n\n\n";
+        // 3. Update data pengajuan dengan path file
+
+        //function Proses kirim pesan
+        $info = getUserInfo();
+
+        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan ID*\n\n";
+        $pesanText .= "*Jenis Pengajuan:* $this->jenis_pengajuan_id\n\n";
+        $pesanText .= "*Info Karyawan:*\n$infoKaryawan\n\n";
+
+        // Siapkan daftar status upload sesuai jenis pengajuan
+        $statusList = [
+            'Request'              => ['status' => $this->status_upload_request[$id] ?? $pengajuan->status_upload_request, 'catatan' => $this->status_upload_request[$id] ?? null],
+            'Foto'              => ['status' => $this->status_upload_foto[$id] ?? $pengajuan->status_upload_foto, 'catatan' => $this->catatan_upload_foto[$id] ?? null],
+            'KTP'               => ['status' => $this->status_upload_ktp[$id] ?? $pengajuan->status_upload_ktp, 'catatan' => $this->catatan_upload_ktp[$id] ?? null],
+            'SKD'               => ['status' => $this->status_upload_skd[$id] ?? $pengajuan->status_upload_skd, 'catatan' => $this->catatan_upload_skd[$id] ?? null],
+            'BPJS Kesehatan'    => ['status' => $this->status_upload_bpjs_kes[$id] ?? $pengajuan->status_upload_bpjs_kes, 'catatan' => $this->catatan_upload_bpjs_kes[$id] ?? null],
+            'BPJS Ketenagakerjaan' => ['status' => $this->status_upload_bpjs_ker[$id] ?? $pengajuan->status_upload_bpjs_ker, 'catatan' => $this->catatan_upload_bpjs_ker[$id] ?? null],
+            'Induksi'           => ['status' => $this->status_upload_induksi[$id] ?? $pengajuan->status_upload_induksi, 'catatan' => $this->catatan_upload_induksi[$id] ?? null],
+            'SPDK'              => ['status' => $this->status_upload_spdk[$id] ?? $pengajuan->status_upload_spdk, 'catatan' => $this->catatan_upload_spdk[$id] ?? null],
+        ];
+
+        // Tambahkan "ID Lama" jika jenis pengajuan adalah Perpanjangan
+        if (strtolower($this->jenis_pengajuan_id) === 'perpanjangan') {
+            $statusList = ['ID Lama' => ['status' => $this->status_upload_id_lama[$id] ?? $pengajuan->status_upload_id_lama, 'catatan' => $this->catatan_upload_id_lama[$id] ?? null]] + $statusList;
+        }
+
+        $pesanText .= "*Hasil Verifikasi Upload:*\n";
+
+        foreach ($statusList as $item => $data) {
+            $statusStr = $data['status'] == 1 ? '✅ Diterima' : '❌ Ditolak';
+            $catatanStr = $data['catatan'] ? "Catatan: {$data['catatan']}" : '';
+            $pesanText .= "• *$item*: $statusStr" . ($catatanStr ? "\n  $catatanStr" : '') . "\n";
+        }
+
+        foreach ($info['nomorAdmins'] as $i => $nomor) {
+            pesan($nomor, $pesanText, $info['token']);
+            if ($i < count($info['nomorAdmins']) - 1) {
+                sleep(1);
+            }
+        }
 
         $this->dispatch(
             'alert',
