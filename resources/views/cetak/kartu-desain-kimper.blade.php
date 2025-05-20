@@ -139,6 +139,9 @@
 </head>
 
 <body>
+    @php
+        $pengajuanKimper = DB::table('pengajuan_kimper')->where('nrp', $id)->first();
+    @endphp
     <div class="container">
         <div class="card">
             <div class="card-header">
@@ -176,13 +179,19 @@
                     <tr>
                         <td>
                             @php
-                                $carifoto = DB::table('pengajuan_id')->where('nrp', $karyawans->nrp)->first();
+                                $carifoto = DB::table('pengajuan_kimper')
+                                    ->where('nrp', $karyawans->nrp)
+                                    ->orderByDesc('id')
+                                    ->first();
+
+                                $uploadFoto = $carifoto?->upload_foto;
+                                $path = $uploadFoto ? public_path('storage/' . $uploadFoto) : null;
                             @endphp
-                            @if ($carifoto)
-                                <img src="{{ public_path('/storage/' . $carifoto->upload_foto) }}" class="profile-pic">
+
+                            @if ($path && file_exists($path))
+                                <img src="{{ $path }}" class="profile-pic">
                             @else
-                                <img src="{{ public_path('/storage/fotos/6408045201970004wHqpIXoAJOqwyVXNrU0IJsVewkhMrNJxgxm0jbAa.jpg') }}"
-                                    class="profile-pic">
+                                <img src="{{ public_path('storage/fotos/default.jpg') }}" class="profile-pic">
                             @endif
                         </td>
                         <td style="vertical-align: bottom;">
@@ -228,21 +237,21 @@
                             SIM POLISI
                         </td>
                         <td width="1%">:</td>
-                        <td width="49%">{{ $karyawans->sim_polisi ?? '' }}</td>
+                        <td width="49%">{{ $pengajuanKimper->jenis_sim ?? '' }}</td>
                     </tr>
                     <tr>
                         <td>
                             NOMOR SIM
                         </td>
                         <td>:</td>
-                        <td>{{ $karyawans->no_polisi ?? '' }}</td>
+                        <td>{{ $pengajuanKimper->no_sim ?? '' }}</td>
                     </tr>
                     <tr>
                         <td>
                             MASA BERLAKU
                         </td>
                         <td>:</td>
-                        <td>{{ $karyawans->exp_polisi ?? '' }}</td>
+                        <td>{{ $pengajuanKimper->exp_sim ?? '' }}</td>
                     </tr>
                 </table>
                 <table width="100%" style="font-family: Arial, Helvetica, sans-serif;font-size:8pt;">
@@ -260,41 +269,75 @@
                             style="background-color: white; border: 1px solid black; text-align: center;">P</td>
                     </tr>
                     @php
+                        $versatilities = DB::table('pengajuan_kimper')
+                            ->where('nrp', $id)
+                            ->join(
+                                'pengajuan_kimper_versatility',
+                                'pengajuan_kimper.id',
+                                '=',
+                                'pengajuan_kimper_versatility.id_pengajuan_kimper',
+                            )
+                            ->join('versatility', 'pengajuan_kimper_versatility.id_versatility', '=', 'versatility.id')
+                            ->select(
+                                'versatility.id',
+                                'versatility.versatility as namaVersatility',
+                                'versatility.description',
+                                'pengajuan_kimper_versatility.klasifikasi',
+                            )
+                            ->distinct()
+                            ->get();
                         $access = [];
                     @endphp
-                    @for ($i = 1; $i <= 20; $i++)
+                    @foreach ($versatilities as $item)
+                        <tr style="font-family: Arial, Helvetica, sans-serif;font-size:5pt;">
+                            <td>{{ $item->namaVersatility }}</td>
+                            <td style="text-align: center;">
+                                @if ($item->klasifikasi == 'F')
+                                    v
+                                @else
+                                    -
+                                @endif
+                            </td>
+                            <td style="text-align: center;">
+                                @if ($item->klasifikasi == 'R')
+                                    v
+                                @else
+                                    -
+                                @endif
+                            </td>
+                            <td style="text-align: center;">
+                                @if ($item->klasifikasi == 'I')
+                                    v
+                                @else
+                                    -
+                                @endif
+                            </td>
+                            <td style="text-align: center;">
+                                @if ($item->klasifikasi == 'P')
+                                    v
+                                @else
+                                    -
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+                    @for ($i = $versatilities->count(); $i <= 20 - $versatilities->count(); $i++)
                         @php
                             $access[$i] = rand(1, 4);
                         @endphp
                         <tr style="font-family: Arial, Helvetica, sans-serif;font-size:5pt;">
                             <td>{{ $i }}</td>
                             <td style="text-align: center;">
-                                @if ($access[$i] == 1)
-                                    v
-                                @else
-                                    -
-                                @endif
+                                -
                             </td>
                             <td style="text-align: center;">
-                                @if ($access[$i] == 2)
-                                    v
-                                @else
-                                    -
-                                @endif
+                                -
                             </td>
                             <td style="text-align: center;">
-                                @if ($access[$i] == 3)
-                                    v
-                                @else
-                                    -
-                                @endif
+                                -
                             </td>
                             <td style="text-align: center;">
-                                @if ($access[$i] == 4)
-                                    v
-                                @else
-                                    -
-                                @endif
+                                -
                             </td>
                         </tr>
                     @endfor

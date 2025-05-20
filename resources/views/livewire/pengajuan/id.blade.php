@@ -60,7 +60,7 @@
                                         @elseif ($pengajuan->status_pengajuan == '1')
                                             Approved
                                         @elseif ($pengajuan->status_pengajuan == '2')
-                                            Rejected
+                                            Cetak
                                         @else
                                             <button class="btn btn-primary btn-sm" type="button" disabled>
                                                 <span class="spinner-border spinner-border-sm"

@@ -214,7 +214,7 @@ class Id extends Component
 
         // Check if folder exists, if not, create it
         $datakaryawan = Karyawan::where('nrp', $nrp)->first();
-        $folderDept = strtoupper(StR::slug($datakaryawan->dept, '_'));
+        $folderDept = strtoupper(Str::slug($datakaryawan->dept, '_'));
         $folderKaryawan = strtoupper(Str::slug(
             $datakaryawan->nrp . '-' . $datakaryawan->nama . '-' . $datakaryawan->dept . '-' . $datakaryawan->jabatan,
             '_'

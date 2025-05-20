@@ -31,6 +31,7 @@ return new class extends Migration
             $table->enum('jenis_sim', ['A', 'B', 'B1', 'B1 UMUM', 'B2', 'B2 UMUM',])->nullable();
             $table->string('upload_sim')->nullable();
             $table->string('no_sim')->nullable();
+            $table->string('exp_sim')->nullable();
             $table->enum('status_upload_sim', [0, 1])->nullable();
             $table->string('catatan_upload_sim')->nullable();
 
