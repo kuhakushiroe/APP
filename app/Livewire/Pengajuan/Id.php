@@ -314,6 +314,22 @@ class Id extends Component
 
         $pengajuan->update($data);
 
+        $infoKaryawan = getInfoKaryawanByNrp($nrp);
+        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan ID*\n\n\n*Berkas Sudah Di Upload Ulang*\n\n\n$infoKaryawan\n\n\n";
+        // 3. Update data pengajuan dengan path file
+
+        //function Proses kirim pesan
+        $info = getUserInfo();
+
+        foreach ($info['nomorAdmins'] as $i => $nomor) {
+            pesan($nomor, $pesanText, $info['token']);
+            if ($i < count($info['nomorAdmins']) - 1) {
+                sleep(1);
+            }
+        }
+
+
+
         $this->reset();
         // Determine whether it's an edit or a new entry
         $this->dispatch(
@@ -354,20 +370,20 @@ class Id extends Component
             'catatan_upload_spdk'       => $this->catatan_upload_spdk[$id] ?? null,
         ]);
 
-        $infoKaryawan = getInfoKaryawanByNrp($this->nrp);
-        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan ID*\n\n\n*$this->jenis_pengajuan_id*\n\n\n$infoKaryawan\n\n\n";
+        $infoKaryawan = getInfoKaryawanByNrp($pengajuan->nrp);
+        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan ID*\n\n\n*$pengajuan->jenis_pengajuan_id*\n\n\n$infoKaryawan\n\n\n";
         // 3. Update data pengajuan dengan path file
 
         //function Proses kirim pesan
         $info = getUserInfo();
 
         $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan ID*\n\n";
-        $pesanText .= "*Jenis Pengajuan:* $this->jenis_pengajuan_id\n\n";
+        $pesanText .= "*Jenis Pengajuan: *\n$pengajuan->jenis_pengajuan_id\n\n";
         $pesanText .= "*Info Karyawan:*\n$infoKaryawan\n\n";
 
         // Siapkan daftar status upload sesuai jenis pengajuan
         $statusList = [
-            'Request'              => ['status' => $this->status_upload_request[$id] ?? $pengajuan->status_upload_request, 'catatan' => $this->status_upload_request[$id] ?? null],
+            'Request'           => ['status' => $this->status_upload_request[$id] ?? $pengajuan->status_upload_request, 'catatan' => $this->catatan_upload_request[$id] ?? null],
             'Foto'              => ['status' => $this->status_upload_foto[$id] ?? $pengajuan->status_upload_foto, 'catatan' => $this->catatan_upload_foto[$id] ?? null],
             'KTP'               => ['status' => $this->status_upload_ktp[$id] ?? $pengajuan->status_upload_ktp, 'catatan' => $this->catatan_upload_ktp[$id] ?? null],
             'SKD'               => ['status' => $this->status_upload_skd[$id] ?? $pengajuan->status_upload_skd, 'catatan' => $this->catatan_upload_skd[$id] ?? null],
