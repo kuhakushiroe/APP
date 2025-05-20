@@ -133,8 +133,7 @@
                                     in_array(auth()->user()->role, ['admin', 'superadmin']))
                                 <div class="alert alert-warning">
                                     <form wire:submit.prevent="updateUpload({{ $pengajuan->id_pengajuan }})">
-                                        {{ $pengajuan->id_pengajuan }}
-                                        {{ $pengajuan->status_upload_request }}
+
                                         @if ($pengajuan->status_upload_request == '0')
                                             <div class="col-12">
                                                 <div class="form-group">

@@ -447,6 +447,17 @@ class Id extends Component
             //'tgl_induksi' => $this->tgl_induksi[$id],
         ]);
 
+        $infoKaryawan = getInfoKaryawanByNrp($pengajuan->nrp);
+        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan ID*\n\n\n*Lanjut Proses Cetak*\n\n\n$infoKaryawan\n\n\n";
+        $info = getUserInfo();
+
+        foreach ($info['nomorAdmins'] as $i => $nomor) {
+            pesan($nomor, $pesanText, $info['token']);
+            if ($i < count($info['nomorAdmins']) - 1) {
+                sleep(1);
+            }
+        }
+
         $this->reset('expired_id', 'tgl_induksi'); // reset hanya properti ini
 
         $this->dispatch(
@@ -465,6 +476,16 @@ class Id extends Component
         $caripengajuan->update([
             'status_pengajuan' => '2',
         ]);
+        $infoKaryawan = getInfoKaryawanByNrp($caripengajuan->nrp);
+        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan ID*\n\n\n*Kartu ID Telah Tercetak*\n\n\n$infoKaryawan\n\n\n";
+        $info = getUserInfo();
+
+        foreach ($info['nomorAdmins'] as $i => $nomor) {
+            pesan($nomor, $pesanText, $info['token']);
+            if ($i < count($info['nomorAdmins']) - 1) {
+                sleep(1);
+            }
+        }
 
         $this->dispatch(
             'alert',

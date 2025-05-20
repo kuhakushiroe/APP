@@ -107,6 +107,20 @@ class Kimper extends Component
         $pengajuan->update([
             'versatility' => 'ok',
         ]);
+
+        $infoKaryawan = getInfoKaryawanByNrp($pengajuan->nrp);
+        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan Kimper*\n\n\n*Versatility Di Proses*\n\n\n$infoKaryawan\n\n\n";
+        // 3. Update data pengajuan dengan path file
+
+        //function Proses kirim pesan
+        $info = getUserInfo();
+
+        foreach ($info['nomorAdmins'] as $i => $nomor) {
+            pesan($nomor, $pesanText, $info['token']);
+            if ($i < count($info['nomorAdmins']) - 1) {
+                sleep(1);
+            }
+        }
     }
     public function open()
     {
@@ -298,6 +312,19 @@ class Kimper extends Component
         }
         // 3. Update data pengajuan dengan path file
 
+        $infoKaryawan = getInfoKaryawanByNrp($this->nrp);
+        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan Kimper*\n\n\n*$this->jenis_pengajuan_kimper*\n\n\n$infoKaryawan\n\n\n";
+        // 3. Update data pengajuan dengan path file
+
+
+        //function Proses kirim pesan
+        $info = getUserInfo();
+        foreach ($info['nomorAdmins'] as $i => $nomor) {
+            pesan($nomor, $pesanText, $info['token']);
+            if ($i < count($info['nomorAdmins']) - 1) {
+                sleep(1);
+            }
+        }
         $this->reset();
 
 
@@ -340,6 +367,48 @@ class Kimper extends Component
             'catatan_upload_lpo'   => $this->catatan_upload_lpo[$id] ?? null,
             'catatan_upload_sertifikat'   => $this->catatan_upload_sertifikat[$id] ?? null,
         ]);
+
+        $infoKaryawan = getInfoKaryawanByNrp($pengajuan->nrp);
+        //function Proses kirim pesan
+        $info = getUserInfo();
+
+        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan Kimper*\n\n";
+        $pesanText .= "*Jenis Pengajuan: *\n$pengajuan->jenis_pengajuan_kimper\n\n";
+        $pesanText .= "*Info Karyawan:*\n$infoKaryawan\n\n";
+
+        // Siapkan daftar status upload sesuai jenis pengajuan
+        $statusList = [
+            'Request'           => ['status' => $this->status_upload_request[$id] ?? $pengajuan->status_upload_request, 'catatan' => $this->catatan_upload_request[$id] ?? null],
+            'ID AKTIF'           => ['status' => $this->status_upload_id[$id] ?? $pengajuan->status_upload_id, 'catatan' => $this->catatan_upload_id[$id] ?? null],
+            'Foto'              => ['status' => $this->status_upload_foto[$id] ?? $pengajuan->status_upload_foto, 'catatan' => $this->catatan_upload_foto[$id] ?? null],
+            'KTP'               => ['status' => $this->status_upload_ktp[$id] ?? $pengajuan->status_upload_ktp, 'catatan' => $this->catatan_upload_ktp[$id] ?? null],
+            'SKD'               => ['status' => $this->status_upload_skd[$id] ?? $pengajuan->status_upload_skd, 'catatan' => $this->catatan_upload_skd[$id] ?? null],
+            'BPJS Kesehatan'    => ['status' => $this->status_upload_bpjs_kes[$id] ?? $pengajuan->status_upload_bpjs_kes, 'catatan' => $this->catatan_upload_bpjs_kes[$id] ?? null],
+            'BPJS Ketenagakerjaan' => ['status' => $this->status_upload_bpjs_ker[$id] ?? $pengajuan->status_upload_bpjs_ker, 'catatan' => $this->catatan_upload_bpjs_ker[$id] ?? null],
+            'LPO'               => ['status' => $this->status_upload_lpo[$id] ?? $pengajuan->status_upload_lpo, 'catatan' => $this->catatan_upload_lpo[$id] ?? null],
+            'Sertifikat'        => ['status' => $this->status_upload_sertifikat[$id] ?? $pengajuan->status_upload_sertifikat, 'catatan' => $this->catatan_upload_sertifikat[$id] ?? null],
+            'SIM'               => ['status' => $this->status_upload_sim[$id] ?? $pengajuan->status_upload_sim, 'catatan' => $this->catatan_upload_sim[$id] ?? null],
+
+        ];
+
+        if (strtolower($pengajuan->jenis_pengajuan_kimper) === 'perpanjangan') {
+            $statusList = ['Kimper Lama' => ['status' => $this->status_upload_kimper_lama[$id] ?? $pengajuan->status_upload_kimper_lama, 'catatan' => $this->catatan_upload_kimper_lama[$id] ?? null]]  + $statusList;
+        }
+
+        $pesanText .= "*Hasil Verifikasi Upload:*\n";
+
+        foreach ($statusList as $item => $data) {
+            $statusStr = $data['status'] == 1 ? '✅ Diterima' : '❌ Ditolak';
+            $catatanStr = $data['catatan'] ? "Catatan: {$data['catatan']}" : '';
+            $pesanText .= "• *$item*: $statusStr" . ($catatanStr ? "\n  $catatanStr" : '') . "\n";
+        }
+
+        foreach ($info['nomorAdmins'] as $i => $nomor) {
+            pesan($nomor, $pesanText, $info['token']);
+            if ($i < count($info['nomorAdmins']) - 1) {
+                sleep(1);
+            }
+        }
 
         $this->dispatch(
             'alert',
@@ -465,6 +534,20 @@ class Kimper extends Component
 
         $pengajuan->update($data);
 
+        $infoKaryawan = getInfoKaryawanByNrp($nrp);
+        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan Kimper*\n\n\n*Berkas Sudah Di Upload Ulang*\n\n\n$infoKaryawan\n\n\n";
+        // 3. Update data pengajuan dengan path file
+
+        //function Proses kirim pesan
+        $info = getUserInfo();
+
+        foreach ($info['nomorAdmins'] as $i => $nomor) {
+            pesan($nomor, $pesanText, $info['token']);
+            if ($i < count($info['nomorAdmins']) - 1) {
+                sleep(1);
+            }
+        }
+
         $this->reset();
         // Determine whether it's an edit or a new entry
         $this->dispatch(
@@ -496,6 +579,16 @@ class Kimper extends Component
             'exp_kimper' => $this->expired_kimper[$id],
         ]);
 
+        $infoKaryawan = getInfoKaryawanByNrp($pengajuan->nrp);
+        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan Kimper*\n\n\n*Lanjut Proses Cetak*\n\n\n$infoKaryawan\n\n\n";
+        $info = getUserInfo();
+
+        foreach ($info['nomorAdmins'] as $i => $nomor) {
+            pesan($nomor, $pesanText, $info['token']);
+            if ($i < count($info['nomorAdmins']) - 1) {
+                sleep(1);
+            }
+        }
         $this->dispatch(
             'alert',
             type: 'success',
@@ -512,6 +605,17 @@ class Kimper extends Component
         $caripengajuan->update([
             'status_pengajuan' => '2',
         ]);
+
+        $infoKaryawan = getInfoKaryawanByNrp($caripengajuan->nrp);
+        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan Kimper*\n\n\n*Kartu Kimper Telah Tercetak*\n\n\n$infoKaryawan\n\n\n";
+        $info = getUserInfo();
+
+        foreach ($info['nomorAdmins'] as $i => $nomor) {
+            pesan($nomor, $pesanText, $info['token']);
+            if ($i < count($info['nomorAdmins']) - 1) {
+                sleep(1);
+            }
+        }
 
         $this->dispatch(
             'alert',
