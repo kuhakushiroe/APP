@@ -4,6 +4,7 @@ use App\Exports\checklistExport;
 use App\Http\Controllers\CetakKartuController;
 use App\Http\Controllers\ExportKaryawans;
 use App\Http\Controllers\McuCetak;
+use App\Http\Controllers\QueueController;
 use App\Imports\checklistImport;
 use App\Livewire\Cetak\Id as CetakId;
 use App\Livewire\Cetak\Kimper as CetakKimper;
@@ -95,3 +96,4 @@ Auth::routes([
     'reset' => false, // Reset Password Routes...
     'verify' => false, // Email Verification Routes...
 ]);
+Route::get('/run-queue-once/{token}', [QueueController::class, 'runQueueOnce']);

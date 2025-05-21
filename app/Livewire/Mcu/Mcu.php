@@ -170,13 +170,15 @@ class Mcu extends Component
         }
 
         //function Proses kirim pesan
-        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*";
         if ($this->id_mcu) {
             $pesanText .= "\n*Upload File Revisi*";
         }
 
-        $info = getUserInfo();
-        dispatch(new SendNotifMcu($pesanText, array_merge($info['nomorAdmins'], $info['nomorParamedik']), $info['token']));
+        $info = getUserInfo(); // ambil data user saat dispatch, di konteks request HTTP (user pasti ada)
+        $nomorGabungan = array_merge($info['nomorAdmins'], $info['nomorParamedik']);
+        $token = $info['token'];
+        $namaUser = $info['nama'];
+        dispatch(new SendNotifMcu($pesanText, $nomorGabungan, $token, $namaUser));
 
         // Reset the form fields after save
 

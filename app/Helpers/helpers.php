@@ -44,16 +44,12 @@ if (!function_exists('getUserInfo')) {
             'waktu' => $waktu,
             'nomorAdmins' => [
                 '088212543694', //saya
+                '085954590940', // yazid
                 //'082266012957' // mas anton
-                // '081233115324',
-                // '081233115325',
-                // '08991649871',
             ],
             'nomorParamedik' => [
-                '085954590940',
-                '081233115324', // yazid
-                //'081233115324',
-                //'081233115325',
+                '088212543694', //saya
+                '085954590940', // yazid
                 //'085879793321', //masbondan
                 //'08991649871' // mas candra
                 //'088212543694',
@@ -91,7 +87,7 @@ if (!function_exists('pesan')) {
             CURLOPT_URL => 'https://pesan.buanatechno.id/send-message',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POSTFIELDS => [
-                'message' => $pesan . "\n\n👤 Oleh: *{$info['nama']}*\n⏰ Waktu: *{$info['waktu']}*",
+                'message' => $pesan,
                 'number' => $nohp,
             ],
         ]);
