@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Mcu;
 
+use App\Jobs\SendNotifMcu;
 use App\Models\Karyawan;
 use App\Models\Mcu as ModelsMcu;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -169,19 +170,13 @@ class Mcu extends Component
         }
 
         //function Proses kirim pesan
+        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*";
+        if ($this->id_mcu) {
+            $pesanText .= "\n*Upload File Revisi*";
+        }
+
         $info = getUserInfo();
-        foreach ($info['nomorAdmins'] as $i => $nomor) {
-            pesan($nomor, $pesanText, $info['token']);
-            if ($i < count($info['nomorAdmins']) - 1) {
-                sleep(1);
-            }
-        }
-        foreach ($info['nomorParamedik'] as $i => $nomor) {
-            pesan($nomor, $pesanText, $info['token']);
-            if ($i < count($info['nomorParamedik']) - 1) {
-                sleep(1);
-            }
-        }
+        dispatch(new SendNotifMcu($pesanText, array_merge($info['nomorAdmins'], $info['nomorParamedik']), $info['token']));
 
         // Reset the form fields after save
 
