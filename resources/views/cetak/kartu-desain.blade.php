@@ -157,6 +157,27 @@
                 </p>
             </div>
             <div class="card-body">
+                @php
+                    $jabatan = $karyawans->jabatan;
+                    $jumlahKata = str_word_count($jabatan);
+                    $styleTransform =
+                        $jumlahKata === 1 ? 'scaleY(2.0); font-size: 50px;' : 'none; scaleY(1.5); font-size: 60px;';
+                @endphp
+
+                <div
+                    style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(0, 0, 0, 0.2); font-weight: bold; pointer-events: none;">
+                    <p
+                        style="font-family: 'Oswald', sans-serif; display: inline-block; transform: {{ $jumlahKata === 1 ? 'scaleY(2.0)' : 'none' }}; font-size: {{ $jumlahKata === 1 ? '50px' : '40px' }};">
+                        {{ Str::upper($jabatan) }}
+                    </p>
+                </div>
+                {{-- <div
+                    style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(0, 0, 0, 0.2); font-weight: bold; pointer-events: none;">
+                    <p
+                        style="font-family: 'Oswald', sans-serif; font-size: 50px; transform: scaleY(2.0); display: inline-block;">
+                        {{ $karyawans->jabatan }}
+                    </p>
+                </div> --}}
                 <p style="font-size: 8pt; padding-top:30px;">
                     <b>{{ Str::upper($karyawans->nama ?? 'Nama Karyawan') }}</b>
                 </p>
@@ -177,6 +198,8 @@
                             @endif
                         </td>
                         <td style="vertical-align: bottom;">
+                            <p style="font-size: 6pt;"><b>MIFA/K.AMM.{{ $karyawans->nrp ?? 'NRP' }}</b></p>
+                            <br>
                             <p style="font-size: 8pt;">Berlaku Sampai:</p>
                             <p style="font-size: 8pt;">
                                 <b>{{ \Carbon\Carbon::parse($karyawans->exp_id ?? '')->locale('id')->isoFormat('D MMMM Y') }}</b>
@@ -197,6 +220,19 @@
                 </table>
             </div>
             <div class="card-footer">
+                @php
+                    $jabatan = $karyawans->jabatan;
+                    $jumlahKata = str_word_count($jabatan);
+                    $styleTransform =
+                    $jumlahKata === 1 ? 'scaleY(2.0); font-size: 50px;' : 'none; scaleY(1.5); font-size: 60px;'; @endphp
+                <div
+                    style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(0, 0, 0, 0.2); font-weight: bold; pointer-events: none;">
+                    <p
+                        style="font-family: 'Oswald', sans-serif; display: inline-block; transform: {{ $jumlahKata === 1 ? 'scaleY(2.0)' : 'none' }}; font-size: {{ $jumlahKata === 1 ? '50px' : '40px' }};">
+                        {{ Str::upper($jabatan) }}
+                    </p>
+                </div>
+
                 <div class="rules" style="margin-left: 10px;margin-right: 10px;">
                     <ol style="font-size:6pt;">
                         <li>KARTU INI DIGUNAKAN SEBAGAI TANDA BAHWA ANDA DIBERIKAN IZIN UNTUK MEMASUKI AREA OPERASIONAL
@@ -209,6 +245,15 @@
                             CHANNEL RADIO 108 ATAU DI NOMOR 08116729220</li>
                     </ol>
                 </div>
+                <div
+                    style="margin-top: 10px; font-family: Arial, Helvetica, sans-serif; font-size: 6pt; text-align: center;">
+                    <p>Meulaboh,
+                        {{ \Carbon\Carbon::parse($karyawans->tgl_cetak ?? '')->locale('id')->isoFormat('D MMMM Y') }}
+                    </p>
+                    <p style="margin-top: 20px;">___________________________</p>
+                    <p>Hadi Firmansah<br>KTT. PT. Mifa Bersaudara</p>
+                </div>
+
             </div>
         </div>
     </div>
