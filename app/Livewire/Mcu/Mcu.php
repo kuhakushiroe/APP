@@ -81,7 +81,6 @@ class Mcu extends Component
         $this->reset();
     }
 
-
     // Fungsi untuk memuat data dari database
     public function store()
     {
@@ -95,7 +94,7 @@ class Mcu extends Component
                 }),
             ],
             'tgl_mcu' => 'required|date',
-            'gol_darah' => 'required',
+            //'gol_darah' => 'required',
             'file_mcu' => 'required|file|mimes:pdf|max:10240', // max 10MB
         ], [
             'proveder.required' => 'Proveder harus diisi.',
@@ -103,7 +102,7 @@ class Mcu extends Component
             'nrp.exists' => 'NRP tidak ditemukan atau karyawan tidak aktif.',
             'tgl_mcu.required' => 'Tanggal MCU harus diisi.',
             'tgl_mcu.date' => 'Tanggal MCU harus dalam format yang valid.',
-            'gol_darah.required' => 'Golongan Darah harus diisi.',
+            //'gol_darah.required' => 'Golongan Darah harus diisi.',
             'file_mcu.required' => 'File MCU harus diunggah.',
             'file_mcu.file' => 'File harus berupa file.',
             'file_mcu.mimes' => 'Format file harus PDF.',
@@ -168,12 +167,6 @@ class Mcu extends Component
             );
             $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*";
         }
-
-        //function Proses kirim pesan
-        if ($this->id_mcu) {
-            $pesanText .= "\n*Upload File Revisi*";
-        }
-
         $info = getUserInfo(); // ambil data user saat dispatch, di konteks request HTTP (user pasti ada)
         $nomorGabungan = array_merge($info['nomorAdmins'], $info['nomorParamedik']);
         $token = $info['token'];
@@ -231,24 +224,16 @@ class Mcu extends Component
             // Simpan perubahan
             $mcu->save();
 
-            $info = getUserInfo();
+            $info = getUserInfo(); // ambil data user saat dispatch, di konteks request HTTP (user pasti ada)
             if ($status == 1) {
                 $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n*$infoKaryawan*\n Status File MCU: *Diterima* Proses Dokter";
             } else {
                 $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n*$infoKaryawan*\n Status File MCU: *Ditolak - $catatan*";
             }
-            foreach ($info['nomorAdmins'] as $i => $nomor) {
-                pesan($nomor, $pesanText, $info['token']);
-                if ($i < count($info['nomorAdmins']) - 1) {
-                    sleep(1);
-                }
-            }
-            foreach ($info['nomorDokter'] as $i => $nomor) {
-                pesan($nomor, $pesanText, $info['token']);
-                if ($i < count($info['nomorDokter']) - 1) {
-                    sleep(1);
-                }
-            }
+            $nomorGabungan = array_merge($info['nomorAdmins'], $info['nomorParamedik']);
+            $token = $info['token'];
+            $namaUser = $info['nama'];
+            dispatch(new SendNotifMcu($pesanText, $nomorGabungan, $token, $namaUser));
             // Reset input setelah kirim
 
             $this->status_file_mcu[$id_mcu] = '';
@@ -440,22 +425,14 @@ class Mcu extends Component
             ]
         );
 
-        $info = getUserInfo();
+        $info = getUserInfo(); // ambil data user saat dispatch, di konteks request HTTP (user pasti ada)
         $infoKaryawan = getInfoKaryawanByNrp($this->nrp);
 
         $pesanText = "📢 *MIFA-TEST NOTIF - Follow Up MCU*\n\n\n*$infoKaryawan*\n";
-        foreach ($info['nomorAdmins'] as $i => $nomor) {
-            pesan($nomor, $pesanText, $info['token']);
-            if ($i < count($info['nomorAdmins']) - 1) {
-                sleep(1);
-            }
-        }
-        foreach ($info['nomorParamedik'] as $i => $nomor) {
-            pesan($nomor, $pesanText, $info['token']);
-            if ($i < count($info['nomorParamedik']) - 1) {
-                sleep(1);
-            }
-        }
+        $nomorGabungan = array_merge($info['nomorAdmins'], $info['nomorParamedik']);
+        $token = $info['token'];
+        $namaUser = $info['nama'];
+        dispatch(new SendNotifMcu($pesanText, $nomorGabungan, $token, $namaUser));
 
         // Reset the form fields after save
         $this->reset();
@@ -476,14 +453,14 @@ class Mcu extends Component
     public function verifikasi($id_mcu)
     {
         $this->formVerifikasi = true;
-        $carimcu = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus')
+        $carimcu = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.gol_darah as mcuGolDarah')
             ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
             ->where('mcu.id', $id_mcu)->first();
         $this->nrp = $carimcu->id_karyawan;
         $this->no_dokumen = $carimcu->no_dokumen;
         $this->tgl_mcu = $carimcu->tgl_mcu;
         $this->nama = $carimcu->nama;
-        $this->gol_darah = $carimcu->gol_darah;
+        $this->gol_darah = $carimcu->mcuGolDarah;
         $this->file_mcu = $carimcu->file_mcu;
         $this->status = $carimcu->mcuStatus;
         $this->id_mcu = $id_mcu;
@@ -531,6 +508,8 @@ class Mcu extends Component
     public function storeVerifikasi()
     {
         $info = getUserInfo();
+        $token = $info['token'];
+        $namaUser = $info['nama'];
         $mcu = ModelsMcu::find($this->id_mcu);
         $nrp = $mcu->id_karyawan;
         $infoKaryawan = getInfoKaryawanByNrp($nrp);
@@ -654,6 +633,7 @@ class Mcu extends Component
 
             $mcu->update([
                 'no_dokumen' => $this->no_dokumen,
+                'gol_darah' => $this->gol_darah,
                 'status_' => 'open',
                 'status' => $this->status,
                 'tgl_verifikasi' => $this->tgl_verifikasi, // Use Laravel's `now()` helper for current date
@@ -701,19 +681,15 @@ class Mcu extends Component
                 'paramedik_catatan' => $this->paramedik_catatan,
                 'paramedik_status' => NULL,
             ]);
-            foreach ($info['nomorDokter'] as $i => $nomor) {
-                pesan($nomor, $pesanText, $info['token']);
-                if ($i < count($info['nomorDokter']) - 1) {
-                    sleep(1);
-                }
-            }
+            $updateKaryawan = Karyawan::where('nrp', $nrp)->first();
+            $updateKaryawan->update([
+                'gol_darah' => $this->gol_darah,
+            ]);
+            $nomorDokter = array_merge($info['nomorDokter']);
+            dispatch(new SendNotifMcu($pesanText, $nomorDokter, $token, $namaUser));
         }
-        foreach ($info['nomorAdmins'] as $i => $nomor) {
-            pesan($nomor, $pesanText, $info['token']);
-            if ($i < count($info['nomorAdmins']) - 1) {
-                sleep(1);
-            }
-        }
+        $nomorAdmin = array_merge($info['nomorAdmins']);
+        dispatch(new SendNotifMcu($pesanText, $nomorAdmin, $token, $namaUser));
 
         $jenis = $this->id_mcu ? 'Verifikasi' : 'Tambah';
         $this->dispatch(

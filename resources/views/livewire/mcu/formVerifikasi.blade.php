@@ -41,6 +41,23 @@
                             <fieldset>Cek Fisik</fieldset>
                             <hr>
                         </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="gol_darah">Gol Darah:</label>
+                                <select class="form-control form-control-sm @error('gol_darah') is-invalid @enderror"
+                                    id="gol_darah" wire:model.live="gol_darah"
+                                    @if (auth()->user()->subrole === 'verifikator') disabled @endif>
+                                    <option value="">-Pilih Gol Darah-</option>
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="AB">AB</option>
+                                    <option value="O">O</option>
+                                </select>
+                                @error('gol_darah')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
                         <div class="col-sm-2">
                             <label for="BB">BB</label>
                             <input type="text" class="form-control form-control-sm @error('BB') is-invalid @enderror"
