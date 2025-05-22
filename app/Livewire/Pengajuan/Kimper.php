@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Pengajuan;
 
+use App\Jobs\SendNotifMcu;
 use Livewire\Component;
 use App\Models\Karyawan;
 use App\Models\ModelPengajuanID;
@@ -114,13 +115,17 @@ class Kimper extends Component
 
         //function Proses kirim pesan
         $info = getUserInfo();
+        $nomorGabungan = array_merge($info['nomorAdmins']);
+        $token = $info['token'];
+        $namaUser = $info['nama'];
+        dispatch(new SendNotifMcu($pesanText, $nomorGabungan, $token, $namaUser));
 
-        foreach ($info['nomorAdmins'] as $i => $nomor) {
-            pesan($nomor, $pesanText, $info['token']);
-            if ($i < count($info['nomorAdmins']) - 1) {
-                sleep(1);
-            }
-        }
+        // foreach ($info['nomorAdmins'] as $i => $nomor) {
+        //     pesan($nomor, $pesanText, $info['token']);
+        //     if ($i < count($info['nomorAdmins']) - 1) {
+        //         sleep(1);
+        //     }
+        // }
     }
     public function open()
     {
@@ -314,17 +319,24 @@ class Kimper extends Component
 
         $infoKaryawan = getInfoKaryawanByNrp($this->nrp);
         $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan Kimper*\n\n\n*$this->jenis_pengajuan_kimper*\n\n\n$infoKaryawan\n\n\n";
+
         // 3. Update data pengajuan dengan path file
 
 
         //function Proses kirim pesan
-        $info = getUserInfo();
-        foreach ($info['nomorAdmins'] as $i => $nomor) {
-            pesan($nomor, $pesanText, $info['token']);
-            if ($i < count($info['nomorAdmins']) - 1) {
-                sleep(1);
-            }
-        }
+        // $info = getUserInfo();
+        // foreach ($info['nomorAdmins'] as $i => $nomor) {
+        //     pesan($nomor, $pesanText, $info['token']);
+        //     if ($i < count($info['nomorAdmins']) - 1) {
+        //         sleep(1);
+        //     }
+        // }
+
+        $info = getUserInfo(); // ambil data user saat dispatch, di konteks request HTTP (user pasti ada)
+        $nomorGabungan = array_merge($info['nomorAdmins']);
+        $token = $info['token'];
+        $namaUser = $info['nama'];
+        dispatch(new SendNotifMcu($pesanText, $nomorGabungan, $token, $namaUser));
         $this->reset();
 
 
@@ -403,12 +415,18 @@ class Kimper extends Component
             $pesanText .= "• *$item*: $statusStr" . ($catatanStr ? "\n  $catatanStr" : '') . "\n";
         }
 
-        foreach ($info['nomorAdmins'] as $i => $nomor) {
-            pesan($nomor, $pesanText, $info['token']);
-            if ($i < count($info['nomorAdmins']) - 1) {
-                sleep(1);
-            }
-        }
+        // ambil data user saat dispatch, di konteks request HTTP (user pasti ada)
+        $nomorGabungan = array_merge($info['nomorAdmins']);
+        $token = $info['token'];
+        $namaUser = $info['nama'];
+        dispatch(new SendNotifMcu($pesanText, $nomorGabungan, $token, $namaUser));
+
+        // foreach ($info['nomorAdmins'] as $i => $nomor) {
+        //     pesan($nomor, $pesanText, $info['token']);
+        //     if ($i < count($info['nomorAdmins']) - 1) {
+        //         sleep(1);
+        //     }
+        // }
 
         $this->dispatch(
             'alert',
@@ -540,13 +558,17 @@ class Kimper extends Component
 
         //function Proses kirim pesan
         $info = getUserInfo();
+        $nomorGabungan = array_merge($info['nomorAdmins']);
+        $token = $info['token'];
+        $namaUser = $info['nama'];
+        dispatch(new SendNotifMcu($pesanText, $nomorGabungan, $token, $namaUser));
 
-        foreach ($info['nomorAdmins'] as $i => $nomor) {
-            pesan($nomor, $pesanText, $info['token']);
-            if ($i < count($info['nomorAdmins']) - 1) {
-                sleep(1);
-            }
-        }
+        // foreach ($info['nomorAdmins'] as $i => $nomor) {
+        //     pesan($nomor, $pesanText, $info['token']);
+        //     if ($i < count($info['nomorAdmins']) - 1) {
+        //         sleep(1);
+        //     }
+        // }
 
         $this->reset();
         // Determine whether it's an edit or a new entry
@@ -583,12 +605,17 @@ class Kimper extends Component
         $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan Kimper*\n\n\n*Lanjut Proses Cetak*\n\n\n$infoKaryawan\n\n\n";
         $info = getUserInfo();
 
-        foreach ($info['nomorAdmins'] as $i => $nomor) {
-            pesan($nomor, $pesanText, $info['token']);
-            if ($i < count($info['nomorAdmins']) - 1) {
-                sleep(1);
-            }
-        }
+        $nomorGabungan = array_merge($info['nomorAdmins']);
+        $token = $info['token'];
+        $namaUser = $info['nama'];
+        dispatch(new SendNotifMcu($pesanText, $nomorGabungan, $token, $namaUser));
+
+        // foreach ($info['nomorAdmins'] as $i => $nomor) {
+        //     pesan($nomor, $pesanText, $info['token']);
+        //     if ($i < count($info['nomorAdmins']) - 1) {
+        //         sleep(1);
+        //     }
+        // }
         $this->dispatch(
             'alert',
             type: 'success',
@@ -610,12 +637,17 @@ class Kimper extends Component
         $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan Kimper*\n\n\n*Kartu Kimper Telah Tercetak*\n\n\n$infoKaryawan\n\n\n";
         $info = getUserInfo();
 
-        foreach ($info['nomorAdmins'] as $i => $nomor) {
-            pesan($nomor, $pesanText, $info['token']);
-            if ($i < count($info['nomorAdmins']) - 1) {
-                sleep(1);
-            }
-        }
+
+        $nomorGabungan = array_merge($info['nomorAdmins']);
+        $token = $info['token'];
+        $namaUser = $info['nama'];
+        dispatch(new SendNotifMcu($pesanText, $nomorGabungan, $token, $namaUser));
+        // foreach ($info['nomorAdmins'] as $i => $nomor) {
+        //     pesan($nomor, $pesanText, $info['token']);
+        //     if ($i < count($info['nomorAdmins']) - 1) {
+        //         sleep(1);
+        //     }
+        // }
 
         $this->dispatch(
             'alert',

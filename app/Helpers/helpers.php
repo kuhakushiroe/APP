@@ -44,23 +44,23 @@ if (!function_exists('getUserInfo')) {
             'waktu' => $waktu,
             'nomorAdmins' => [
                 '088212543694', //saya
-                //'085954590940', // yazid
+                '085954590940', // yazid
                 //'082266012957' // mas anton
             ],
             'nomorParamedik' => [
                 '088212543694', //saya
-                //'085954590940', // yazid
+                '085954590940', // yazid
                 //'085879793321', //masbondan
                 //'08991649871' // mas candra
                 //'088212543694',
                 //'085954590940',
             ],
             'nomorDokter' => [
-                '088212543694', //saya
+                //'088212543694', //saya
                 //'085879793321', //masbondan
                 //'08991649871' // mas candra
                 //'088212543694',
-                //'085954590940',
+                '085954590940',
             ],
             'token' => env('PESAN_TOKEN', 'abc25qc'),
         ];
