@@ -27,12 +27,27 @@ class Kimper extends Component
     public $search = '';
     public $catatan_upload_induksi = [], $catatan_upload_id = [], $catatan_upload_kimper_lama = [], $catatan_upload_request = [], $catatan_upload_sim = [], $catatan_upload_sertifikat = [], $catatan_upload_lpo = [], $catatan_upload_foto = [], $catatan_upload_ktp = [], $catatan_upload_skd = [], $catatan_upload_bpjs_kes = [], $catatan_upload_bpjs_ker = [];
     public $status_upload_induksi = [], $status_upload_id = [], $status_upload_kimper_lama = [], $status_upload_request = [], $status_upload_sim = [], $status_upload_sertifikat = [], $status_upload_lpo = [], $status_upload_foto = [], $status_upload_ktp = [], $status_upload_skd = [], $status_upload_bpjs_kes = [], $status_upload_bpjs_ker = [];
-    public $upload_id, $upload_kimper_lama, $upload_request, $upload_sim, $upload_sertifikat, $upload_lpo, $upload_foto, $upload_ktp, $upload_skd, $upload_bpjs_kes, $upload_bpjs_ker;
+    public $upload_id, $upload_kimper_lama, $upload_request, $upload_sim, $upload_sertifikat, $upload_foto, $upload_ktp, $upload_skd, $upload_bpjs_kes, $upload_bpjs_ker;
     public $info_nama, $info_dept, $info_jabatan, $info_mcu, $info_id, $info_kimper;
     public $expired_kimper = [];
     public $formVersatility = false;
 
     public $id_pengajuan_kimper, $id_versatility, $klasifikasi;
+    public $form_lpo = 1;
+    public $jenis_upload_lpo = [];
+    public $upload_lpo = [];
+    public $nilai_lpo_1 = [];
+    public $nilai_lpo_2 = [];
+    public $nilai_lpo_3 = [];
+    public $nilai_lpo_4 = [];
+    public function tambahLpo()
+    {
+        $this->form_lpo++;
+    }
+    public function kurangLpo()
+    {
+        $this->form_lpo--;
+    }
     public function openVersatility($id)
     {
         $this->id_pengajuan = $id;
@@ -85,7 +100,8 @@ class Kimper extends Component
     public function getAvailableVersatilityProperty()
     {
         $pengajuan = ModelPengajuanKimper::find($this->id_pengajuan);
-        if (!$pengajuan) return collect();
+        if (!$pengajuan)
+            return collect();
 
         $nrp = $pengajuan->nrp;
 
@@ -176,59 +192,61 @@ class Kimper extends Component
     }
     public function store()
     {
-        // Validasi dasar
-        $this->validate(
-            [
-                'nrp' => [
-                    'required',
-                    function ($attribute, $value, $fail) {
-                        $karyawan = Karyawan::where('nrp', $value)->first();
-                        if (!$karyawan) {
-                            $fail('NRP tidak ditemukan dalam data karyawan.');
-                        } elseif (!$karyawan->exp_mcu) {
-                            $fail('Tanggal MCU belum diisi / Belum Memiliki MCU.');
-                        } elseif ($karyawan->status === 'non aktif') {
-                            $fail('Status Karyawan Non Aktif');
-                        } elseif ($karyawan->exp_mcu < now()) {
-                            $fail('MCU sudah kadaluarsa.');
-                        } elseif ($karyawan->exp_id < now() || $karyawan->exp_id === null) {
-                            $fail('ID sudah kadaluarsa.');
-                        }
-                    },
-                ],
-                'jenis_pengajuan_kimper' => 'required',
-                'no_sim' => 'required',
-                'jenis_sim' => 'required',
-                'exp_sim' => 'required',
-                'upload_sim' => 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240',
-                'upload_request' => 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240',
-                'tgl_pengajuan' => 'required',
-            ]
-        );
+        $rules = [];
+        $messages = [];
+        for ($i = 1; $i <= $this->form_lpo; $i++) {
+            $rules["jenis_upload_lpo.$i"] = 'required';
+            $rules["upload_lpo.$i"] = 'required|file|mimes:pdf,jpg,png|max:2048';
+            $rules["nilai_lpo_1.$i"] = 'required|numeric';
+            $rules["nilai_lpo_2.$i"] = 'required|numeric';
+            $rules["nilai_lpo_3.$i"] = 'required|numeric';
+            $rules["nilai_lpo_4.$i"] = 'required|numeric';
 
-        if ($this->jenis_pengajuan_kimper == 'baru') {
-            $rules['upload_id'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
-            $rules['upload_lpo'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
-            $rules['upload_sertifikat'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
+            $messages["jenis_upload_lpo.$i.required"] = "Jenis upload LPO [$i] wajib diisi.";
+            $messages["upload_lpo.$i.required"] = "File LPO [$i] wajib diunggah.";
+            $messages["upload_lpo.$i.mimes"] = "File LPO [$i] harus berformat PDF, JPG, atau PNG.";
+            $messages["upload_lpo.$i.max"] = "Ukuran file LPO [$i] maksimal 2MB.";
+
+            $messages["nilai_lpo_1.$i.required"] = "Nilai 1 LPO [$i] wajib diisi.";
+            $messages["nilai_lpo_1.$i.numeric"] = "Nilai 1 LPO [$i] harus berupa angka.";
+
+            $messages["nilai_lpo_2.$i.required"] = "Nilai 2 LPO [$i] wajib diisi.";
+            $messages["nilai_lpo_2.$i.numeric"] = "Nilai 2 LPO [$i] harus berupa angka.";
+
+            $messages["nilai_lpo_3.$i.required"] = "Nilai 3 LPO [$i] wajib diisi.";
+            $messages["nilai_lpo_3.$i.numeric"] = "Nilai 3 LPO [$i] harus berupa angka.";
+
+            $messages["nilai_lpo_4.$i.required"] = "Nilai 4 LPO [$i] wajib diisi.";
+            $messages["nilai_lpo_4.$i.numeric"] = "Nilai 4 LPO [$i] harus berupa angka.";
         }
 
-        if ($this->jenis_pengajuan_kimper == 'perpanjangan') {
-            $rules['upload_lpo'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
-            $rules['upload_kimper_lama'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
-            $rules['upload_sertifikat'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
-        }
-
-        if ($this->jenis_pengajuan_kimper == "penambahan") {
-            $rules['upload_lpo'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
-            $rules['upload_sertifikat'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
-        }
-
-        $messages = [
-            'required' => 'Kolom :attribute harus diisi.',
-            'mimes' => 'Format file :attribute harus JPEG, PNG, JPG, GIF, atau PDF.',
-            'upload_foto.mimes' => 'Format file Foto harus berupa gambar (JPEG, PNG, JPG, atau GIF).',
-            'max' => 'Ukuran file :attribute maksimal 10MB.',
+        // ✅ Validasi statis
+        $rules['nrp'] = [
+            'required',
+            function ($attribute, $value, $fail) {
+                $karyawan = Karyawan::where('nrp', $value)->first();
+                if (!$karyawan) {
+                    $fail('NRP tidak ditemukan dalam data karyawan.');
+                } elseif (!$karyawan->exp_mcu) {
+                    $fail('Tanggal MCU belum diisi / Belum Memiliki MCU.');
+                } elseif ($karyawan->status === 'non aktif') {
+                    $fail('Status Karyawan Non Aktif');
+                } elseif ($karyawan->exp_mcu < now()) {
+                    $fail('MCU sudah kadaluarsa.');
+                } elseif ($karyawan->exp_id < now() || $karyawan->exp_id === null) {
+                    $fail('ID sudah kadaluarsa.');
+                }
+            },
         ];
+        $rules['jenis_pengajuan_kimper'] = 'required';
+        $rules['no_sim'] = 'required';
+        $rules['jenis_sim'] = 'required';
+        $rules['exp_sim'] = 'required';
+        $rules['upload_sim'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
+        $rules['upload_request'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
+        $rules['tgl_pengajuan'] = 'required';
+
+        // ✅ Jalankan validasi keseluruhan
         $this->validate($rules, $messages);
 
         $caridatalama = ModelPengajuanKimper::where('nrp', $this->nrp)->orderBy('created_at', 'desc')->first();
@@ -355,29 +373,29 @@ class Kimper extends Component
         $pengajuan = ModelPengajuanKimper::findOrFail($id);
 
         $pengajuan->update([
-            'status_upload_request'     => $this->status_upload_request[$id] ?? $pengajuan->status_upload_request,
-            'status_upload_id'          => $this->status_upload_id[$id] ?? $pengajuan->status_upload_id,
-            'status_upload_sim'          => $this->status_upload_sim[$id] ?? $pengajuan->status_upload_sim,
-            'status_upload_kimper_lama'     => $this->status_upload_kimper_lama[$id] ?? $pengajuan->status_upload_kimper_lama,
-            'status_upload_foto'        => $this->status_upload_foto[$id] ?? $pengajuan->status_upload_foto,
-            'status_upload_ktp'         => $this->status_upload_ktp[$id] ?? $pengajuan->status_upload_ktp,
-            'status_upload_skd'         => $this->status_upload_skd[$id] ?? $pengajuan->status_upload_skd,
-            'status_upload_bpjs_kes'    => $this->status_upload_bpjs_kes[$id] ?? $pengajuan->status_upload_bpjs_kes,
-            'status_upload_bpjs_ker'    => $this->status_upload_bpjs_ker[$id] ?? $pengajuan->status_upload_bpjs_ker,
-            'status_upload_lpo'    => $this->status_upload_lpo[$id] ?? $pengajuan->status_upload_lpo,
-            'status_upload_sertifikat'    => $this->status_upload_sertifikat[$id] ?? $pengajuan->status_upload_sertifikat,
+            'status_upload_request' => $this->status_upload_request[$id] ?? $pengajuan->status_upload_request,
+            'status_upload_id' => $this->status_upload_id[$id] ?? $pengajuan->status_upload_id,
+            'status_upload_sim' => $this->status_upload_sim[$id] ?? $pengajuan->status_upload_sim,
+            'status_upload_kimper_lama' => $this->status_upload_kimper_lama[$id] ?? $pengajuan->status_upload_kimper_lama,
+            'status_upload_foto' => $this->status_upload_foto[$id] ?? $pengajuan->status_upload_foto,
+            'status_upload_ktp' => $this->status_upload_ktp[$id] ?? $pengajuan->status_upload_ktp,
+            'status_upload_skd' => $this->status_upload_skd[$id] ?? $pengajuan->status_upload_skd,
+            'status_upload_bpjs_kes' => $this->status_upload_bpjs_kes[$id] ?? $pengajuan->status_upload_bpjs_kes,
+            'status_upload_bpjs_ker' => $this->status_upload_bpjs_ker[$id] ?? $pengajuan->status_upload_bpjs_ker,
+            'status_upload_lpo' => $this->status_upload_lpo[$id] ?? $pengajuan->status_upload_lpo,
+            'status_upload_sertifikat' => $this->status_upload_sertifikat[$id] ?? $pengajuan->status_upload_sertifikat,
 
-            'catatan_upload_request'    => $this->catatan_upload_request[$id] ?? null,
-            'catatan_upload_id'         => $this->catatan_upload_id[$id] ?? $pengajuan->catatan_upload_id,
-            'catatan_upload_sim'         => $this->catatan_upload_sim[$id] ?? $pengajuan->catatan_upload_sim,
-            'catatan_upload_kimper_lama'    => $this->catatan_upload_kimper_lama[$id] ?? null,
-            'catatan_upload_foto'       => $this->catatan_upload_foto[$id] ?? null,
-            'catatan_upload_ktp'        => $this->catatan_upload_ktp[$id] ?? null,
-            'catatan_upload_skd'        => $this->catatan_upload_skd[$id] ?? null,
-            'catatan_upload_bpjs_kes'   => $this->catatan_upload_bpjs_kes[$id] ?? null,
-            'catatan_upload_bpjs_ker'   => $this->catatan_upload_bpjs_ker[$id] ?? null,
-            'catatan_upload_lpo'   => $this->catatan_upload_lpo[$id] ?? null,
-            'catatan_upload_sertifikat'   => $this->catatan_upload_sertifikat[$id] ?? null,
+            'catatan_upload_request' => $this->catatan_upload_request[$id] ?? null,
+            'catatan_upload_id' => $this->catatan_upload_id[$id] ?? $pengajuan->catatan_upload_id,
+            'catatan_upload_sim' => $this->catatan_upload_sim[$id] ?? $pengajuan->catatan_upload_sim,
+            'catatan_upload_kimper_lama' => $this->catatan_upload_kimper_lama[$id] ?? null,
+            'catatan_upload_foto' => $this->catatan_upload_foto[$id] ?? null,
+            'catatan_upload_ktp' => $this->catatan_upload_ktp[$id] ?? null,
+            'catatan_upload_skd' => $this->catatan_upload_skd[$id] ?? null,
+            'catatan_upload_bpjs_kes' => $this->catatan_upload_bpjs_kes[$id] ?? null,
+            'catatan_upload_bpjs_ker' => $this->catatan_upload_bpjs_ker[$id] ?? null,
+            'catatan_upload_lpo' => $this->catatan_upload_lpo[$id] ?? null,
+            'catatan_upload_sertifikat' => $this->catatan_upload_sertifikat[$id] ?? null,
         ]);
 
         $infoKaryawan = getInfoKaryawanByNrp($pengajuan->nrp);
@@ -390,21 +408,21 @@ class Kimper extends Component
 
         // Siapkan daftar status upload sesuai jenis pengajuan
         $statusList = [
-            'Request'           => ['status' => $this->status_upload_request[$id] ?? $pengajuan->status_upload_request, 'catatan' => $this->catatan_upload_request[$id] ?? null],
-            'ID AKTIF'           => ['status' => $this->status_upload_id[$id] ?? $pengajuan->status_upload_id, 'catatan' => $this->catatan_upload_id[$id] ?? null],
-            'Foto'              => ['status' => $this->status_upload_foto[$id] ?? $pengajuan->status_upload_foto, 'catatan' => $this->catatan_upload_foto[$id] ?? null],
-            'KTP'               => ['status' => $this->status_upload_ktp[$id] ?? $pengajuan->status_upload_ktp, 'catatan' => $this->catatan_upload_ktp[$id] ?? null],
-            'SKD'               => ['status' => $this->status_upload_skd[$id] ?? $pengajuan->status_upload_skd, 'catatan' => $this->catatan_upload_skd[$id] ?? null],
-            'BPJS Kesehatan'    => ['status' => $this->status_upload_bpjs_kes[$id] ?? $pengajuan->status_upload_bpjs_kes, 'catatan' => $this->catatan_upload_bpjs_kes[$id] ?? null],
+            'Request' => ['status' => $this->status_upload_request[$id] ?? $pengajuan->status_upload_request, 'catatan' => $this->catatan_upload_request[$id] ?? null],
+            'ID AKTIF' => ['status' => $this->status_upload_id[$id] ?? $pengajuan->status_upload_id, 'catatan' => $this->catatan_upload_id[$id] ?? null],
+            'Foto' => ['status' => $this->status_upload_foto[$id] ?? $pengajuan->status_upload_foto, 'catatan' => $this->catatan_upload_foto[$id] ?? null],
+            'KTP' => ['status' => $this->status_upload_ktp[$id] ?? $pengajuan->status_upload_ktp, 'catatan' => $this->catatan_upload_ktp[$id] ?? null],
+            'SKD' => ['status' => $this->status_upload_skd[$id] ?? $pengajuan->status_upload_skd, 'catatan' => $this->catatan_upload_skd[$id] ?? null],
+            'BPJS Kesehatan' => ['status' => $this->status_upload_bpjs_kes[$id] ?? $pengajuan->status_upload_bpjs_kes, 'catatan' => $this->catatan_upload_bpjs_kes[$id] ?? null],
             'BPJS Ketenagakerjaan' => ['status' => $this->status_upload_bpjs_ker[$id] ?? $pengajuan->status_upload_bpjs_ker, 'catatan' => $this->catatan_upload_bpjs_ker[$id] ?? null],
-            'LPO'               => ['status' => $this->status_upload_lpo[$id] ?? $pengajuan->status_upload_lpo, 'catatan' => $this->catatan_upload_lpo[$id] ?? null],
-            'Sertifikat'        => ['status' => $this->status_upload_sertifikat[$id] ?? $pengajuan->status_upload_sertifikat, 'catatan' => $this->catatan_upload_sertifikat[$id] ?? null],
-            'SIM'               => ['status' => $this->status_upload_sim[$id] ?? $pengajuan->status_upload_sim, 'catatan' => $this->catatan_upload_sim[$id] ?? null],
+            'LPO' => ['status' => $this->status_upload_lpo[$id] ?? $pengajuan->status_upload_lpo, 'catatan' => $this->catatan_upload_lpo[$id] ?? null],
+            'Sertifikat' => ['status' => $this->status_upload_sertifikat[$id] ?? $pengajuan->status_upload_sertifikat, 'catatan' => $this->catatan_upload_sertifikat[$id] ?? null],
+            'SIM' => ['status' => $this->status_upload_sim[$id] ?? $pengajuan->status_upload_sim, 'catatan' => $this->catatan_upload_sim[$id] ?? null],
 
         ];
 
         if (strtolower($pengajuan->jenis_pengajuan_kimper) === 'perpanjangan') {
-            $statusList = ['Kimper Lama' => ['status' => $this->status_upload_kimper_lama[$id] ?? $pengajuan->status_upload_kimper_lama, 'catatan' => $this->catatan_upload_kimper_lama[$id] ?? null]]  + $statusList;
+            $statusList = ['Kimper Lama' => ['status' => $this->status_upload_kimper_lama[$id] ?? $pengajuan->status_upload_kimper_lama, 'catatan' => $this->catatan_upload_kimper_lama[$id] ?? null]] + $statusList;
         }
 
         $pesanText .= "*Hasil Verifikasi Upload:*\n";
@@ -715,7 +733,7 @@ class Kimper extends Component
             $this->catatan_upload_sertifikat[$id] = $item->catatan_upload_sertifikat;
 
             $this->status_upload_id[$id] = $item->status_upload_id ?? '1';
-            $this->status_upload_sim[$id] = $item->status_upload_sim  ?? '1';
+            $this->status_upload_sim[$id] = $item->status_upload_sim ?? '1';
             $this->status_upload_request[$id] = $item->status_upload_request ?? '1';
             $this->status_upload_foto[$id] = $item->status_upload_foto ?? '1';
             $this->status_upload_ktp[$id] = $item->status_upload_ktp ?? '1';

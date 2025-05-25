@@ -1,5 +1,5 @@
 <div>
-    @if ($form)
+    @if (!$form)
         @include('livewire.pengajuan.form-kimper')
     @elseif ($formVersatility)
         @include('livewire.pengajuan.form-versatility')
