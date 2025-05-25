@@ -18,8 +18,12 @@
             <div class="col-md-12">
                 @forelse ($kimpers as $pengajuan)
                     <div class="card card-primary card-outline mb-4">
+                        <div class="card-header text-bg-primary">
+                            <div class="card-title">
+                                Pengajuan Kimper {{ $pengajuan->nrp }}
+                            </div>
+                        </div>
                         <div class="card-body">
-
                             <table class="table table-bordered">
                                 <tr>
                                     <td width="20%">
@@ -141,7 +145,26 @@
                                         <tbody>
                                             @foreach ($cariLPO as $key => $lpo)
                                                 <tr>
-                                                    <td>{{ $key + 1 }}</td>
+                                                    <td width="10%">
+                                                        <select name="" class="form-control form-control-sm"
+                                                            id="" wire:model='status_lpo.{{ $lpo->id }}'
+                                                            wire:change="updateLPO({{ $lpo->id }})">
+                                                            <option value="">-Verifikasi-
+                                                            </option>
+                                                            <option value="0">Tolak
+                                                            </option>
+                                                            <option value="1">Terima
+                                                            </option>
+                                                        </select>
+                                                        <a href="#" class="btn btn-primary btn-sm"
+                                                            wire:click="editLPO({{ $lpo->id }})">
+                                                            <i class="bi bi-pencil-square"></i>
+                                                        </a>
+                                                        <a href="#" class="btn btn-danger btn-sm"
+                                                            wire:click="deleteLPO({{ $lpo->id }})">
+                                                            <i class="bi bi-trash"></i>
+                                                        </a>
+                                                    </td>
                                                     <td>{{ $lpo->type_lpo }}</td>
                                                     <td>
                                                         <a href="{{ asset('storage/' . $lpo->upload_lpo) }}"
@@ -156,6 +179,14 @@
                                                     <td>{{ $lpo->nilai_total }}</td>
                                                 </tr>
                                             @endforeach
+                                            <tr>
+                                                <td colspan="8">
+                                                    <a href="#" class="btn btn-outline-primary btn-sm"
+                                                        wire:click="kunciLpo({{ $pengajuan->id_pengajuan }})">
+                                                        <i class="bi bi-lock"></i> Kunci LPO
+                                                    </a>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>

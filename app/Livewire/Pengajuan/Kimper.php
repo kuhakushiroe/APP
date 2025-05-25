@@ -42,6 +42,8 @@ class Kimper extends Component
     public $metode_operasi = [];
     public $perawatan = [];
     public $nilai_total = [];
+    public $status_lpo = [];
+    public $catatan_lpo = [];
     public function tambahLpo()
     {
         $this->form_lpo++;

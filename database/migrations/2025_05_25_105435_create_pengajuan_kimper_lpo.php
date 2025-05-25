@@ -21,6 +21,8 @@ return new class extends Migration
             $table->integer('metode_operasi');
             $table->integer('perawatan');
             $table->integer('nilai_total');
+            $table->enum('status_lpo', [0, 1])->nullable();
+            $table->string('catatan_lpo')->nullable();
             $table->timestamps();
         });
     }
