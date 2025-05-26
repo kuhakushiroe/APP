@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('versatility', function (Blueprint $table) {
             $table->id();
-            $table->string('code_versatility');
+            $table->string('type_versatility');
             $table->string('versatility');
-            $table->string('description');
+            $table->string('code_versatility');
             $table->softDeletes();
             $table->timestamps();
         });
