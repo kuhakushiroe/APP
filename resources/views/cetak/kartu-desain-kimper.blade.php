@@ -169,6 +169,13 @@
                 </p>
             </div>
             <div class="card-body">
+                <div
+                    style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(0, 0, 0, 0.2); font-weight: bold; pointer-events: none;">
+                    <p
+                        style="font-family: 'Oswald', sans-serif; font-size: 60px; transform: scaleY(5.0); display: inline-block;">
+                        KONTRAKTOR
+                    </p>
+                </div>
                 <p style="font-size: 8pt; padding-top:30px;">
                     <b>{{ Str::upper($karyawans->nama ?? 'Nama Karyawan') }}</b>
                 </p>
@@ -232,6 +239,7 @@
             <div style="margin: 0 0 0 0;">
                 <table width="100%"
                     style="font-family: Arial, Helvetica, sans-serif;font-size:7pt; font-weight: bold;">
+
                     <tr>
                         <td width="40%">
                             SIM POLISI
@@ -268,6 +276,13 @@
                         <td width="10%"
                             style="background-color: white; border: 1px solid black; text-align: center;">P</td>
                     </tr>
+                    <div
+                        style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(0, 0, 0, 0.2); font-weight: bold; pointer-events: none;">
+                        <p
+                            style="font-family: 'Oswald', sans-serif; font-size: 60px; transform: scaleY(5.0); display: inline-block;">
+                            KONTRAKTOR
+                        </p>
+                    </div>
                     @php
                         $versatilities = DB::table('pengajuan_kimper')
                             ->where('nrp', $id)
@@ -362,7 +377,8 @@
                         <td colspan="2" style="font-size: 5pt;">PT. MIFA BERSAUDARA</td>
                     </tr>
                     <tr>
-                        <td colspan="2">ttd</td>
+                        <td colspan="2"><img src="{{ public_path('/storage/TTD.png') }}" alt="Signature"
+                                style="transform: scaleY(5.0); display: inline-block; width: 100px;"></td>
                     </tr>
                     <tr>
                         <td colspan="2" style="font-size: 5pt;">HADI FIRMANSAH</td>

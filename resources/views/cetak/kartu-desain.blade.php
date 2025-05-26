@@ -151,33 +151,34 @@
                     </tr>
                 </table>
             </div>
-            <div class="card-title" style="padding-top:80px;">
+            <div class="card-title" style="padding-top:100  px;">
                 <p>
                     <b>PT ANTAREJA MAHADA MAKMUR</b>
                 </p>
             </div>
             <div class="card-body">
-                @php
+                {{-- @php
                     $jabatan = $karyawans->jabatan;
                     $jumlahKata = str_word_count($jabatan);
                     $styleTransform =
                         $jumlahKata === 1 ? 'scaleY(2.0); font-size: 50px;' : 'none; scaleY(1.5); font-size: 60px;';
-                @endphp
+                @endphp --}}
 
-                <div
+                {{-- <div
                     style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(0, 0, 0, 0.2); font-weight: bold; pointer-events: none;">
                     <p
                         style="font-family: 'Oswald', sans-serif; display: inline-block; transform: {{ $jumlahKata === 1 ? 'scaleY(2.0)' : 'none' }}; font-size: {{ $jumlahKata === 1 ? '50px' : '40px' }};">
                         {{ Str::upper($jabatan) }}
                     </p>
-                </div>
-                {{-- <div
+                </div> --}}
+
+                <div
                     style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(0, 0, 0, 0.2); font-weight: bold; pointer-events: none;">
                     <p
-                        style="font-family: 'Oswald', sans-serif; font-size: 50px; transform: scaleY(2.0); display: inline-block;">
-                        {{ $karyawans->jabatan }}
+                        style="font-family: 'Oswald', sans-serif; font-size: 60px; transform: scaleY(5.0); display: inline-block;">
+                        KONTRAKTOR
                     </p>
-                </div> --}}
+                </div>
                 <p style="font-size: 8pt; padding-top:30px;">
                     <b>{{ Str::upper($karyawans->nama ?? 'Nama Karyawan') }}</b>
                 </p>
@@ -220,7 +221,7 @@
                 </table>
             </div>
             <div class="card-footer">
-                @php
+                {{-- @php
                     $jabatan = $karyawans->jabatan;
                     $jumlahKata = str_word_count($jabatan);
                     $styleTransform =
@@ -230,6 +231,14 @@
                     <p
                         style="font-family: 'Oswald', sans-serif; display: inline-block; transform: {{ $jumlahKata === 1 ? 'scaleY(2.0)' : 'none' }}; font-size: {{ $jumlahKata === 1 ? '50px' : '40px' }};">
                         {{ Str::upper($jabatan) }}
+                    </p>
+                </div> --}}
+
+                <div
+                    style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(0, 0, 0, 0.2); font-weight: bold; pointer-events: none;">
+                    <p
+                        style="font-family: 'Oswald', sans-serif; font-size: 60px; transform: scaleY(5.0); display: inline-block;">
+                        KONTRAKTOR
                     </p>
                 </div>
 
@@ -250,6 +259,15 @@
                     <p>Meulaboh,
                         {{ \Carbon\Carbon::parse($karyawans->tgl_cetak ?? '')->locale('id')->isoFormat('D MMMM Y') }}
                     </p>
+                    <div
+                        style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(0, 0, 0, 0.2); font-weight: bold; pointer-events: none;">
+                        <p
+                            style="font-family: 'Oswald', sans-serif; font-size: 60px; transform: scaleY(5.0); display: inline-block;">
+                            KONTRAKTOR
+                        </p>
+                    </div>
+                    <img src="{{ public_path('/storage/TTD.png') }}" alt="Signature"
+                        style="transform: scaleY(5.0); display: inline-block; width: 100px;">
                     <p style="margin-top: 20px;">___________________________</p>
                     <p>Hadi Firmansah<br>KTT. PT. Mifa Bersaudara</p>
                 </div>
