@@ -296,7 +296,7 @@
                             ->select(
                                 'versatility.id',
                                 'versatility.versatility as namaVersatility',
-                                'versatility.description',
+                                'versatility.code_versatility',
                                 'pengajuan_kimper_versatility.klasifikasi',
                             )
                             ->distinct()

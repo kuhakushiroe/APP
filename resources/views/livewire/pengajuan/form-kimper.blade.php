@@ -223,15 +223,44 @@
                                     <hr>
                                 </div>
                                 @php
-                                    // Ambil semua yang sudah dipilih, kecuali index sekarang ($i)
+                                    // Ambil semua pengajuan_kimper milik NRP
+                                    $pengajuanKimperIds = \App\Models\ModelPengajuanKimper::where('nrp', $nrp)->pluck(
+                                        'id',
+                                    );
+
+                                    // Ambil semua id_versatility yang sudah digunakan oleh NRP
+                                    $usedVersatilityIds = DB::table('pengajuan_kimper_versatility')
+                                        ->whereIn('id_pengajuan_kimper', $pengajuanKimperIds)
+                                        ->pluck('id_versatility')
+                                        ->toArray();
+
+                                    // Group semua Versatility berdasarkan type_versatility
+                                    $versatilityByType = \App\Models\Versatility::all()->groupBy('type_versatility');
+
+                                    $unfulfilledTypes = [];
+
+                                    foreach ($versatilityByType as $type => $versatilities) {
+                                        $versatilityIds = $versatilities->pluck('id')->toArray();
+
+                                        // Cek apakah semua unit dari type ini sudah digunakan
+                                        $unused = array_diff($versatilityIds, $usedVersatilityIds);
+
+                                        if (count($unused) > 0) {
+                                            $unfulfilledTypes[] = $type;
+                                        }
+                                    }
+
+                                    // Sekarang filter available types dari yang belum digunakan semua
                                     $used = $type_lpo;
                                     unset($used[$i]);
-                                    $available = array_diff($type_versatility_list, $used);
+
+                                    $available = array_diff($unfulfilledTypes, $used);
                                 @endphp
+
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="type_lpo" class="form-label">Upload LPO
-                                            {{ '[' . $i . ']' }}</label>
+                                            [{{ $i }}]</label>
                                         <select class="form-control form-control-sm"
                                             wire:model.live="type_lpo.{{ $i }}">
                                             <option value="">-Type / Jenis LPO-</option>
