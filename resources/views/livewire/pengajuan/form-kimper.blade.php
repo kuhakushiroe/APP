@@ -205,9 +205,7 @@
                                 @enderror
                             </div>
                         </div>
-
-
-                        <div class="col-6">
+                        <div class="col-12">
                             <div class="form-group">
                                 <label for="upload_sertifikat" class="form-label">Upload Sertifikat</label>
                                 <input
@@ -218,15 +216,110 @@
                                 @enderror
                             </div>
                         </div>
-
-                        <div class="col-6">
+                        @for ($i = 1; $i <= $form_lpo; $i++)
+                            <div class="col-12 pt-2">
+                                <fieldset><b>LPO {{ $type_lpo[$i] ?? '' }}</b></fieldset>
+                                <hr>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="type_lpo" class="form-label">Upload LPO
+                                        {{ '[' . $i . ']' }}</label>
+                                    <select class="form-control form-control-sm"
+                                        wire:model.live="type_lpo.{{ $i }}">
+                                        <option value="">-Type / Jenis LPO-</option>
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                        <option value="D">D</option>
+                                        <option value="E">E</option>
+                                    </select>
+                                    @error('type_lpo.' . $i)
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="upload_lpo" class="form-label">Upload LPO{{ '[' . $i . ']' }}</label>
+                                    <input
+                                        class="form-control form-control-sm @error('upload_lpo') is-invalid @enderror"
+                                        type="file" id="upload_lpo" wire:model='upload_lpo.{{ $i }}'>
+                                    @error('upload_lpo.' . $i)
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="nilai_1" class="form-label">Nilai Instrument
+                                        Panel & Kontrol{{ '[' . $i . ']' }}</label>
+                                    <input
+                                        class="form-control form-control-sm @error('instrumen_panel.' . $i) is-invalid @enderror"
+                                        type="number" id="instrumen_panel"
+                                        wire:model.live='instrumen_panel.{{ $i }}'>
+                                    @error('instrumen_panel.' . $i)
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="safety_operasi" class="form-label">Safety
+                                        Operasi{{ '[' . $i . ']' }}</label>
+                                    <input
+                                        class="form-control form-control-sm @error('safety_operasi.' . $i) is-invalid @enderror"
+                                        type="number" id="safety_operasi"
+                                        wire:model.live='safety_operasi.{{ $i }}'>
+                                    @error('safety_operasi.' . $i)
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="metode_operasi" class="form-label">Metode dan Teknik
+                                        Operasi{{ '[' . $i . ']' }}</label>
+                                    <input
+                                        class="form-control form-control-sm @error('metode_operasi.' . $i) is-invalid @enderror"
+                                        type="number" id="metode_operasi"
+                                        wire:model.live='metode_operasi.{{ $i }}'>
+                                    @error('metode_operasi.' . $i)
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="perawatan" class="form-label">Perawatan{{ '[' . $i . ']' }}</label>
+                                    <input
+                                        class="form-control form-control-sm @error('perawatan.' . $i) is-invalid @enderror"
+                                        type="number" id="perawatan"
+                                        wire:model.live='perawatan.{{ $i }}'>
+                                    @error('perawatan.' . $i)
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="nilai_total" class="form-label">Nilai
+                                        Total{{ '[' . $i . ']' }}</label>
+                                    <input class="form-control form-control-sm" type="number" id="nilai_total"
+                                        wire:model='nilai_total.{{ $i }}' readonly>
+                                </div>
+                            </div>
+                        @endfor
+                        <div class="col-12 pt-2">
                             <div class="form-group">
-                                <label for="upload_lpo" class="form-label">Upload LPO</label>
-                                <input class="form-control form-control-sm @error('upload_lpo') is-invalid @enderror"
-                                    type="file" id="upload_lpo" wire:model='upload_lpo'>
-                                @error('upload_lpo')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
+                                <a wire:click="tambahLpo" class="btn btn-success btn-sm">
+                                    <i class="bi bi-plus-square"></i> LPO
+                                </a>
+                                @if ($form_lpo > 1)
+                                    <a wire:click="kurangLpo" class="btn btn-danger btn-sm">
+                                        <i class="bi bi-dash-square"></i> LPO
+                                    </a>
+                                @endif
                             </div>
                         </div>
                         {{-- <div class="col-4">
@@ -261,7 +354,7 @@
                                 @enderror
                             </div>
                         </div> --}}
-                        <div class="form-group pt-2">
+                        <div class="form-group pt-2 text-end">
                             <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                             <button class="btn btn-outline-danger btn-sm" wire:click="close">Close</button>
                         </div>

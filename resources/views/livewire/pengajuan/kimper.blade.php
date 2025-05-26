@@ -18,8 +18,12 @@
             <div class="col-md-12">
                 @forelse ($kimpers as $pengajuan)
                     <div class="card card-primary card-outline mb-4">
+                        <div class="card-header text-bg-primary">
+                            <div class="card-title">
+                                Pengajuan Kimper {{ $pengajuan->nrp }}
+                            </div>
+                        </div>
                         <div class="card-body">
-
                             <table class="table table-bordered">
                                 <tr>
                                     <td width="20%">
@@ -94,7 +98,7 @@
                                             'Kimper Lama' => $pengajuan->upload_kimper_lama,
                                             'Sim' => $pengajuan->upload_sim,
                                             'Sertifikat' => $pengajuan->upload_sertifikat,
-                                            'Lpo' => $pengajuan->upload_lpo,
+                                            //'Lpo' => $pengajuan->upload_lpo,
                                         ];
 
                                         if ($pengajuan->jenis_pengajuan_kimper === 'perpanjangan') {
@@ -118,6 +122,75 @@
                                     @endforeach
                                 </div>
                             </div>
+                            <div class="alert alert-secondary mt-3">
+                                <div class="row g-2">
+                                    @php
+                                        $cariLPO = DB::table('pengajuan_kimper_lpo')
+                                            ->where('id_pengajuan_kimper', $pengajuan->id_pengajuan)
+                                            ->get();
+                                    @endphp
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 10px">#</th>
+                                                <th>Type</th>
+                                                <th>File</th>
+                                                <th>Nilai 1</th>
+                                                <th>Nilai 2</th>
+                                                <th>Nilai 3</th>
+                                                <th>Nilai 4</th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($cariLPO as $key => $lpo)
+                                                <tr>
+                                                    <td width="10%">
+                                                        <select name="" class="form-control form-control-sm"
+                                                            id="" wire:model='status_lpo.{{ $lpo->id }}'
+                                                            wire:change="updateLPO({{ $lpo->id }})">
+                                                            <option value="">-Verifikasi-
+                                                            </option>
+                                                            <option value="0">Tolak
+                                                            </option>
+                                                            <option value="1">Terima
+                                                            </option>
+                                                        </select>
+                                                        <a href="#" class="btn btn-primary btn-sm"
+                                                            wire:click="editLPO({{ $lpo->id }})">
+                                                            <i class="bi bi-pencil-square"></i>
+                                                        </a>
+                                                        <a href="#" class="btn btn-danger btn-sm"
+                                                            wire:click="deleteLPO({{ $lpo->id }})">
+                                                            <i class="bi bi-trash"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td>{{ $lpo->type_lpo }}</td>
+                                                    <td>
+                                                        <a href="{{ asset('storage/' . $lpo->upload_lpo) }}"
+                                                            target="_blank" class="btn btn-primary btn-sm w-100">
+                                                            <i class="bi bi-file-earmark-pdf"></i> File LPO
+                                                        </a>
+                                                    </td>
+                                                    <td>{{ $lpo->instrumen_panel }}</td>
+                                                    <td>{{ $lpo->safety_operasi }}</td>
+                                                    <td>{{ $lpo->metode_operasi }}</td>
+                                                    <td>{{ $lpo->perawatan }}</td>
+                                                    <td>{{ $lpo->nilai_total }}</td>
+                                                </tr>
+                                            @endforeach
+                                            <tr>
+                                                <td colspan="8">
+                                                    <a href="#" class="btn btn-outline-primary btn-sm"
+                                                        wire:click="kunciLpo({{ $pengajuan->id_pengajuan }})">
+                                                        <i class="bi bi-lock"></i> Kunci LPO
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                             @if (
                                 ($pengajuan->status_upload_request == '0' ||
                                     $pengajuan->status_upload_id == '0' ||
@@ -126,7 +199,7 @@
                                     $pengajuan->status_upload_foto == '0' ||
                                     $pengajuan->status_upload_ktp == '0' ||
                                     $pengajuan->status_upload_skd == '0' ||
-                                    $pengajuan->status_upload_lpo == '0' ||
+                                    //$pengajuan->status_upload_lpo == '0' ||
                                     $pengajuan->status_upload_bpjs_kes == '0' ||
                                     $pengajuan->status_upload_bpjs_ker == '0' ||
                                     $pengajuan->status_upload_sertifikat == '0') &&
@@ -303,7 +376,7 @@
                                                 </div>
                                             </div>
                                         @endif
-                                        @if ($pengajuan->status_upload_lpo == '0')
+                                        {{-- @if ($pengajuan->status_upload_lpo == '0')
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <label for="upload_lpo" class="form-label">Upload
@@ -319,7 +392,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        @endif
+                                        @endif --}}
                                         <div class="col-12 pt-2">
                                             <button type="submit" class="btn btn-primary btn-sm">
                                                 <span class="bi bi-save"></span> Simpan
@@ -339,7 +412,7 @@
                                         $pengajuan->status_upload_skd,
                                         $pengajuan->status_upload_bpjs_kes,
                                         $pengajuan->status_upload_bpjs_ker,
-                                        $pengajuan->status_upload_lpo,
+                                        //$pengajuan->status_upload_lpo,
                                         $pengajuan->status_upload_sertifikat,
                                     ]) ||
                                     in_array(0, [
@@ -351,7 +424,7 @@
                                         $pengajuan->status_upload_skd,
                                         $pengajuan->status_upload_bpjs_kes,
                                         $pengajuan->status_upload_bpjs_ker,
-                                        $pengajuan->status_upload_lpo,
+                                        //$pengajuan->status_upload_lpo,
                                         $pengajuan->status_upload_sertifikat,
                                     ]);
 
@@ -371,7 +444,7 @@
                                     $pengajuan->status_upload_foto == '0' ||
                                     $pengajuan->status_upload_ktp == '0' ||
                                     $pengajuan->status_upload_skd == '0' ||
-                                    $pengajuan->status_upload_lpo == '0' ||
+                                    //$pengajuan->status_upload_lpo == '0' ||
                                     $pengajuan->status_upload_sertifikat == '0' ||
                                     $pengajuan->status_upload_bpjs_kes == '0' ||
                                     $pengajuan->status_upload_bpjs_ker == '0') &&
@@ -400,7 +473,7 @@
                                                             'upload_skd' => 'SKD',
                                                             'upload_bpjs_kes' => 'BPJS KESEHATAN',
                                                             'upload_bpjs_ker' => 'BPJS KETENAGAKERJAAN',
-                                                            'upload_lpo' => 'LPO',
+                                                            //'upload_lpo' => 'LPO',
                                                             'upload_sertifikat' => 'Sertifikat',
                                                         ];
 
