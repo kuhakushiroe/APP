@@ -104,25 +104,34 @@ class Kimper extends Component
     }
     public function getAvailableVersatilityProperty()
     {
-        $pengajuan = ModelPengajuanKimper::find($this->id_pengajuan);
-        if (!$pengajuan)
-            return collect();
+        $pengajuanLpo = PengajuanKimperLpo::find($this->id_pengajuan);
+        if (!$pengajuanLpo) return collect();
 
-        $nrp = $pengajuan->nrp;
+        // Ambil pengajuan kimper terkait
+        $pengajuanKimper = ModelPengajuanKimper::find($pengajuanLpo->id_pengajuan_kimper);
+        if (!$pengajuanKimper) return collect();
 
-        // Ambil semua pengajuan milik NRP ini
-        $pengajuanIds = ModelPengajuanKimper::where('nrp', $nrp)->pluck('id');
+        $nrp = $pengajuanKimper->nrp;
 
-        // Ambil semua versatility yang pernah dipakai oleh NRP ini
+        // Ambil semua pengajuan LPO yang terhubung dengan NRP ini (lewat pengajuan_kimper)
+        $pengajuanKimperIds = ModelPengajuanKimper::where('nrp', $nrp)->pluck('id');
+
+        $typeLpoList = PengajuanKimperLpo::whereIn('id_pengajuan_kimper', $pengajuanKimperIds)
+            ->pluck('type_lpo')
+            ->unique()
+            ->values();
+
+        // Ambil semua ID versatility yang sudah pernah diajukan oleh NRP ini
         $usedVersatilityIds = DB::table('pengajuan_kimper_versatility')
-            ->whereIn('id_pengajuan_kimper', $pengajuanIds)
+            ->whereIn('id_pengajuan_kimper', $pengajuanKimperIds)
             ->pluck('id_versatility')
             ->unique();
 
-        // Kembalikan daftar versatility yang belum dipakai oleh NRP ini
-        return \App\Models\Versatility::whereNotIn('id', $usedVersatilityIds)->get();
+        // Ambil versatility yang sesuai type_lpo dan belum digunakan
+        return \App\Models\Versatility::whereIn('type_versatility', $typeLpoList)
+            ->whereNotIn('id', $usedVersatilityIds)
+            ->get();
     }
-
     public function lanjutKimper($id)
     {
         $pengajuan = ModelPengajuanKimper::findOrFail($id);

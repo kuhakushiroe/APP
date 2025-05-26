@@ -19,7 +19,8 @@
                                     wire:model="id_versatility">
                                     <option value="">Pilih Versatility</option>
                                     @foreach ($versatility as $item)
-                                        <option value="{{ $item->id }}">{{ $item->versatility }}</option>
+                                        <option value="{{ $item->id }}">
+                                            {{ $item->type_versatility }}-{{ $item->versatility }}</option>
                                     @endforeach
                                 </select>
                                 @error('id_versatility')
