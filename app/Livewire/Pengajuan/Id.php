@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Pengajuan;
 
+use App\Jobs\SendNotifMcu;
 use App\Models\Karyawan;
 use App\Models\ModelPengajuanID;
 use Carbon\Carbon;
@@ -120,8 +121,8 @@ class Id extends Component
             'status_pengajuan' => '0',
         ]);
 
-        $nrp = $this->nrp;
-        $idPengajuan = $pengajuan->id;
+        //$nrp = $this->nrp;
+        //$idPengajuan = $pengajuan->id;
 
         $datakaryawan = Karyawan::where('nrp', $this->nrp)->first();
         $folderDept = strtoupper(StR::slug($datakaryawan->dept, '_'));
@@ -195,14 +196,20 @@ class Id extends Component
 
         $this->reset();
 
+        $info = getUserInfo(); // ambil data user saat dispatch, di konteks request HTTP (user pasti ada)
+        $nomorGabungan = array_merge($info['nomorAdmins']);
+        $token = $info['token'];
+        $namaUser = $info['nama'];
+        dispatch(new SendNotifMcu($pesanText, $nomorGabungan, $token, $namaUser));
+
         //function Proses kirim pesan
-        $info = getUserInfo();
-        foreach ($info['nomorAdmins'] as $i => $nomor) {
-            pesan($nomor, $pesanText, $info['token']);
-            if ($i < count($info['nomorAdmins']) - 1) {
-                sleep(1);
-            }
-        }
+        // $info = getUserInfo();
+        // foreach ($info['nomorAdmins'] as $i => $nomor) {
+        //     pesan($nomor, $pesanText, $info['token']);
+        //     if ($i < count($info['nomorAdmins']) - 1) {
+        //         sleep(1);
+        //     }
+        // }
 
 
         // Determine whether it's an edit or a new entry
@@ -319,14 +326,19 @@ class Id extends Component
         // 3. Update data pengajuan dengan path file
 
         //function Proses kirim pesan
-        $info = getUserInfo();
+        //$info = getUserInfo();
+        $info = getUserInfo(); // ambil data user saat dispatch, di konteks request HTTP (user pasti ada)
+        $nomorGabungan = array_merge($info['nomorAdmins']);
+        $token = $info['token'];
+        $namaUser = $info['nama'];
+        dispatch(new SendNotifMcu($pesanText, $nomorGabungan, $token, $namaUser));
 
-        foreach ($info['nomorAdmins'] as $i => $nomor) {
-            pesan($nomor, $pesanText, $info['token']);
-            if ($i < count($info['nomorAdmins']) - 1) {
-                sleep(1);
-            }
-        }
+        // foreach ($info['nomorAdmins'] as $i => $nomor) {
+        //     pesan($nomor, $pesanText, $info['token']);
+        //     if ($i < count($info['nomorAdmins']) - 1) {
+        //         sleep(1);
+        //     }
+        // }
 
 
 
@@ -398,7 +410,7 @@ class Id extends Component
             $statusList = ['ID Lama' => ['status' => $this->status_upload_id_lama[$id] ?? $pengajuan->status_upload_id_lama, 'catatan' => $this->catatan_upload_id_lama[$id] ?? null]] + $statusList;
         }
 
-        $pesanText .= "*Hasil Verifikasi Upload:*\n";
+        // $pesanText .= "*Hasil Verifikasi Upload:*\n";
 
         foreach ($statusList as $item => $data) {
             $statusStr = $data['status'] == 1 ? '✅ Diterima' : '❌ Ditolak';
@@ -406,12 +418,23 @@ class Id extends Component
             $pesanText .= "• *$item*: $statusStr" . ($catatanStr ? "\n  $catatanStr" : '') . "\n";
         }
 
-        foreach ($info['nomorAdmins'] as $i => $nomor) {
-            pesan($nomor, $pesanText, $info['token']);
-            if ($i < count($info['nomorAdmins']) - 1) {
-                sleep(1);
-            }
-        }
+        // 3. Update data pengajuan dengan path file
+
+
+
+        $info = getUserInfo(); // ambil data user saat dispatch, di konteks request HTTP (user pasti ada)
+        $nomorGabungan = array_merge($info['nomorAdmins']);
+        $token = $info['token'];
+        $namaUser = $info['nama'];
+        dispatch(new SendNotifMcu($pesanText, $nomorGabungan, $token, $namaUser));
+
+        // foreach ($info['nomorAdmins'] as $i => $nomor) {
+        //     pesan($nomor, $pesanText, $info['token']);
+        //     if ($i < count($info['nomorAdmins']) - 1) {
+        //         sleep(1);
+        //     }
+        // }
+        $this->reset();
 
         $this->dispatch(
             'alert',
@@ -449,14 +472,20 @@ class Id extends Component
 
         $infoKaryawan = getInfoKaryawanByNrp($pengajuan->nrp);
         $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan ID*\n\n\n*Lanjut Proses Cetak*\n\n\n$infoKaryawan\n\n\n";
-        $info = getUserInfo();
+        //$info = getUserInfo();
 
-        foreach ($info['nomorAdmins'] as $i => $nomor) {
-            pesan($nomor, $pesanText, $info['token']);
-            if ($i < count($info['nomorAdmins']) - 1) {
-                sleep(1);
-            }
-        }
+        $info = getUserInfo(); // ambil data user saat dispatch, di konteks request HTTP (user pasti ada)
+        $nomorGabungan = array_merge($info['nomorAdmins']);
+        $token = $info['token'];
+        $namaUser = $info['nama'];
+        dispatch(new SendNotifMcu($pesanText, $nomorGabungan, $token, $namaUser));
+
+        // foreach ($info['nomorAdmins'] as $i => $nomor) {
+        //     pesan($nomor, $pesanText, $info['token']);
+        //     if ($i < count($info['nomorAdmins']) - 1) {
+        //         sleep(1);
+        //     }
+        // }
 
         $this->reset('expired_id', 'tgl_induksi'); // reset hanya properti ini
 
@@ -464,7 +493,7 @@ class Id extends Component
             'alert',
             type: 'success',
             title: 'Berhasil',
-            text: 'Verifikasi dokumen berhasil dikirim',
+            text: 'Lanjut Proses Cetak Kartu ID',
             position: 'center',
             confirm: true,
             redirect: '/pengajuan-id',
@@ -480,12 +509,18 @@ class Id extends Component
         $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan ID*\n\n\n*Kartu ID Telah Tercetak*\n\n\n$infoKaryawan\n\n\n";
         $info = getUserInfo();
 
-        foreach ($info['nomorAdmins'] as $i => $nomor) {
-            pesan($nomor, $pesanText, $info['token']);
-            if ($i < count($info['nomorAdmins']) - 1) {
-                sleep(1);
-            }
-        }
+        //$info = getUserInfo(); // ambil data user saat dispatch, di konteks request HTTP (user pasti ada)
+        $nomorGabungan = array_merge($info['nomorAdmins']);
+        $token = $info['token'];
+        $namaUser = $info['nama'];
+        dispatch(new SendNotifMcu($pesanText, $nomorGabungan, $token, $namaUser));
+
+        // foreach ($info['nomorAdmins'] as $i => $nomor) {
+        //     pesan($nomor, $pesanText, $info['token']);
+        //     if ($i < count($info['nomorAdmins']) - 1) {
+        //         sleep(1);
+        //     }
+        // }
 
         $this->dispatch(
             'alert',
