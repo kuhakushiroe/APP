@@ -599,7 +599,7 @@
                                                                             class="btn btn-outline-primary btn-sm @if ($pengajuan->status_versatility === 'ok') disabled @endif"
                                                                             wire:click="openVersatility({{ $pengajuan->id_pengajuan }})">
                                                                             <span class="bi bi-plus"></span>
-                                                                            Versatility {{ $pengajuan->id_pengajuan }}
+                                                                            Versatility
                                                                         </button>
                                                                     @else
                                                                         -LPO Belum Dikunci-

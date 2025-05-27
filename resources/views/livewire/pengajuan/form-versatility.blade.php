@@ -7,7 +7,7 @@
                 </div>
                 <div class="card-body">
                     <form action="" wire:submit.prevent="saveVersatility()" class="row">
-                        <input type="text" class="form-control form-control-sm" wire:model="id_pengajuan">
+                        <input type="hidden" class="form-control form-control-sm" wire:model="id_pengajuan">
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="jenis Pengajuan">Unit</label>
