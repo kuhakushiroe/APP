@@ -220,6 +220,8 @@ class DatabaseSeeder extends Seeder
                 $selectedKendaraan = collect($kendaraanList)->pluck('revisi')->random(rand(3, 5))->implode(', ');
 
                 // Data karyawan
+                $rawJabatan = $faker->jobTitle;
+                $cleanJabatan = preg_replace('/[^a-zA-Z0-9\s]/', '', $rawJabatan);
                 DB::table('karyawans')->insert([
                     'nik' => $nik,
                     'nrp' => $nrp,
@@ -234,7 +236,7 @@ class DatabaseSeeder extends Seeder
                     'perusahaan' => $faker->company,
                     'kontraktor' => $faker->company,
                     'dept' => $randomSubrole,
-                    'jabatan' => $faker->jobTitle,
+                    'jabatan' => $cleanJabatan,
                     'no_hp' => $faker->phoneNumber,
                     'alamat' => $faker->address,
                     'domisili' => $faker->randomElement(['lokal', 'non lokal']),

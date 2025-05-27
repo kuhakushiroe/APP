@@ -7,12 +7,13 @@
                 </div>
                 <div class="card-body">
                     <form action="" wire:submit.prevent="saveVersatility()" class="row">
-                        <input type="hidden" class="form-control form-control-sm" wire:model="id_pengajuan">
+                        <input type="text" class="form-control form-control-sm" wire:model="id_pengajuan">
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="jenis Pengajuan">Jenis Pengajuan</label>
+                                <label for="jenis Pengajuan">Unit</label>
                                 @php
                                     $versatility = $this->availableVersatility;
+
                                 @endphp
                                 <select
                                     class="form-control form-control-sm @error('id_versatility') is-invalid @enderror"

@@ -14,7 +14,7 @@ class Kimper extends Component
     {
         if (auth()->user()->role === 'superadmin') {
             $pengajuankimper = DB::table('pengajuan_kimper')
-                ->select('pengajuan_kimper.*', 'karyawans.*', 'pengajuan_kimper.id as kimper_pengajuan')
+                ->select('pengajuan_kimper.*', 'karyawans.*', 'pengajuan_kimper.id as id_pengajuan')
                 ->join('karyawans', 'karyawans.nrp', '=', 'pengajuan_kimper.nrp')
                 ->where('pengajuan_kimper.status_pengajuan', '=', '2')
                 ->whereAny(['karyawans.nik', 'karyawans.nrp', 'karyawans.nama'], 'LIKE', '%' . $this->search . '%')
