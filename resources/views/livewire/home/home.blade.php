@@ -40,6 +40,139 @@
             </div>
             <!-- /.info-box -->
         </div>
+
+        <div class="col-md-12">
+            <div class="card mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="card-title">Laporan MCU</h5>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
+                            <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+                            <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+                        </button>
+
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 col-sm-4 col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon text-bg-success shadow-sm">
+                                    <i class="bi bi-person-fill-check"></i>
+                                </span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Karyawan MCU Fit</span>
+                                    <span class="info-box-number">{{ $jumlahMCUFit }}</span>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <div class="col-12 col-sm-4 col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon text-bg-info shadow-sm">
+                                    <i class="bi bi bi-person-fill-add"></i>
+                                </span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Karyawan MCU Fit Whit Note</span>
+                                    <span class="info-box-number">{{ $jumlahKaryawanNonAktif }}</span>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <div class="col-12 col-sm-4 col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon text-bg-warning shadow-sm">
+                                    <i class="bi bi-person-exclamation"></i>
+                                </span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Karyawan MCU Follow Up</span>
+                                    <span class="info-box-number">{{ $jumlahKaryawanNonAktif }}</span>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <div class="col-12 col-sm-4 col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon text-bg-danger shadow-sm">
+                                    <i class="bi bi-person-fill-x"></i>
+                                </span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Karyawan MCU Unfit</span>
+                                    <span class="info-box-number">{{ $jumlahKaryawanNonAktif }}</span>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                    </div>
+
+
+                </div>
+                <!-- ./card-body -->
+
+                <!-- /.card-footer -->
+            </div>
+            <!-- /.card -->
+        </div>
+
+        <div class="col-md-12">
+            <div class="card mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="card-title">Verifikator MCU</h5>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
+                            <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+                            <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 col-sm-4 col-md-6">
+                            <div class="info-box">
+                                <span class="info-box-icon text-bg-info shadow-sm">
+                                    <i class="bi bi bi-person-workspace"></i>
+                                </span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Dokter A</span>
+                                    <span class="info-box-number"></span>
+                                    dd{{ $verifikators }}
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <div class="col-12 col-sm-4 col-md-6">
+                            <div class="info-box">
+                                <span class="info-box-icon text-bg-info shadow-sm">
+                                    <i class="bi bi bi-person-workspace"></i>
+                                </span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Dokter B</span>
+                                    <span class="info-box-number">{{ $jumlahKaryawanNonAktif }}</span>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                    </div>
+
+
+                </div>
+                <!-- ./card-body -->
+
+                <!-- /.card-footer -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+
+
         <div class="col-12 col-sm-12 col-md-6">
             <div class="card mb-4">
                 <div class="card-header">

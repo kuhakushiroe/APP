@@ -43,7 +43,7 @@ if (!function_exists('getUserInfo')) {
             'nama' => $nama,
             'waktu' => $waktu,
             'nomorAdmins' => [
-                '088212543694', //saya
+                //'088212543694', //saya
                 '085954590940', // yazid
                 //'082266012957' // mas anton
             ],

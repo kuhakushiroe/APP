@@ -4,6 +4,8 @@ namespace App\Livewire\Home;
 
 use App\Models\Departments;
 use App\Models\Karyawan;
+use App\Models\Mcu as ModelsMcu;
+use App\Models\User;
 use Livewire\Component;
 
 class Home extends Component
@@ -49,6 +51,24 @@ class Home extends Component
         $jumlahKaryawan = Karyawan::all()->count();
         $jumlahKaryawanAktif = Karyawan::where('status', 'aktif')->count();
         $jumlahKaryawanNonAktif = Karyawan::where('status', 'non aktif')->count();
+        $jumlahMCUFit = ModelsMcu::where('status', 'FIT')->count();
+
+        $verifikators = User::where('role', 'dokter')
+            ->where('subrole', 'verifikator')
+            ->get(['id', 'name']);
+
+
+
+        // $mcuCountsByVerifikator = [];
+        // foreach ($verifikators as $verifikator) {
+        //     $mcuCount = ModelsMcu::where('verifikator_id', $verifikator->id)->count();
+        //     $mcuCountsByVerifikator[] = [
+        //         'verifikator_name' => $verifikator->name,
+        //         'mcu_count' => $mcuCount,
+        //     ];
+        // }
+
+
 
         return view('livewire.home.home', [
             'departments' => $departments,
@@ -57,7 +77,11 @@ class Home extends Component
             'employeeCountsNonAktif' => $employeeCountsNonAktif,
             'jumlahKaryawan' => $jumlahKaryawan,
             'jumlahKaryawanAktif' => $jumlahKaryawanAktif,
-            'jumlahKaryawanNonAktif' => $jumlahKaryawanNonAktif
+            'jumlahKaryawanNonAktif' => $jumlahKaryawanNonAktif,
+            'jumlahMCUFit' => $jumlahMCUFit,
+            'verifikators' => $verifikators
+
+
         ]);
     }
 }
