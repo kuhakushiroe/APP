@@ -467,7 +467,7 @@ class Kimper extends Component
             'status_upload_skd' => $this->status_upload_skd[$id] ?? $pengajuan->status_upload_skd,
             'status_upload_bpjs_kes' => $this->status_upload_bpjs_kes[$id] ?? $pengajuan->status_upload_bpjs_kes,
             'status_upload_bpjs_ker' => $this->status_upload_bpjs_ker[$id] ?? $pengajuan->status_upload_bpjs_ker,
-            'status_upload_lpo' => $this->status_upload_lpo[$id] ?? $pengajuan->status_upload_lpo,
+            //'status_upload_lpo' => $this->status_upload_lpo[$id] ?? $pengajuan->status_upload_lpo,
             'status_upload_sertifikat' => $this->status_upload_sertifikat[$id] ?? $pengajuan->status_upload_sertifikat,
 
             'catatan_upload_request' => $this->catatan_upload_request[$id] ?? null,
@@ -479,7 +479,7 @@ class Kimper extends Component
             'catatan_upload_skd' => $this->catatan_upload_skd[$id] ?? null,
             'catatan_upload_bpjs_kes' => $this->catatan_upload_bpjs_kes[$id] ?? null,
             'catatan_upload_bpjs_ker' => $this->catatan_upload_bpjs_ker[$id] ?? null,
-            'catatan_upload_lpo' => $this->catatan_upload_lpo[$id] ?? null,
+            //'catatan_upload_lpo' => $this->catatan_upload_lpo[$id] ?? null,
             'catatan_upload_sertifikat' => $this->catatan_upload_sertifikat[$id] ?? null,
         ]);
 
@@ -541,6 +541,51 @@ class Kimper extends Component
             redirect: '/pengajuan-kimper',
         );
         return;
+    }
+    public function kunciLpo($id)
+    {
+        $pengajuan = ModelPengajuanKimper::findOrFail($id);
+        PengajuanKimperLpo::where('id_pengajuan_kimper', $id)->update([
+            'status_lpo' => '1',
+        ]);
+        $pengajuan->update([
+            'status_upload_lpo' => '1',
+        ]);
+        $infoKaryawan = getInfoKaryawanByNrp($pengajuan->nrp);
+        //function Proses kirim pesan
+        $info = getUserInfo();
+
+        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan Kimper*\n\n";
+        $pesanText .= "*Jenis Pengajuan: *\n$pengajuan->jenis_pengajuan_kimper\n\n";
+        $pesanText .= "*Info Karyawan:*\n$infoKaryawan\n\n";
+
+        // Siapkan daftar status upload sesuai jenis pengajuan
+        $statusList = [
+            'LPO' => ['status' => $this->status_upload_lpo[$id] ?? $pengajuan->status_upload_lpo, 'catatan' => $this->catatan_upload_lpo[$id] ?? null],
+        ];
+
+        $pesanText .= "*Hasil Verifikasi Upload:*\n";
+
+        foreach ($statusList as $item => $data) {
+            $statusStr = $data['status'] == 1 ? '✅ Diterima' : '❌ Ditolak';
+            $catatanStr = $data['catatan'] ? "Catatan: {$data['catatan']}" : '';
+            $pesanText .= "• *$item*: $statusStr" . ($catatanStr ? "\n  $catatanStr" : '') . "\n";
+        }
+
+        // ambil data user saat dispatch, di konteks request HTTP (user pasti ada)
+        $nomorGabungan = array_merge($info['nomorAdmins']);
+        $token = $info['token'];
+        $namaUser = $info['nama'];
+        dispatch(new SendNotifMcu($pesanText, $nomorGabungan, $token, $namaUser));
+        $this->dispatch(
+            'alert',
+            type: 'success',
+            title: 'Berhasil',
+            text: 'Berhasil Kunci LPO',
+            position: 'center',
+            confirm: true,
+            redirect: '/pengajuan-kimper',
+        );
     }
     public function updateUpload($id)
     {

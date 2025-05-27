@@ -136,10 +136,10 @@
                                                     <th style="width: 10px">#</th>
                                                     <th>Type</th>
                                                     <th>File</th>
-                                                    <th>Nilai 1</th>
-                                                    <th>Nilai 2</th>
-                                                    <th>Nilai 3</th>
-                                                    <th>Nilai 4</th>
+                                                    <th>Instrumen</th>
+                                                    <th>Safety</th>
+                                                    <th>Metode</th>
+                                                    <th>Perawatan</th>
                                                     <th>Total</th>
                                                 </tr>
                                             </thead>
@@ -147,25 +147,31 @@
                                                 @forelse ($cariLPO as $key => $lpo)
                                                     <tr>
                                                         <td width="10%">
-                                                            <select name="" class="form-control form-control-sm"
-                                                                id=""
-                                                                wire:model='status_lpo.{{ $lpo->id }}'
-                                                                wire:change="updateLPO({{ $lpo->id }})">
-                                                                <option value="">-Verifikasi-
-                                                                </option>
-                                                                <option value="0">Tolak
-                                                                </option>
-                                                                <option value="1">Terima
-                                                                </option>
-                                                            </select>
-                                                            <a href="#" class="btn btn-primary btn-sm"
-                                                                wire:click="editLPO({{ $lpo->id }})">
-                                                                <i class="bi bi-pencil-square"></i>
-                                                            </a>
-                                                            <a href="#" class="btn btn-danger btn-sm"
-                                                                wire:click="deleteLPO({{ $lpo->id }})">
-                                                                <i class="bi bi-trash"></i>
-                                                            </a>
+                                                            @if ($pengajuan->status_upload_lpo == '0' || $pengajuan->status_upload_lpo == null)
+                                                                <select name=""
+                                                                    class="form-control form-control-sm" id=""
+                                                                    wire:model='status_lpo.{{ $lpo->id }}'
+                                                                    wire:change="updateLPO({{ $lpo->id }})">
+                                                                    <option value="">-Verifikasi-
+                                                                    </option>
+                                                                    <option value="0">Tolak
+                                                                    </option>
+                                                                    <option value="1">Terima
+                                                                    </option>
+                                                                </select>
+                                                                <a href="#" class="btn btn-primary btn-sm"
+                                                                    wire:click="editLPO({{ $lpo->id }})">
+                                                                    <i class="bi bi-pencil-square"></i>
+                                                                </a>
+                                                                <a href="#" class="btn btn-danger btn-sm"
+                                                                    wire:click="deleteLPO({{ $lpo->id }})">
+                                                                    <i class="bi bi-trash"></i>
+                                                                </a>
+                                                            @else
+                                                                <button class="btn btn-success btn-sm">
+                                                                    <span class="bi bi-hand-thumbs-up-fill"></span>
+                                                                </button>
+                                                            @endif
                                                         </td>
                                                         <td>{{ $lpo->type_lpo }}</td>
                                                         <td>
@@ -184,10 +190,18 @@
                                                 @endforelse
                                                 <tr>
                                                     <td colspan="8">
-                                                        <a href="#" class="btn btn-outline-primary btn-sm"
-                                                            wire:click="kunciLpo({{ $pengajuan->id_pengajuan }})">
-                                                            <i class="bi bi-lock"></i> Kunci LPO
-                                                        </a>
+                                                        @if ($pengajuan->status_upload_lpo == '0' || $pengajuan->status_upload_lpo == null)
+                                                            <a href="#" class="btn btn-outline-primary btn-sm"
+                                                                wire:click="kunciLpo({{ $pengajuan->id_pengajuan }})">
+                                                                <i class="bi bi-lock"></i> Kunci LPO
+                                                            </a>
+                                                        @else
+                                                            <a href="#"
+                                                                class="btn btn-outline-secondary btn-sm disabled"
+                                                                wire:click="kunciLpo({{ $pengajuan->id_pengajuan }})">
+                                                                <i class="bi bi-lock"></i> Kunci LPO
+                                                            </a>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -203,7 +217,7 @@
                                     $pengajuan->status_upload_foto == '0' ||
                                     $pengajuan->status_upload_ktp == '0' ||
                                     $pengajuan->status_upload_skd == '0' ||
-                                    //$pengajuan->status_upload_lpo == '0' ||
+                                    $pengajuan->status_upload_lpo == '0' ||
                                     $pengajuan->status_upload_bpjs_kes == '0' ||
                                     $pengajuan->status_upload_bpjs_ker == '0' ||
                                     $pengajuan->status_upload_sertifikat == '0') &&
@@ -380,23 +394,6 @@
                                                 </div>
                                             </div>
                                         @endif
-                                        {{-- @if ($pengajuan->status_upload_lpo == '0')
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label for="upload_lpo" class="form-label">Upload
-                                                        LPO</label>
-                                                    <input
-                                                        class="form-control form-control-sm @error('upload_lpo') is-invalid @enderror"
-                                                        type="file" id="upload_lpo" wire:model='upload_lpo'>
-                                                    @error('upload_lpo')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
-                                                    <div class="text-danger">
-                                                        {{ $pengajuan->catatan_upload_lpo }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif --}}
                                         <div class="col-12 pt-2">
                                             <button type="submit" class="btn btn-primary btn-sm">
                                                 <span class="bi bi-save"></span> Simpan
@@ -595,11 +592,16 @@
                                                         <tr>
                                                             <td colspan="3" class="text-center">
                                                                 <div class="alert alert-danger">
-                                                                    <button
-                                                                        class="btn btn-outline-primary btn-sm @if ($pengajuan->status_versatility === 'ok') disabled @endif"
-                                                                        wire:click="openVersatility({{ $pengajuan->id_pengajuan }})">
-                                                                        <span class="bi bi-plus"></span> Versatility
-                                                                    </button>
+                                                                    @if ($pengajuan->status_upload_lpo === '1')
+                                                                        <button
+                                                                            class="btn btn-outline-primary btn-sm @if ($pengajuan->status_versatility === 'ok') disabled @endif"
+                                                                            wire:click="openVersatility({{ $pengajuan->id_pengajuan }})">
+                                                                            <span class="bi bi-plus"></span>
+                                                                            Versatility
+                                                                        </button>
+                                                                    @else
+                                                                        -LPO Belum Dikunci-
+                                                                    @endif
                                                                 </div>
                                                             </td>
                                                         </tr>
