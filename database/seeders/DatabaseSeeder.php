@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Departments;
+use App\Models\Mcu;
 use App\Models\User;
 use Carbon\Carbon;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -66,7 +67,7 @@ class DatabaseSeeder extends Seeder
             'username' => 'dokter2',
             'email' => 'dokter2@example.com',
             'role' => 'dokter',
-            'subrole' => 'skd',
+            'subrole' => 'verifikator',
             'password' => Hash::make('password'),
         ]);
         User::create([
@@ -220,6 +221,8 @@ class DatabaseSeeder extends Seeder
                 $selectedKendaraan = collect($kendaraanList)->pluck('revisi')->random(rand(3, 5))->implode(', ');
 
                 // Data karyawan
+                $rawJabatan = $faker->jobTitle;
+                $cleanJabatan = preg_replace('/[^a-zA-Z0-9\s]/', '', $rawJabatan);
                 DB::table('karyawans')->insert([
                     'nik' => $nik,
                     'nrp' => $nrp,
@@ -234,7 +237,7 @@ class DatabaseSeeder extends Seeder
                     'perusahaan' => $faker->company,
                     'kontraktor' => $faker->company,
                     'dept' => $randomSubrole,
-                    'jabatan' => $faker->jobTitle,
+                    'jabatan' => $cleanJabatan,
                     'no_hp' => $faker->phoneNumber,
                     'alamat' => $faker->address,
                     'domisili' => $faker->randomElement(['lokal', 'non lokal']),
@@ -258,5 +261,20 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         });
+        $verifikators = User::where('subrole', 'verifikator')->pluck('username')->toArray();
+        $nrps = DB::table('karyawans')->pluck('nrp')->toArray();
+        $faker = Faker::create('id_ID');
+        for ($i = 0; $i < 500; $i++) {
+            $status = $faker->randomElement(['FIT', 'FOLLOW UP', 'FIT WITH NOTE', 'UNFIT']);
+            Mcu::create([
+                'id_karyawan' => $nrps[array_rand($nrps)],
+                'status' => $status,
+                'tgl_mcu' => $faker->dateTimeBetween('-1 years', 'now'),
+                'exp_mcu' => $faker->dateTimeBetween('-1 years', 'now'),
+                'tgl_verifikasi' => $faker->dateTimeBetween('-1 years', 'now'),
+                'verifikator' => $verifikators[array_rand($verifikators)],
+                'status_' => $status === 'FOLLOW UP' ? 'open' : 'close',
+            ]);
+        }
     }
 }

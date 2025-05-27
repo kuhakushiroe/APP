@@ -32,6 +32,7 @@ class Kimper extends Component
     public $info_nama, $info_dept, $info_jabatan, $info_mcu, $info_id, $info_kimper;
     public $expired_kimper = [];
     public $formVersatility = false;
+    public $lpoUpload = false;
 
     public $id_pengajuan_kimper, $id_versatility, $klasifikasi;
     public $form_lpo = 1;
@@ -45,6 +46,8 @@ class Kimper extends Component
     public $status_lpo = [];
     public $catatan_lpo = []; // array tipe yang dipilih untuk tiap form
     public $type_versatility_list = [];
+    public $edit_type_lpo, $edit_upload_lpo, $edit_instrumen_panel, $edit_safety_operasi, $edit_metode_operasi, $edit_perawatan, $edit_nilai_total;
+
     public function tambahLpo()
     {
         $this->form_lpo++;
@@ -104,32 +107,32 @@ class Kimper extends Component
     }
     public function getAvailableVersatilityProperty()
     {
-        $pengajuanLpo = PengajuanKimperLpo::find($this->id_pengajuan);
+        //dd($this->id_pengajuan);
+        $pengajuanLpo = PengajuanKimperLpo::where('id_pengajuan_kimper', '=', $this->id_pengajuan)->first();
         if (!$pengajuanLpo) return collect();
-
-        // Ambil pengajuan kimper terkait
         $pengajuanKimper = ModelPengajuanKimper::find($pengajuanLpo->id_pengajuan_kimper);
         if (!$pengajuanKimper) return collect();
 
         $nrp = $pengajuanKimper->nrp;
 
-        // Ambil semua pengajuan LPO yang terhubung dengan NRP ini (lewat pengajuan_kimper)
+        // Ambil semua pengajuan kimper dengan NRP yang sama
         $pengajuanKimperIds = ModelPengajuanKimper::where('nrp', $nrp)->pluck('id');
 
+        // Semua type LPO yang pernah diajukan oleh NRP ini
         $typeLpoList = PengajuanKimperLpo::whereIn('id_pengajuan_kimper', $pengajuanKimperIds)
             ->pluck('type_lpo')
-            ->unique()
-            ->values();
-
-        // Ambil semua ID versatility yang sudah pernah diajukan oleh NRP ini
-        $usedVersatilityIds = DB::table('pengajuan_kimper_versatility')
-            ->whereIn('id_pengajuan_kimper', $pengajuanKimperIds)
-            ->pluck('id_versatility')
             ->unique();
 
-        // Ambil versatility yang sesuai type_lpo dan belum digunakan
-        return \App\Models\Versatility::whereIn('type_versatility', $typeLpoList)
+        // Semua id versatility yang sudah dipakai
+        $usedVersatilityIds = DB::table('pengajuan_kimper_versatility')
+            ->whereIn('id_pengajuan_kimper', $pengajuanKimperIds)
+            ->pluck('id_versatility');
+
+        // Ambil versatility yang sesuai dengan type LPO yang dimiliki, dan belum pernah dipakai
+        return Versatility::whereIn('type_versatility', $typeLpoList)
             ->whereNotIn('id', $usedVersatilityIds)
+            ->orderBy('type_versatility')
+            ->orderBy('versatility')
             ->get();
     }
     public function lanjutKimper($id)
@@ -166,6 +169,7 @@ class Kimper extends Component
     {
         $this->form = false;
         $this->formVersatility = false;
+        $this->lpoUpload = false;
     }
     public function updatedNrp($value)
     {
@@ -214,12 +218,21 @@ class Kimper extends Component
 
             $this->nilai_total[$i] = $panel + $safety + $metode + $perawatan;
         }
+        if ($this->id_pengajuan) {
+            $panel = (float) ($this->edit_instrumen_panel ?? 0);
+            $safety = (float) ($this->edit_safety_operasi ?? 0);
+            $metode = (float) ($this->edit_metode_operasi ?? 0);
+            $perawatan = (float) ($this->edit_perawatan ?? 0);
+
+            $this->edit_nilai_total = $panel + $safety + $metode + $perawatan;
+        }
     }
     public function store()
     {
         $rules = [];
         $messages = [];
         if ($this->jenis_pengajuan_kimper === 'baru' || $this->jenis_pengajuan_kimper === 'penambahan') {
+
             for ($i = 1; $i <= $this->form_lpo; $i++) {
                 $rules["type_lpo.$i"] = 'required';
                 $rules["upload_lpo.$i"] = 'required|file|mimes:pdf,jpg,png|max:2048';
@@ -280,7 +293,13 @@ class Kimper extends Component
         $rules['upload_sim'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
         $rules['upload_request'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
         $rules['tgl_pengajuan'] = 'required';
-
+        $rules['upload_sertifikat'] = 'required';
+        if ($this->jenis_pengajuan_kimper == 'baru') {
+            $rules['upload_id'] = 'required';
+        }
+        if ($this->jenis_pengajuan_kimper == 'perpanjangan' || $this->jenis_pengajuan_kimper == 'penambahan') {
+            $rules['upload_kimper_lama'] = 'required';
+        }
         // ✅ Jalankan validasi keseluruhan
         $this->validate($rules, $messages);
 
@@ -309,6 +328,7 @@ class Kimper extends Component
 
         $requestPath = $this->upload_request->storeAs($folderPath, $folderKaryawan . "-REQUEST-" . time() . ".{$this->upload_request->getClientOriginalExtension()}", 'public');
         //$lpoPath = $this->upload_lpo->storeAs($folderPath, $folderKaryawan . "-LPO-" . time() . ".{$this->upload_lpo->getClientOriginalExtension()}", 'public');
+
         $sertifikatPath = $this->upload_sertifikat->storeAs($folderPath, $folderKaryawan . "-SERTIFIKAT-" . time() . ".{$this->upload_sertifikat->getClientOriginalExtension()}", 'public');
         $simPath = $this->upload_sim->storeAs($folderPath, $folderKaryawan . "-SIM-" . time() . ".{$this->upload_sim->getClientOriginalExtension()}", 'public');
 
@@ -536,6 +556,141 @@ class Kimper extends Component
             type: 'success',
             title: 'Berhasil',
             text: 'Berhasil Kirim Verifikasi Dokumen',
+            position: 'center',
+            confirm: true,
+            redirect: '/pengajuan-kimper',
+        );
+        return;
+    }
+    public function openLPO($id)
+    {
+        $caripengajuanlpo = PengajuanKimperLpo::findOrFail($id);
+        $this->id_pengajuan = $id;
+        $this->edit_type_lpo = $caripengajuanlpo->type_lpo;
+        $this->edit_instrumen_panel = $caripengajuanlpo->instrumen_panel;
+        $this->edit_safety_operasi = $caripengajuanlpo->safety_operasi;
+        $this->edit_metode_operasi = $caripengajuanlpo->metode_operasi;
+        $this->edit_perawatan = $caripengajuanlpo->perawatan;
+        $this->edit_nilai_total = $caripengajuanlpo->nilai_total;
+        $this->lpoUpload = true;
+    }
+    public function saveLPO()
+    {
+        $this->validate([
+            'edit_type_lpo' => 'required|string|max:255',
+            'edit_instrumen_panel' => 'required|numeric|min:0|max:25',
+            'edit_safety_operasi' => 'required|numeric|min:0|max:25',
+            'edit_metode_operasi' => 'required|numeric|min:0|max:25',
+            'edit_perawatan' => 'required|numeric|min:0|max:25',
+            'edit_nilai_total' => 'required|numeric|min:0|max:100',
+        ], [
+            'edit_type_lpo.required' => 'Tipe LPO wajib diisi',
+            'edit_type_lpo.string' => 'Tipe LPO harus berupa teks',
+            'edit_type_lpo.max' => 'Tipe LPO maksimal 255 karakter',
+            'edit_instrumen_panel.required' => 'Instrumen Panel wajib diisi',
+            'edit_instrumen_panel.numeric' => 'Instrumen Panel harus berupa angka',
+            'edit_instrumen_panel.min' => 'Instrumen Panel minimal 0',
+            'edit_instrumen_panel.max' => 'Instrumen Panel maksimal 25',
+            'edit_safety_operasi.required' => 'Safety Operasi wajib diisi',
+            'edit_safety_operasi.numeric' => 'Safety Operasi harus berupa angka',
+            'edit_safety_operasi.min' => 'Safety Operasi minimal 0',
+            'edit_safety_operasi.max' => 'Safety Operasi maksimal 25',
+            'edit_metode_operasi.required' => 'Metode Operasi wajib diisi',
+            'edit_metode_operasi.numeric' => 'Metode Operasi harus berupa angka',
+            'edit_metode_operasi.min' => 'Metode Operasi minimal 0',
+            'edit_metode_operasi.max' => 'Metode Operasi maksimal 25',
+            'edit_perawatan.required' => 'Perawatan wajib diisi',
+            'edit_perawatan.numeric' => 'Perawatan harus berupa angka',
+            'edit_perawatan.min' => 'Perawatan minimal 0',
+            'edit_perawatan.max' => 'Perawatan maksimal 25',
+            'edit_nilai_total.required' => 'Nilai Total wajib diisi',
+            'edit_nilai_total.numeric' => 'Nilai Total harus berupa angka',
+            'edit_nilai_total.min' => 'Nilai Total minimal 0',
+            'edit_nilai_total.max' => 'Nilai Total maksimal 100',
+        ]);
+
+        $caripengajuanlpo = PengajuanKimperLpo::find($this->id_pengajuan);
+
+        // Update data utama
+        try {
+            $caripengajuanlpo->update([
+                'status_lpo' => null,
+                'type_lpo' => $this->edit_type_lpo,
+                'instrumen_panel' => $this->edit_instrumen_panel,
+                'safety_operasi' => $this->edit_safety_operasi,
+                'metode_operasi' => $this->edit_metode_operasi,
+                'perawatan' => $this->edit_perawatan,
+                'nilai_total' => $this->edit_nilai_total,
+            ]);
+        } catch (\Exception $e) {
+            $this->dispatch(
+                'alert',
+                type: 'error',
+                title: 'Gagal',
+                text: 'Gagal Update Pengajuan LPO',
+                position: 'center',
+                confirm: true,
+            );
+        }
+
+        $cariidkimper = PengajuanKimperLpo::findOrFail($this->id_pengajuan);
+        $caripengajuankimper = ModelPengajuanKimper::findOrFail($cariidkimper->id_pengajuan_kimper);
+        // Jika ada file yang diupload, simpan
+        if (!empty($this->edit_upload_lpo)) {
+            $datakaryawan = Karyawan::where('nrp', $caripengajuankimper->nrp)->first();
+            $folderDept = strtoupper($datakaryawan->dept);
+            $folderKaryawan = strtoupper($datakaryawan->nrp . '-' . $datakaryawan->nama . '-' . $datakaryawan->dept . '-' . $datakaryawan->jabatan);
+            $folderPath = $folderDept . '/' . $folderKaryawan . '/PENGAJUAN-KIMPER';
+
+            if (!Storage::disk('public')->exists($folderPath)) {
+                Storage::disk('public')->makeDirectory($folderPath);
+            }
+
+            $file = $this->edit_upload_lpo;
+            $filename = $folderKaryawan . "-LPO-" . $this->edit_type_lpo . "-REVISI-" . time() . "." . $file->getClientOriginalExtension();
+
+            $lpoPath = $file->storeAs($folderPath, $filename, 'public');
+
+            // Update kolom file di database
+            $caripengajuanlpo->update([
+                'upload_lpo' => $lpoPath
+            ]);
+        }
+
+        // Reset dan feedback
+        $this->lpoUpload = false;
+        $this->reset(
+            'edit_type_lpo',
+            'edit_instrumen_panel',
+            'edit_safety_operasi',
+            'edit_metode_operasi',
+            'edit_perawatan',
+            'edit_nilai_total',
+            'edit_upload_lpo'
+        );
+        $this->dispatch(
+            'alert',
+            type: 'success',
+            title: 'Berhasil',
+            text: 'Berhasil Kirim Verifikasi LPO',
+            position: 'center',
+            confirm: true,
+            redirect: '/pengajuan-kimper',
+        );
+        return;
+    }
+    public function verifikasiLPO($id)
+    {
+        $caripengajuanlpo = PengajuanKimperLpo::findOrFail($id);
+        $caripengajuanlpo->update([
+            'status_lpo' => $this->status_lpo[$id],
+        ]);
+
+        $this->dispatch(
+            'alert',
+            type: 'success',
+            title: 'Berhasil',
+            text: 'Berhasil Kirim Verifikasi LPO',
             position: 'center',
             confirm: true,
             redirect: '/pengajuan-kimper',

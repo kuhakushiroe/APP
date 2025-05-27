@@ -3,6 +3,8 @@
         @include('livewire.pengajuan.form-kimper')
     @elseif ($formVersatility)
         @include('livewire.pengajuan.form-versatility')
+    @elseif ($lpoUpload)
+        @include('livewire.pengajuan.form-lpo')
     @else
         @hasAnyRole(['superadmin', 'admin'])
             <button wire:click='open' class="btn btn-outline-success btn-sm">
@@ -148,25 +150,25 @@
                                                     <tr>
                                                         <td width="10%">
                                                             @if ($pengajuan->status_upload_lpo == '0' || $pengajuan->status_upload_lpo == null)
-                                                                <select name=""
-                                                                    class="form-control form-control-sm" id=""
-                                                                    wire:model='status_lpo.{{ $lpo->id }}'
-                                                                    wire:change="updateLPO({{ $lpo->id }})">
-                                                                    <option value="">-Verifikasi-
-                                                                    </option>
-                                                                    <option value="0">Tolak
-                                                                    </option>
-                                                                    <option value="1">Terima
-                                                                    </option>
-                                                                </select>
-                                                                <a href="#" class="btn btn-primary btn-sm"
-                                                                    wire:click="editLPO({{ $lpo->id }})">
-                                                                    <i class="bi bi-pencil-square"></i>
-                                                                </a>
-                                                                <a href="#" class="btn btn-danger btn-sm"
-                                                                    wire:click="deleteLPO({{ $lpo->id }})">
-                                                                    <i class="bi bi-trash"></i>
-                                                                </a>
+                                                                @if ($lpo->status_lpo == '0')
+                                                                    <a href="#" class="btn btn-warning btn-sm"
+                                                                        wire:click="openLPO({{ $lpo->id }})">
+                                                                        <i class="bi bi-pencil-square"></i> Edit
+                                                                    </a>
+                                                                @elseif ($lpo->status_lpo == null)
+                                                                    <select name=""
+                                                                        class="form-control form-control-sm"
+                                                                        id=""
+                                                                        wire:model='status_lpo.{{ $lpo->id }}'
+                                                                        wire:change="verifikasiLPO({{ $lpo->id }})">
+                                                                        <option value="">-Verifikasi-
+                                                                        </option>
+                                                                        <option value="0">Tolak
+                                                                        </option>
+                                                                        <option value="1">Terima
+                                                                        </option>
+                                                                    </select>
+                                                                @endif
                                                             @else
                                                                 <button class="btn btn-success btn-sm">
                                                                     <span class="bi bi-hand-thumbs-up-fill"></span>
