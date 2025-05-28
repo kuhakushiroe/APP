@@ -76,7 +76,7 @@
                                 </span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">Karyawan MCU Fit Whit Note</span>
-                                    <span class="info-box-number">{{ $jumlahKaryawanNonAktif }}</span>
+                                    <span class="info-box-number">{{ $jumlahMCUFitWithNote }}</span>
                                 </div>
                                 <!-- /.info-box-content -->
                             </div>
@@ -89,7 +89,7 @@
                                 </span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">Karyawan MCU Follow Up</span>
-                                    <span class="info-box-number">{{ $jumlahKaryawanNonAktif }}</span>
+                                    <span class="info-box-number">{{ $jumlahMCUFollowUp }}</span>
                                 </div>
                                 <!-- /.info-box-content -->
                             </div>
@@ -102,7 +102,7 @@
                                 </span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">Karyawan MCU Unfit</span>
-                                    <span class="info-box-number">{{ $jumlahKaryawanNonAktif }}</span>
+                                    <span class="info-box-number">{{ $jumlahMCUnfit }}</span>
                                 </div>
                                 <!-- /.info-box-content -->
                             </div>
@@ -140,8 +140,7 @@
                                 </span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">Dokter A</span>
-                                    <span class="info-box-number"></span>
-                                    dd{{ $verifikators }}
+                                    <span class="info-box-number">{{ $dokter }}</span>
                                 </div>
                                 <!-- /.info-box-content -->
                             </div>
@@ -154,7 +153,7 @@
                                 </span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">Dokter B</span>
-                                    <span class="info-box-number">{{ $jumlahKaryawanNonAktif }}</span>
+                                    <span class="info-box-number">{{ $dokter2 }}</span>
                                 </div>
                                 <!-- /.info-box-content -->
                             </div>

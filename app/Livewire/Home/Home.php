@@ -52,6 +52,11 @@ class Home extends Component
         $jumlahKaryawanAktif = Karyawan::where('status', 'aktif')->count();
         $jumlahKaryawanNonAktif = Karyawan::where('status', 'non aktif')->count();
         $jumlahMCUFit = ModelsMcu::where('status', 'FIT')->count();
+        $jumlahMCUFitWithNote = ModelsMcu::where('status', 'FIT WITH NOTE')->count();
+        $jumlahMCUFollowUp = ModelsMcu::where('status', 'FOLLOW UP')->count();
+        $jumlahMCUnfit = ModelsMcu::where('status', 'UNFIT')->count();
+        $dokter = ModelsMcu::where('verifikator', 'dokter')->count();
+        $dokter2 = ModelsMcu::where('verifikator', 'dokter2')->count();
 
         $verifikators = User::where('role', 'dokter')
             ->where('subrole', 'verifikator')
@@ -79,6 +84,11 @@ class Home extends Component
             'jumlahKaryawanAktif' => $jumlahKaryawanAktif,
             'jumlahKaryawanNonAktif' => $jumlahKaryawanNonAktif,
             'jumlahMCUFit' => $jumlahMCUFit,
+            'jumlahMCUFitWithNote' => $jumlahMCUFitWithNote,
+            'jumlahMCUFollowUp' => $jumlahMCUFollowUp,
+            'jumlahMCUnfit' => $jumlahMCUnfit,
+            'dokter' => $dokter,
+            'dokter2' => $dokter2,
             'verifikators' => $verifikators
 
 
