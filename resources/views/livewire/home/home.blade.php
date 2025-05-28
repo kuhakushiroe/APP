@@ -56,7 +56,23 @@
                 <!-- /.card-header -->
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-12 col-sm-4 col-md-3">
+                        @forelse ($mcuCounts as $datamcu)
+                            <div class="col-12 col-sm-4 col-md-3">
+                                <div class="info-box">
+                                    <span class="info-box-icon {{ $datamcu['color'] }} shadow-sm">
+                                        <i class="bi bi-person-fill-check"></i>
+                                    </span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">{{ $datamcu['status'] }}</span>
+                                        <span class="info-box-number">{{ $datamcu['total'] }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        @empty
+                            <p>Tidak ada data MCU.</p>
+                        @endforelse
+
+                        {{-- <div class="col-12 col-sm-4 col-md-3">
                             <div class="info-box">
                                 <span class="info-box-icon text-bg-success shadow-sm">
                                     <i class="bi bi-person-fill-check"></i>
@@ -107,10 +123,8 @@
                                 <!-- /.info-box-content -->
                             </div>
                             <!-- /.info-box -->
-                        </div>
+                        </div> --}}
                     </div>
-
-
                 </div>
                 <!-- ./card-body -->
 
@@ -133,7 +147,25 @@
                 <!-- /.card-header -->
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-12 col-sm-4 col-md-6">
+                        @forelse ($verifikators as $dataverifikator)
+                            <div class="col-12 col-sm-4 col-md-6">
+                                <div class="info-box">
+                                    <span class="info-box-icon text-bg-info shadow-sm">
+                                        <i class="bi bi bi-person-workspace"></i>
+                                    </span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">{{ $dataverifikator['nama'] }}</span>
+                                        <span class="info-box-number">{{ $dataverifikator['jumlah_mcu'] }}</span>
+                                    </div>
+                                    <!-- /.info-box-content -->
+                                </div>
+                                <!-- /.info-box -->
+                            </div>
+                        @empty
+                            -
+                        @endforelse
+
+                        {{-- <div class="col-12 col-sm-4 col-md-6">
                             <div class="info-box">
                                 <span class="info-box-icon text-bg-info shadow-sm">
                                     <i class="bi bi bi-person-workspace"></i>
@@ -158,7 +190,7 @@
                                 <!-- /.info-box-content -->
                             </div>
                             <!-- /.info-box -->
-                        </div>
+                        </div> --}}
                     </div>
 
 
