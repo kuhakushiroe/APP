@@ -14,7 +14,22 @@
             </div>
             <!-- /.info-box -->
         </div>
-        <div class="col-12 col-sm-4 col-md-4">
+        @forelse ($karyawanCounts as $datakaryawan)
+            <div class="col-12 col-sm-4 col-md-4">
+                <div class="info-box">
+                    <span class="info-box-icon {{ $datakaryawan['color'] }} shadow-sm">
+                        <i class="bi bi-person-fill-check"></i>
+                    </span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">{{ $datakaryawan['status'] }}</span>
+                        <span class="info-box-number">{{ $datakaryawan['total'] }}</span>
+                    </div>
+                </div>
+            </div>
+        @empty
+            <p>Tidak ada data MCU.</p>
+        @endforelse
+        {{-- <div class="col-12 col-sm-4 col-md-4">
             <div class="info-box">
                 <span class="info-box-icon text-bg-success shadow-sm">
                     <i class="bi bi-people-fill"></i>
@@ -29,6 +44,7 @@
         </div>
         <div class="col-12 col-sm-4 col-md-4">
             <div class="info-box">
+
                 <span class="info-box-icon text-bg-secondary shadow-sm">
                     <i class="bi bi-people-fill"></i>
                 </span>
@@ -39,7 +55,7 @@
                 <!-- /.info-box-content -->
             </div>
             <!-- /.info-box -->
-        </div>
+        </div> --}}
 
         <div class="col-md-12">
             <div class="card mb-4">
@@ -201,10 +217,50 @@
             </div>
             <!-- /.card -->
         </div>
+
+        <div class="col-md-12">
+            <div class="card mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="card-title">Temuan Pemeriksaan Kesehatan Karyawan</h5>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
+                            <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+                            <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+                        </button>
+
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <div class="row">
+
+                        <div class="col-12 col-sm-4 col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon shadow-sm">
+                                    <i class="bi bi-person-fill-check"></i>
+                                </span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text"></span>
+                                    <span class="info-box-number"></span>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+                <!-- ./card-body -->
+
+                <!-- /.card-footer -->
+            </div>
+            <!-- /.card -->
+        </div>
         <!-- /.col -->
 
 
-        <div class="col-12 col-sm-12 col-md-6">
+        <div class="col-12
+                                        col-sm-12 col-md-6">
             <div class="card mb-4">
                 <div class="card-header">
                     <h3 class="card-title">Karyawan Aktif</h3>

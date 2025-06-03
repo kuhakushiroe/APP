@@ -56,6 +56,30 @@ class Home extends Component
         // $jumlahMCUFitWithNote = ModelsMcu::where('status', 'FIT WITH NOTE')->count();
         // $jumlahMCUFollowUp = ModelsMcu::where('status', 'FOLLOW UP')->count();
         // $jumlahMCUnfit = ModelsMcu::where('status', 'UNFIT')->count();
+
+        $statusCountsKaryawan = Karyawan::select('status', DB::raw('count(*) as total'))
+            ->whereIn('status', ['aktif', 'non aktif'])
+            ->groupBy('status')
+            ->pluck('total', 'status')
+            ->toArray();
+
+        $colorKaryawan = [
+            'aktif' => 'text-bg-success',        // Hijau
+            'non aktif' => 'text-bg-danger',       // Merah
+        ];
+
+        $finalKaryawanCounts = collect(['aktif', 'non aktif'])
+            ->map(function ($status) use ($statusCountsKaryawan, $colorKaryawan) {
+                return [
+                    'status' => $status,
+                    'total' => $statusCountsKaryawan[$status] ?? 0,
+                    'color' => $colorKaryawan[$status] ?? 'text-bg-secondary',
+                ];
+            })
+            ->toArray();
+
+
+
         $statusCounts = ModelsMcu::select('status', DB::raw('count(*) as total'))
             ->whereIn('status', ['FIT', 'FIT WITH NOTE', 'FOLLOW UP', 'UNFIT'])
             ->groupBy('status')
@@ -117,6 +141,7 @@ class Home extends Component
             // 'jumlahMCUFollowUp' => $jumlahMCUFollowUp,
             // 'jumlahMCUnfit' => $jumlahMCUnfit,
             'mcuCounts' => $finalmcuCounts,
+            'karyawanCounts' => $finalKaryawanCounts,
             'dokter' => $dokter,
             'dokter2' => $dokter2,
             'verifikators' => $verifikators

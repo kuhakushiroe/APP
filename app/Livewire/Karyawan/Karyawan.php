@@ -2,23 +2,28 @@
 
 namespace App\Livewire\Karyawan;
 
-use App\Exports\KaryawansExport;
-use App\Imports\checklistImport;
-use App\Imports\KaryawanImport;
-use App\Models\Departments;
-use App\Models\Jabatan;
-use App\Models\Karyawan as ModelsKaryawan;
-use App\Models\Perusahaan;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
-use Livewire\Attributes\Title;
+use App\Models\Jabatan;
 use Livewire\Component;
-use Livewire\WithoutUrlPagination;
+use App\Models\Perusahaan;
+use App\Models\Departments;
+use App\Models\LogKaryawan;
+use Illuminate\Support\Str;
 use Livewire\WithPagination;
 use Maatwebsite\Excel\Excel;
-use Illuminate\Support\Str;
 use Livewire\WithFileUploads;
+use Livewire\Attributes\Title;
+use App\Imports\KaryawanImport;
+use App\Exports\KaryawansExport;
+use App\Imports\checklistImport;
+use App\Livewire\Histori\Mcu\Mcu;
+use Livewire\WithoutUrlPagination;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Karyawan as ModelsKaryawan;
+use App\Models\ModelPengajuanID;
+use App\Models\ModelPengajuanKimper;
+use App\Models\Versatility;
 
 class Karyawan extends Component
 {
@@ -31,7 +36,7 @@ class Karyawan extends Component
     public $form = false;
     public $formImport = false;
     public $formImportCek = false;
-    public $id_karyawan, $foto, $fotolama, $nik, $nrp, $doh, $tgl_lahir, $nama, $jenis_kelamin;
+    public $id_karyawan, $foto, $fotolama, $nik, $nrp, $doh, $tgl_lahir, $nama, $jenis_kelamin, $nrp_lama;
     public $tempat_lahir, $agama, $gol_darah, $status_perkawinan, $perusahaan;
     public $kontraktor, $dept, $jabatan, $no_hp, $alamat, $domisili, $status = 'aktif', $file, $fileCek;
     public $dataKaryawan = [];
@@ -53,6 +58,7 @@ class Karyawan extends Component
     {
         $karyawans = ModelsKaryawan::find($id);
         $this->id_karyawan = $karyawans->id;
+        $this->nrp_lama = $karyawans->nrp;
         $this->fotolama = $karyawans->foto;
         $this->nik = $karyawans->nik;
         $this->nrp = $karyawans->nrp;
@@ -97,6 +103,7 @@ class Karyawan extends Component
                 'domisili' => 'nullable',
                 'status' => 'nullable',
                 'foto' => 'nullable',
+                'nrp_lama' => 'nullable',
             ]);
         } else {
             $this->validate([
@@ -119,6 +126,7 @@ class Karyawan extends Component
                 'domisili' => 'nullable',
                 'status' => 'nullable',
                 'foto' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:1024',
+                'nrp_lama' => 'nullable',
             ]);
         }
 
@@ -148,6 +156,25 @@ class Karyawan extends Component
             } // Handle if no file is uploaded (optional)
         }
         // Update or create the Karyawan model
+
+
+        if ($this->id_karyawan) {
+            if ($this->nrp_lama != $this->nrp) {
+                LogKaryawan::create(
+                    [
+                        'id_karyawan' => $this->id_karyawan,
+                        'lama' => $this->nrp_lama,
+                        'baru' => $this->nrp,
+                        'jenis_perubahan' => 'nrp',
+                    ]
+                );
+                ModelPengajuanID::where('nrp', $this->nrp_lama)->update(['nrp' => $this->nrp]);
+                ModelPengajuanKimper::where('nrp', $this->nrp_lama)->update(['nrp' => $this->nrp]);
+                User::where('username', $this->nrp_lama)->update(['username' => $this->nrp]);
+                Mcu::where('id_karyawan', $this->id_karyawan)->update(['nrp' => $this->nrp]);
+            }
+        }
+
 
         ModelsKaryawan::updateOrCreate(
             ['id' => $this->id_karyawan], // Unique identifier for update
@@ -331,9 +358,10 @@ class Karyawan extends Component
         $this->resetPage();
     }
 
-    public function detail($id){
+    public function detail($id)
+    {
         $karyawan = ModelsKaryawan::find($id);
-        $this->dataKaryawan =[
+        $this->dataKaryawan = [
 
             //Data Pribadi dan Data Karyawan
             'nik' => $karyawan->nik,
@@ -364,7 +392,6 @@ class Karyawan extends Component
 
         ];
         $this->lihatdetail = true;
-
     }
 
     public function render()
@@ -386,6 +413,4 @@ class Karyawan extends Component
         $jabatans = Jabatan::all();
         return view('livewire.karyawan.karyawan', compact('karyawans', 'departments', 'jabatans', 'perusahaans'));
     }
-
-
 }
