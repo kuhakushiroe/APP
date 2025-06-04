@@ -16,11 +16,11 @@ use Livewire\Attributes\Title;
 use App\Imports\KaryawanImport;
 use App\Exports\KaryawansExport;
 use App\Imports\checklistImport;
-use App\Livewire\Histori\Mcu\Mcu;
 use Livewire\WithoutUrlPagination;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Karyawan as ModelsKaryawan;
+use App\Models\Mcu;
 use App\Models\ModelPengajuanID;
 use App\Models\ModelPengajuanKimper;
 use App\Models\Versatility;
@@ -36,7 +36,7 @@ class Karyawan extends Component
     public $form = false;
     public $formImport = false;
     public $formImportCek = false;
-    public $id_karyawan, $foto, $fotolama, $nik, $nrp, $doh, $tgl_lahir, $nama, $jenis_kelamin, $nrp_lama;
+    public $id_karyawan, $foto, $fotolama, $nik, $nrp, $doh, $tgl_lahir, $nama, $jenis_kelamin, $nrp_lama, $departemen_lama, $jabatan_lama, $nama_lama;
     public $tempat_lahir, $agama, $gol_darah, $status_perkawinan, $perusahaan;
     public $kontraktor, $dept, $jabatan, $no_hp, $alamat, $domisili, $status = 'aktif', $file, $fileCek;
     public $dataKaryawan = [];
@@ -59,6 +59,9 @@ class Karyawan extends Component
         $karyawans = ModelsKaryawan::find($id);
         $this->id_karyawan = $karyawans->id;
         $this->nrp_lama = $karyawans->nrp;
+        $this->nama_lama = $karyawans->nama;
+        $this->jabatan_lama = $karyawans->jabatan;
+        $this->departemen_lama = $karyawans->dept;
         $this->fotolama = $karyawans->foto;
         $this->nik = $karyawans->nik;
         $this->nrp = $karyawans->nrp;
@@ -171,9 +174,50 @@ class Karyawan extends Component
                 ModelPengajuanID::where('nrp', $this->nrp_lama)->update(['nrp' => $this->nrp]);
                 ModelPengajuanKimper::where('nrp', $this->nrp_lama)->update(['nrp' => $this->nrp]);
                 User::where('username', $this->nrp_lama)->update(['username' => $this->nrp]);
-                Mcu::where('id_karyawan', $this->id_karyawan)->update(['nrp' => $this->nrp]);
+                Mcu::where('id_karyawan', $this->nrp_lama)->update(['id_karyawan' => $this->nrp]);
             }
         }
+
+        if ($this->id_karyawan) {
+            if ($this->nama_lama != $this->nama) {
+                LogKaryawan::create(
+                    [
+                        'id_karyawan' => $this->id_karyawan,
+                        'lama' => $this->nama_lama,
+                        'baru' => $this->nama,
+                        'jenis_perubahan' => 'nama',
+                    ]
+                );
+            }
+        }
+
+        if ($this->id_karyawan) {
+            if ($this->jabatan_lama != $this->jabatan) {
+                LogKaryawan::create(
+                    [
+                        'id_karyawan' => $this->id_karyawan,
+                        'lama' => $this->jabatan_lama,
+                        'baru' => $this->jabatan,
+                        'jenis_perubahan' => 'jabatan',
+                    ]
+                );
+            }
+        }
+
+        if ($this->id_karyawan) {
+            if ($this->departemen_lama != $this->dept) {
+                LogKaryawan::create(
+                    [
+                        'id_karyawan' => $this->id_karyawan,
+                        'lama' => $this->departemen_lama,
+                        'baru' => $this->dept,
+                        'jenis_perubahan' => 'departemen',
+                    ]
+                );
+            }
+        }
+
+
 
 
         ModelsKaryawan::updateOrCreate(

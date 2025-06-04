@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Departments;
+use App\Models\Jabatan;
 use App\Models\Mcu;
 use App\Models\User;
 use Carbon\Carbon;
@@ -28,6 +29,19 @@ class DatabaseSeeder extends Seeder
             ['name_department' => 'COE', 'description_department' => 'COE'],
             ['name_department' => 'PLANT', 'description_department' => 'PLANT'],
             ['name_department' => 'HCGA', 'description_department' => 'HCGA'],
+        ]);
+
+        //Jabatan
+        Jabatan::insert([
+            ['nama_jabatan' => 'Kepala Divisi', 'keterangan_jabatan' => 'KADIV'],
+            ['nama_jabatan' => 'Manager', 'keterangan_jabatan' => 'MNG'],
+            ['nama_jabatan' => 'Supervisor', 'keterangan_jabatan' => 'SPV'],
+            ['nama_jabatan' => 'Staff', 'keterangan_jabatan' => 'STF'],
+            ['nama_jabatan' => 'Verifikator', 'keterangan_jabatan' => 'VER'],
+            ['nama_jabatan' => 'Auditor', 'keterangan_jabatan' => 'AUD'],
+            ['nama_jabatan' => 'Dokter', 'keterangan_jabatan' => 'DOK'],
+            ['nama_jabatan' => 'Asisten Dokter', 'keterangan_jabatan' => 'ADOK'],
+
         ]);
 
         // User init
