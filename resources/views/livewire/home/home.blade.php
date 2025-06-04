@@ -234,14 +234,38 @@
                 <div class="card-body">
                     <div class="row">
 
-                        <div class="col-12 col-sm-4 col-md-3">
+                        <div class="col-12 col-sm-4 col-md-4">
                             <div class="info-box">
                                 <span class="info-box-icon shadow-sm">
                                     <i class="bi bi-person-fill-check"></i>
                                 </span>
                                 <div class="info-box-content">
-                                    <span class="info-box-text"></span>
-                                    <span class="info-box-number"></span>
+                                    <span class="info-box-text">Gula Normal</span>
+                                    <span class="info-box-number">{{$gulanormal}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-4 col-md-4">
+                            <div class="info-box">
+                                <span class="info-box-icon shadow-sm">
+                                    <i class="bi bi-person-fill-check"></i>
+                                </span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Prediabetes</span>
+                                    <span class="info-box-number">{{$prediabetes}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-4 col-md-4">
+                            <div class="info-box">
+                                <span class="info-box-icon shadow-sm">
+                                    <i class="bi bi-person-fill-check"></i>
+                                </span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Diabetes</span>
+                                    <span class="info-box-number">{{$diabetes}}</span>
                                 </div>
                             </div>
                         </div>

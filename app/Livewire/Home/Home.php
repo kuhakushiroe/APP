@@ -125,7 +125,25 @@ class Home extends Component
         //         'mcu_count' => $mcuCount,
         //     ];
         // }
+        //temuan
+        $gulanormal = ModelsMcu::where('gdp', '<', 100)
+            ->where('gd_2_jpp', '<', 140)
+            ->count();
 
+        $prediabetes = ModelsMcu::where(function ($query) {
+            $query->whereBetween('gdp', [100, 125])
+                ->orWhereBetween('gd_2_jpp', [140, 199]);
+        })->where(function ($query) {
+            $query->where('gdp', '<', 126)
+                ->orWhereNull('gdp')
+                ->where('gd_2_jpp', '<', 200)
+                ->orWhereNull('gd_2_jpp');
+        })->count();
+
+        $diabetes = ModelsMcu::where(function ($query) {
+            $query->where('gdp', '>=', 126)
+                ->orWhere('gd_2_jpp', '>=', 200);
+        })->count();
 
 
         return view('livewire.home.home', [
@@ -144,7 +162,10 @@ class Home extends Component
             'karyawanCounts' => $finalKaryawanCounts,
             'dokter' => $dokter,
             'dokter2' => $dokter2,
-            'verifikators' => $verifikators
+            'verifikators' => $verifikators,
+            'prediabetes' => $prediabetes,
+            'diabetes' => $diabetes,
+            'gulanormal' => $gulanormal
         ]);
     }
 }

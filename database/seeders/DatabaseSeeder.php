@@ -288,6 +288,8 @@ class DatabaseSeeder extends Seeder
                 'tgl_verifikasi' => $faker->dateTimeBetween('-1 years', 'now'),
                 'verifikator' => $verifikators[array_rand($verifikators)],
                 'status_' => $status === 'FOLLOW UP' ? 'open' : 'close',
+                'gdp' => rand(80, 100),
+                'gd_2_jpp' => rand(100, 110),
             ]);
         }
     }
