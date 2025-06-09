@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('tgl_mcu');
             $table->string('exp_mcu')->nullable();
             $table->string('tgl_verifikasi')->nullable();
-            $table->string('status')->nullable();
+            $table->enum('status', ['FIT', 'FOLLOW UP', 'UNFIT', 'TEMPORARY UNFIT'])->nullable();
             $table->string('verifikator')->nullable();
 
 

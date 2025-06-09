@@ -516,7 +516,7 @@
                                         class="form-control form-control-sm @error('status') is-invalid @enderror">
                                         <option value="">Pilih Status</option>
                                         <option value="FIT">FIT</option>
-                                        <option value="FIT WITH NOTE">FIT WITH NOTE</option>
+                                        {{-- <option value="FIT WITH NOTE">FIT WITH NOTE</option> --}}
                                         <option value="FOLLOW UP">FOLLOW UP</option>
                                         <option value="TEMPORARY UNFIT">TEMPORARY UNFIT</option>
                                         <option value="UNFIT">UNFIT</option>

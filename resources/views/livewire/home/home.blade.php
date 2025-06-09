@@ -72,7 +72,7 @@
                 <!-- /.card-header -->
                 <div class="card-body">
                     <div class="row">
-                        @forelse ($mcuCounts as $datamcu)
+                        @forelse ($verifikators as $datamcu)
                             <div class="col-12 col-sm-4 col-md-3">
                                 <div class="info-box">
                                     <span class="info-box-icon {{ $datamcu['color'] }} shadow-sm">
@@ -171,7 +171,15 @@
                                     </span>
                                     <div class="info-box-content">
                                         <span class="info-box-text">{{ $dataverifikator['nama'] }}</span>
-                                        <span class="info-box-number">{{ $dataverifikator['jumlah_mcu'] }}</span>
+                                        <span class="info-box-number">Fit : {{ $dataverifikator['status_fit'] }}</span>
+                                        <span class="info-box-number">Follow Up :
+                                            {{ $dataverifikator['status_follow_up'] }}</span>
+                                        <span class="info-box-number">Temporary Unfit :
+                                            {{ $dataverifikator['status_temporary_unfit'] }}</span>
+                                        <span class="info-box-number">Unfit :
+                                            {{ $dataverifikator['status_unfit'] }}</span>
+                                        <span class="info-box-number">Total Verify :
+                                            {{ $dataverifikator['status_total'] }}</span>
                                     </div>
                                     <!-- /.info-box-content -->
                                 </div>
@@ -241,7 +249,7 @@
                                 </span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">Gula Normal</span>
-                                    <span class="info-box-number">{{$gulanormal}}</span>
+                                    <span class="info-box-number">{{ $gulanormal }}</span>
                                 </div>
                             </div>
                         </div>
@@ -253,7 +261,7 @@
                                 </span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">Prediabetes</span>
-                                    <span class="info-box-number">{{$prediabetes}}</span>
+                                    <span class="info-box-number">{{ $prediabetes }}</span>
                                 </div>
                             </div>
                         </div>
@@ -265,7 +273,7 @@
                                 </span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">Diabetes</span>
-                                    <span class="info-box-number">{{$diabetes}}</span>
+                                    <span class="info-box-number">{{ $diabetes }}</span>
                                 </div>
                             </div>
                         </div>

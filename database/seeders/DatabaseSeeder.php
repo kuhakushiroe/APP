@@ -101,6 +101,8 @@ class DatabaseSeeder extends Seeder
             return Carbon::now()->$direction('1 year')->format('Y-m-d');
         }
 
+
+
         // Array kendaraan untuk versatility
         // $kendaraanList = [
         //     'LV',
@@ -275,11 +277,15 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         });
+
+
+
+
         $verifikators = User::where('subrole', 'verifikator')->pluck('username')->toArray();
         $nrps = DB::table('karyawans')->pluck('nrp')->toArray();
         $faker = Faker::create('id_ID');
         for ($i = 0; $i < 500; $i++) {
-            $status = $faker->randomElement(['FIT', 'FOLLOW UP', 'FIT WITH NOTE', 'UNFIT']);
+            $status = $faker->randomElement(['FIT', 'FOLLOW UP', 'TEMPORARY UNFIT', 'UNFIT']);
             Mcu::create([
                 'id_karyawan' => $nrps[array_rand($nrps)],
                 'status' => $status,

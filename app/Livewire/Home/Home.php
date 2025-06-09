@@ -2,12 +2,13 @@
 
 namespace App\Livewire\Home;
 
-use App\Models\Departments;
-use App\Models\Karyawan;
-use App\Models\Mcu as ModelsMcu;
+use Carbon\Carbon;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use App\Models\Karyawan;
+use App\Models\Departments;
+use App\Models\Mcu as ModelsMcu;
+use Illuminate\Support\Facades\DB;
 
 class Home extends Component
 {
@@ -80,43 +81,45 @@ class Home extends Component
 
 
 
-        $statusCounts = ModelsMcu::select('status', DB::raw('count(*) as total'))
-            ->whereIn('status', ['FIT', 'FIT WITH NOTE', 'FOLLOW UP', 'UNFIT'])
-            ->groupBy('status')
-            ->pluck('total', 'status')
-            ->toArray();
+        // $statusCounts = ModelsMcu::select('status', DB::raw('count(*) as total'))
+        //     ->whereIn('status', ['FIT', 'TEMPORARY UNFIT', 'FOLLOW UP', 'UNFIT'])
+        //     ->groupBy('status')
+        //     ->pluck('total', 'status')
+        //     ->toArray();
 
-        $colorMap = [
-            'FIT' => 'text-bg-success',        // Hijau
-            'FIT WITH NOTE' => 'text-bg-primary',  // Biru
-            'FOLLOW UP' => 'text-bg-warning',  // Kuning
-            'UNFIT' => 'text-bg-danger',       // Merah
-        ];
+        // $colorMap = [
+        //     'FIT' => 'text-bg-success',        // Hijau
+        //     'TEMPORARY UNFIT' => 'text-bg-primary',  // Biru
+        //     'FOLLOW UP' => 'text-bg-warning',  // Kuning
+        //     'UNFIT' => 'text-bg-danger',       // Merah
+        // ];
 
-        $finalmcuCounts = collect(['FIT', 'FIT WITH NOTE', 'FOLLOW UP', 'UNFIT'])
-            ->map(function ($status) use ($statusCounts, $colorMap) {
-                return [
-                    'status' => $status,
-                    'total' => $statusCounts[$status] ?? 0,
-                    'color' => $colorMap[$status] ?? 'text-bg-secondary',
-                ];
-            })
-            ->toArray();
-        $dokter = ModelsMcu::where('verifikator', 'dokter')->count();
-        $dokter2 = ModelsMcu::where('verifikator', 'dokter2')->count();
+        // $finalmcuCounts = collect(['FIT', 'TEMPORARY UNFIT', 'FOLLOW UP', 'UNFIT'])
+        //     ->map(function ($status) use ($statusCounts, $colorMap) {
+        //         return [
+        //             'status' => $status,
+        //             'total' => $statusCounts[$status] ?? 0,
+        //             'color' => $colorMap[$status] ?? 'text-bg-secondary',
+        //         ];
+        //     })
+        //     ->toArray();
 
-        $verifikators = User::where('role', 'dokter')
-            ->where('subrole', 'verifikator')
-            ->get()
-            ->map(function ($verifikator) {
-                $jumlahMcu = ModelsMcu::where('verifikator', $verifikator->username)->count();
-                return [
-                    'username' => $verifikator->username,
-                    'nama' => $verifikator->name,
-                    'jumlah_mcu' => $jumlahMcu,
-                ];
-            })
-            ->toArray();
+
+        // $dokter = ModelsMcu::where('verifikator', 'dokter')->count();
+        // $dokter2 = ModelsMcu::where('verifikator', 'dokter2')->count();
+
+        // $verifikators = User::where('role', 'dokter')
+        //     ->where('subrole', 'verifikator')
+        //     ->get()
+        //     ->map(function ($verifikator) {
+        //         $jumlahMcu = ModelsMcu::where('verifikator', $verifikator->username)->count();
+        //         return [
+        //             'username' => $verifikator->username,
+        //             'nama' => $verifikator->name,
+        //             'jumlah_mcu' => $jumlahMcu,
+        //         ];
+        //     })
+        //     ->toArray();
         // $mcuCountsByVerifikator = [];
         // foreach ($verifikators as $verifikator) {
         //     $mcuCount = ModelsMcu::where('verifikator_id', $verifikator->id)->count();
@@ -126,6 +129,69 @@ class Home extends Component
         //     ];
         // }
         //temuan
+
+
+        //pakai ini coba untuk mcu dashboard dokter
+        $today = Carbon::today()->toDateString(); // Format: '2025-06-09'
+
+        // Warna untuk setiap status
+        $colorMap = [
+            'FIT' => 'text-bg-success',
+            'FOLLOW UP' => 'text-bg-warning',
+            'UNFIT' => 'text-bg-danger',
+            'TEMPORARY UNFIT' => 'text-bg-info',
+        ];
+
+        // Ambil data MCU untuk hari ini, dikelompokkan berdasarkan verifikator dan status
+        $mcuData = ModelsMcu::select('verifikator', 'status', DB::raw('count(*) as total'))
+            ->whereDate('tgl_mcu', $today)
+            ->groupBy('verifikator', 'status')
+            ->get()
+            ->groupBy('verifikator');
+
+        // Ambil semua verifikator dengan role dokter dan subrole verifikator
+        $verifikators = User::where('role', 'dokter')
+            ->where('subrole', 'verifikator')
+            ->get()
+            ->map(function ($verifikator) use ($mcuData, $colorMap, $today) {
+                // Ambil data MCU untuk verifikator ini
+                $statusCounts = $mcuData->get($verifikator->username, collect([]))
+                    ->pluck('total', 'status')
+                    ->toArray();
+
+                // Hitung total MCU untuk verifikator ini pada hari ini
+                $jumlahMcu = ModelsMcu::where('verifikator', $verifikator->username)
+                    ->whereDate('tgl_mcu', $today)
+                    ->count();
+
+                // Format status counts dengan semua status (termasuk yang 0)
+                $finalMcuCounts = collect(['FIT', 'FOLLOW UP', 'UNFIT', 'TEMPORARY UNFIT'])
+                    ->map(function ($status) use ($statusCounts, $colorMap) {
+                        return [
+                            'status' => $status,
+                            'total' => $statusCounts[$status] ?? 0,
+                            'color' => $colorMap[$status] ?? 'text-bg-secondary',
+                        ];
+                    })
+                    ->toArray();
+
+                return [
+                    'username' => $verifikator->username,
+                    'nama' => $verifikator->name,
+                    'jumlah_mcu' => $jumlahMcu,
+                    'status_counts' => $finalMcuCounts,
+                    'status_fit' => $finalMcuCounts[0]['total'],
+                    'status_follow_up' => $finalMcuCounts[1]['total'],
+                    'status_unfit' => $finalMcuCounts[2]['total'],
+                    'status_temporary_unfit' => $finalMcuCounts[3]['total'],
+                    'color' => $finalMcuCounts[0]['color'],
+                    'status_total' => $finalMcuCounts[0]['total'] + $finalMcuCounts[1]['total'] + $finalMcuCounts[2]['total'] + $finalMcuCounts[3]['total'],
+                ];
+            })
+            ->toArray();
+
+
+
         $gulanormal = ModelsMcu::where('gdp', '<', 100)
             ->where('gd_2_jpp', '<', 140)
             ->count();
@@ -158,10 +224,11 @@ class Home extends Component
             // 'jumlahMCUFitWithNote' => $jumlahMCUFitWithNote,
             // 'jumlahMCUFollowUp' => $jumlahMCUFollowUp,
             // 'jumlahMCUnfit' => $jumlahMCUnfit,
-            'mcuCounts' => $finalmcuCounts,
+            //'mcuCounts' => $finalmcuCounts,
             'karyawanCounts' => $finalKaryawanCounts,
-            'dokter' => $dokter,
-            'dokter2' => $dokter2,
+
+            //'dokter' => $dokter,
+            //'dokter2' => $dokter2,
             'verifikators' => $verifikators,
             'prediabetes' => $prediabetes,
             'diabetes' => $diabetes,
