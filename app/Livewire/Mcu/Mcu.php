@@ -751,11 +751,21 @@ class Mcu extends Component
             ->where('status', 'aktif')
             ->first();
         if (in_array(auth()->user()->role, ['superadmin', 'dokter', 'she'])) {
-            $mcus = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu', 'mcu.status as mcuStatus')
+            $carimcu = ModelsMcu::select('sub_id', 'verifikator')
+                ->whereNull('verifikator')
+                ->get();
+
+            $prioritasIDs = $carimcu->pluck('sub_id')->filter()->unique()->toArray(); // Ambil nilai sub_id unik dan tidak null
+
+            $mcus = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu')
                 ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
                 ->whereAny(['karyawans.nrp', 'karyawans.nama'], 'like', '%' . $this->search . '%')
                 ->where('mcu.status_', '=', "open")
-                ->where('mcu.sub_id', NULL)
+                ->whereNull('mcu.sub_id')
+                ->when(!empty($prioritasIDs), function ($query) use ($prioritasIDs) {
+                    $ids = implode(',', $prioritasIDs);
+                    return $query->orderByRaw("FIELD(mcu.id, $ids) DESC");
+                })
                 ->orderBy('mcu.tgl_mcu', 'desc')
                 ->paginate(10)
                 ->withQueryString();
