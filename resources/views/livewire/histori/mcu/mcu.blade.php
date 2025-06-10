@@ -34,7 +34,7 @@
                         <td>
                             @php
                                 $subItems = DB::table('mcu')
-                                    ->whereAny(['id', 'sub_id'], '=', $data->sub_id)
+                                    ->whereAny(['id', 'sub_id'], '=', $data->id)
                                     ->where('id', '!=', $data->id_mcu)
                                     ->orderBy('tgl_mcu', 'asc') // Mengurutkan berdasarkan tanggal MCU
                                     ->get();
@@ -76,7 +76,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5">
+                        <td colspan="6">
                             <div class="alert alert-danger">
                                 <span class="bi bi-exclamation-circle"></span>
                                 &nbsp;No data

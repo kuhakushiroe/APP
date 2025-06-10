@@ -284,10 +284,16 @@ class DatabaseSeeder extends Seeder
         $verifikators = User::where('subrole', 'verifikator')->pluck('username')->toArray();
         $nrps = DB::table('karyawans')->pluck('nrp')->toArray();
         $faker = Faker::create('id_ID');
+
+        // Menyimpan id terakhir untuk follow-up per karyawan
+        $lastFollowUpId = [];
+
         for ($i = 0; $i < 500; $i++) {
+            $id_karyawan = $nrps[array_rand($nrps)];
             $status = $faker->randomElement(['FIT', 'FOLLOW UP', 'TEMPORARY UNFIT', 'UNFIT']);
-            Mcu::create([
-                'id_karyawan' => $nrps[array_rand($nrps)],
+
+            $data = [
+                'id_karyawan' => $id_karyawan,
                 'status' => $status,
                 'tgl_mcu' => $faker->dateTimeBetween('-1 days', 'now'),
                 'exp_mcu' => $faker->dateTimeBetween('-1 days', 'now'),
@@ -296,7 +302,24 @@ class DatabaseSeeder extends Seeder
                 'status_' => $status === 'FOLLOW UP' ? 'open' : 'close',
                 'gdp' => rand(80, 100),
                 'gd_2_jpp' => rand(100, 110),
-            ]);
+            ];
+
+            // Cek apakah status FOLLOW UP, jika ya, isi sub_id dari follow up sebelumnya (jika ada)
+            if ($status === 'FOLLOW UP') {
+                $data['sub_id'] = $lastFollowUpId[$id_karyawan] ?? null;
+            } else {
+                // Status akhir, berarti tutup chain follow-up
+                $data['sub_id'] = null;
+                unset($lastFollowUpId[$id_karyawan]);
+            }
+
+            // Buat entri
+            $newMcu = Mcu::create($data);
+
+            // Jika status FOLLOW UP, simpan id-nya untuk referensi berikutnya
+            if ($status === 'FOLLOW UP') {
+                $lastFollowUpId[$id_karyawan] = $newMcu->id;
+            }
         }
     }
 }
