@@ -213,16 +213,20 @@
                         {{ $query->keterangan_mcu }}
                     @endif
                     @php
-                        $subquery = DB::table('mcu')
-                            ->where('sub_id', $query->sub_id)
-                            ->orderBy('tgl_mcu', 'desc')
-                            ->get();
+                        if ($query->sub_id !== null) {
+                            $subquery = DB::table('mcu')
+                                ->where('sub_id', $query->sub_id)
+                                ->orderBy('tgl_mcu', 'desc')
+                                ->get();
+                        }
                     @endphp
-                    @forelse ($subquery as $data)
-                        {{ $data->status . ' , ' }}<br>
-                    @empty
-                        -
-                    @endforelse
+                    @if ($query->sub_id !== null)
+                        @forelse ($subquery as $data)
+                            {{ $data->status . ' , ' }}<br>
+                        @empty
+                            -
+                        @endforelse
+                    @endif
                 </td>
             </tr>
             <tr>
@@ -233,7 +237,7 @@
             <tr>
                 <td style="width: 10%;">&nbsp;</td>
                 <td colspan="3" style="text-align: left;">
-                    @if ($data->status !== 'FIT')
+                    @if ($query->status !== 'FIT')
                         {{ $query->saran_mcu ?? '' }}
                     @endif
                 </td>

@@ -32,22 +32,28 @@
                         </td>
                         <td>{{ $data->dept }} / {{ $data->jabatan }}</td>
                         <td>
-                            @php
-                                $subItems = DB::table('mcu')
-                                    ->whereAny(['id', 'sub_id'], '=', $data->id)
-                                    ->where('id', '!=', $data->id_mcu)
-                                    ->orderBy('tgl_mcu', 'asc') // Mengurutkan berdasarkan tanggal MCU
-                                    ->get();
-                            @endphp
+                            @if (!is_null($data->sub_id))
+                                @php
+                                    $subItems = DB::table('mcu')
+                                        ->where(function ($query) use ($data) {
+                                            $query->where('id', $data->sub_id)->orWhere('sub_id', $data->sub_id);
+                                        })
+                                        ->whereNull('exp_mcu')
+                                        ->orderBy('tgl_mcu', 'asc')
+                                        ->get();
+                                @endphp
+                            @endif
                             <div class="d-grid gap-2">
-                                @forelse ($subItems as $index => $item)
-                                    <a class="btn btn-outline-primary btn-sm" href="{{ Storage::url($item->file_mcu) }}"
-                                        target="_blank">
-                                        <span class="bi bi-file-earmark-arrow-down"></span> File MCU
-                                        {{ $index + 1 }}
-                                    </a>
-                                @empty
-                                @endforelse
+                                @if (!is_null($data->sub_id))
+                                    @forelse ($subItems as $index => $item)
+                                        <a class="btn btn-outline-primary btn-sm"
+                                            href="{{ Storage::url($item->file_mcu) }}" target="_blank">
+                                            <span class="bi bi-file-earmark-arrow-down"></span> File MCU
+                                            {{ $index + 1 }}
+                                        </a>
+                                    @empty
+                                    @endforelse
+                                @endif
                                 <a class="btn btn-outline-primary btn-sm" href="{{ Storage::url($data->file_mcu) }}"
                                     target="_blank">
                                     <span class="bi bi-file-earmark-arrow-down"></span> File MCU Final
@@ -56,7 +62,7 @@
                         </td>
                         <td>
                             <div class="d-grid gap-2">
-                                @if ($data->mcuStatus == 'FIT' || $data->mcuStatus == 'FIT WITH NOTE')
+                                @if ($data->mcuStatus == 'FIT' || $data->mcuStatus == 'UNFIT' || $data->mcuStatus == 'TEMPORARY UNFIT')
                                     <a href="cetak-mcu/{{ $data->id_mcu }}" target="_blank"
                                         class="btn btn-outline-warning btn-sm">
                                         <span class="bi bi-download"></span>
