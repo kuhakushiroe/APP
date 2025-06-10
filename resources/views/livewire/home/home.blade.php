@@ -30,7 +30,7 @@
             <p>Tidak ada data</p>
         @endforelse
         <div class="col-12 col-sm-12 col-md-6">
-            <div class="card mb-4">
+            <div class="card mb-4 collapsed-card">
                 <div class="card-header">
                     <h3 class="card-title">Karyawan Aktif</h3>
                     <div class="card-tools">
@@ -54,7 +54,7 @@
             </div>
         </div>
         <div class="col-12 col-sm-12 col-md-6">
-            <div class="card mb-4">
+            <div class="card mb-4 collapsed-card">
                 <div class="card-header">
                     <h3 class="card-title">Karyawan Non Aktif</h3>
                     <div class="card-tools">
@@ -78,7 +78,7 @@
             </div>
         </div>
 
-        <div class="col-md-12">
+        <div class="col-md-9">
             <div class="card mb-4">
                 <div class="card-header bg-secondary text-white">
                     <h5 class="card-title">Verifikator MCU</h5>
@@ -246,7 +246,7 @@
             <!-- /.card -->
         </div>
 
-        <div class="col-md-12">
+        <div class="col-md-3">
             <div class="card mb-4">
                 <div class="card-header bg-secondary text-white">
                     <h5 class="card-title">Temuan MCU</h5>
@@ -261,8 +261,7 @@
                 <!-- /.card-header -->
                 <div class="card-body">
                     <div class="row">
-
-                        <div class="col-12 col-sm-4 col-md-4">
+                        <div class="col-12">
                             <div class="info-box">
                                 <span class="info-box-icon shadow-sm">
                                     <i class="bi bi-person-fill-check"></i>
@@ -273,8 +272,7 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-12 col-sm-4 col-md-4">
+                        <div class="col-12">
                             <div class="info-box">
                                 <span class="info-box-icon shadow-sm">
                                     <i class="bi bi-person-fill-check"></i>
@@ -285,8 +283,7 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-12 col-sm-4 col-md-4">
+                        <div class="col-12">
                             <div class="info-box">
                                 <span class="info-box-icon shadow-sm">
                                     <i class="bi bi-person-fill-check"></i>
