@@ -29,125 +29,6 @@
         @empty
             <p>Tidak ada data MCU.</p>
         @endforelse
-        {{-- <div class="col-12 col-sm-4 col-md-4">
-            <div class="info-box">
-                <span class="info-box-icon text-bg-success shadow-sm">
-                    <i class="bi bi-people-fill"></i>
-                </span>
-                <div class="info-box-content">
-                    <span class="info-box-text">Karyawan Aktif</span>
-                    <span class="info-box-number">{{ $jumlahKaryawanAktif }}</span>
-                </div>
-                <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-        </div>
-        <div class="col-12 col-sm-4 col-md-4">
-            <div class="info-box">
-
-                <span class="info-box-icon text-bg-secondary shadow-sm">
-                    <i class="bi bi-people-fill"></i>
-                </span>
-                <div class="info-box-content">
-                    <span class="info-box-text">Karyawan Non Aktif</span>
-                    <span class="info-box-number">{{ $jumlahKaryawanNonAktif }}</span>
-                </div>
-                <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-        </div> --}}
-
-        <div class="col-md-12">
-            <div class="card mb-4">
-                <div class="card-header bg-secondary text-white">
-                    <h5 class="card-title">Laporan MCU</h5>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
-                            <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
-                            <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
-                        </button>
-
-                    </div>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                    <div class="row">
-                        @forelse ($verifikators as $datamcu)
-                            <div class="col-12 col-sm-4 col-md-3">
-                                <div class="info-box">
-                                    <span class="info-box-icon {{ $datamcu['color'] }} shadow-sm">
-                                        <i class="bi bi-person-fill-check"></i>
-                                    </span>
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">{{ $datamcu['status'] }}</span>
-                                        <span class="info-box-number">{{ $datamcu['total'] }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        @empty
-                            <p>Tidak ada data MCU.</p>
-                        @endforelse
-
-                        {{-- <div class="col-12 col-sm-4 col-md-3">
-                            <div class="info-box">
-                                <span class="info-box-icon text-bg-success shadow-sm">
-                                    <i class="bi bi-person-fill-check"></i>
-                                </span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Karyawan MCU Fit</span>
-                                    <span class="info-box-number">{{ $jumlahMCUFit }}</span>
-                                </div>
-                                <!-- /.info-box-content -->
-                            </div>
-                            <!-- /.info-box -->
-                        </div>
-                        <div class="col-12 col-sm-4 col-md-3">
-                            <div class="info-box">
-                                <span class="info-box-icon text-bg-info shadow-sm">
-                                    <i class="bi bi bi-person-fill-add"></i>
-                                </span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Karyawan MCU Fit Whit Note</span>
-                                    <span class="info-box-number">{{ $jumlahMCUFitWithNote }}</span>
-                                </div>
-                                <!-- /.info-box-content -->
-                            </div>
-                            <!-- /.info-box -->
-                        </div>
-                        <div class="col-12 col-sm-4 col-md-3">
-                            <div class="info-box">
-                                <span class="info-box-icon text-bg-warning shadow-sm">
-                                    <i class="bi bi-person-exclamation"></i>
-                                </span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Karyawan MCU Follow Up</span>
-                                    <span class="info-box-number">{{ $jumlahMCUFollowUp }}</span>
-                                </div>
-                                <!-- /.info-box-content -->
-                            </div>
-                            <!-- /.info-box -->
-                        </div>
-                        <div class="col-12 col-sm-4 col-md-3">
-                            <div class="info-box">
-                                <span class="info-box-icon text-bg-danger shadow-sm">
-                                    <i class="bi bi-person-fill-x"></i>
-                                </span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Karyawan MCU Unfit</span>
-                                    <span class="info-box-number">{{ $jumlahMCUnfit }}</span>
-                                </div>
-                                <!-- /.info-box-content -->
-                            </div>
-                            <!-- /.info-box -->
-                        </div> --}}
-                    </div>
-                </div>
-                <!-- ./card-body -->
-
-                <!-- /.card-footer -->
-            </div>
-            <!-- /.card -->
-        </div>
 
         <div class="col-md-12">
             <div class="card mb-4">
@@ -163,7 +44,18 @@
                 <!-- /.card-header -->
                 <div class="card-body">
                     <div class="row">
-                        @forelse ($verifikators as $dataverifikator)
+                        <div class="col-md-12 text-center">
+                            @php
+                                $carijumlahmcuharian = 0;
+                                foreach ($verifikators as $dataverifikator) {
+                                    $carijumlahmcuharian += $dataverifikator['status_total'];
+                                }
+                                $jumlahmcuharian = $mcuNoAcc + $carijumlahmcuharian;
+                            @endphp
+                            <pre>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y') }}</pre>
+                            <pre>MCU Harian : {{ $carijumlahmcuharian . '/' . $jumlahmcuharian }}</pre>
+                        </div>
+                        {{-- @forelse ($verifikators as $dataverifikator)
                             <div class="col-12 col-sm-4 col-md-6">
                                 <div class="info-box">
                                     <span class="info-box-icon text-bg-info shadow-sm">
@@ -178,8 +70,10 @@
                                             {{ $dataverifikator['status_temporary_unfit'] }}</span>
                                         <span class="info-box-number">Unfit :
                                             {{ $dataverifikator['status_unfit'] }}</span>
-                                        <span class="info-box-number">Total Verify :
-                                            {{ $dataverifikator['status_total'] }}</span>
+                                        <span class="info-box-number">
+                                            Total Verify :
+                                            {{ $dataverifikator['status_total'] }}
+                                        </span>
                                     </div>
                                     <!-- /.info-box-content -->
                                 </div>
@@ -187,36 +81,90 @@
                             </div>
                         @empty
                             -
+                        @endforelse --}}
+                        @forelse ($verifikators as $dataverifikator)
+                            <div class="col-md-6">
+                                <p class="text-center"><strong>{{ $dataverifikator['nama'] }}</strong></p>
+                                <div class="progress-group">
+                                    FIT
+                                    <span class="float-end">
+                                        <b>
+                                            {{ $dataverifikator['status_fit'] }}
+                                        </b>/{{ $jumlahmcuharian }}
+                                    </span>
+                                    <div class="progress progress-sm" style="height: 20px">
+                                        <div class="progress-bar text-bg-success"
+                                            style="width: {{ ($dataverifikator['status_fit'] / $jumlahmcuharian) * 100 }}%">
+                                            {{ ($dataverifikator['status_fit'] / $jumlahmcuharian) * 100 }} %
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.progress-group -->
+                                <div class="progress-group">
+                                    FOLLOW UP
+                                    <span class="float-end">
+                                        <b>
+                                            {{ $dataverifikator['status_follow_up'] }}
+                                        </b>/{{ $jumlahmcuharian }}
+                                    </span>
+                                    <div class="progress progress-sm" style="height: 20px">
+                                        <div class="progress-bar text-bg-primary"
+                                            style="width: {{ ($dataverifikator['status_follow_up'] / $jumlahmcuharian) * 100 }}%">
+                                            {{ ($dataverifikator['status_follow_up'] / $jumlahmcuharian) * 100 }} %
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.progress-group -->
+                                <div class="progress-group">
+                                    <span class="progress-text">TEMPORARY UNFIT</span>
+                                    <span class="float-end">
+                                        <b>
+                                            {{ $dataverifikator['status_temporary_unfit'] }}
+                                        </b>/{{ $jumlahmcuharian }}
+                                    </span>
+                                    <div class="progress progress-sm" style="height: 20px">
+                                        <div class="progress-bar text-bg-warning"
+                                            style="width: {{ ($dataverifikator['status_temporary_unfit'] / $jumlahmcuharian) * 100 }}%">
+                                            {{ ($dataverifikator['status_temporary_unfit'] / $jumlahmcuharian) * 100 }}
+                                            %
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.progress-group -->
+                                <div class="progress-group">
+                                    UNFIT
+                                    <span class="float-end">
+                                        <b>
+                                            {{ $dataverifikator['status_unfit'] }}
+                                        </b>/{{ $jumlahmcuharian }}
+                                    </span>
+                                    <div class="progress progress-sm" style="height: 20px">
+                                        <div class="progress-bar text-bg-danger"
+                                            style="width: {{ ($dataverifikator['status_unfit'] / $jumlahmcuharian) * 100 }}%">
+                                            {{ ($dataverifikator['status_unfit'] / $jumlahmcuharian) * 100 }} %
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="progress-group">
+                                    Total Verifikasi
+                                    <span class="float-end">
+                                        <b>
+                                            {{ $dataverifikator['status_total'] }}
+                                        </b>/{{ $jumlahmcuharian }}
+                                    </span>
+                                    <div class="progress progress-sm" style="height: 20px">
+                                        <div class="progress-bar text-bg-secondary"
+                                            style="width: {{ ($dataverifikator['status_total'] / $jumlahmcuharian) * 100 }}%">
+                                            {{ ($dataverifikator['status_total'] / $jumlahmcuharian) * 100 }} %
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.progress-group -->
+                            </div>
+                        @empty
+                            -
                         @endforelse
-
-                        {{-- <div class="col-12 col-sm-4 col-md-6">
-                            <div class="info-box">
-                                <span class="info-box-icon text-bg-info shadow-sm">
-                                    <i class="bi bi bi-person-workspace"></i>
-                                </span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Dokter A</span>
-                                    <span class="info-box-number">{{ $dokter }}</span>
-                                </div>
-                                <!-- /.info-box-content -->
-                            </div>
-                            <!-- /.info-box -->
-                        </div>
-                        <div class="col-12 col-sm-4 col-md-6">
-                            <div class="info-box">
-                                <span class="info-box-icon text-bg-info shadow-sm">
-                                    <i class="bi bi bi-person-workspace"></i>
-                                </span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Dokter B</span>
-                                    <span class="info-box-number">{{ $dokter2 }}</span>
-                                </div>
-                                <!-- /.info-box-content -->
-                            </div>
-                            <!-- /.info-box -->
-                        </div> --}}
                     </div>
-
 
                 </div>
                 <!-- ./card-body -->

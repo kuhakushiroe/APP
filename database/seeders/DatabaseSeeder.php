@@ -289,9 +289,9 @@ class DatabaseSeeder extends Seeder
             Mcu::create([
                 'id_karyawan' => $nrps[array_rand($nrps)],
                 'status' => $status,
-                'tgl_mcu' => $faker->dateTimeBetween('-1 years', 'now'),
-                'exp_mcu' => $faker->dateTimeBetween('-1 years', 'now'),
-                'tgl_verifikasi' => $faker->dateTimeBetween('-1 years', 'now'),
+                'tgl_mcu' => $faker->dateTimeBetween('-1 days', 'now'),
+                'exp_mcu' => $faker->dateTimeBetween('-1 days', 'now'),
+                'tgl_verifikasi' => $faker->dateTimeBetween('-1 days', 'now'),
                 'verifikator' => $verifikators[array_rand($verifikators)],
                 'status_' => $status === 'FOLLOW UP' ? 'open' : 'close',
                 'gdp' => rand(80, 100),

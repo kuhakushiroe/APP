@@ -53,10 +53,6 @@ class Home extends Component
         $jumlahKaryawan = Karyawan::all()->count();
         $jumlahKaryawanAktif = Karyawan::where('status', 'aktif')->count();
         $jumlahKaryawanNonAktif = Karyawan::where('status', 'non aktif')->count();
-        // $jumlahMCUFit = ModelsMcu::where('status', 'FIT')->count();
-        // $jumlahMCUFitWithNote = ModelsMcu::where('status', 'FIT WITH NOTE')->count();
-        // $jumlahMCUFollowUp = ModelsMcu::where('status', 'FOLLOW UP')->count();
-        // $jumlahMCUnfit = ModelsMcu::where('status', 'UNFIT')->count();
 
         $statusCountsKaryawan = Karyawan::select('status', DB::raw('count(*) as total'))
             ->whereIn('status', ['aktif', 'non aktif'])
@@ -79,58 +75,6 @@ class Home extends Component
             })
             ->toArray();
 
-
-
-        // $statusCounts = ModelsMcu::select('status', DB::raw('count(*) as total'))
-        //     ->whereIn('status', ['FIT', 'TEMPORARY UNFIT', 'FOLLOW UP', 'UNFIT'])
-        //     ->groupBy('status')
-        //     ->pluck('total', 'status')
-        //     ->toArray();
-
-        // $colorMap = [
-        //     'FIT' => 'text-bg-success',        // Hijau
-        //     'TEMPORARY UNFIT' => 'text-bg-primary',  // Biru
-        //     'FOLLOW UP' => 'text-bg-warning',  // Kuning
-        //     'UNFIT' => 'text-bg-danger',       // Merah
-        // ];
-
-        // $finalmcuCounts = collect(['FIT', 'TEMPORARY UNFIT', 'FOLLOW UP', 'UNFIT'])
-        //     ->map(function ($status) use ($statusCounts, $colorMap) {
-        //         return [
-        //             'status' => $status,
-        //             'total' => $statusCounts[$status] ?? 0,
-        //             'color' => $colorMap[$status] ?? 'text-bg-secondary',
-        //         ];
-        //     })
-        //     ->toArray();
-
-
-        // $dokter = ModelsMcu::where('verifikator', 'dokter')->count();
-        // $dokter2 = ModelsMcu::where('verifikator', 'dokter2')->count();
-
-        // $verifikators = User::where('role', 'dokter')
-        //     ->where('subrole', 'verifikator')
-        //     ->get()
-        //     ->map(function ($verifikator) {
-        //         $jumlahMcu = ModelsMcu::where('verifikator', $verifikator->username)->count();
-        //         return [
-        //             'username' => $verifikator->username,
-        //             'nama' => $verifikator->name,
-        //             'jumlah_mcu' => $jumlahMcu,
-        //         ];
-        //     })
-        //     ->toArray();
-        // $mcuCountsByVerifikator = [];
-        // foreach ($verifikators as $verifikator) {
-        //     $mcuCount = ModelsMcu::where('verifikator_id', $verifikator->id)->count();
-        //     $mcuCountsByVerifikator[] = [
-        //         'verifikator_name' => $verifikator->name,
-        //         'mcu_count' => $mcuCount,
-        //     ];
-        // }
-        //temuan
-
-
         //pakai ini coba untuk mcu dashboard dokter
         $today = Carbon::today()->toDateString(); // Format: '2025-06-09'
 
@@ -142,12 +86,17 @@ class Home extends Component
             'TEMPORARY UNFIT' => 'text-bg-info',
         ];
 
+        //MCU belum di acc
+        $mcuNoAcc = ModelsMcu::whereNull(['status', 'verifikator'])->count();
         // Ambil data MCU untuk hari ini, dikelompokkan berdasarkan verifikator dan status
         $mcuData = ModelsMcu::select('verifikator', 'status', DB::raw('count(*) as total'))
+            ->whereNotNull('verifikator')
             ->whereDate('tgl_mcu', $today)
             ->groupBy('verifikator', 'status')
             ->get()
             ->groupBy('verifikator');
+
+        //dd($mcuData);
 
         // Ambil semua verifikator dengan role dokter dan subrole verifikator
         $verifikators = User::where('role', 'dokter')
@@ -229,6 +178,7 @@ class Home extends Component
 
             //'dokter' => $dokter,
             //'dokter2' => $dokter2,
+            'mcuNoAcc' => $mcuNoAcc,
             'verifikators' => $verifikators,
             'prediabetes' => $prediabetes,
             'diabetes' => $diabetes,
