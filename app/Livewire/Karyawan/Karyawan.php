@@ -41,6 +41,12 @@ class Karyawan extends Component
     public $kontraktor, $dept, $jabatan, $no_hp, $alamat, $domisili, $status = 'aktif', $file, $fileCek;
     public $dataKaryawan = [];
     public $lihatdetail = false;
+    public $perubahan = false;
+    public function openPerubahan($id_karyawan)
+    {
+        $this->perubahan = true;
+        $this->id_karyawan = $id_karyawan;
+    }
     public function open()
     {
         if (auth()->user()->hasRole('admin')) {
@@ -52,6 +58,7 @@ class Karyawan extends Component
     {
         $this->form = false;
         $this->lihatdetail = false;
+        $this->perubahan = false;
         $this->reset();
     }
     public function edit($id)

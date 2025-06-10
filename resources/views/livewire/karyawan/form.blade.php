@@ -29,11 +29,11 @@
                                     <br>
                                 @endif
                             @endif
-                            <input type="text" class="form-control form-control-sm" wire:model="nrp_lama">
-                            <input type="text" class="form-control form-control-sm" wire:model="nama_lama">
-                            <input type="text" class="form-control form-control-sm" wire:model="jabatan_lama">
-                            <input type="text" class="form-control form-control-sm" wire:model="departemen_lama">
-                            <input type="text" class="form-control form-control-sm" wire:model="id_karyawan">
+                            <input type="hidden" class="form-control form-control-sm" wire:model="nrp_lama">
+                            <input type="hidden" class="form-control form-control-sm" wire:model="nama_lama">
+                            <input type="hidden" class="form-control form-control-sm" wire:model="jabatan_lama">
+                            <input type="hidden" class="form-control form-control-sm" wire:model="departemen_lama">
+                            <input type="hidden" class="form-control form-control-sm" wire:model="id_karyawan">
                             <input type="hidden" class="form-control form-control-sm" wire:model="fotolama">
                             <label for="foto">Foto</label>
                             <input type="file"

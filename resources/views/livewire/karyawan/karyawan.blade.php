@@ -3,6 +3,8 @@
         @include('livewire.karyawan.form')
     @elseif ($lihatdetail)
         @include('livewire.karyawan.detail')
+    @elseif ($perubahan)
+        @include('livewire.karyawan.perubahan')
     @else
         <div class="row pt-2">
             <div class="col-md-12">
@@ -90,6 +92,17 @@
                         <tr @if ($datakaryawan->status == 'non aktif') class="table-danger" @endif>
                             <td>
                                 @if ($datakaryawan->status == 'aktif')
+                                    @php
+                                        $cariperubahan = DB::table('log_karyawan')
+                                            ->where('id_karyawan', $datakaryawan->id)
+                                            ->get();
+                                    @endphp
+                                    @if ($cariperubahan->count() > 0)
+                                        <button class="btn btn-outline-warning btn-sm"
+                                            wire:click="openPerubahan({{ $datakaryawan->id }})">
+                                            <span class="bi bi-exclamation-diamond"></span>
+                                        </button>
+                                    @endif
                                     <button class="btn btn-outline-info btn-sm"
                                         wire:click="detail({{ $datakaryawan->id }})">
                                         <span class="bi bi-eye"></span>
