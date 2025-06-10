@@ -27,8 +27,56 @@
                 </div>
             </div>
         @empty
-            <p>Tidak ada data MCU.</p>
+            <p>Tidak ada data</p>
         @endforelse
+        <div class="col-12 col-sm-12 col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title">Karyawan Aktif</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
+                            <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+                            <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <!--begin::Row-->
+                    <div class="row">
+                        <div class="col-12">
+                            <div id="pie-chart-aktif"></div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!--end::Row-->
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title">Karyawan Non Aktif</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
+                            <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+                            <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <!--begin::Row-->
+                    <div class="row">
+                        <div class="col-12">
+                            <div id="pie-chart-non-aktif"></div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!--end::Row-->
+                </div>
+            </div>
+        </div>
 
         <div class="col-md-12">
             <div class="card mb-4">
@@ -85,85 +133,109 @@
                         @forelse ($verifikators as $dataverifikator)
                             <div class="col-md-6">
                                 <p class="text-center"><strong>{{ $dataverifikator['nama'] }}</strong></p>
+
+                                {{-- FIT --}}
                                 <div class="progress-group">
                                     FIT
                                     <span class="float-end">
-                                        <b>
-                                            {{ $dataverifikator['status_fit'] }}
-                                        </b>/{{ $jumlahmcuharian }}
+                                        <b>{{ $dataverifikator['status_fit'] }}</b>/{{ $jumlahmcuharian }}
                                     </span>
+                                    @php
+                                        $persenFit =
+                                            $jumlahmcuharian > 0
+                                                ? ($dataverifikator['status_fit'] / $jumlahmcuharian) * 100
+                                                : 0;
+                                    @endphp
                                     <div class="progress progress-sm" style="height: 20px">
-                                        <div class="progress-bar text-bg-success"
-                                            style="width: {{ ($dataverifikator['status_fit'] / $jumlahmcuharian) * 100 }}%">
-                                            {{ ($dataverifikator['status_fit'] / $jumlahmcuharian) * 100 }} %
+                                        <div class="progress-bar text-bg-success" style="width: {{ $persenFit }}%">
+                                            {{ number_format($persenFit, 2) }} %
                                         </div>
                                     </div>
                                 </div>
-                                <!-- /.progress-group -->
+
+                                {{-- FOLLOW UP --}}
                                 <div class="progress-group">
                                     FOLLOW UP
                                     <span class="float-end">
-                                        <b>
-                                            {{ $dataverifikator['status_follow_up'] }}
-                                        </b>/{{ $jumlahmcuharian }}
+                                        <b>{{ $dataverifikator['status_follow_up'] }}</b>/{{ $jumlahmcuharian }}
                                     </span>
+                                    @php
+                                        $persenFollowUp =
+                                            $jumlahmcuharian > 0
+                                                ? ($dataverifikator['status_follow_up'] / $jumlahmcuharian) * 100
+                                                : 0;
+                                    @endphp
                                     <div class="progress progress-sm" style="height: 20px">
                                         <div class="progress-bar text-bg-primary"
-                                            style="width: {{ ($dataverifikator['status_follow_up'] / $jumlahmcuharian) * 100 }}%">
-                                            {{ ($dataverifikator['status_follow_up'] / $jumlahmcuharian) * 100 }} %
+                                            style="width: {{ $persenFollowUp }}%">
+                                            {{ number_format($persenFollowUp, 2) }} %
                                         </div>
                                     </div>
                                 </div>
-                                <!-- /.progress-group -->
+
+                                {{-- TEMPORARY UNFIT --}}
                                 <div class="progress-group">
-                                    <span class="progress-text">TEMPORARY UNFIT</span>
+                                    TEMPORARY UNFIT
                                     <span class="float-end">
-                                        <b>
-                                            {{ $dataverifikator['status_temporary_unfit'] }}
-                                        </b>/{{ $jumlahmcuharian }}
+                                        <b>{{ $dataverifikator['status_temporary_unfit'] }}</b>/{{ $jumlahmcuharian }}
                                     </span>
+                                    @php
+                                        $persenTemporaryUnfit =
+                                            $jumlahmcuharian > 0
+                                                ? ($dataverifikator['status_temporary_unfit'] / $jumlahmcuharian) * 100
+                                                : 0;
+                                    @endphp
                                     <div class="progress progress-sm" style="height: 20px">
                                         <div class="progress-bar text-bg-warning"
-                                            style="width: {{ ($dataverifikator['status_temporary_unfit'] / $jumlahmcuharian) * 100 }}%">
-                                            {{ ($dataverifikator['status_temporary_unfit'] / $jumlahmcuharian) * 100 }}
-                                            %
+                                            style="width: {{ $persenTemporaryUnfit }}%">
+                                            {{ number_format($persenTemporaryUnfit, 2) }} %
                                         </div>
                                     </div>
                                 </div>
-                                <!-- /.progress-group -->
+
+                                {{-- UNFIT --}}
                                 <div class="progress-group">
                                     UNFIT
                                     <span class="float-end">
-                                        <b>
-                                            {{ $dataverifikator['status_unfit'] }}
-                                        </b>/{{ $jumlahmcuharian }}
+                                        <b>{{ $dataverifikator['status_unfit'] }}</b>/{{ $jumlahmcuharian }}
                                     </span>
+                                    @php
+                                        $persenUnfit =
+                                            $jumlahmcuharian > 0
+                                                ? ($dataverifikator['status_unfit'] / $jumlahmcuharian) * 100
+                                                : 0;
+                                    @endphp
                                     <div class="progress progress-sm" style="height: 20px">
-                                        <div class="progress-bar text-bg-danger"
-                                            style="width: {{ ($dataverifikator['status_unfit'] / $jumlahmcuharian) * 100 }}%">
-                                            {{ ($dataverifikator['status_unfit'] / $jumlahmcuharian) * 100 }} %
+                                        <div class="progress-bar text-bg-danger" style="width: {{ $persenUnfit }}%">
+                                            {{ number_format($persenUnfit, 2) }} %
                                         </div>
                                     </div>
                                 </div>
+
+                                {{-- Total Verifikasi --}}
                                 <div class="progress-group">
                                     Total Verifikasi
                                     <span class="float-end">
-                                        <b>
-                                            {{ $dataverifikator['status_total'] }}
-                                        </b>/{{ $jumlahmcuharian }}
+                                        <b>{{ $dataverifikator['status_total'] }}</b>/{{ $jumlahmcuharian }}
                                     </span>
+                                    @php
+                                        $persenTotal =
+                                            $jumlahmcuharian > 0
+                                                ? ($dataverifikator['status_total'] / $jumlahmcuharian) * 100
+                                                : 0;
+                                    @endphp
                                     <div class="progress progress-sm" style="height: 20px">
                                         <div class="progress-bar text-bg-secondary"
-                                            style="width: {{ ($dataverifikator['status_total'] / $jumlahmcuharian) * 100 }}%">
-                                            {{ ($dataverifikator['status_total'] / $jumlahmcuharian) * 100 }} %
+                                            style="width: {{ $persenTotal }}%">
+                                            {{ number_format($persenTotal, 2) }} %
                                         </div>
                                     </div>
                                 </div>
-                                <!-- /.progress-group -->
                             </div>
                         @empty
                             -
                         @endforelse
+
                     </div>
 
                 </div>
@@ -177,7 +249,7 @@
         <div class="col-md-12">
             <div class="card mb-4">
                 <div class="card-header bg-secondary text-white">
-                    <h5 class="card-title">Temuan Pemeriksaan Kesehatan Karyawan</h5>
+                    <h5 class="card-title">Temuan MCU</h5>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
                             <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
@@ -225,9 +297,6 @@
                                 </div>
                             </div>
                         </div>
-
-
-
                     </div>
                 </div>
                 <!-- ./card-body -->
@@ -237,58 +306,6 @@
             <!-- /.card -->
         </div>
         <!-- /.col -->
-
-
-        <div class="col-12
-                                        col-sm-12 col-md-6">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h3 class="card-title">Karyawan Aktif</h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
-                            <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
-                            <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
-                        </button>
-                    </div>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                    <!--begin::Row-->
-                    <div class="row">
-                        <div class="col-12">
-                            <div id="pie-chart-aktif"></div>
-                        </div>
-                        <!-- /.col -->
-                    </div>
-                    <!--end::Row-->
-                </div>
-            </div>
-        </div>
-
-        <div class="col-12 col-sm-12 col-md-6">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h3 class="card-title">Karyawan Non Aktif</h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
-                            <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
-                            <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
-                        </button>
-                    </div>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                    <!--begin::Row-->
-                    <div class="row">
-                        <div class="col-12">
-                            <div id="pie-chart-non-aktif"></div>
-                        </div>
-                        <!-- /.col -->
-                    </div>
-                    <!--end::Row-->
-                </div>
-            </div>
-        </div>
     </div>
 
     <script>
