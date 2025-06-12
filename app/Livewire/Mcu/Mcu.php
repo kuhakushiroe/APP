@@ -26,7 +26,7 @@ class Mcu extends Component
     public $formVerifikasi = false;
     public $formUpload = false;
     public $id_mcu, $sub_id, $proveder, $nrp, $nama, $tgl_mcu, $gol_darah, $jenis_kelamin, $file_mcu;
-    public $no_dokumen, $status = '', $keterangan_mcu, $saran_mcu, $tgl_verifikasi, $exp_mcu;
+    public $no_dokumen, $status = NULL, $keterangan_mcu, $saran_mcu, $tgl_verifikasi, $exp_mcu;
     public $riwayat_rokok, $BB, $TB, $LP, $BMI, $Laseq, $reqtal_touche, $sistol, $diastol, $OD_jauh, $OS_jauh, $OD_dekat, $OS_dekat, $butawarna, $gdp, $gd_2_jpp, $ureum, $creatine, $asamurat, $sgot, $sgpt, $hbsag, $anti_hbs, $kolesterol, $hdl, $ldl, $tg, $darah_rutin, $napza, $urin, $ekg, $rontgen, $audiometri, $spirometri, $tredmil_test, $widal_test, $routin_feces, $kultur_feces;
     public $caridatakaryawan = [];
     public $carikaryawan = [];
