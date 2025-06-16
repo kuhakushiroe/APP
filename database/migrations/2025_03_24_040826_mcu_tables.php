@@ -35,7 +35,7 @@ return new class extends Migration
             $table->enum('paramedik_status', [0, 1])->nullable();
             $table->text('paramedik_catatan')->nullable();
 
-            $table->enum('riwayat_rokok', ['Ya', 'Tidak'])->nullable()->default('Tidak'); //baru
+            $table->enum('riwayat_rokok', ['Ya', 'Tidak'])->default('Tidak')->nullable(); //baru
             //tubuh
             $table->string('BB')->nullable();
             $table->string('TB')->nullable();
@@ -51,7 +51,7 @@ return new class extends Migration
             $table->string('OS_jauh')->nullable();
             $table->string('OD_dekat')->nullable();
             $table->string('OS_dekat')->nullable();
-            $table->string('butawarna')->nullable();
+            $table->enum('butawarna', ['none', 'parsial', 'total'])->default('none')->nullable();
             //Gula darah
             $table->integer('gdp')->nullable();
             $table->integer('gd_2_jpp')->nullable();
@@ -77,7 +77,7 @@ return new class extends Migration
             $table->string('rontgen')->nullable();
             $table->string('audiometri')->nullable();
             $table->string('spirometri')->nullable();
-            $table->enum('tredmil_test', ['Hipertensi Positif', 'Hipertensi Negatif'])->nullable();
+            $table->enum('tredmil_test', ['Hipertensif Positif', 'Hipertensif Negatif'])->nullable();
             $table->string('widal_test')->nullable();
             $table->string('routin_feces')->nullable();
             $table->string('kultur_feces')->nullable();
