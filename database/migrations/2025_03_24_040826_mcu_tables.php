@@ -35,44 +35,59 @@ return new class extends Migration
             $table->enum('paramedik_status', [0, 1])->nullable();
             $table->text('paramedik_catatan')->nullable();
 
-            $table->enum('riwayat_rokok', ['Ya', 'Tidak'])->default('Tidak');
+            $table->enum('riwayat_rokok', ['Ya', 'Tidak'])->default('Tidak')->nullable(); //baru
+            //tubuh
             $table->string('BB')->nullable();
             $table->string('TB')->nullable();
             $table->string('LP')->nullable();
-            $table->string('BMI')->nullable();
+            $table->double('BMI')->nullable();
             $table->string('Laseq')->nullable();
-            $table->string('reqtal_touche')->nullable();
-            $table->string('sistol')->nullable();
-            $table->string('diastol')->nullable();
+            $table->enum('reqtal_touche', ['Ditemukan', 'Tidak Ditemukan'])->nullable(); // baru
+            //tekanan darah
+            $table->integer('sistol')->nullable();
+            $table->integer('diastol')->nullable();
+            //mata
             $table->string('OD_jauh')->nullable();
             $table->string('OS_jauh')->nullable();
             $table->string('OD_dekat')->nullable();
             $table->string('OS_dekat')->nullable();
-            $table->string('butawarna')->nullable();
-            $table->string('gdp')->nullable();
-            $table->string('gd_2_jpp')->nullable();
-            $table->string('ureum')->nullable();
-            $table->string('creatine')->nullable();
-            $table->string('asamurat')->nullable();
-            $table->string('sgot')->nullable();
-            $table->string('sgpt')->nullable();
-            $table->string('hbsag')->nullable();
-            $table->string('anti_hbs')->nullable();
-            $table->string('kolesterol')->nullable();
-            $table->string('hdl')->nullable();
-            $table->string('ldl')->nullable();
-            $table->string('tg')->nullable();
-            $table->string('darah_rutin')->nullable();
-            $table->string('napza')->nullable();
+            $table->enum('butawarna', ['none', 'parsial', 'total'])->default('none')->nullable();
+            //Gula darah
+            $table->integer('gdp')->nullable();
+            $table->integer('gd_2_jpp')->nullable();
+            $table->double('hba1c')->nullable(); // baru
+            //Ginjal
+            $table->integer('ureum')->nullable();
+            $table->double('creatine')->nullable();
+            $table->integer('asamurat')->nullable();
+            //Fungsi Hati
+            $table->integer('sgot')->nullable();
+            $table->integer('sgpt')->nullable();
+            $table->integer('gamma_gt')->nullable(); // baru
+            $table->enum('hbsag', ['Positif', 'Negatif'])->nullable();
+            //LIPID
+            $table->integer('kolesterol')->nullable();
+            $table->integer('hdl')->nullable();
+            $table->integer('ldl')->nullable();
+            $table->integer('tg')->nullable();
+            //darah rutin
+            $table->enum('napza', ['Positif', 'Negatif'])->nullable();
             $table->string('urin')->nullable();
             $table->string('ekg')->nullable();
             $table->string('rontgen')->nullable();
             $table->string('audiometri')->nullable();
             $table->string('spirometri')->nullable();
-            $table->string('tredmil_test')->nullable();
+            $table->enum('tredmil_test', ['Hipertensif Positif', 'Hipertensif Negatif'])->nullable();
             $table->string('widal_test')->nullable();
             $table->string('routin_feces')->nullable();
             $table->string('kultur_feces')->nullable();
+
+
+            //tidak ada
+            $table->string('anti_hbs')->nullable();
+            $table->string('darah_rutin')->nullable();
+            //tidak ada
+
             $table->enum('status_', ['open', 'close'])->default('open');
             $table->string('temuan')->nullable();
             $table->string('keterangan_mcu')->nullable();
