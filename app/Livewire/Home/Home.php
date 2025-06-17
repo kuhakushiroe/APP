@@ -34,6 +34,8 @@ class Home extends Component
             $employeeCountsAktif[] = Karyawan::where('dept', $department->name_department)->where('status', 'aktif')->count();
         }
 
+        //coba branch baru
+
         $employeeCountsNonAktif = [];
         foreach ($departments as $department) {
             // Count the number of employees in each department
