@@ -15,7 +15,7 @@ class Home extends Component
     public $tanggal;
     public function onchangeTanggal()
     {
-        $this->tanggal = $this->tanggal;
+        $this->tanggal = $this->tanggal; //"coba git hub terus"
     }
     public function mount()
     {
