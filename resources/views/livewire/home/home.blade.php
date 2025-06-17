@@ -93,6 +93,12 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12 text-center">
+                            <form> <!-- Ganti dengan nama route yang sesuai -->
+                                <div class="form-group">
+                                    <label for="tanggal">Pilih Tanggal:</label>
+                                    <input type="date" name="tanggal" wire:model="tanggal" wire:change="onchangeTanggal" id="tanggal" class="form-control d-inline-block w-auto">
+                                </div>
+                            </form>
                             @php
                                 $carijumlahmcuharian = 0;
                                 foreach ($verifikators as $dataverifikator) {
@@ -100,9 +106,10 @@
                                 }
                                 $jumlahmcuharian = $mcuNoAcc + $carijumlahmcuharian;
                             @endphp
-                            <pre>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y') }}</pre>
+                            {{-- <pre>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y') }}</pre> --}}
                             <pre>MCU Harian : {{ $carijumlahmcuharian . '/' . $jumlahmcuharian }}</pre>
                         </div>
+
                         {{-- @forelse ($verifikators as $dataverifikator)
                             <div class="col-12 col-sm-4 col-md-6">
                                 <div class="info-box">
@@ -231,10 +238,34 @@
                                         </div>
                                     </div>
                                 </div>
+
+
                             </div>
                         @empty
                             -
                         @endforelse
+                        <div class="col-md-12 text-center">
+                            <p class="text-center"><strong>Total Verifikasi</strong></p>
+
+                            {{-- FIT --}}
+                            <div class="progress-group">
+                                <span class="float-end">
+                                    <b>{{ $totalSemuaStatus }}</b>/{{ $jumlahmcuharian }}
+                                </span>
+                                @php
+                                    $persenFit =
+                                        $jumlahmcuharian > 0
+                                            ? ($totalSemuaStatus / $jumlahmcuharian) * 100
+                                            : 0;
+                                @endphp
+                                <div class="progress progress-sm" style="height: 20px">
+                                    <div class="progress-bar text-bg-success" style="width: {{ $persenFit }}%">
+                                        {{ number_format($persenFit, 2) }} %
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
 
                     </div>
 

@@ -12,6 +12,15 @@ use Illuminate\Support\Facades\DB;
 
 class Home extends Component
 {
+    public $tanggal;
+    public function onchangeTanggal()
+    {
+        $this->tanggal = $this->tanggal;
+    }
+    public function mount()
+    {
+        $this->tanggal = date('Y-m-d');
+    }
     public function render()
     {
         $departments = Departments::select('name_department')->get();
@@ -76,7 +85,13 @@ class Home extends Component
             ->toArray();
 
         //pakai ini coba untuk mcu dashboard dokter
-        $today = Carbon::today()->toDateString(); // Format: '2025-06-09'
+        //$today = Carbon::today()->toDateString(); // Format: '2025-06-09'
+        // $this->tanggal = date('Y-m-d');
+        // if ($this->tanggal) {
+        //     $today = $this->tanggal;
+        // } else {
+        //     $today = Carbon::today()->toDateString();
+        // }
 
         // Warna untuk setiap status
         $colorMap = [
@@ -87,6 +102,7 @@ class Home extends Component
         ];
 
         //MCU belum di acc
+        $today = $this->tanggal;
         $mcuNoAcc = ModelsMcu::whereNull(['status', 'verifikator'])->count();
         // Ambil data MCU untuk hari ini, dikelompokkan berdasarkan verifikator dan status
         $mcuData = ModelsMcu::select('verifikator', 'status', DB::raw('count(*) as total'))
@@ -97,7 +113,6 @@ class Home extends Component
             ->groupBy('verifikator');
 
         //dd($mcuData);
-
         // Ambil semua verifikator dengan role dokter dan subrole verifikator
         $verifikators = User::where('role', 'dokter')
             ->where('subrole', 'verifikator')
@@ -135,9 +150,12 @@ class Home extends Component
                     'status_temporary_unfit' => $finalMcuCounts[3]['total'],
                     'color' => $finalMcuCounts[0]['color'],
                     'status_total' => $finalMcuCounts[0]['total'] + $finalMcuCounts[1]['total'] + $finalMcuCounts[2]['total'] + $finalMcuCounts[3]['total'],
+
                 ];
             })
             ->toArray();
+
+        $totalSemuaStatus = collect($verifikators)->sum('status_total');
 
 
 
@@ -182,7 +200,8 @@ class Home extends Component
             'verifikators' => $verifikators,
             'prediabetes' => $prediabetes,
             'diabetes' => $diabetes,
-            'gulanormal' => $gulanormal
+            'gulanormal' => $gulanormal,
+            'totalSemuaStatus' => $totalSemuaStatus,
         ]);
     }
 }
