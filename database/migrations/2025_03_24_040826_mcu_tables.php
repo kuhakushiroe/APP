@@ -29,7 +29,7 @@ return new class extends Migration
             $table->string('tgl_verifikasi')->nullable();
             $table->enum('status', ['FIT', 'FOLLOW UP', 'UNFIT', 'TEMPORARY UNFIT'])->nullable();
             $table->string('verifikator')->nullable();
-
+            //coba rubah yazid
 
             $table->string('paramedik')->nullable();
             $table->enum('paramedik_status', [0, 1])->nullable();
