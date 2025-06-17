@@ -94,6 +94,7 @@ return new class extends Migration
             $table->string('saran_mcu')->nullable();
             $table->softDeletes();
             $table->timestamps();
+            //coba github
         });
     }
 
