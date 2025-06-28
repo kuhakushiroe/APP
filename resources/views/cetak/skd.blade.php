@@ -2,7 +2,7 @@
 <html lang="id">
 
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset="UTF-8">
     <title>Surat Keterangan Dokter</title>
     <style>
         @page {
@@ -64,7 +64,27 @@
                     Jenis MCU
                 </td>
                 <td>:</td>
-                <td>-</td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>
+                                <p>Tahunan &#9634;</p>
+                            </td>
+                            <td>
+                                <p>Pre Employeed &#9634;</p>
+                            </td>
+                            <td>
+                                <p>Khusus &#9634;</p>
+                            </td>
+                        </tr>
+                    </table>
+                    {{-- <input type="checkbox" id="checkbox1" name="mcu_type" value="type1">
+                    <label for="checkbox1" style="margin-right: 20px;">Tahunan</label>
+                    <input type="checkbox" id="checkbox2" name="mcu_type" value="type2">
+                    <label for="checkbox2" style="margin-right: 20px;">Pre Employeed</label>
+                    <input type="checkbox" id="checkbox3" name="mcu_type" value="type3">
+                    <label for="checkbox3">Khusus</label> --}}
+                </td>
             </tr>
         </table>
     </div>
@@ -103,15 +123,93 @@
         </div>
     </div>
     <div style="margin: 0cm 0cm 0cm 1.2cm">
-        Setelah dilakukan pemeriksaan:
+        {{-- Setelah dilakukan pemeriksaan: --}}
+        <div style="padding: 0cm 0cm 0cm 0.6cm">
+            <table width="100%">
+                <tr>
+                    <td width="1">1.</td>
+                    <td width="36%">Gula Darah</td>
+                    <td>: {{ $query->gdp }} mg/dl </td>
+                </tr>
+                <tr>
+                    <td>2.</td>
+                    <td>Pemeriksa Mata</td>
+                    <td>: OD : {{ $query->OD_jauh }} , OS : {{ $query->OS_jauh }}</td>
+                </tr>
+                <tr>
+                    <td>3.</td>
+                    <td>Audiometeri</td>
+                    <td>: {{ $query->audiometri }}</td>
+                </tr>
+                <tr>
+                    <td>4.</td>
+                    <td>EKG</td>
+                    <td>: {{ $query->ekg }}</td>
+                </tr>
+                <tr>
+                    <td>5.</td>
+                    <td>Treadmill</td>
+                    <td>: </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Hasil Follow Up</td>
+                    <td>: </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td> Echocardiography</td>
+                    <td>: </td>
+                </tr>
+                <tr>
+                    <td>6.</td>
+                    <td>Tinggi Badan</td>
+                    <td>: {{ $query->TB }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Berat Badan</td>
+                    <td>: {{ $query->BB }}</td>
+                </tr>
+            </table>
+        </div>
+
         <div style="padding: 0cm 0cm 0cm 0.6cm">
             {{ $query->saran_mcu }}
         </div>
     </div>
     <div style="margin: 0cm 0cm 0cm 1.2cm">
-        <p class="mt-3"><b>Berdasarkan hasil pemeriksaan MCU di atas dapat dinyatakan:
+        Setelah dilakukan pemeriksaan:
+        <div style="padding: 0cm 0cm 0cm 0.6cm">
+            <table width="100%">
+                <tr rowspan="2">
+                    <td width="38%">1. Riwayat Penyakit</td>
+                    <td>: Kehilangan Kesadaran : Yes / No</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td> Epilepsi : Yes / No</td>
+                </tr>
+                <tr>
+                    <td>2. Tekanan Darah</td>
+                    <td>: {{ $query->sistol }} mmhg</td>
+                </tr>
+                <tr>
+                    <td>3. Buta Warna</td>
+                    <td>: </td>
+                </tr>
+                <tr>
+                    <td colspan="2">4. Berdasarkan hasil pemeriksaan MCU diatas dapat dinyatakan
+                        <u>{{ $query->status }}</u>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div style="margin: 0cm 0cm 0cm 1.2cm">
+        {{-- <p class="mt-3"><b>Berdasarkan hasil pemeriksaan MCU di atas dapat dinyatakan:
                 <u>{{ $query->status }}</u>.</b>
-        </p>
+        </p> --}}
         Surat keterangan ini untuk keperluan administrasi pengajuan ID Card & KIMPER berlaku sampai dengan
         {{ \Carbon\Carbon::parse($query->exp_mcu)->locale('id')->translatedFormat('l, d F Y') }} Atas perhatian dan
         kerjasamanya saya mengucapkan terima kasih.
