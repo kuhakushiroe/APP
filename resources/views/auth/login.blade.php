@@ -4,7 +4,7 @@
         <div class="login-logo">
             <img src="{{ asset('storage/LOGO SHE-G.png') }}" class="rounded brand-image"
                 style="background-color: white; padding: 5px; width: 10%;" />
-            <a href="/"><b>APP</b> SHE-G</a>
+            <a href="/"><b>APPs</b> SHE-G</a>
         </div>
         <!-- /.login-logo -->
         <div class="card">
