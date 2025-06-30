@@ -32,7 +32,7 @@
                 <img src="{{ public_path('storage/LOGO AMM 01.png') }}" width="60px" alt="">
             </td>
             <td align="center" style="font-size: 14pt;font-weight: bold" rowspan="4" width="40%">SURAT KETERANGAN
-                LAIK DOKTER</td>
+                LAIK KERJA</td>
             <td width="15%">No. Dokumen</td>
             <td width="25%">: AMM-MIFA-F-SHE-77E</td>
         </tr>
@@ -94,9 +94,13 @@
                 <td>{{ $query->nama }}</td>
             </tr>
             <tr>
+                @php
+                    use Carbon\Carbon;
+                    $usia = Carbon::parse($query->tgl_lahir)->age;
+                @endphp
                 <td>Usia</td>
                 <td>:</td>
-                <td>{{ $query->usia }} tahun</td>
+                <td>{{ $usia }} tahun</td>
             </tr>
             <tr>
                 <td>Jenis Kelamain</td>
@@ -111,7 +115,7 @@
             <tr>
                 <td>Karyawan</td>
                 <td>:</td>
-                <td>{{ $query->Departemen }}</td>
+                <td>{{ $query->dept }}</td>
             </tr>
         </table>
     </div>
@@ -124,8 +128,8 @@
 
         </div>
     </div>
-    <div>
-        Status Kelayakan Kerja Tersebut akan berakhir pada tanggal {{ $query->berakhir }},
+    <div style="margin: 0cm 0cm 0cm 1cm">
+        Status Kelayakan Kerja Tersebut akan berakhir pada tanggal {{ $query->exp_mcu }},
         Sehingga Perlu dilakukan pemeriksaan MCU berikutnya sebagai dasar perpanjangan status kelaikan kerja.
     </div>
 
