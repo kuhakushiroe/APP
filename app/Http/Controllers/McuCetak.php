@@ -15,7 +15,7 @@ class McuCetak extends Controller
         $pdf = Pdf::loadView('cetak.skd', ['id' => $id,])
             ->set_option('dpi', '96')
             ->setPaper('a4', 'portrait');
-        return $pdf->stream('mcu-' . $carimcu->nik . '-' . date('Y-m-d') . '.pdf');
+        return $pdf->stream('skd-' . $carimcu->nik . '-' . date('Y-m-d') . '.pdf');
     }
     public function cetak($id)
     {
@@ -40,6 +40,6 @@ class McuCetak extends Controller
         $pdf = Pdf::loadView('cetak.kartu-laik-kerja', ['id' => $id,])
             ->set_option('dpi', '96')
             ->setPaper('a4', 'landscape');
-        return $pdf->stream('mcu-' . $carimcu->nik . '-' . date('Y-m-d') . '.pdf');
+        return $pdf->stream('surat-laik-kerja-' . $carimcu->nik . '-' . date('Y-m-d') . '.pdf');
     }
 }
