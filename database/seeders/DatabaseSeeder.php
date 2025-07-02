@@ -12,6 +12,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Faker\Factory as Faker;
 use Illuminate\Support\Facades\DB;
+use illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,7 +22,16 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Departments
-        Departments::insert([
+        // Departments::insert([
+        //     ['name_department' => 'ENGINEERING', 'description_department' => 'ENGINEERING'],
+        //     ['name_department' => 'PRODUKSI', 'description_department' => 'PRODUKSI'],
+        //     ['name_department' => 'FALOG', 'description_department' => 'FALOG'],
+        //     ['name_department' => 'SHE', 'description_department' => 'SHE'],
+        //     ['name_department' => 'COE', 'description_department' => 'COE'],
+        //     ['name_department' => 'PLANT', 'description_department' => 'PLANT'],
+        //     ['name_department' => 'HCGA', 'description_department' => 'HCGA'],
+        // ]);
+        $departments = [
             ['name_department' => 'ENGINEERING', 'description_department' => 'ENGINEERING'],
             ['name_department' => 'PRODUKSI', 'description_department' => 'PRODUKSI'],
             ['name_department' => 'FALOG', 'description_department' => 'FALOG'],
@@ -29,7 +39,22 @@ class DatabaseSeeder extends Seeder
             ['name_department' => 'COE', 'description_department' => 'COE'],
             ['name_department' => 'PLANT', 'description_department' => 'PLANT'],
             ['name_department' => 'HCGA', 'description_department' => 'HCGA'],
-        ]);
+        ];
+
+        Departments::insert($departments);
+
+        foreach ($departments as $dept) {
+            User::create([
+                'name' => 'Admin ' . $dept['name_department'],
+                'username' => 'admin_' . strtolower($dept['name_department']),
+                'email' => 'admin_' . strtolower($dept['name_department']) . '@example.com',
+                'role' => 'admin',
+                'subrole' => $dept['name_department'],
+                'password' => Hash::make('password'),
+            ]);
+        }
+
+
 
         //Jabatan
         Jabatan::insert([
@@ -351,5 +376,12 @@ class DatabaseSeeder extends Seeder
         }
 
         DB::table('mcu')->insert($mcuRecords);
+    }
+
+    private function generateAdminName()
+    {
+        $firstNames = ['John', 'Jane', 'Alice', 'Bob', 'Emma', 'Michael', 'Sarah'];
+        $lastNames = ['Doe', 'Smith', 'Johnson', 'Brown', 'Davis', 'Lee', 'Wilson'];
+        return $firstNames[array_rand($firstNames)] . ' ' . $lastNames[array_rand($lastNames)];
     }
 }
