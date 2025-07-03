@@ -276,6 +276,12 @@
                                                             <span class="bi bi-download"></span>
                                                             Download Verifikasi {{ $data->mcuStatus }}
                                                         </a>
+                                                        <br>
+                                                        <a href="{{ asset('storage/surat_jawaban_konsul.docx') }}"
+                                                            target="_blank" class="btn btn-outline-warning btn-sm">
+                                                            <span class="bi bi-download"></span>
+                                                            Download Surat Jawaban Konsul
+                                                        </a>
                                                     @endif
                                                 </td>
                                             </tr>
