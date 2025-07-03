@@ -459,6 +459,13 @@
                                                                 <span class="bi bi-download"></span>
                                                                 Download Verifikasi {{ $item->status }}
                                                             </a>
+                                                            <br>
+                                                            <a href="{{ asset('storage/surat jawaban konsul.docx') }}"
+                                                                target="_blank"
+                                                                class="btn btn-outline-warning btn-sm">
+                                                                <span class="bi bi-download"></span>
+                                                                Download Surat Jawaban Konsul
+                                                            </a>
                                                         @endif
                                                     </td>
                                                 </tr>
