@@ -264,28 +264,50 @@
                                                 <td class="text-end">-</td>
                                                 <td colspan="3">
                                                     @if (!empty($data->mcuStatus))
-                                                        Hasil:
-                                                        <br>
-                                                        <b>{{ $data->saran_mcu }}</b>
-                                                        <br>
-                                                        <small>~{{ $data->keterangan_mcu }}~</small>
-                                                        <br>
-                                                        <small>~{{ $data->tgl_verifikasi }}~</small><br>
-                                                        <a href="cetak-mcu-sub/{{ $data->id_mcu }}" target="_blank"
-                                                            class="btn btn-outline-warning btn-sm">
-                                                            <span class="bi bi-download"></span>
-                                                            Download Verifikasi {{ $data->mcuStatus }}
-                                                        </a>
+                                                        <div class="mb-2">
+                                                            <strong>Hasil:</strong>
+                                                        </div>
+
+                                                        <div class="mb-1">
+                                                            <b>{{ $data->saran_mcu }}</b>
+                                                        </div>
+
+                                                        <div class="mb-1 text-muted">
+                                                            <small><i>{{ $data->keterangan_mcu }}</i></small>
+                                                        </div>
+
+                                                        <div class="mb-3 text-muted">
+                                                            <small><i>{{ $data->tgl_verifikasi }}</i></small>
+                                                        </div>
+
+                                                        <div class="mb-2">
+                                                            <a href="{{ url('cetak-mcu-sub/' . $data->id_mcu) }}"
+                                                                target="_blank" class="btn btn-outline-warning btn-sm">
+                                                                <i class="bi bi-download"></i> Download Verifikasi
+                                                                {{ $data->mcuStatus }}
+                                                            </a>
+                                                        </div>
+
+                                                        <div>
+                                                            <a href="{{ asset('storage/surat jawaban konsul.docx') }}"
+                                                                target="_blank" class="btn btn-outline-warning btn-sm">
+                                                                <i class="bi bi-download"></i> Download Surat Jawaban
+                                                                Konsul
+                                                            </a>
+                                                        </div>
                                                     @endif
                                                 </td>
+
                                             </tr>
                                             @php $row = 2; @endphp
                                             @foreach ($subItems as $item)
                                                 <tr>
                                                     <td>{{ $row++ }}</td>
                                                     <td>
-                                                        <a href="{{ Storage::url($item->file_mcu) }}" target="_blank">
-                                                            <span class="bi bi-file-earmark-arrow-down"></span> File MCU
+                                                        <a href="{{ Storage::url($item->file_mcu) }}"
+                                                            target="_blank">
+                                                            <span class="bi bi-file-earmark-arrow-down"></span> File
+                                                            MCU
                                                         </a>
                                                     </td>
                                                     <td>{{ $item->tgl_mcu }}</td>
@@ -440,19 +462,39 @@
                                                     <td class="text-end">-</td>
                                                     <td colspan="3">
                                                         @if (!empty($item->status))
-                                                            Hasil:
-                                                            <br>
-                                                            <b>{{ $item->saran_mcu }}</b>
-                                                            <br>
-                                                            <small>~{{ $item->keterangan_mcu }}~</small>
-                                                            <br>
-                                                            <small>~{{ \Carbon\Carbon::parse($item->tgl_verifikasi)->locale('id')->isoFormat('D MMMM YYYY') }}~</small><br>
-                                                            <a href="cetak-mcu-sub/{{ $item->id }}"
-                                                                target="_blank"
-                                                                class="btn btn-outline-warning btn-sm">
-                                                                <span class="bi bi-download"></span>
-                                                                Download Verifikasi {{ $item->status }}
-                                                            </a>
+                                                            <div class="mb-2">
+                                                                <strong>Hasil:</strong>
+                                                            </div>
+
+                                                            <div class="mb-1">
+                                                                <b>{{ $item->saran_mcu }}</b>
+                                                            </div>
+
+                                                            <div class="mb-1 text-muted">
+                                                                <small><i>{{ $item->keterangan_mcu }}</i></small>
+                                                            </div>
+
+                                                            <div class="mb-3 text-muted">
+                                                                <small><i>{{ \Carbon\Carbon::parse($item->tgl_verifikasi)->locale('id')->isoFormat('D MMMM YYYY') }}</i></small>
+                                                            </div>
+
+                                                            <div class="mb-2">
+                                                                <a href="{{ url('cetak-mcu-sub/' . $item->id) }}"
+                                                                    target="_blank"
+                                                                    class="btn btn-outline-warning btn-sm">
+                                                                    <i class="bi bi-download"></i> Download Verifikasi
+                                                                    {{ $item->status }}
+                                                                </a>
+                                                            </div>
+
+                                                            <div>
+                                                                <a href="{{ asset('storage/surat jawaban konsul.docx') }}"
+                                                                    target="_blank"
+                                                                    class="btn btn-outline-warning btn-sm">
+                                                                    <i class="bi bi-download"></i> Download Surat
+                                                                    Jawaban Konsul
+                                                                </a>
+                                                            </div>
                                                         @endif
                                                     </td>
                                                 </tr>

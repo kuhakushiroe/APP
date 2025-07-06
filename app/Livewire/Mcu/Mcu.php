@@ -27,7 +27,7 @@ class Mcu extends Component
     public $formUpload = false;
     public $id_mcu, $sub_id, $proveder, $nrp, $nama, $tgl_mcu, $gol_darah, $jenis_kelamin, $file_mcu;
     public $no_dokumen, $status = NULL, $keterangan_mcu, $saran_mcu, $tgl_verifikasi, $exp_mcu;
-    public $riwayat_rokok, $BB, $TB, $LP, $BMI, $Laseq, $reqtal_touche, $sistol, $diastol, $OD_jauh, $OS_jauh, $OD_dekat, $OS_dekat, $butawarna, $gdp, $gd_2_jpp, $ureum, $creatine, $asamurat, $sgot, $sgpt, $hbsag, $anti_hbs, $kolesterol, $hdl, $ldl, $tg, $darah_rutin, $napza, $urin, $ekg, $rontgen, $audiometri, $spirometri, $tredmil_test, $widal_test, $routin_feces, $kultur_feces;
+    public $riwayat_rokok, $BB, $TB, $LP, $BMI, $Laseq, $reqtal_touche, $sistol, $diastol, $OD_jauh, $OS_jauh, $OD_dekat, $OS_dekat, $butawarna, $gdp, $hba1c, $gd_2_jpp, $ureum, $creatine, $asamurat, $sgot, $sgpt, $hbsag, $anti_hbs, $kolesterol, $hdl, $ldl, $tg, $darah_rutin, $napza, $urin, $ekg, $rontgen, $audiometri, $spirometri, $tredmil_test, $widal_test, $routin_feces, $kultur_feces;
     public $caridatakaryawan = [];
     public $carikaryawan = [];
     public $status_file_mcu = [];
@@ -450,6 +450,24 @@ class Mcu extends Component
         );
         return;
     }
+    public function updatedBB()
+    {
+        $this->hitungBMI();
+    }
+
+    public function updatedTB()
+    {
+        $this->hitungBMI();
+    }
+
+    private function hitungBMI()
+    {
+        if (!empty($this->BB) && !empty($this->TB) && $this->TB > 0) {
+            $this->BMI =  round($this->BB / pow($this->TB / 100, 2), 2);
+        } else {
+            $this->BMI = null;
+        }
+    }
     public function verifikasi($id_mcu)
     {
         $this->formVerifikasi = true;
@@ -468,7 +486,7 @@ class Mcu extends Component
         $this->BB = $carimcu->BB;
         $this->TB = $carimcu->TB;
         $this->LP = $carimcu->LP;
-        $this->BMI = $carimcu->BMI;
+        //$this->BMI = $carimcu->BMI;
         $this->Laseq = $carimcu->Laseq;
         $this->reqtal_touche = $carimcu->reqtal_touche;
         $this->sistol = $carimcu->sistol;
@@ -480,6 +498,7 @@ class Mcu extends Component
         $this->butawarna = $carimcu->butawarna;
         $this->gdp = $carimcu->gdp;
         $this->gd_2_jpp = $carimcu->gd_2_jpp;
+        $this->hba1c = $carimcu->hba1c;
         $this->ureum = $carimcu->ureum;
         $this->creatine = $carimcu->creatine;
         $this->asamurat = $carimcu->asamurat;
