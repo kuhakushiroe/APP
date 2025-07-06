@@ -137,7 +137,7 @@
                                 <tbody>
                                     <tr>
                                         <th>Expired ID</th>
-                                        <td>{{ $dataKaryawan['exp_id'] }}</td>
+                                        <td>{{ $dataKaryawan['exp_mcu'] }}</td>
                                     </tr>
                                     <tr>
                                         <th>Expired Kimper</th>

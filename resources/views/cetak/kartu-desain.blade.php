@@ -199,7 +199,9 @@
                             @endif
                         </td>
                         <td style="vertical-align: bottom;">
-                            <p style="font-size: 6pt;"><b>MIFA/K.AMM.{{ $karyawans->nrp ?? 'NRP' }}</b></p>
+                            <p style="font-size: 6pt;">
+                                <b>MIFA/K.AMM.{{ $karyawans->nrp ?? 'NRP' }}/{{ ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'][$karyawans->created_at->month - 1] }}/{{ $karyawans->created_at->format('Y') }}</b>
+                            </p>
                             <br>
                             <p style="font-size: 8pt;">Berlaku Sampai:</p>
                             <p style="font-size: 8pt;">
