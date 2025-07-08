@@ -70,18 +70,18 @@
                 <table style="margin-left: 25%;">
                     <tr>
                         <td>
-                            <p>MCU Pre-Employment &#9634;</p>
+                            <p>MCU Pre-Employment &#9744;</p>
                         </td>
                         <td>
-                            <p>MCU Khusus &#9634;</p>
+                            <p>MCU Khusus &#9744;</p>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <p>Exit MCU &#9634;</p>
+                            <p>Exit MCU &#9744;</p>
                         </td>
                         <td>
-                            <p>MCU Tahunan &#9634;</p>
+                            <p>MCU Tahunan &#9744;</p>
                         </td>
                     </tr>
                 </table>
