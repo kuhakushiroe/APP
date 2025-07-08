@@ -32,14 +32,16 @@ class DatabaseSeeder extends Seeder
         //     ['name_department' => 'HCGA', 'description_department' => 'HCGA'],
         // ]);
         $departments = [
-            ['name_department' => 'ENGINEERING', 'description_department' => 'ENGINEERING'],
-            ['name_department' => 'PRODUKSI', 'description_department' => 'PRODUKSI'],
-            ['name_department' => 'FALOG', 'description_department' => 'FALOG'],
-            ['name_department' => 'SHE', 'description_department' => 'SHE'],
             ['name_department' => 'COE', 'description_department' => 'COE'],
-            ['name_department' => 'PLANT', 'description_department' => 'PLANT'],
-            ['name_department' => 'HCGA', 'description_department' => 'HCGA'],
+            ['name_department' => 'ENG', 'description_department' => 'ENGINEERING'],
+            ['name_department' => 'FLO', 'description_department' => 'FALOG'],
+            ['name_department' => 'HCG', 'description_department' => 'HCGA'],
+            ['name_department' => 'MNG', 'description_department' => 'MNG'],
+            ['name_department' => 'PLT', 'description_department' => 'PLANT'], // Tambahan
+            ['name_department' => 'PRO', 'description_department' => 'PRODUKSI'],
+            ['name_department' => 'SHE', 'description_department' => 'SHE'],
         ];
+
 
         Departments::insert($departments);
 
@@ -57,17 +59,46 @@ class DatabaseSeeder extends Seeder
 
 
         //Jabatan
-        Jabatan::insert([
-            ['nama_jabatan' => 'Kepala Divisi', 'keterangan_jabatan' => 'KADIV'],
-            ['nama_jabatan' => 'Manager', 'keterangan_jabatan' => 'MNG'],
-            ['nama_jabatan' => 'Supervisor', 'keterangan_jabatan' => 'SPV'],
-            ['nama_jabatan' => 'Staff', 'keterangan_jabatan' => 'STF'],
-            ['nama_jabatan' => 'Verifikator', 'keterangan_jabatan' => 'VER'],
-            ['nama_jabatan' => 'Auditor', 'keterangan_jabatan' => 'AUD'],
-            ['nama_jabatan' => 'Dokter', 'keterangan_jabatan' => 'DOK'],
-            ['nama_jabatan' => 'Asisten Dokter', 'keterangan_jabatan' => 'ADOK'],
+        // Jabatan::insert([
+        //     ['nama_jabatan' => 'Kepala Divisi', 'keterangan_jabatan' => 'KADIV'],
+        //     ['nama_jabatan' => 'Manager', 'keterangan_jabatan' => 'MNG'],
+        //     ['nama_jabatan' => 'Supervisor', 'keterangan_jabatan' => 'SPV'],
+        //     ['nama_jabatan' => 'Staff', 'keterangan_jabatan' => 'STF'],
+        //     ['nama_jabatan' => 'Verifikator', 'keterangan_jabatan' => 'VER'],
+        //     ['nama_jabatan' => 'Auditor', 'keterangan_jabatan' => 'AUD'],
+        //     ['nama_jabatan' => 'Dokter', 'keterangan_jabatan' => 'DOK'],
+        //     ['nama_jabatan' => 'Asisten Dokter', 'keterangan_jabatan' => 'ADOK'],
 
+        // ]);
+
+        Jabatan::insert([
+            ['nama_jabatan' => 'KEPALA DIVISI', 'keterangan_jabatan' => 'KADIV'],
+            ['nama_jabatan' => 'MANAGER', 'keterangan_jabatan' => 'MNG'],
+            ['nama_jabatan' => 'SUPERVISOR', 'keterangan_jabatan' => 'SPV'],
+            ['nama_jabatan' => 'STAFF', 'keterangan_jabatan' => 'STF'],
+            ['nama_jabatan' => 'VERIFIKATOR', 'keterangan_jabatan' => 'VER'],
+            ['nama_jabatan' => 'AUDITOR', 'keterangan_jabatan' => 'AUD'],
+            ['nama_jabatan' => 'DOKTER', 'keterangan_jabatan' => 'DOK'],
+            ['nama_jabatan' => 'ASISTEN DOKTER', 'keterangan_jabatan' => 'ADOK'],
+
+            // Tambahan dari gambar
+            ['nama_jabatan' => 'ADMINISTRASI', 'keterangan_jabatan' => 'ADM'],
+            ['nama_jabatan' => 'ASSISTANT', 'keterangan_jabatan' => 'AST'],
+            ['nama_jabatan' => 'DATA PROCESSOR', 'keterangan_jabatan' => 'DPR'],
+            ['nama_jabatan' => 'DEPT HEAD', 'keterangan_jabatan' => 'DH'],
+            ['nama_jabatan' => 'DRAFTER', 'keterangan_jabatan' => 'DRF'],
+            ['nama_jabatan' => 'ERT', 'keterangan_jabatan' => 'ERT'],
+            ['nama_jabatan' => 'GROUP LEADER', 'keterangan_jabatan' => 'GL'],
+            ['nama_jabatan' => 'HELPER', 'keterangan_jabatan' => 'HLP'],
+            ['nama_jabatan' => 'ICT', 'keterangan_jabatan' => 'ICT'],
+            ['nama_jabatan' => 'INSTRUMENT MAN', 'keterangan_jabatan' => 'INS'],
+            ['nama_jabatan' => 'MECHANIC', 'keterangan_jabatan' => 'MCH'],
+            ['nama_jabatan' => 'OPERATOR', 'keterangan_jabatan' => 'OPR'],
+            ['nama_jabatan' => 'SECTION HEAD', 'keterangan_jabatan' => 'SH'],
+            ['nama_jabatan' => 'SITE MANAGER', 'keterangan_jabatan' => 'SM'],
+            ['nama_jabatan' => 'SURVEY INSTRUMENT MAN', 'keterangan_jabatan' => 'SIM'],
         ]);
+
 
         // User init
         User::create([
@@ -246,136 +277,137 @@ class DatabaseSeeder extends Seeder
         }
 
         // Insert 100 karyawan
-        DB::transaction(function () use ($kendaraanList) {
-            $faker = Faker::create('id_ID');
-            $departments = Departments::pluck('name_department')->toArray();
 
-            foreach (range(1, 100) as $index) {
-                // Unique NIK dan NRP
-                $nrp = $faker->unique()->numerify('###########');
-                $nik = $faker->unique()->numerify('###########');
+        // DB::transaction(function () use ($kendaraanList) {
+        //     $faker = Faker::create('id_ID');
+        //     $departments = Departments::pluck('name_department')->toArray();
 
-                // Subrole acak dari daftar departemen
-                $randomSubrole = $departments[array_rand($departments)];
+        //     foreach (range(1, 100) as $index) {
+        //         // Unique NIK dan NRP
+        //         $nrp = $faker->unique()->numerify('###########');
+        //         $nik = $faker->unique()->numerify('###########');
 
-                // Ambil 3-5 kendaraan acak, pisahkan dengan koma
-                $selectedKendaraan = collect($kendaraanList)->pluck('revisi')->random(rand(3, 5))->implode(', ');
+        //         // Subrole acak dari daftar departemen
+        //         $randomSubrole = $departments[array_rand($departments)];
 
-                // Data karyawan
-                $rawJabatan = $faker->jobTitle;
-                $cleanJabatan = preg_replace('/[^a-zA-Z0-9\s]/', '', $rawJabatan);
-                DB::table('karyawans')->insert([
-                    'nik' => $nik,
-                    'nrp' => $nrp,
-                    'doh' => $faker->date('Y-m-d'),
-                    'tgl_lahir' => $faker->date('Y-m-d'),
-                    'nama' => $faker->name,
-                    'jenis_kelamin' => $faker->randomElement(['laki-laki', 'perempuan']),
-                    'tempat_lahir' => $faker->city,
-                    'agama' => $faker->randomElement(['Islam', 'Kristen', 'Katolik', 'Hindu', 'Budha', 'Konghucu']),
-                    'gol_darah' => $faker->randomElement(['A', 'B', 'AB', 'O']),
-                    'status_perkawinan' => $faker->randomElement(['menikah', 'belum menikah']),
-                    'perusahaan' => $faker->company,
-                    'kontraktor' => $faker->company,
-                    'dept' => $randomSubrole,
-                    'jabatan' => $cleanJabatan,
-                    'no_hp' => $faker->phoneNumber,
-                    'alamat' => $faker->address,
-                    'domisili' => $faker->randomElement(['lokal', 'non lokal']),
-                    'status' => $faker->randomElement(['aktif', 'non aktif']),
-                    'versatility' => $selectedKendaraan,
-                    'exp_id' => randomExpireDate(),
-                    'exp_kimper' => randomExpireDate(),
-                    'exp_mcu' => randomExpireDate(),
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
+        //         // Ambil 3-5 kendaraan acak, pisahkan dengan koma
+        //         $selectedKendaraan = collect($kendaraanList)->pluck('revisi')->random(rand(3, 5))->implode(', ');
 
-                // Data user terkait
-                User::create([
-                    'name' => $faker->name,
-                    'username' => $nrp,
-                    'email' => $faker->unique()->safeEmail,
-                    'role' => 'karyawan',
-                    'subrole' => $randomSubrole,
-                    'password' => Hash::make('password'),
-                ]);
-            }
-        });
+        //         // Data karyawan
+        //         $rawJabatan = $faker->jobTitle;
+        //         $cleanJabatan = preg_replace('/[^a-zA-Z0-9\s]/', '', $rawJabatan);
+        //         DB::table('karyawans')->insert([
+        //             'nik' => $nik,
+        //             'nrp' => $nrp,
+        //             'doh' => $faker->date('Y-m-d'),
+        //             'tgl_lahir' => $faker->date('Y-m-d'),
+        //             'nama' => $faker->name,
+        //             'jenis_kelamin' => $faker->randomElement(['laki-laki', 'perempuan']),
+        //             'tempat_lahir' => $faker->city,
+        //             'agama' => $faker->randomElement(['Islam', 'Kristen', 'Katolik', 'Hindu', 'Budha', 'Konghucu']),
+        //             'gol_darah' => $faker->randomElement(['A', 'B', 'AB', 'O']),
+        //             'status_perkawinan' => $faker->randomElement(['menikah', 'belum menikah']),
+        //             'perusahaan' => $faker->company,
+        //             'kontraktor' => $faker->company,
+        //             'dept' => $randomSubrole,
+        //             'jabatan' => $cleanJabatan,
+        //             'no_hp' => $faker->phoneNumber,
+        //             'alamat' => $faker->address,
+        //             'domisili' => $faker->randomElement(['lokal', 'non lokal']),
+        //             'status' => $faker->randomElement(['aktif', 'non aktif']),
+        //             'versatility' => $selectedKendaraan,
+        //             'exp_id' => randomExpireDate(),
+        //             'exp_kimper' => randomExpireDate(),
+        //             'exp_mcu' => randomExpireDate(),
+        //             'created_at' => now(),
+        //             'updated_at' => now(),
+        //         ]);
+
+        //         // Data user terkait
+        //         User::create([
+        //             'name' => $faker->name,
+        //             'username' => $nrp,
+        //             'email' => $faker->unique()->safeEmail,
+        //             'role' => 'karyawan',
+        //             'subrole' => $randomSubrole,
+        //             'password' => Hash::make('password'),
+        //         ]);
+        //     }
+        // });
 
 
-        $verifikators = User::where('subrole', 'verifikator')->pluck('username')->toArray();
-        $nrps = DB::table('karyawans')->pluck('nrp')->toArray();
-        $faker = Faker::create('id_ID');
+        // $verifikators = User::where('subrole', 'verifikator')->pluck('username')->toArray();
+        // $nrps = DB::table('karyawans')->pluck('nrp')->toArray();
+        // $faker = Faker::create('id_ID');
 
-        $mcuRecords = [];
-        $idCounter = 1;
-        $followUpMap = [];
+        // $mcuRecords = [];
+        // $idCounter = 1;
+        // $followUpMap = [];
 
-        for ($i = 0; $i < 300; $i++) {
-            $id_karyawan = $nrps[array_rand($nrps)];
-            $status = $faker->randomElement(['FIT', 'UNFIT', 'TEMPORARY UNFIT', 'FOLLOW UP']);
+        // for ($i = 0; $i < 300; $i++) {
+        //     $id_karyawan = $nrps[array_rand($nrps)];
+        //     $status = $faker->randomElement(['FIT', 'UNFIT', 'TEMPORARY UNFIT', 'FOLLOW UP']);
 
-            $record = [
-                'id' => $idCounter,
-                'sub_id' => null,
-                'id_karyawan' => $id_karyawan,
-                'status' => $status,
-                'tgl_mcu' => $faker->dateTimeBetween('-1 days', 'now'),
-                'exp_mcu' => in_array($status, ['FIT', 'UNFIT', 'TEMPORARY UNFIT']) ? $faker->dateTimeBetween('+30 days', '+60 days') : null,
-                'tgl_verifikasi' => $faker->dateTimeBetween('-1 days', 'now'),
-                'verifikator' => $verifikators[array_rand($verifikators)],
-                'status_' => $status === 'FOLLOW UP' ? 'open' : 'close',
-                'gdp' => rand(80, 100),
-                'gd_2_jpp' => rand(100, 110),
-            ];
+        //     $record = [
+        //         'id' => $idCounter,
+        //         'sub_id' => null,
+        //         'id_karyawan' => $id_karyawan,
+        //         'status' => $status,
+        //         'tgl_mcu' => $faker->dateTimeBetween('-1 days', 'now'),
+        //         'exp_mcu' => in_array($status, ['FIT', 'UNFIT', 'TEMPORARY UNFIT']) ? $faker->dateTimeBetween('+30 days', '+60 days') : null,
+        //         'tgl_verifikasi' => $faker->dateTimeBetween('-1 days', 'now'),
+        //         'verifikator' => $verifikators[array_rand($verifikators)],
+        //         'status_' => $status === 'FOLLOW UP' ? 'open' : 'close',
+        //         'gdp' => rand(80, 100),
+        //         'gd_2_jpp' => rand(100, 110),
+        //     ];
 
-            $mcuRecords[] = $record;
+        //     $mcuRecords[] = $record;
 
-            if ($status === 'FOLLOW UP') {
-                $followUpMap[] = [
-                    'id' => $idCounter,
-                    'id_karyawan' => $id_karyawan,
-                ];
-            }
+        //     if ($status === 'FOLLOW UP') {
+        //         $followUpMap[] = [
+        //             'id' => $idCounter,
+        //             'id_karyawan' => $id_karyawan,
+        //         ];
+        //     }
 
-            $idCounter++;
-        }
+        //     $idCounter++;
+        // }
 
-        // Tambahkan hasil verifikasi untuk FOLLOW UP
-        foreach ($followUpMap as $follow) {
-            $status = $faker->randomElement(['FIT', 'UNFIT', 'TEMPORARY UNFIT', 'FOLLOW UP']);
+        // // Tambahkan hasil verifikasi untuk FOLLOW UP
+        // foreach ($followUpMap as $follow) {
+        //     $status = $faker->randomElement(['FIT', 'UNFIT', 'TEMPORARY UNFIT', 'FOLLOW UP']);
 
-            $record = [
-                'id' => $idCounter,
-                'sub_id' => $follow['id'],
-                'id_karyawan' => $follow['id_karyawan'],
-                'status' => $status,
-                'tgl_mcu' => $faker->dateTimeBetween('now', '+2 days'),
-                'exp_mcu' => in_array($status, ['FIT', 'UNFIT', 'TEMPORARY UNFIT']) ? $faker->dateTimeBetween('+30 days', '+60 days') : null,
-                'tgl_verifikasi' => $faker->dateTimeBetween('now', '+1 days'),
-                'verifikator' => $verifikators[array_rand($verifikators)],
-                'status_' => $status === 'FOLLOW UP' ? 'open' : 'close',
-                'gdp' => rand(80, 100),
-                'gd_2_jpp' => rand(100, 110),
-            ];
+        //     $record = [
+        //         'id' => $idCounter,
+        //         'sub_id' => $follow['id'],
+        //         'id_karyawan' => $follow['id_karyawan'],
+        //         'status' => $status,
+        //         'tgl_mcu' => $faker->dateTimeBetween('now', '+2 days'),
+        //         'exp_mcu' => in_array($status, ['FIT', 'UNFIT', 'TEMPORARY UNFIT']) ? $faker->dateTimeBetween('+30 days', '+60 days') : null,
+        //         'tgl_verifikasi' => $faker->dateTimeBetween('now', '+1 days'),
+        //         'verifikator' => $verifikators[array_rand($verifikators)],
+        //         'status_' => $status === 'FOLLOW UP' ? 'open' : 'close',
+        //         'gdp' => rand(80, 100),
+        //         'gd_2_jpp' => rand(100, 110),
+        //     ];
 
-            $mcuRecords[] = $record;
+        //     $mcuRecords[] = $record;
 
-            // Tutup record awal jika hasil akhir bukan FOLLOW UP
-            if ($status !== 'FOLLOW UP') {
-                foreach ($mcuRecords as &$mcu) {
-                    if ($mcu['id'] === $follow['id']) {
-                        $mcu['status_'] = 'close';
-                        break;
-                    }
-                }
-            }
+        //     // Tutup record awal jika hasil akhir bukan FOLLOW UP
+        //     if ($status !== 'FOLLOW UP') {
+        //         foreach ($mcuRecords as &$mcu) {
+        //             if ($mcu['id'] === $follow['id']) {
+        //                 $mcu['status_'] = 'close';
+        //                 break;
+        //             }
+        //         }
+        //     }
 
-            $idCounter++;
-        }
+        //     $idCounter++;
+        // }
 
-        DB::table('mcu')->insert($mcuRecords);
+        // DB::table('mcu')->insert($mcuRecords);
     }
 
     private function generateAdminName()
