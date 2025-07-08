@@ -33,7 +33,6 @@ class ProcessKaryawanImport implements ShouldQueue
      */
     public function handle(): void
     {
-        //
         $row = $this->row;
         $unitList = $this->unitList;
 
@@ -46,23 +45,23 @@ class ProcessKaryawanImport implements ShouldQueue
         $jabatan = $row[11];
         $nik = $row[12];
 
-        $kendaraan = [];
+        // Kendaraan
+        $newKendaraan = [];
         foreach ($unitList as $index => $unitName) {
             if (strtoupper($row[$index] ?? '') === 'F') {
-                $kendaraan[] = strtoupper(str_replace('_', ' ', $unitName));
+                $newKendaraan[] = strtoupper(str_replace('_', ' ', $unitName));
             }
         }
-        $newKendaraan = array_map('strtoupper', $kendaraan);
 
-        $karyawan = Karyawan::where('nrp', $nrp)->first();
-        $users = User::where('username', $nrp)->first();
+        $karyawan = Karyawan::firstWhere('nrp', $nrp);
+        $user = User::firstWhere('username', $nrp);
 
         if ($karyawan) {
             $existing = array_filter(explode(',', $karyawan->versatility));
             $combined = array_unique(array_merge($existing, $newKendaraan));
             $added = array_diff($newKendaraan, $existing);
 
-            if (!empty($added)) {
+            if ($added) {
                 VersatilityLog::create([
                     'nrp' => $nrp,
                     'kendaraan_baru' => implode(',', $added),
@@ -70,7 +69,7 @@ class ProcessKaryawanImport implements ShouldQueue
                 ]);
             }
 
-            $karyawan->update([
+            $karyawan->fill([
                 'nik' => $nik,
                 'nama' => $nama,
                 'gol_darah' => $gol_darah,
@@ -79,17 +78,9 @@ class ProcessKaryawanImport implements ShouldQueue
                 'dept' => $dept,
                 'jabatan' => $jabatan,
                 'versatility' => implode(',', $combined),
-            ]);
-
-            $users->update([
-                'name' => $nama,
-                'username' => $nrp,
-                'email' => $nrp . '@example.com',
-                'password' => Hash::make($nrp),
-                'role' => 'karyawan',
-            ]);
+            ])->save();
         } else {
-            Karyawan::create([
+            $karyawan = Karyawan::create([
                 'nrp' => $nrp,
                 'nik' => $nik,
                 'nama' => $nama,
@@ -98,9 +89,27 @@ class ProcessKaryawanImport implements ShouldQueue
                 'kontraktor' => $kontraktor,
                 'dept' => $dept,
                 'jabatan' => $jabatan,
-                'doh' => now()->format('Y-m-d'),
+                'doh' => now()->toDateString(),
                 'versatility' => implode(',', $newKendaraan),
             ]);
+
+            if ($newKendaraan) {
+                VersatilityLog::create([
+                    'nrp' => $nrp,
+                    'kendaraan_baru' => implode(',', $newKendaraan),
+                    'updated_at' => now(),
+                ]);
+            }
+        }
+
+        if ($user) {
+            $user->update([
+                'name' => $nama,
+                'username' => $nrp,
+                'email' => $nrp . '@example.com',
+                'role' => 'karyawan',
+            ]);
+        } else {
             User::create([
                 'name' => $nama,
                 'username' => $nrp,
@@ -108,14 +117,6 @@ class ProcessKaryawanImport implements ShouldQueue
                 'password' => Hash::make($nrp),
                 'role' => 'karyawan',
             ]);
-
-            if (!empty($newKendaraan)) {
-                VersatilityLog::create([
-                    'nrp' => $nrp,
-                    'kendaraan_baru' => implode(',', $newKendaraan),
-                    'updated_at' => now(),
-                ]);
-            }
         }
     }
 }
