@@ -158,7 +158,7 @@ class Home extends Component
         $totalSemuaStatus = collect($verifikators)->sum('status_total');
 
 
-
+        //Rumus Gula Darah di google
         $gulanormal = ModelsMcu::where('gdp', '<', 100)
             ->where('gd_2_jpp', '<', 140)
             ->count();
