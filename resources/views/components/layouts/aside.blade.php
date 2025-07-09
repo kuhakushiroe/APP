@@ -34,8 +34,13 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('report') }}" class="nav-link @if ($routeName == 'report') active @endif">
+                        <i class="nav-icon bi bi-speedometer"></i>
+                        <p>Report</p>
+                    </a>
+                </li>
                 @hasAnyRole(['superadmin', 'admin', 'dokter', 'she'])
-
                     {{-- MASTER DATA --}}
                     @hasAnyRole(['superadmin', 'admin', 'she'])
                         @php
@@ -128,7 +133,8 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="pengajuan-kimper" class="nav-link @if ($routeName == 'pengajuan-kimper') active @endif">
+                                    <a href="pengajuan-kimper"
+                                        class="nav-link @if ($routeName == 'pengajuan-kimper') active @endif">
                                         <i class="nav-icon bi {{ iconActive('pengajuan-kimper', 'circle') }}"></i>
                                         <p>KIMPER</p>
                                     </a>

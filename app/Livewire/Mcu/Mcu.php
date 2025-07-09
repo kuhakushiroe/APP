@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Mcu;
 
+use App\Exports\mcuExport;
 use App\Jobs\SendNotifMcu;
 use App\Models\Karyawan;
 use App\Models\Mcu as ModelsMcu;
@@ -15,6 +16,7 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 
 class Mcu extends Component
 {
@@ -745,6 +747,11 @@ class Mcu extends Component
             ->setPaper('a4', 'landscape');
 
         return $pdf->stream('mcu-' . ($data['nik'] ?? 'unknown') . '-' . date('Y-m-d') . '.pdf');
+    }
+    public function exportExcel()
+    {
+        $filename = 'Hasil_MCU_' . date('Y-m-d_His') . '.xlsx';
+        return Excel::download(new mcuExport, $filename);
     }
     public function mount()
     {

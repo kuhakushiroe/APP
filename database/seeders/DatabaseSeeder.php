@@ -157,8 +157,6 @@ class DatabaseSeeder extends Seeder
             return Carbon::now()->$direction('1 year')->format('Y-m-d');
         }
 
-
-
         // Array kendaraan untuk versatility
         // $kendaraanList = [
         //     'LV',
@@ -278,136 +276,140 @@ class DatabaseSeeder extends Seeder
 
         // Insert 100 karyawan
 
-        // DB::transaction(function () use ($kendaraanList) {
-        //     $faker = Faker::create('id_ID');
-        //     $departments = Departments::pluck('name_department')->toArray();
+        DB::transaction(function () use ($kendaraanList) {
+            $faker = Faker::create('id_ID');
+            $departments = Departments::pluck('name_department')->toArray();
 
-        //     foreach (range(1, 100) as $index) {
-        //         // Unique NIK dan NRP
-        //         $nrp = $faker->unique()->numerify('###########');
-        //         $nik = $faker->unique()->numerify('###########');
+            foreach (range(1, 100) as $index) {
+                // Unique NIK dan NRP
+                $nrp = $faker->unique()->numerify('###########');
+                $nik = $faker->unique()->numerify('###########');
 
-        //         // Subrole acak dari daftar departemen
-        //         $randomSubrole = $departments[array_rand($departments)];
+                // Subrole acak dari daftar departemen
+                $randomSubrole = $departments[array_rand($departments)];
 
-        //         // Ambil 3-5 kendaraan acak, pisahkan dengan koma
-        //         $selectedKendaraan = collect($kendaraanList)->pluck('revisi')->random(rand(3, 5))->implode(', ');
+                // Ambil 3-5 kendaraan acak, pisahkan dengan koma
+                $selectedKendaraan = collect($kendaraanList)->pluck('revisi')->random(rand(3, 5))->implode(', ');
 
-        //         // Data karyawan
-        //         $rawJabatan = $faker->jobTitle;
-        //         $cleanJabatan = preg_replace('/[^a-zA-Z0-9\s]/', '', $rawJabatan);
-        //         DB::table('karyawans')->insert([
-        //             'nik' => $nik,
-        //             'nrp' => $nrp,
-        //             'doh' => $faker->date('Y-m-d'),
-        //             'tgl_lahir' => $faker->date('Y-m-d'),
-        //             'nama' => $faker->name,
-        //             'jenis_kelamin' => $faker->randomElement(['laki-laki', 'perempuan']),
-        //             'tempat_lahir' => $faker->city,
-        //             'agama' => $faker->randomElement(['Islam', 'Kristen', 'Katolik', 'Hindu', 'Budha', 'Konghucu']),
-        //             'gol_darah' => $faker->randomElement(['A', 'B', 'AB', 'O']),
-        //             'status_perkawinan' => $faker->randomElement(['menikah', 'belum menikah']),
-        //             'perusahaan' => $faker->company,
-        //             'kontraktor' => $faker->company,
-        //             'dept' => $randomSubrole,
-        //             'jabatan' => $cleanJabatan,
-        //             'no_hp' => $faker->phoneNumber,
-        //             'alamat' => $faker->address,
-        //             'domisili' => $faker->randomElement(['lokal', 'non lokal']),
-        //             'status' => $faker->randomElement(['aktif', 'non aktif']),
-        //             'versatility' => $selectedKendaraan,
-        //             'exp_id' => randomExpireDate(),
-        //             'exp_kimper' => randomExpireDate(),
-        //             'exp_mcu' => randomExpireDate(),
-        //             'created_at' => now(),
-        //             'updated_at' => now(),
-        //         ]);
+                // Data karyawan
+                $rawJabatan = $faker->jobTitle;
+                $cleanJabatan = preg_replace('/[^a-zA-Z0-9\s]/', '', $rawJabatan);
+                DB::table('karyawans')->insert([
+                    'nik' => $nik,
+                    'nrp' => $nrp,
+                    'doh' => $faker->date('Y-m-d'),
+                    'tgl_lahir' => $faker->date('Y-m-d'),
+                    'nama' => $faker->name,
+                    'jenis_kelamin' => $faker->randomElement(['laki-laki', 'perempuan']),
+                    'tempat_lahir' => $faker->city,
+                    'agama' => $faker->randomElement(['Islam', 'Kristen', 'Katolik', 'Hindu', 'Budha', 'Konghucu']),
+                    'gol_darah' => $faker->randomElement(['A', 'B', 'AB', 'O']),
+                    'status_perkawinan' => $faker->randomElement(['menikah', 'belum menikah']),
+                    'perusahaan' => $faker->company,
+                    'kontraktor' => $faker->company,
+                    'dept' => $randomSubrole,
+                    'jabatan' => $cleanJabatan,
+                    'no_hp' => $faker->phoneNumber,
+                    'alamat' => $faker->address,
+                    'domisili' => $faker->randomElement(['lokal', 'non lokal']),
+                    'status' => $faker->randomElement(['aktif', 'non aktif']),
+                    'versatility' => $selectedKendaraan,
+                    'exp_id' => randomExpireDate(),
+                    'exp_kimper' => randomExpireDate(),
+                    'exp_mcu' => randomExpireDate(),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
 
-        //         // Data user terkait
-        //         User::create([
-        //             'name' => $faker->name,
-        //             'username' => $nrp,
-        //             'email' => $faker->unique()->safeEmail,
-        //             'role' => 'karyawan',
-        //             'subrole' => $randomSubrole,
-        //             'password' => Hash::make('password'),
-        //         ]);
-        //     }
-        // });
+                // Data user terkait
+                User::create([
+                    'name' => $faker->name,
+                    'username' => $nrp,
+                    'email' => $faker->unique()->safeEmail,
+                    'role' => 'karyawan',
+                    'subrole' => $randomSubrole,
+                    'password' => Hash::make('password'),
+                ]);
+            }
+        });
 
 
-        // $verifikators = User::where('subrole', 'verifikator')->pluck('username')->toArray();
-        // $nrps = DB::table('karyawans')->pluck('nrp')->toArray();
-        // $faker = Faker::create('id_ID');
+        $verifikators = User::where('subrole', 'verifikator')->pluck('username')->toArray();
+        $nrps = DB::table('karyawans')->pluck('nrp')->toArray();
+        $faker = Faker::create('id_ID');
 
-        // $mcuRecords = [];
-        // $idCounter = 1;
-        // $followUpMap = [];
+        $mcuRecords = [];
+        $idCounter = 1;
+        $followUpMap = [];
 
-        // for ($i = 0; $i < 300; $i++) {
-        //     $id_karyawan = $nrps[array_rand($nrps)];
-        //     $status = $faker->randomElement(['FIT', 'UNFIT', 'TEMPORARY UNFIT', 'FOLLOW UP']);
+        for ($i = 0; $i < 300; $i++) {
+            $id_karyawan = $nrps[array_rand($nrps)];
+            $status = $faker->randomElement(['FIT', 'UNFIT', 'TEMPORARY UNFIT', 'FOLLOW UP']);
 
-        //     $record = [
-        //         'id' => $idCounter,
-        //         'sub_id' => null,
-        //         'id_karyawan' => $id_karyawan,
-        //         'status' => $status,
-        //         'tgl_mcu' => $faker->dateTimeBetween('-1 days', 'now'),
-        //         'exp_mcu' => in_array($status, ['FIT', 'UNFIT', 'TEMPORARY UNFIT']) ? $faker->dateTimeBetween('+30 days', '+60 days') : null,
-        //         'tgl_verifikasi' => $faker->dateTimeBetween('-1 days', 'now'),
-        //         'verifikator' => $verifikators[array_rand($verifikators)],
-        //         'status_' => $status === 'FOLLOW UP' ? 'open' : 'close',
-        //         'gdp' => rand(80, 100),
-        //         'gd_2_jpp' => rand(100, 110),
-        //     ];
+            $record = [
+                'id' => $idCounter,
+                'sub_id' => null,
+                'id_karyawan' => $id_karyawan,
+                'status' => $status,
+                'tgl_mcu' => $faker->dateTimeBetween('-1 days', 'now'),
+                'exp_mcu' => in_array($status, ['FIT', 'UNFIT', 'TEMPORARY UNFIT']) ? $faker->dateTimeBetween('+30 days', '+60 days') : null,
+                'tgl_verifikasi' => $tgl_verifikasi = $faker->dateTimeBetween('-1 days', 'now'),
+                'verifikator' => $verifikators[array_rand($verifikators)],
+                'status_' => $status === 'FOLLOW UP' ? 'open' : 'close',
+                'gdp' => rand(80, 100),
+                'gd_2_jpp' => rand(100, 110),
+                'proveder' => $faker->company,
+                'created_at' => $tgl_verifikasi,
+            ];
 
-        //     $mcuRecords[] = $record;
+            $mcuRecords[] = $record;
 
-        //     if ($status === 'FOLLOW UP') {
-        //         $followUpMap[] = [
-        //             'id' => $idCounter,
-        //             'id_karyawan' => $id_karyawan,
-        //         ];
-        //     }
+            if ($status === 'FOLLOW UP') {
+                $followUpMap[] = [
+                    'id' => $idCounter,
+                    'id_karyawan' => $id_karyawan,
+                ];
+            }
 
-        //     $idCounter++;
-        // }
+            $idCounter++;
+        }
 
-        // // Tambahkan hasil verifikasi untuk FOLLOW UP
-        // foreach ($followUpMap as $follow) {
-        //     $status = $faker->randomElement(['FIT', 'UNFIT', 'TEMPORARY UNFIT', 'FOLLOW UP']);
+        // Tambahkan hasil verifikasi untuk FOLLOW UP
+        foreach ($followUpMap as $follow) {
+            $status = $faker->randomElement(['FIT', 'UNFIT', 'TEMPORARY UNFIT', 'FOLLOW UP']);
 
-        //     $record = [
-        //         'id' => $idCounter,
-        //         'sub_id' => $follow['id'],
-        //         'id_karyawan' => $follow['id_karyawan'],
-        //         'status' => $status,
-        //         'tgl_mcu' => $faker->dateTimeBetween('now', '+2 days'),
-        //         'exp_mcu' => in_array($status, ['FIT', 'UNFIT', 'TEMPORARY UNFIT']) ? $faker->dateTimeBetween('+30 days', '+60 days') : null,
-        //         'tgl_verifikasi' => $faker->dateTimeBetween('now', '+1 days'),
-        //         'verifikator' => $verifikators[array_rand($verifikators)],
-        //         'status_' => $status === 'FOLLOW UP' ? 'open' : 'close',
-        //         'gdp' => rand(80, 100),
-        //         'gd_2_jpp' => rand(100, 110),
-        //     ];
+            $record = [
+                'id' => $idCounter,
+                'sub_id' => $follow['id'],
+                'id_karyawan' => $follow['id_karyawan'],
+                'status' => $status,
+                'tgl_mcu' => $faker->dateTimeBetween('now', '+2 days'),
+                'exp_mcu' => in_array($status, ['FIT', 'UNFIT', 'TEMPORARY UNFIT']) ? $faker->dateTimeBetween('+30 days', '+60 days') : null,
+                'tgl_verifikasi' => $tgl_verifikasi = $faker->dateTimeBetween('now', '+1 days'),
+                'verifikator' => $verifikators[array_rand($verifikators)],
+                'status_' => $status === 'FOLLOW UP' ? 'open' : 'close',
+                'gdp' => rand(80, 100),
+                'gd_2_jpp' => rand(100, 110),
+                'proveder' => $faker->company,
+                'created_at' => $tgl_verifikasi,
+            ];
 
-        //     $mcuRecords[] = $record;
+            $mcuRecords[] = $record;
 
-        //     // Tutup record awal jika hasil akhir bukan FOLLOW UP
-        //     if ($status !== 'FOLLOW UP') {
-        //         foreach ($mcuRecords as &$mcu) {
-        //             if ($mcu['id'] === $follow['id']) {
-        //                 $mcu['status_'] = 'close';
-        //                 break;
-        //             }
-        //         }
-        //     }
+            // Tutup record awal jika hasil akhir bukan FOLLOW UP
+            if ($status !== 'FOLLOW UP') {
+                foreach ($mcuRecords as &$mcu) {
+                    if ($mcu['id'] === $follow['id']) {
+                        $mcu['status_'] = 'close';
+                        break;
+                    }
+                }
+            }
 
-        //     $idCounter++;
-        // }
+            $idCounter++;
+        }
 
-        // DB::table('mcu')->insert($mcuRecords);
+        DB::table('mcu')->insert($mcuRecords);
     }
 
     private function generateAdminName()

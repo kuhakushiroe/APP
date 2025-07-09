@@ -22,6 +22,7 @@ use App\Livewire\Pengajuan\Id;
 use App\Livewire\Pengajuan\Kimper;
 use App\Livewire\Perusahaan\Perusahaan;
 use App\Livewire\Profil\Password;
+use App\Livewire\Report;
 use App\Livewire\Users\Users;
 use App\Livewire\Versatility\Versatility;
 use Illuminate\Support\Facades\Auth;
@@ -37,6 +38,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('profil', Password::class)->name('profil');
     Route::get('mcu', Mcu::class)->name('mcu');
     Route::get('histori-mcu', McuMcu::class)->name('histori-mcu');
+    Route::get('report', Report::class)->name('report');
+
     Route::group(['middleware' => ['role:superadmin']], function () {
         //Route::get('export-karyawans', [Karyawan::class, 'export'])->name('export-karyawans');
         Route::get('users', Users::class)->name('users');
@@ -58,6 +61,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('cetak-kartu-kimper/{id}', [CetakKartuController::class, 'cetakKimper']);
     });
     Route::group(['middleware' => ['role:superadmin,dokter']], function () {
+        Route::get('export-hasil-mcu', [Mcu::class, 'exportExcel'])->name('export-hasil-mcu');
         Route::get('cetak-mcu/{id}', [McuCetak::class, 'cetak']);
         Route::get('cetak-mcu-sub/{id}', [McuCetak::class, 'cetakSub']);
         Route::get('cetak-skd/{id}', [McuCetak::class, 'skd']);

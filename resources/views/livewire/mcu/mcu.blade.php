@@ -13,6 +13,9 @@
                         <span class="bi bi-plus-square"></span>
                         &nbsp;Mcu
                     </button>
+                    <a href="{{ route('export-hasil-mcu') }}" class="btn btn-success btn-sm">
+                        <span class="bi bi-download"></span> Export Excel
+                    </a>
                 @endhasanyrole
             </div>
             <div class="col-md-6">
@@ -290,7 +293,8 @@
 
                                                         <div>
                                                             <a href="{{ asset('storage/surat jawaban konsul.docx') }}"
-                                                                target="_blank" class="btn btn-outline-warning btn-sm">
+                                                                target="_blank"
+                                                                class="btn btn-outline-warning btn-sm">
                                                                 <i class="bi bi-download"></i> Download Surat Jawaban
                                                                 Konsul
                                                             </a>

@@ -202,6 +202,13 @@
                             </ul>
                         </li>
                     @endhasAnyRole
+                    <li class="nav-item">
+                        <a href="{{ route('report') }}"
+                            class="nav-link @if ($routeName == 'report') active @endif">
+                            <i class="nav-icon bi bi-speedometer"></i>
+                            <p>Report</p>
+                        </a>
+                    </li>
                 @endhasAnyRole
             </ul>
             <!--end::Sidebar Menu-->
