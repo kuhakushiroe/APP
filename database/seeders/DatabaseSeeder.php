@@ -279,6 +279,7 @@ class DatabaseSeeder extends Seeder
         DB::transaction(function () use ($kendaraanList) {
             $faker = Faker::create('id_ID');
             $departments = Departments::pluck('name_department')->toArray();
+            $jabatanList = Jabatan::pluck('jabatan')->toArray();
 
             foreach (range(1, 100) as $index) {
                 // Unique NIK dan NRP
@@ -287,13 +288,14 @@ class DatabaseSeeder extends Seeder
 
                 // Subrole acak dari daftar departemen
                 $randomSubrole = $departments[array_rand($departments)];
+                $randomJabatan = $jabatanList[array_rand($jabatanList)];
 
                 // Ambil 3-5 kendaraan acak, pisahkan dengan koma
                 $selectedKendaraan = collect($kendaraanList)->pluck('revisi')->random(rand(3, 5))->implode(', ');
 
                 // Data karyawan
                 $rawJabatan = $faker->jobTitle;
-                $cleanJabatan = preg_replace('/[^a-zA-Z0-9\s]/', '', $rawJabatan);
+                //$cleanJabatan = preg_replace('/[^a-zA-Z0-9\s]/', '', $rawJabatan);
                 DB::table('karyawans')->insert([
                     'nik' => $nik,
                     'nrp' => $nrp,
@@ -308,7 +310,7 @@ class DatabaseSeeder extends Seeder
                     'perusahaan' => $faker->company,
                     'kontraktor' => $faker->company,
                     'dept' => $randomSubrole,
-                    'jabatan' => $cleanJabatan,
+                    'jabatan' => $randomJabatan,
                     'no_hp' => $faker->phoneNumber,
                     'alamat' => $faker->address,
                     'domisili' => $faker->randomElement(['lokal', 'non lokal']),
