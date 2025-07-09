@@ -279,7 +279,7 @@ class DatabaseSeeder extends Seeder
         DB::transaction(function () use ($kendaraanList) {
             $faker = Faker::create('id_ID');
             $departments = Departments::pluck('name_department')->toArray();
-            $jabatanList = Jabatan::pluck('jabatan')->toArray();
+            $jabatanList = Jabatan::pluck('nama_jabatan')->toArray();
 
             foreach (range(1, 100) as $index) {
                 // Unique NIK dan NRP
