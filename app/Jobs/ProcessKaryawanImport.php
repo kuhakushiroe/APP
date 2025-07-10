@@ -44,6 +44,9 @@ class ProcessKaryawanImport implements ShouldQueue
         $dept = $row[10];
         $jabatan = $row[11];
         $nik = $row[12];
+        $bpjs_kesehatan = $row[15];
+        $bpjs_tenagakerja = $row[16];
+
 
         // Kendaraan
         $newKendaraan = [];
@@ -78,6 +81,10 @@ class ProcessKaryawanImport implements ShouldQueue
                 'dept' => $dept,
                 'jabatan' => $jabatan,
                 'versatility' => implode(',', $combined),
+                'bpjs_kesehatan' => $bpjs_kesehatan,
+                'bpjs_tenagakerja' => $bpjs_tenagakerja,
+                'status' => 'aktif',
+                'domisili' => 'lokal'
             ])->save();
         } else {
             $karyawan = Karyawan::create([
@@ -89,8 +96,11 @@ class ProcessKaryawanImport implements ShouldQueue
                 'kontraktor' => $kontraktor,
                 'dept' => $dept,
                 'jabatan' => $jabatan,
-                'doh' => now()->toDateString(),
                 'versatility' => implode(',', $newKendaraan),
+                'bpjs_kesehatan' => $bpjs_kesehatan,
+                'bpjs_tenagakerja' => $bpjs_tenagakerja,
+                'status' => 'aktif',
+                'domisili' => 'lokal'
             ]);
 
             if ($newKendaraan) {
