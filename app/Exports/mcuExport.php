@@ -199,21 +199,23 @@ class mcuExport implements FromQuery, WithHeadings, WithStyles, WithColumnFormat
 
     public function styles(Worksheet $sheet)
     {
-        foreach (range('A', $sheet->getHighestColumn()) as $columnID) {
-            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        $highestColumnIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($sheet->getHighestColumn());
+
+        for ($col = 1; $col <= $highestColumnIndex; $col++) {
+            $columnLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($col);
+            $sheet->getColumnDimension($columnLetter)->setAutoSize(true);
         }
 
-        // Optionally, apply other styles like header styles here
+        // Bold untuk baris header
         $sheet->getStyle('1:1')->getFont()->setBold(true);
 
-        return [
-            // Additional styling options can be set here
-        ];
+        return [];
     }
+
     public function columnFormats(): array
     {
         return [
-            'A' => NumberFormat::FORMAT_TEXT, // Assuming 'A' is the column for NIK
+            'A' => \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_TEXT,
         ];
     }
 }
