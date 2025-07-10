@@ -122,9 +122,9 @@ class mcuExport implements FromQuery, WithHeadings, WithStyles, WithColumnFormat
                 'mcu.anti_hbs',
                 'mcu.darah_rutin',
                 'mcu.status_',
-                'mcu.temuan',
-                'mcu.keterangan_mcu',
-                'mcu.saran_mcu'
+                //'mcu.temuan',
+                //'mcu.keterangan_mcu',
+                //'mcu.saran_mcu'
             )
             ->orderBy('mcu.created_at', 'DESC')
             ->orderBy('mcu.status', 'DESC');
@@ -191,9 +191,9 @@ class mcuExport implements FromQuery, WithHeadings, WithStyles, WithColumnFormat
             'Anti HBs',
             'Darah Rutin',
             'Status MCU',
-            'Temuan',
-            'Keterangan MCU',
-            'Saran MCU'
+            //'Temuan',
+            //'Keterangan MCU',
+            //'Saran MCU'
         ];
     }
 
