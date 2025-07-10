@@ -59,6 +59,8 @@ class ImportKaryawanJob implements ShouldQueue
             $dept = $row[10];
             $jabatan = $row[11];
             $nik = $row[12];
+            $bpjs_kesehatan = $row[15];
+            $bpjs_tenagakerja = $row[16];
 
             $kendaraan = [];
             foreach ($unitList as $index => $unitName) {
@@ -83,6 +85,10 @@ class ImportKaryawanJob implements ShouldQueue
                     'dept' => $dept,
                     'jabatan' => $jabatan,
                     'versatility' => implode(',', $combined),
+                    'bpjs_kesehatan' => $bpjs_kesehatan,
+                    'bpjs_tenagakerja' => $bpjs_tenagakerja,
+                    'status' => 'aktif',
+                    'domisili' => 'lokal'
                 ]);
 
                 if (!empty($added)) {
@@ -105,6 +111,10 @@ class ImportKaryawanJob implements ShouldQueue
                     'jabatan' => $jabatan,
                     'doh' => now()->toDateString(),
                     'versatility' => implode(',', $newKendaraan),
+                    'bpjs_kesehatan' => $bpjs_kesehatan,
+                    'bpjs_tenagakerja' => $bpjs_tenagakerja,
+                    'status' => 'aktif',
+                    'domisili' => 'lokal',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
