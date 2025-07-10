@@ -149,7 +149,7 @@ class Mcu extends Component
                     'file_mcu' => $filePath,
                     'status_file_mcu' => NULL,
                     'status' => $this->status,
-                    'tgl_verifikasi' => $this->tgl_verifikasi, // Store the file path, not the file object
+                    //'tgl_verifikasi' => $this->tgl_verifikasi, // Store the file path, not the file object
                 ]
             );
             $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n*Upload File Revisi*";
@@ -164,7 +164,7 @@ class Mcu extends Component
                     'file_mcu' => $filePath,
                     'status' => $this->status,
                     'status_file_mcu' => NULL,
-                    'tgl_verifikasi' => $this->tgl_verifikasi, // Store the file path, not the file object
+                    //'tgl_verifikasi' => $this->tgl_verifikasi, // Store the file path, not the file object
                 ]
             );
             $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*";
