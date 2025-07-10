@@ -262,6 +262,15 @@ class checklistImport implements ToCollection
     //     }
     // }
     {
-        ImportKaryawanJob::dispatch($rows->toArray());
+        $chunkSize = 100; // atau 200 jika server kuat
+
+        // Hilangkan header dan ambil mulai baris ke-3
+        $slicedRows = $rows->slice(2);
+
+        $slicedRows->chunk($chunkSize)->each(function ($chunk) use ($rows) {
+            // Kirim ke Job, tetap sertakan header di $rows[2]
+            $chunkWithHeader = collect([$rows[2]])->concat($chunk);
+            ImportKaryawanJob::dispatch($chunkWithHeader->toArray());
+        });
     }
 }
