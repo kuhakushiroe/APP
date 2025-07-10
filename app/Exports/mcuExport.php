@@ -18,16 +18,51 @@ class mcuExport implements FromQuery, WithHeadings, WithStyles, WithColumnFormat
     /**
      * @return \Illuminate\Support\Collection
      */
+    // public function query()
+    // {
+    //     $latestMcuIds = DB::table('mcu')
+    //         ->select(DB::raw('MAX(created_at) as latest_created_at'), 'id_karyawan')
+    //         ->groupBy('id_karyawan');
+
+    //     return ModelsMcu::join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
+    //         ->joinSub($latestMcuIds, 'latest_mcus', function ($join) {
+    //             $join->on('mcu.id_karyawan', '=', 'latest_mcus.id_karyawan')
+    //                 ->on('mcu.created_at', '=', 'latest_mcus.latest_created_at');
+    //         })
+    //         ->select(
+    //             'karyawans.nrp',
+    //             DB::raw("CONCAT('\'', karyawans.nik) as nik"),
+    //             'karyawans.nama',
+    //             DB::raw("TIMESTAMPDIFF(YEAR, karyawans.tgl_lahir, CURDATE()) as umur"),
+    //             'karyawans.jenis_kelamin',
+    //             'karyawans.perusahaan',
+    //             'karyawans.dept',
+    //             'karyawans.jabatan',
+    //             'mcu.proveder',
+    //             'mcu.status',
+    //             'mcu.keterangan_mcu',
+    //             'mcu.saran_mcu',
+    //             'mcu.tgl_mcu',
+    //             'mcu.tgl_verifikasi',
+    //             'mcu.exp_mcu'
+    //         )
+    //         ->orderBy('mcu.created_at', 'DESC')
+    //         ->orderBy('mcu.status', 'DESC');
+    // }
     public function query()
     {
-        $latestMcuIds = DB::table('mcu')
+        // Subquery untuk MCU terbaru per karyawan
+        $latestMcu = DB::table('mcu')
             ->select(DB::raw('MAX(created_at) as latest_created_at'), 'id_karyawan')
             ->groupBy('id_karyawan');
 
-        return ModelsMcu::join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
-            ->joinSub($latestMcuIds, 'latest_mcus', function ($join) {
-                $join->on('mcu.id_karyawan', '=', 'latest_mcus.id_karyawan')
-                    ->on('mcu.created_at', '=', 'latest_mcus.latest_created_at');
+        return DB::table('karyawans')
+            ->leftJoinSub($latestMcu, 'latest_mcu', function ($join) {
+                $join->on('karyawans.nrp', '=', 'latest_mcu.id_karyawan');
+            })
+            ->leftJoin('mcu', function ($join) {
+                $join->on('karyawans.nrp', '=', 'mcu.id_karyawan')
+                    ->on('mcu.created_at', '=', DB::raw('latest_mcu.latest_created_at'));
             })
             ->select(
                 'karyawans.nrp',
@@ -49,6 +84,7 @@ class mcuExport implements FromQuery, WithHeadings, WithStyles, WithColumnFormat
             ->orderBy('mcu.created_at', 'DESC')
             ->orderBy('mcu.status', 'DESC');
     }
+
 
     public function headings(): array
     {
