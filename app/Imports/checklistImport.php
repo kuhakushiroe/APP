@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Jobs\BulkProcessKaryawanImport;
 use App\Jobs\ImportKaryawanJob;
 use App\Jobs\ProcessKaryawanImport;
 use App\Models\Karyawan;
@@ -125,6 +126,20 @@ class checklistImport implements ToCollection
     // }
     public function collection(Collection $rows)
     {
+        // $unitHeaderRow = $rows[2];
+
+        // $unitList = [];
+        // foreach ($unitHeaderRow as $key => $value) {
+        //     if ($key >= 31 && !empty($value)) {
+        //         $unitList[$key] = strtolower(str_replace(' ', '_', trim($value)));
+        //     }
+        // }
+
+        // for ($i = 3; $i < count($rows); $i++) {
+        //     $row = $rows[$i];
+        //     // Dispatch setiap row ke queue
+        //     ProcessKaryawanImport::dispatch($row, $unitList);
+        // }
         $unitHeaderRow = $rows[2];
 
         $unitList = [];
@@ -134,10 +149,11 @@ class checklistImport implements ToCollection
             }
         }
 
-        for ($i = 3; $i < count($rows); $i++) {
-            $row = $rows[$i];
-            // Dispatch setiap row ke queue
-            ProcessKaryawanImport::dispatch($row, $unitList);
+        $dataRows = $rows->slice(3); // Mulai dari baris ke-4 (index 3)
+        $chunked = $dataRows->chunk(100); // Bagi jadi potongan 100 baris
+
+        foreach ($chunked as $chunk) {
+            BulkProcessKaryawanImport::dispatch($chunk->toArray(), $unitList);
         }
     }
 }
