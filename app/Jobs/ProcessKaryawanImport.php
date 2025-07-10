@@ -44,8 +44,8 @@ class ProcessKaryawanImport implements ShouldQueue
         $dept = $row[10];
         $jabatan = $row[11];
         $nik = $row[12];
-        $bpjs_kesehatan = $row[15];
-        $bpjs_tenagakerja = $row[16];
+        $bpjs_kesehatan = isset($row[15]) ? (string) trim($row[15]) : null;
+        $bpjs_tenagakerja = isset($row[16]) ? (string) trim($row[16]) : null;
 
 
         // Kendaraan
@@ -97,6 +97,7 @@ class ProcessKaryawanImport implements ShouldQueue
                 'dept' => $dept,
                 'jabatan' => $jabatan,
                 'versatility' => implode(',', $newKendaraan),
+                'doh' => now()->format('Y-m-d'),
                 'bpjs_kesehatan' => $bpjs_kesehatan,
                 'bpjs_tenagakerja' => $bpjs_tenagakerja,
                 'status' => 'aktif',

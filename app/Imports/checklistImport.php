@@ -16,7 +16,6 @@ class checklistImport implements ToCollection
     /**
      * @param Collection $collection
      */
-    public function collection(Collection $rows)
     // {
     //     // Ambil row ke-2 untuk nama unit kendaraan
     //     $unitHeaderRow = $rows[2]; // index 1 = baris ke-2 Excel
@@ -124,6 +123,7 @@ class checklistImport implements ToCollection
     //         }
     //     }
     // }
+    public function collection(Collection $rows)
     {
         $unitHeaderRow = $rows[2];
 
