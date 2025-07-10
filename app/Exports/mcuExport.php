@@ -81,7 +81,6 @@ class mcuExport implements FromQuery, WithHeadings, WithStyles, WithColumnFormat
                 'mcu.tgl_verifikasi',
                 'mcu.verifikator',
                 'mcu.exp_mcu',
-
                 'mcu.riwayat_rokok',
                 'mcu.BB',
                 'mcu.TB',
@@ -151,7 +150,6 @@ class mcuExport implements FromQuery, WithHeadings, WithStyles, WithColumnFormat
             'Tanggal Verifikasi',
             'Verifikator',
             'Exp MCU',
-
             'Riwayat Rokok',
             'Berat Badan (BB)',
             'Tinggi Badan (TB)',
