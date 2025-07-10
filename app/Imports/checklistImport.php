@@ -262,14 +262,20 @@ class checklistImport implements ToCollection
     //     }
     // }
     {
-        $chunkSize = 100; // atau 200 jika server kuat
+        $chunkSize = 100;
 
-        // Hilangkan header dan ambil mulai baris ke-3
-        $slicedRows = $rows->slice(2);
+        // Baris ke-1 dan ke-2 = header
+        $unitHeaderRow = $rows[2]; // index 2 = baris ke-3 Excel (header unit kendaraan)
 
-        $slicedRows->chunk($chunkSize)->each(function ($chunk) use ($rows) {
-            // Kirim ke Job, tetap sertakan header di $rows[2]
-            $chunkWithHeader = collect([$rows[2]])->concat($chunk);
+        // Data asli mulai dari baris ke-4 Excel (index 3)
+        $dataRows = $rows->slice(3);
+
+        // Bagi data menjadi potongan (chunk) per 100 baris
+        $dataRows->chunk($chunkSize)->each(function ($chunk) use ($unitHeaderRow) {
+            // Gabungkan header unit dengan masing-masing chunk data
+            $chunkWithHeader = collect([$unitHeaderRow])->concat($chunk);
+
+            // Kirim ke Job untuk diproses di background
             ImportKaryawanJob::dispatch($chunkWithHeader->toArray());
         });
     }
