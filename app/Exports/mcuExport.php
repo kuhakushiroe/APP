@@ -40,7 +40,8 @@ class mcuExport implements FromQuery, WithHeadings, WithStyles, WithColumnFormat
                 'karyawans.jabatan',
                 'mcu.proveder',
                 'mcu.status',
-                'mcu.catatan_file_mcu',
+                'mcu.keterangan_mcu',
+                'mcu.saran_mcu',
                 'mcu.tgl_mcu',
                 'mcu.tgl_verifikasi',
                 'mcu.exp_mcu'
@@ -63,6 +64,7 @@ class mcuExport implements FromQuery, WithHeadings, WithStyles, WithColumnFormat
             'MCU Provider',
             'Hasil MCU',
             'Catatan',
+            'Saran',
             'Tanggal MCU',
             'Tanggal Verifikasi',
             'Exp MCU'
