@@ -42,7 +42,7 @@
         </tr>
         <tr>
             <td>Tgl. Efektif</td>
-            <td>: 00/00/0000</td>
+            <td>: {{ now()->format('d/m/Y') }}</td>
         </tr>
         <tr>
             <td>Halaman</td>
@@ -57,7 +57,12 @@
                     Dokter Perusahaan
                 </td>
                 <td style="width: 1%">:</td>
-                <td>dr. Muhammad Reza Wardana</td>
+                <td>
+                    @php
+                        $users = DB::table('users')->where('username', $query->verifikator)->first();
+                    @endphp
+                    {{ $users->name }}
+                </td>
             </tr>
             <tr>
                 <td>
@@ -65,25 +70,26 @@
                 </td>
                 <td>:</td>
                 <td>
-                    <table>
-                        <tr>
-                            <td>
-                                <p>Tahunan &#9634;</p>
-                            </td>
-                            <td>
-                                <p>Pre Employeed &#9634;</p>
-                            </td>
-                            <td>
-                                <p>Khusus &#9634;</p>
-                            </td>
-                        </tr>
-                    </table>
-                    {{-- <input type="checkbox" id="checkbox1" name="mcu_type" value="type1">
-                    <label for="checkbox1" style="margin-right: 20px;">Tahunan</label>
-                    <input type="checkbox" id="checkbox2" name="mcu_type" value="type2">
-                    <label for="checkbox2" style="margin-right: 20px;">Pre Employeed</label>
-                    <input type="checkbox" id="checkbox3" name="mcu_type" value="type3">
-                    <label for="checkbox3">Khusus</label> --}}
+                    <p style="font-family: DejaVu Sans, sans-serif;">
+                        Pre Employed
+                        @if ($query->jenis_pengajuan_mcu === 'Pre Employeed MCU')
+                            &#9746;
+                        @else
+                            &#9744;
+                        @endif
+                        Tahunan
+                        @if ($query->jenis_pengajuan_mcu === 'Annual MCU')
+                            &#9746;
+                        @else
+                            &#9744;
+                        @endif
+                        Khusus
+                        @if ($query->jenis_pengajuan_mcu === 'MCU Khusus')
+                            &#9746;
+                        @else
+                            &#9744;
+                        @endif
+                    </p>
                 </td>
             </tr>
         </table>
@@ -102,7 +108,8 @@
                 </tr>
                 <tr>
                     <td>Jenis Kelamin / Umur</td>
-                    <td>: {{ $query->jenis_kelamin }} / {{ \Carbon\Carbon::parse($query->tgl_lahir)->age }} tahun</td>
+                    <td>: {{ $query->jenis_kelamin ?: '-' }} /
+                        {{ \Carbon\Carbon::parse($query->tgl_lahir)->age }} tahun</td>
                 </tr>
                 <tr>
                     <td>Jabatan</td>
@@ -149,17 +156,17 @@
                 <tr>
                     <td>5.</td>
                     <td>Treadmill</td>
-                    <td>: </td>
+                    <td>: {{ $query->tredmil_test }}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>Hasil Follow Up</td>
-                    <td>: </td>
+                    <td>: {{ $query->status }}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td> Echocardiography</td>
-                    <td>: </td>
+                    <td>: {{ $query->echocardiography }}</td>
                 </tr>
                 <tr>
                     <td>6.</td>
@@ -192,11 +199,11 @@
                 </tr>
                 <tr>
                     <td>2. Tekanan Darah</td>
-                    <td>: {{ $query->sistol }} mmhg</td>
+                    <td>: {{ $query->sistol }} / {{ $query->diastol }} mmhg</td>
                 </tr>
                 <tr>
                     <td>3. Buta Warna</td>
-                    <td>: </td>
+                    <td>: {{ $query->butawarna }}</td>
                 </tr>
                 <tr>
                     <td colspan="2">4. Berdasarkan hasil pemeriksaan MCU diatas dapat dinyatakan
@@ -223,7 +230,8 @@
                         {{ \Carbon\Carbon::parse($query->tgl_verifikasi)->locale('id')->translatedFormat('l, d F Y') }}
                     </p>
                     <p>Dokter Yang Memeriksa</p>
-                    <img src="{{ public_path('storage/Dokter 1.jpeg') }}" alt="" width="100px">
+                    <img src="{{ public_path('storage/' . $query->verifikator . '.jpg') }}" alt=""
+                        width="150px">
                     {{-- <p><b>dr. Muhammad Reza Wardana</b></p>
                     <p>No. STR: EQ00000519937393</p> --}}
                 </td>

@@ -72,7 +72,7 @@
             ->first();
     @endphp
     <div class="kodedoc">
-        AMM-BGE-F-SHE-012A
+        AMM-MIFA-F-SHE-68F
     </div>
     <div class="isi">
         <h2>
@@ -264,7 +264,8 @@
                         <tr>
                             <td style="width: 40%;">&nbsp;</td>
                             <td style="text-align: center;">
-                                <img src="{{ public_path('storage/Dokter 1.jpeg') }}" alt="" width="100px">
+                                <img src="{{ public_path('storage/' . $query->verifikator . '.jpg') }}" alt=""
+                                    width="150px">
                             </td>
                         </tr>
                         {{-- <tr>

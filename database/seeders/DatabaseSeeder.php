@@ -125,20 +125,20 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
         ]);
         User::create([
-            'name' => 'dokter 1',
-            'username' => 'dokter',
+            'name' => 'Dr. Yuldi A',
+            'username' => 'yuldi',
             'email' => 'dokter1@example.com',
             'role' => 'dokter',
             'subrole' => 'verifikator',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('yuldi'),
         ]);
         User::create([
-            'name' => 'dokter 2',
-            'username' => 'dokter2',
+            'name' => 'Dr. Guntara',
+            'username' => 'guntara',
             'email' => 'dokter2@example.com',
             'role' => 'dokter',
             'subrole' => 'verifikator',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('guntara'),
         ]);
         User::create([
             'name' => 'paramedik',

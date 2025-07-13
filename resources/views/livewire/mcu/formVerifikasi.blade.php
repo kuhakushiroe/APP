@@ -18,15 +18,32 @@
                         <input type="hidden" class="form-control form-control-sm" wire:model.live="nrp" readonly>
                         <div class="card text-start">
                             <div class="card-body">
-                                <h4 class="card-title">No Dokumen MCU</h4>
-                                <input type="text"
-                                    class="form-control form-control-sm @error('no_dokumen') is-invalid @enderror"
-                                    wire:model.live="no_dokumen" placeholder="No Dokumen"
-                                    @if (auth()->user()->subrole === 'verifikator') readonly @endif>
-                                @error('no_dokumen')
-                                    <span class="invalid-feedback"
-                                        role="alert"><strong>{{ $message }}</strong></span>
-                                @enderror
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <h4 class="card-title">No Dokumen MCU</h4>
+                                        <input type="text"
+                                            class="form-control form-control-sm @error('no_dokumen') is-invalid @enderror"
+                                            wire:model.live="no_dokumen" placeholder="No Dokumen"
+                                            @if (auth()->user()->subrole === 'verifikator') readonly @endif>
+                                        @error('no_dokumen')
+                                            <span class="invalid-feedback"
+                                                role="alert"><strong>{{ $message }}</strong></span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="jenis_pengajuan_mcu">Jenis Pengajuan MCU</label>
+                                        <input type="text"
+                                            class="form-control form-control-sm @error('jenis_pengajuan_mcu') is-invalid @enderror"
+                                            wire:model.live="jenis_pengajuan_mcu" placeholder="Jenis Pengajuan MCU"
+                                            @if (auth()->user()->subrole === 'verifikator') readonly @endif>
+                                        @error('jenis_pengajuan_mcu')
+                                            <span class="invalid-feedback"
+                                                role="alert"><strong>{{ $message }}</strong></span>
+                                        @enderror
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="card text-start">
@@ -589,6 +606,18 @@
                                 </div>
 
                                 <div class="col-sm-12">
+                                    <label for="echocardiography">Echocardiography</label>
+                                    <input type="text"
+                                        class="form-control form-control-sm @error('echocardiography') is-invalid @enderror"
+                                        wire:model.live="echocardiography"
+                                        placeholder="Echocardiography"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
+                                    @error('echocardiography')
+                                        <span class="invalid-feedback"
+                                            role="alert"><strong>{{ $message }}</strong></span>
+                                    @enderror
+                                </div>
+
+                                <div class="col-sm-12">
                                     <label for="widal_test">Widal Test</label>
                                     <input type="text"
                                         class="form-control form-control-sm @error('widal_test') is-invalid @enderror"
@@ -655,6 +684,19 @@
                                 <div class="col-12">
                                     <fieldset>Kesimpulan</fieldset>
                                     <hr>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="jenis_pengajuan_mcu">Jenis Pengajuan MCU</label>
+                                        <input type="text"
+                                            class="form-control form-control-sm @error('jenis_pengajuan_mcu') is-invalid @enderror"
+                                            wire:model.live="jenis_pengajuan_mcu" placeholder="Jenis Pengajuan MCU"
+                                            @if (auth()->user()->subrole === 'verifikator') readonly @endif>
+                                        @error('jenis_pengajuan_mcu')
+                                            <span class="invalid-feedback"
+                                                role="alert"><strong>{{ $message }}</strong></span>
+                                        @enderror
+                                    </div>
                                 </div>
                                 <div class="col-sm">
                                     <label for="status">Status</label>

@@ -27,9 +27,9 @@ class Mcu extends Component
     public $form = false;
     public $formVerifikasi = false;
     public $formUpload = false;
-    public $id_mcu, $sub_id, $proveder, $nrp, $nama, $tgl_mcu, $gol_darah, $jenis_kelamin, $file_mcu;
+    public $id_mcu, $sub_id, $proveder, $nrp, $nama, $tgl_mcu, $gol_darah, $jenis_kelamin, $file_mcu, $jenis_pengajuan_mcu;
     public $no_dokumen, $status = NULL, $keterangan_mcu, $saran_mcu, $tgl_verifikasi, $exp_mcu;
-    public $riwayat_rokok, $BB, $TB, $LP, $BMI, $Laseq, $reqtal_touche, $sistol, $diastol, $OD_jauh, $OS_jauh, $OD_dekat, $OS_dekat, $butawarna, $gdp, $hba1c, $gd_2_jpp, $ureum, $creatine, $asamurat, $sgot, $sgpt, $hbsag, $anti_hbs, $kolesterol, $hdl, $ldl, $tg, $darah_rutin, $napza, $urin, $ekg, $rontgen, $audiometri, $spirometri, $tredmil_test, $widal_test, $routin_feces, $kultur_feces;
+    public $riwayat_rokok, $BB, $TB, $LP, $BMI, $Laseq, $reqtal_touche, $sistol, $diastol, $OD_jauh, $OS_jauh, $OD_dekat, $OS_dekat, $butawarna, $gdp, $hba1c, $gd_2_jpp, $ureum, $creatine, $asamurat, $sgot, $sgpt, $hbsag, $anti_hbs, $kolesterol, $hdl, $ldl, $tg, $darah_rutin, $napza, $urin, $ekg, $rontgen, $audiometri, $spirometri, $tredmil_test, $echocardiography, $widal_test, $routin_feces, $kultur_feces;
     public $caridatakaryawan = [];
     public $carikaryawan = [];
     public $status_file_mcu = [];
@@ -88,6 +88,7 @@ class Mcu extends Component
     {
         // Validate the form inputs
         $this->validate([
+            'jenis_pengajuan_mcu' => 'required',
             'proveder' => 'required',
             'nrp' => [
                 'required',
@@ -143,6 +144,7 @@ class Mcu extends Component
                 ['id' => $this->id_mcu], // Assuming id_mcu is the primary key
                 [
                     'id_karyawan' => $this->nrp,
+                    'jenis_pengajuan_mcu' => $this->jenis_pengajuan_mcu,
                     'proveder' => $this->proveder,
                     'tgl_mcu' => $this->tgl_mcu,
                     'gol_darah' => $this->gol_darah,
@@ -158,6 +160,7 @@ class Mcu extends Component
                 ['id' => $this->id_mcu], // Assuming id_mcu is the primary key
                 [
                     'id_karyawan' => $this->nrp,
+                    'jenis_pengajuan_mcu' => $this->jenis_pengajuan_mcu,
                     'proveder' => $this->proveder,
                     'tgl_mcu' => $this->tgl_mcu,
                     'gol_darah' => $this->gol_darah,
@@ -476,6 +479,7 @@ class Mcu extends Component
         $carimcu = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.gol_darah as mcuGolDarah')
             ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
             ->where('mcu.id', $id_mcu)->first();
+        $this->jenis_pengajuan_mcu = $carimcu->jenis_pengajuan_mcu;
         $this->nrp = $carimcu->id_karyawan;
         $this->no_dokumen = $carimcu->no_dokumen;
         $this->tgl_mcu = $carimcu->tgl_mcu;
@@ -520,6 +524,7 @@ class Mcu extends Component
         $this->audiometri = $carimcu->audiometri;
         $this->spirometri = $carimcu->spirometri;
         $this->tredmil_test = $carimcu->tredmil_test;
+        $this->echocardiography = $carimcu->echocardiography;
         $this->widal_test = $carimcu->widal_test;
         $this->routin_feces = $carimcu->routin_feces;
         $this->kultur_feces = $carimcu->kultur_feces;
@@ -695,6 +700,7 @@ class Mcu extends Component
                 'spirometri' => $this->spirometri,
                 'tredmil_test' => $this->tredmil_test,
                 'widal_test' => $this->widal_test,
+                'echocardiography' => $this->echocardiography,
                 'routin_feces' => $this->routin_feces,
                 'kultur_feces' => $this->kultur_feces,
                 'saran_mcu' => $this->saran_mcu,
@@ -704,6 +710,7 @@ class Mcu extends Component
             ]);
             $updateKaryawan = Karyawan::where('nrp', $nrp)->first();
             $updateKaryawan->update([
+                'jenis_kelamin' => $this->jenis_kelamin,
                 'gol_darah' => $this->gol_darah,
             ]);
             $nomorDokter = array_merge($info['nomorDokter']);

@@ -48,6 +48,21 @@
                             <input class="form-control form-control-sm" list="browsers" wire:model='nama' readonly>
                         </div>
                         <div class="form-group">
+                            <label for="jenis_pengajuan_mcu">Jenis Pengajuan MCU</label>
+                            <select
+                                class="form-control form-control-sm @error('jenis_pengajuan_mcu') is-invalid @enderror"
+                                wire:model="jenis_pengajuan_mcu" placeholder="Keterangan Perusahaan">
+                                <option value="">Pilih Jenis Pengajuan MCU</option>
+                                <option value="Pre Employeed MCU">Pre Employeed MCU</option>
+                                <option value="Annual MCU">Annual MCU</option>
+                                <option value="MCU Khusus">MCU Khusus</option>
+                                <option value="Exit MCU">Exit MCU</option>
+                            </select>
+                            @error('jenis_pengajuan_mcu')
+                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
+                        </div>
+                        <div class="form-group">
                             <label for="file_mcu">File MCU</label>
                             <input type="file"
                                 class="form-control form-control-sm @error('file_mcu') is-invalid @enderror"

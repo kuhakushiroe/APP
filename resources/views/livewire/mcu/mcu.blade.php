@@ -8,11 +8,13 @@
     @else
         <div class="row">
             <div class="col-md-3">
-                @hasAnyRole(['admin', 'superadmin'])
-                    <button class="btn btn-dark btn-sm" wire:click="open">
-                        <span class="bi bi-plus-square"></span>
-                        &nbsp;Mcu
-                    </button>
+                @hasAnyRole(['admin', 'superadmin', 'dokter'])
+                    @hasAnyRole(['admin', 'superadmin'])
+                        <button class="btn btn-dark btn-sm" wire:click="open">
+                            <span class="bi bi-plus-square"></span>
+                            &nbsp;Mcu
+                        </button>
+                    @endhasAnyRole
                     <a href="{{ route('export-hasil-mcu') }}" class="btn btn-success btn-sm">
                         <span class="bi bi-download"></span> Export Excel
                     </a>
@@ -60,8 +62,7 @@
                                             style="max-width: 100px; max-height: 100px;">
                                     @endif
                                 </div>
-
-                                <div class="col-12 col-sm-5 col-md-5">
+                                <div class="col-12 col-sm-4 col-md-4">
                                     <table>
                                         <tr>
                                             <td>NRP</td>
@@ -102,7 +103,7 @@
                                         </tr>
                                     </table>
                                 </div>
-                                <div class="col-12 col-sm-5 col-md-5">
+                                <div class="col-12 col-sm-6 col-md-6">
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
@@ -264,8 +265,9 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td class="text-end">-</td>
-                                                <td colspan="3">
+                                                <td colspan="2" class="text-start">{{ $data->jenis_pengajuan_mcu }}
+                                                </td>
+                                                <td colspan="2">
                                                     @if (!empty($data->mcuStatus))
                                                         <div class="mb-2">
                                                             <strong>Hasil:</strong>
@@ -463,7 +465,9 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="text-end">-</td>
+                                                    <td colspan="2" class="text-start">
+                                                        {{ $item->jenis_pengajuan_mcu }}
+                                                    </td>
                                                     <td colspan="3">
                                                         @if (!empty($item->status))
                                                             <div class="mb-2">

@@ -23,6 +23,7 @@ return new class extends Migration
 
             $table->enum('gol_darah', ['A', 'B', 'AB', 'O'])->nullable();
             $table->string('no_dokumen')->nullable();
+            $table->enum('jenis_pengajuan_mcu', ['Pre Employeed MCU', 'Annual MCU', 'MCU Khusus', 'Exit MCU'])->nullable();
             $table->string('proveder')->nullable();
             $table->string('tgl_mcu');
             $table->string('exp_mcu')->nullable();
@@ -79,6 +80,7 @@ return new class extends Migration
             $table->string('spirometri')->nullable();
             $table->enum('tredmil_test', ['Hipertensif Positif', 'Hipertensif Negatif'])->nullable();
             $table->string('widal_test')->nullable();
+            $table->string('echocardiography')->nullable();
             $table->string('routin_feces')->nullable();
             $table->string('kultur_feces')->nullable();
 
