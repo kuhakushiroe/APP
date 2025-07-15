@@ -9,10 +9,12 @@ use App\Models\Karyawan;
 use App\Models\Departments;
 use App\Models\Mcu as ModelsMcu;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class Home extends Component
 {
     public $tanggal;
+    //public $files = [];
     public function onchangeTanggal()
     {
         $this->tanggal = $this->tanggal; //coba lagi
@@ -179,7 +181,10 @@ class Home extends Component
         })->count();
 
 
+        //test s3 storage offline
+        $files = Storage::disk('s3')->files('/');
         return view('livewire.home.home', [
+            'files' => $files,
             'departments' => $departments,
             'assignedColors' => $assignedColors,
             'employeeCountsAktif' => $employeeCountsAktif,

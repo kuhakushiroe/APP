@@ -1,5 +1,17 @@
 <div>
     <div class="row">
+        <div class="col-12">
+            <pre>{{ print_r($files, true) }}</pre>
+
+            @forelse ($files as $datafiles)
+                <div class="info-box">
+                    {{ basename($datafiles) }}
+                </div>
+            @empty
+                <div class="alert alert-warning">kosong</div>
+            @endforelse
+        </div>
+
         <!-- /.col -->
         <div class="col-12 col-sm-4 col-md-4">
             <div class="info-box">
@@ -96,7 +108,9 @@
                             <form> <!-- Ganti dengan nama route yang sesuai -->
                                 <div class="form-group">
                                     <label for="tanggal">Pilih Tanggal:</label>
-                                    <input type="date" name="tanggal" wire:model="tanggal" wire:change="onchangeTanggal" id="tanggal" class="form-control d-inline-block w-auto">
+                                    <input type="date" name="tanggal" wire:model="tanggal"
+                                        wire:change="onchangeTanggal" id="tanggal"
+                                        class="form-control d-inline-block w-auto">
                                 </div>
                             </form>
                             @php
@@ -254,9 +268,7 @@
                                 </span>
                                 @php
                                     $persenFit =
-                                        $jumlahmcuharian > 0
-                                            ? ($totalSemuaStatus / $jumlahmcuharian) * 100
-                                            : 0;
+                                        $jumlahmcuharian > 0 ? ($totalSemuaStatus / $jumlahmcuharian) * 100 : 0;
                                 @endphp
                                 <div class="progress progress-sm" style="height: 20px">
                                     <div class="progress-bar text-bg-success" style="width: {{ $persenFit }}%">
