@@ -1,17 +1,5 @@
 <div>
     <div class="row">
-        <div class="col-12">
-            <pre>{{ print_r($files, true) }}</pre>
-
-            @forelse ($files as $datafiles)
-                <div class="info-box">
-                    {{ basename($datafiles) }}
-                </div>
-            @empty
-                <div class="alert alert-warning">kosong</div>
-            @endforelse
-        </div>
-
         <!-- /.col -->
         <div class="col-12 col-sm-4 col-md-4">
             <div class="info-box">

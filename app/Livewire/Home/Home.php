@@ -180,11 +180,7 @@ class Home extends Component
                 ->orWhere('gd_2_jpp', '>=', 200);
         })->count();
 
-
-        //test s3 storage offline
-        $files = Storage::disk('s3')->files('/');
         return view('livewire.home.home', [
-            'files' => $files,
             'departments' => $departments,
             'assignedColors' => $assignedColors,
             'employeeCountsAktif' => $employeeCountsAktif,
