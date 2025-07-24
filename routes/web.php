@@ -61,6 +61,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('cetak-kartu-kimper/{id}', [CetakKartuController::class, 'cetakKimper']);
     });
     Route::group(['middleware' => ['role:superadmin,dokter']], function () {
+        Route::get('report-mcu/{date_mcu1}/{date_mcu2}', [Report::class, 'mcuReport'])->name('report-mcu');
         Route::get('export-hasil-mcu', [Mcu::class, 'exportExcel'])->name('export-hasil-mcu');
         Route::get('cetak-mcu/{id}', [McuCetak::class, 'cetak']);
         Route::get('cetak-mcu-sub/{id}', [McuCetak::class, 'cetakSub']);
