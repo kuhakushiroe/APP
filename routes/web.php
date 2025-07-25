@@ -67,6 +67,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('cetak-mcu-sub/{id}', [McuCetak::class, 'cetakSub']);
         Route::get('cetak-skd/{id}', [McuCetak::class, 'skd']);
         Route::get('cetak-laik/{id}', [McuCetak::class, 'cetakLaik']);
+        Route::get('cetak-reportId/{date_id1}/{date_id2}', [McuCetak::class, 'reportId'])->name('cetak-reportId');
+        Route::get('cetak-reportKimper/{date1}/{date2}', [McuCetak::class, 'reportKimper'])->name('cetak-reportKimper');
     });
 });
 

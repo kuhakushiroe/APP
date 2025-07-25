@@ -39,9 +39,14 @@
                             <input type="date" class="form-control form-control-sm" wire:model.live="date_id2">
                         </div>
                         <div class="col-md-4 text-md-start text-end">
-                            <button type="submit" class="btn btn-success btn-sm" wire:click="reportID">
+                            <a class="btn btn-success btn-sm"
+                                href="{{ route('cetak-reportId', ['date_id1' => $date_id1, 'date_id2' => $date_id2]) }}"
+                                target="_blank" rel="noopener noreferrer">
                                 <span class="bi bi-download"></span> Download
-                            </button>
+                            </a>
+                            {{-- <button type="submit" class="btn btn-success btn-sm" wire:click="reportID">
+                                <span class="bi bi-download"></span> Download
+                            </button> --}}
                         </div>
                     </form>
                 </div>
