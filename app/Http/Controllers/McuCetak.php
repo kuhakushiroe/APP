@@ -66,12 +66,18 @@ class McuCetak extends Controller
             ->whereBetween('pengajuan_id.updated_at', [$date1, $date2])
             ->get();
 
-        $pdf = Pdf::loadView('cetak.report-tarikanId', ['data' => $data, 'date1' => $date1, 'date2' => $date2])
-            ->setPaper('A4', 'landscape');
+        // $pdf = Pdf::loadView('cetak.report-tarikanId', ['data' => $data, 'date1' => $date1, 'date2' => $date2])
+        //     ->setPaper('A4', 'landscape');
+        // return response()->streamDownload(function () use ($pdf) {
+        //     echo $pdf->stream();
+        // }, 'report-id' . $date1 . 'sampai' . $date2 . '.pdf');
+        $pdf = Pdf::loadView('cetak.report-tarikanId', [
+            'data' => $data,
+            'date1' => $date1,
+            'date2' => $date2
+        ])->setPaper('A4', 'landscape');
 
-        return response()->streamDownload(function () use ($pdf) {
-            echo $pdf->stream();
-        }, 'report-id' . $date1 . 'sampai' . $date2 . '.pdf');
+        return $pdf->stream('report-id' . $date1 . 'sampai' . $date2 . '.pdf');
     }
 
     public function reportKimper($date1, $date2) {}

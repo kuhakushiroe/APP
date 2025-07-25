@@ -5,23 +5,16 @@
     <meta http-equiv="Content-Type" content="text/html; charset=" UTF-8">
     <title>Pengajuan Kartu Identitas</title>
     <style>
-        @page {
-            size: A4 landscape;
-            margin: 20mm;
-        }
+        @page {}
 
         body {
             font-family: Arial, Helvetica, sans-serif;
             font-size: 8px;
-            margin: 0;
-            padding: 0;
         }
 
         .container {
             width: 277mm;
             /* Lebar A4 landscape (297mm - 20mm margin kiri - 20mm margin kanan) */
-            margin: auto;
-            padding: 10mm;
             box-sizing: border-box;
         }
 
@@ -53,20 +46,20 @@
         }
     </style>
 </head>
-@foreach ($data as $dataId => $data)
 
-    <body>
-        <div class="container">
-            <table width="100%" style="border: 1px solid black; border-collapse: collapse;" border="1">
+<body>
+    <div class="container">
+        @forelse ($data as $dataId => $data)
+            <table width="100%" border="1">
                 <tr>
-                    <td align="center" rowspan="4" style="padding: 0 1 0 1 " width="20%"><img src="<img src="
-                            MIFA.png" width="70%">" width="60px" alt="">
+                    <td align="center" rowspan="4" style="padding: 0 1 0 1 " width="20%">
+                        <img src="MIFA.png" width="70%">
                     </td>
-                    <td rowspan="2" align="center">FORMULIR</td>
-
-                    <td>Nomor</td>
-                    <td></td>
-
+                    <td rowspan="2" width="60%" align="center">FORMULIR</td>
+                    <td width="10%">Nomor</td>
+                    <td width="10%">
+                        -Nomor-
+                    </td>
                 </tr>
                 <tr>
                     <td>Tanggal Terbit</td>
@@ -233,17 +226,163 @@
                     </tr>
                 </table>
             </div>
-        </div>
-@endforeach
-{{-- <!-- @php
-        $query = DB::table('mcu')
-            ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
-            ->select('karyawans.*', 'mcu.*', 'mcu.id as idPengajuanMcu', 'mcu.created_at as tglPengajuan')
-            ->where('mcu.id', $id)
-            ->first();
-    @endphp --> --}}
+        @empty
+            <table width="100%" border="1">
+                <tr>
+                    <td align="center" rowspan="4" style="padding: 0 1 0 1 " width="20%">
+                        <img src="MIFA.png" width="70%">
+                    </td>
+                    <td rowspan="2" width="60%" align="center">FORMULIR</td>
+                    <td width="10%">Nomor</td>
+                    <td width="10%">
+                        -Nomor-
+                    </td>
+                </tr>
+                <tr>
+                    <td>Tanggal Terbit</td>
+                    <td>
+                        <p><strong>Periode Laporan:</strong>
+                            {{ \Carbon\Carbon::parse($date1)->format('d-m-Y') }}
+                            s/d
+                            {{ \Carbon\Carbon::parse($date2)->format('d-m-Y') }}
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="2" align="center"> PENGAJUAN KARTU IDENTITAS DIRI (ID CARD) KARYAWAN </td>
+                    <td>Revisi</td>
+                    <td></td>
+
+                </tr>
+                <tr>
+                    <td>Halaman</td>
+                    <td></td>
+
+                </tr>
+            </table>
+            <br>
+            <br>
+            <table width="100%" style="border: 1px solid black; border-collapse: collapse;" border="1">
+                <tr class="header-row">
+                    <td rowspan="2"> No. </td>
+                    <td rowspan="2">Nama Karyawan</td>
+                    <td rowspan="2">No. Induk Kependudukan</td>
+                    <td rowspan="2">No. Induk Karyawan</td>
+                    <td rowspan="2">Posisi / Jabatan</td>
+                    <td rowspan="2">Departemen / Bagian</td>
+                    <td colspan="2" align="center">Periode Kerja</td>
+                    <td rowspan="2">Perusahaan</td>
+                    <td colspan="2">Status Pengajuan</td>
+                    <td rowspan="2">Keterangan</td>
+                </tr>
+                <tr class="header-row">
+                    <td>Tanggal Masuk</td>
+                    <td>Tanggal Keluar</td>
+                    <td>Baru</td>
+                    <td>Penggantian</td>
+                </tr>
+
+                <tr>
+                    <td>asd</td>
+                    <td>asd</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                </tr>
+
+            </table>
+
+            <br>
+
+            <div class="table-container">
+                <div class="table_kiri">
+                    <table width="25%" style="border: 1px solid black; border-collapse: collapse;" border="1">
+                        <tr>
+                            <td>Nama PJO / PIC</td>
+                            <td>SEPTIAN</td>
+                        </tr>
+                        <tr>
+                            <td>Nomor Handphone PJO / PIC</td>
+                            <td>085954590940</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="table-kanan">
+                    <table width="45%" style="border: 1px solid black; border-collapse: collapse;" border="1">
+                        <tr>
+                            <td>Diajukan Oleh,</td>
+                            <td>Mengetahui</td>
+                            <td>Diproses Oleh</td>
+                        </tr>
+                        <tr>
+                            <td height="10%">&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>Yudhi Wahyudiana</td>
+                            <td>Hadi Firmasnsyah</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>SHE PT TKS</td>
+                            <td>Kepala Teknik Tambang</td>
+                            <td>HR Site</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
 
 
+            <br>
+
+            <table>
+                <tr>
+                    <td>Catatan</td>
+                </tr>
+                <tr>
+                    <td>- Melampirkan Kartu Tanda Penduduk (KTP) masing - masing karyawan</td>
+                </tr>
+                <tr>
+                    <td>- Melampirkan Soft Copy Pas Photo Latar Merah masing - masing karyawan </td>
+                </tr>
+                <tr>
+                    <td>- Melampirkan Berita Acara (Khusus Penggantian Kartu Karena Rusak)</td>
+                </tr>
+            </table>
+            <br>
+            <br>
+
+            <div>
+                <table width="25%"
+                    style="border: 1px solid black; border-collapse: collapse; page-break-before: always;"
+                    border="1">
+                    <tr>
+                        <td align="center">No</td>
+                        <td align="center">Nama</td>
+                        <td align="center">Pas Photo</td>
+                        <td align="center">KTP</td>
+                        <td align="center">Surat Kesehatan</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>foto</td>
+                        <td>Pas Photo</td>
+                        <td>KTP</td>
+                        <td>Surat Kesehatan</td>
+                    </tr>
+                </table>
+            </div>
+        @endforelse
+    </div>
 </body>
 
 </html>
