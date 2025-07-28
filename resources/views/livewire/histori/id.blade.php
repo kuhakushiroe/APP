@@ -21,7 +21,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($pengajuanid as $pengajuan)
+                            @forelse ($pengajuanid as $pengajuan)
                                 <tr>
                                     <td>{{ $pengajuan->nrp }}</td>
                                     <td>{{ $pengajuan->nama }}</td>
@@ -65,7 +65,16 @@
 
                                     </td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <tr>
+                                    <td colspan="4">
+                                        <div class="alert alert-danger">
+                                            <span class="bi bi-exclamation-circle"></span>
+                                            &nbsp;No data
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Exports\checklistExport;
+use App\Http\Controllers\cetak\CetakRegister;
 use App\Http\Controllers\CetakKartuController;
 use App\Http\Controllers\ExportKaryawans;
 use App\Http\Controllers\McuCetak;
@@ -67,17 +68,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('cetak-mcu-sub/{id}', [McuCetak::class, 'cetakSub']);
         Route::get('cetak-skd/{id}', [McuCetak::class, 'skd']);
         Route::get('cetak-laik/{id}', [McuCetak::class, 'cetakLaik']);
-        Route::get('cetak-reportId/{date_id1}/{date_id2}', [McuCetak::class, 'reportId'])->name('cetak-reportId');
-        Route::get('cetak-reportKimper/{date1}/{date2}', [McuCetak::class, 'reportKimper'])->name('cetak-reportKimper');
     });
-    Route::group(['middleware' => ['role:admin']], function () {
+    Route::group(['middleware' => ['role:admin,superadmin']], function () {
         Route::get('report-mcu/{date_mcu1}/{date_mcu2}', [Report::class, 'mcuReport'])->name('report-mcu');
-        Route::get('cetak-mcu/{id}', [McuCetak::class, 'cetak']);
-        Route::get('cetak-mcu-sub/{id}', [McuCetak::class, 'cetakSub']);
-        Route::get('cetak-skd/{id}', [McuCetak::class, 'skd']);
-        Route::get('cetak-laik/{id}', [McuCetak::class, 'cetakLaik']);
-        Route::get('cetak-reportId/{date_id1}/{date_id2}', [McuCetak::class, 'reportId'])->name('cetak-reportId');
-        Route::get('cetak-reportKimper/{date1}/{date2}', [McuCetak::class, 'reportKimper'])->name('cetak-reportKimper');
+        Route::get('cetak-register-id/{date_id1}/{date_id2}', [CetakRegister::class, 'registerID'])->name('cetak-register-id');
+        Route::get('cetak-register-kimper/{date_kimper1}/{date_kimper2}', [CetakRegister::class, 'registerKIMPER'])->name('cetak-register-kimper');
+        Route::get('formulir-kimper/{id}', [CetakRegister::class, 'formulirKIMPER'])->name('formulir-kimper');
     });
 });
 

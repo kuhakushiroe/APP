@@ -40,13 +40,10 @@
                         </div>
                         <div class="col-md-4 text-md-start text-end">
                             <a class="btn btn-success btn-sm"
-                                href="{{ route('cetak-reportId', ['date_id1' => $date_id1, 'date_id2' => $date_id2]) }}"
+                                href="{{ route('cetak-register-id', ['date_id1' => $date_id1, 'date_id2' => $date_id2]) }}"
                                 target="_blank" rel="noopener noreferrer">
                                 <span class="bi bi-download"></span> Download
                             </a>
-                            {{-- <button type="submit" class="btn btn-success btn-sm" wire:click="reportID">
-                                <span class="bi bi-download"></span> Download
-                            </button> --}}
                         </div>
                     </form>
                 </div>
@@ -67,9 +64,11 @@
                             <input type="date" class="form-control form-control-sm" wire:model.live="date_kimper2">
                         </div>
                         <div class="col-md-4 text-md-start text-end">
-                            <button type="submit" class="btn btn-success btn-sm" wire:click="reportKIMPER">
+                            <a class="btn btn-success btn-sm"
+                                href="{{ route('cetak-register-kimper', ['date_kimper1' => $date_kimper1, 'date_kimper2' => $date_kimper2]) }}"
+                                target="_blank" rel="noopener noreferrer">
                                 <span class="bi bi-download"></span> Download
-                            </button>
+                            </a>
                         </div>
                     </form>
                 </div>

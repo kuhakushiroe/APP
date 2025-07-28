@@ -1,0 +1,83 @@
+<?php
+
+namespace App\Http\Controllers\cetak;
+
+use App\Http\Controllers\Controller;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class CetakRegister extends Controller
+{
+    //
+    public function registerID($date1, $date2)
+    {
+        $data = DB::table('pengajuan_id')
+            ->join('karyawans', 'pengajuan_id.nrp', '=', 'karyawans.nrp')
+            ->select(
+                'karyawans.nama',
+                'karyawans.nik',
+                'karyawans.nrp',
+                'karyawans.jabatan',
+                'karyawans.dept',
+                'karyawans.perusahaan',
+                'pengajuan_id.tgl_pengajuan',
+                'pengajuan_id.exp_id',
+                'pengajuan_id.jenis_pengajuan_id',
+                'pengajuan_id.status_pengajuan'
+            )
+            ->whereNotNull('pengajuan_id.exp_id')
+            ->whereBetween('pengajuan_id.updated_at', [$date1, $date2])
+            ->get();
+        $pdf = Pdf::loadView('cetak.register-id', [
+            'data' => $data,
+            'date1' => $date1,
+            'date2' => $date2
+        ])->setPaper('A4', 'landscape');
+
+        return $pdf->stream('register-id' . $date1 . 'sampai' . $date2 . '.pdf');
+    }
+
+    public function registerKIMPER($date1, $date2)
+    {
+        $data = DB::table('pengajuan_kimper')
+            ->join('karyawans', 'pengajuan_kimper.nrp', '=', 'karyawans.nrp')
+            ->select(
+                'karyawans.nama',
+                'karyawans.nik',
+                'karyawans.nrp',
+                'karyawans.jabatan',
+                'karyawans.dept',
+                'karyawans.perusahaan',
+                'pengajuan_kimper.tgl_pengajuan',
+                'pengajuan_kimper.exp_kimper',
+                'pengajuan_kimper.jenis_pengajuan_kimper',
+                'pengajuan_kimper.status_pengajuan'
+            )
+            ->whereNotNull('pengajuan_kimper.exp_kimper')
+            ->whereBetween('pengajuan_kimper.updated_at', [$date1, $date2])
+            ->get();
+        $pdf = Pdf::loadView('cetak.register-kimper', [
+            'data' => $data,
+            'date1' => $date1,
+            'date2' => $date2
+        ])->setPaper('A4', 'landscape');
+
+        return $pdf->stream('register-id' . $date1 . 'sampai' . $date2 . '.pdf');
+    }
+    public function formulirKImper($id)
+    {
+        $data = DB::table('pengajuan_kimper')
+            ->join('karyawans', 'pengajuan_kimper.nrp', '=', 'karyawans.nrp')
+            ->select(
+                'karyawans.*',
+                'pengajuan_kimper.*'
+            )
+            ->where('pengajuan_kimper.id', $id)->first();
+        $pdf = Pdf::loadView('cetak.formulir-kimper', [
+            'data' => $data,
+        ])->setPaper('A4', 'landscape');
+        return $pdf->stream('formulir-kimper TEST.pdf');
+        //return $pdf->stream('formulir-kimper ' . $data->nrp ?? 'nrp' . '-' . $data->nama ?? 'nama' . '-' . $data->tgl_pengajuan ?? 'tgl_pengajuan' . '.pdf');
+    }
+}
