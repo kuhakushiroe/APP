@@ -9,6 +9,7 @@ use App\Models\Mcu as ModelsMcu;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Title;
@@ -25,6 +26,8 @@ class Mcu extends Component
     public $search = '';
     protected $updatesQueryString = ['search'];
     public $form = false;
+    public $form_multi = false;
+    public $forms = [];
     public $formVerifikasi = false;
     public $formUpload = false;
     public $id_mcu, $sub_id, $proveder, $nrp, $nama, $tgl_mcu, $gol_darah, $jenis_kelamin, $file_mcu, $jenis_pengajuan_mcu;
@@ -35,6 +38,7 @@ class Mcu extends Component
     public $status_file_mcu = [];
     public $catatan_file_mcu = [];
     public $paramedik, $paramedik_status, $paramedik_catatan;
+
 
     #[Title('MCU')]
     public function updatedNrp($value)
@@ -52,10 +56,156 @@ class Mcu extends Component
             $this->jenis_kelamin = null; // Reset field if NIK is not found
         }
     }
+    public function updatedForms($value, $key)
+    {
+        // Contoh $key = "0.nrp", kita pisahkan index dan field
+        [$index, $field] = explode('.', $key);
+
+        if ($field === 'nrp') {
+            $caridatakaryawan = Karyawan::where('nrp', $value)
+                ->where('status', 'aktif')
+                ->first();
+
+            if ($caridatakaryawan) {
+                $this->forms[$index]['nama'] = $caridatakaryawan->nama;
+                $this->forms[$index]['gol_darah'] = $caridatakaryawan->gol_darah;
+                $this->forms[$index]['jenis_kelamin'] = $caridatakaryawan->jenis_kelamin;
+            } else {
+                $this->forms[$index]['nama'] = null;
+                $this->forms[$index]['gol_darah'] = null;
+                $this->forms[$index]['jenis_kelamin'] = null;
+            }
+        }
+    }
+
     public function open()
     {
         $this->form = true;
     }
+    //MULTI MCU
+    public function open_multi()
+    {
+        $this->resetErrorBag();
+        $this->resetValidation();
+
+        $this->forms = [$this->emptyForm()];
+        $this->form_multi = true;
+    }
+
+    public function addFormMcu()
+    {
+        $this->forms[] = $this->emptyForm();
+    }
+
+    public function removeFormMcu($index)
+    {
+        unset($this->forms[$index]);
+        $this->forms = array_values($this->forms); // reset indeks array
+    }
+
+    private function emptyForm()
+    {
+        return [
+            'nrp' => '',
+            'nama' => '',
+            'jenis_pengajuan_mcu' => '',
+            'file_mcu' => null,
+            'jenis_kelamin' => '',
+            'gol_darah' => '',
+            'proveder' => '',
+            'tgl_mcu' => '',
+        ];
+    }
+    public function storeMulti()
+    {
+        // Validasi seluruh array forms
+        $validatedData = Validator::make(
+            ['forms' => $this->forms],
+            [
+                'forms.*.jenis_pengajuan_mcu' => 'required',
+                'forms.*.proveder' => 'required',
+                'forms.*.nrp' => [
+                    'required',
+                    Rule::exists('karyawans', 'nrp')->where(function ($query) {
+                        $query->where('status', 'aktif');
+                    }),
+                ],
+                'forms.*.tgl_mcu' => 'required|date',
+                'forms.*.file_mcu' => 'required|file|mimes:pdf|max:10240',
+            ],
+            [
+                'forms.*.proveder.required' => 'Proveder harus diisi.',
+                'forms.*.nrp.required' => 'NRP harus diisi.',
+                'forms.*.nrp.exists' => 'NRP tidak ditemukan atau karyawan tidak aktif.',
+                'forms.*.tgl_mcu.required' => 'Tanggal MCU harus diisi.',
+                'forms.*.tgl_mcu.date' => 'Tanggal MCU harus format tanggal valid.',
+                'forms.*.file_mcu.required' => 'File MCU harus diunggah.',
+                'forms.*.file_mcu.file' => 'File harus berupa file.',
+                'forms.*.file_mcu.mimes' => 'Format file harus PDF.',
+                'forms.*.file_mcu.max' => 'Ukuran file maksimal 10MB.',
+            ]
+        )->validate();
+
+        $info = getUserInfo();
+        $token = $info['token'];
+        $namaUser = $info['nama'];
+        $nomorGabungan = array_merge($info['nomorAdmins'], $info['nomorParamedik']);
+
+        foreach ($this->forms as $index => $form) {
+            $datakaryawan = Karyawan::where('nrp', $form['nrp'])->first();
+
+            $folderDept = strtoupper(Str::slug($datakaryawan->dept, '_'));
+            $folderKaryawan = strtoupper(Str::slug(
+                $datakaryawan->nrp . '-' . $datakaryawan->nama . '-' . $datakaryawan->dept . '-' . $datakaryawan->jabatan,
+                '_'
+            ));
+            $folderPath = $folderDept . '/' . $folderKaryawan . '/MCU';
+
+            if (!Storage::disk('public')->exists($folderPath)) {
+                Storage::disk('public')->makeDirectory($folderPath);
+            }
+
+            $uploadedFile = $form['file_mcu'];
+            $filePath = $uploadedFile->storeAs(
+                $folderPath,
+                $folderKaryawan . "-MCU-" . time() . ".{$uploadedFile->getClientOriginalExtension()}",
+                'public'
+            );
+
+            ModelsMcu::create([
+                'id_karyawan' => $form['nrp'],
+                'jenis_pengajuan_mcu' => $form['jenis_pengajuan_mcu'],
+                'proveder' => $form['proveder'],
+                'tgl_mcu' => $form['tgl_mcu'],
+                'gol_darah' => $form['gol_darah'] ?? null,
+                'file_mcu' => $filePath,
+                'status_file_mcu' => null,
+                'status' => null,
+            ]);
+
+            // Kirim notifikasi tiap form
+            $infoKaryawan = getInfoKaryawanByNrp($form['nrp']);
+            $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n*$infoKaryawan*";
+            dispatch(new SendNotifMcu($pesanText, $nomorGabungan, $token, $namaUser));
+        }
+
+        // Reset seluruh form
+        $this->forms = [$this->emptyForm()];
+
+        // Feedback ke user
+        $this->dispatch(
+            'alert',
+            type: 'success',
+            title: 'Berhasil',
+            text: 'Semua pengajuan MCU berhasil disimpan.',
+            position: 'center',
+            confirm: true,
+            redirect: '/mcu',
+        );
+    }
+
+
+    //MULTI MCU
     public function edit($id_mcu)
     {
         $this->form = true;
@@ -79,6 +229,7 @@ class Mcu extends Component
     }
     public function close()
     {
+        $this->form_multi = false;
         $this->form = false;
         $this->reset();
     }
@@ -762,6 +913,7 @@ class Mcu extends Component
     }
     public function mount()
     {
+        $this->forms[] = $this->emptyForm();
         $cariMcu = ModelsMcu::where('paramedik', '=', NULL)->get();
         foreach ($cariMcu as $item) {
             $this->status_file_mcu[$item->id] =  '';  // Menambahkan nilai default

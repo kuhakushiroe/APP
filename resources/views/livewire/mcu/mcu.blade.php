@@ -1,18 +1,24 @@
 <div>
     @if ($form)
         @include('livewire.mcu.form')
+    @elseif ($form_multi)
+        @include('livewire.mcu.form-multi')
     @elseif ($formVerifikasi)
         @include('livewire.mcu.formVerifikasi')
     @elseif ($formUpload)
         @include('livewire.mcu.formUpload')
     @else
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-5">
                 @hasAnyRole(['admin', 'superadmin', 'dokter'])
                     @hasAnyRole(['admin', 'superadmin'])
                         <button class="btn btn-dark btn-sm" wire:click="open">
                             <span class="bi bi-plus-square"></span>
                             &nbsp;Mcu
+                        </button>
+                        <button class="btn btn-dark btn-sm" wire:click="open_multi">
+                            <span class="bi bi-plus-square"></span>
+                            &nbsp;Mcu Multi
                         </button>
                     @endhasAnyRole
                     <a href="{{ route('export-hasil-mcu') }}" class="btn btn-success btn-sm">
@@ -20,7 +26,7 @@
                     </a>
                 @endhasanyrole
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 &nbsp;
             </div>
             <div class="col-md-3">
@@ -287,7 +293,8 @@
 
                                                         <div class="mb-2">
                                                             <a href="{{ url('cetak-mcu-sub/' . $data->id_mcu) }}"
-                                                                target="_blank" class="btn btn-outline-warning btn-sm">
+                                                                target="_blank"
+                                                                class="btn btn-outline-warning btn-sm">
                                                                 <i class="bi bi-download"></i> Download Verifikasi
                                                                 {{ $data->mcuStatus }}
                                                             </a>

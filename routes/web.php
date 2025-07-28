@@ -70,6 +70,15 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('cetak-reportId/{date_id1}/{date_id2}', [McuCetak::class, 'reportId'])->name('cetak-reportId');
         Route::get('cetak-reportKimper/{date1}/{date2}', [McuCetak::class, 'reportKimper'])->name('cetak-reportKimper');
     });
+    Route::group(['middleware' => ['role:admin']], function () {
+        Route::get('report-mcu/{date_mcu1}/{date_mcu2}', [Report::class, 'mcuReport'])->name('report-mcu');
+        Route::get('cetak-mcu/{id}', [McuCetak::class, 'cetak']);
+        Route::get('cetak-mcu-sub/{id}', [McuCetak::class, 'cetakSub']);
+        Route::get('cetak-skd/{id}', [McuCetak::class, 'skd']);
+        Route::get('cetak-laik/{id}', [McuCetak::class, 'cetakLaik']);
+        Route::get('cetak-reportId/{date_id1}/{date_id2}', [McuCetak::class, 'reportId'])->name('cetak-reportId');
+        Route::get('cetak-reportKimper/{date1}/{date2}', [McuCetak::class, 'reportKimper'])->name('cetak-reportKimper');
+    });
 });
 
 Route::get('/try-export', function () {
