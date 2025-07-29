@@ -206,7 +206,7 @@
                         <a href="{{ route('report') }}"
                             class="nav-link @if ($routeName == 'report') active @endif">
                             <i class="nav-icon bi bi-speedometer"></i>
-                            <p>Report</p>
+                            <p>Report / Register</p>
                         </a>
                     </li>
                 @endhasAnyRole

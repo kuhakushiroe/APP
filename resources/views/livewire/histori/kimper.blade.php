@@ -6,7 +6,7 @@
                     <table class="table table-hover table-bordered">
                         <thead>
                             <tr>
-                                <td colspan="4">
+                                <td colspan="6">
                                     <input type="text" class="form-control form-control-sm" wire:model.live="search"
                                         placeholder="Search">
                                 </td>
@@ -23,7 +23,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($pengajuankimper as $pengajuan)
+                            @forelse ($pengajuankimper as $pengajuan)
                                 <tr>
                                     <td>{{ $pengajuan->nrp }}</td>
                                     <td>{{ $pengajuan->nama }}</td>
@@ -109,7 +109,16 @@
                                         </div>
                                     </td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <tr>
+                                    <td colspan="6">
+                                        <div class="alert alert-danger">
+                                            <span class="bi bi-exclamation-circle"></span>
+                                            &nbsp;No data
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
