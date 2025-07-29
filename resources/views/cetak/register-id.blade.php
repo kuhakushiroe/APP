@@ -35,35 +35,36 @@
 
 <body>
     <div class="container">
-        <table width="100%" border="1">
+        <table width="100%" style=" border: 1px solid black; border-collapse: collapse;">
             <tr>
-                <td align="center" rowspan="4" style="padding: 0 1 0 1 " width="20%">
-                    <img src="{{ public_path('storage/MIFA.png') }}" width="70%">
+                <td align="center" rowspan="4" style="padding: 0 10 0 10" width="10%"
+                    style="border: 1px solid black; border-collapse: collapse;">
+                    <img src="{{ public_path('storage/MIFA.png') }}" width="80%">
                 </td>
-                <td rowspan="2" width="60%" align="center"><b>FORMULIR</b></td>
-                <td width="10%">Nomor</td>
-                <td width="10%">
-                    MFA-FM-HRA-051
-                </td>
-            </tr>
-            <tr>
-                <td>Tanggal Terbit</td>
-                <td>
-                    <p>
-                        {{ \Carbon\Carbon::parse($date1)->format('d-m-Y') }}
-                        s/d
-                        {{ \Carbon\Carbon::parse($date2)->format('d-m-Y') }}
-                    </p>
+                <td rowspan="2" width="60%" align="center"
+                    style=" border: 1px solid black; border-collapse: collapse;"><b>FORMULIR</b></td>
+                <td width="5%" style="border-bottom: 1px solid black;">Nomor</td>
+                <td width="6%" style="border-bottom: 1px solid black;">
+                    : MFA-FM-HRA-051
                 </td>
             </tr>
             <tr>
-                <td rowspan="2" align="center"><b>PENGAJUAN KARTU IDENTITAS DIRI (ID CARD) KARYAWAN</b></td>
-                <td>Revisi</td>
-                <td>001</td>
+                <td style="border-bottom: 1px solid black;">Tanggal Terbit</td>
+                <td style="border-bottom: 1px solid black;">
+                    {{-- Format Mifa Tidak Boleh di Ubah --}}
+                    : 14-01-2019
+                </td>
             </tr>
             <tr>
-                <td>Halaman</td>
-                <td>01 Dari 01</td>
+                <td rowspan="2" align="center" style=" border: 1px solid black; border-collapse: collapse;">
+                    <b>PENGAJUAN KARTU IDENTITAS DIRI (ID CARD) KARYAWAN</b>
+                </td>
+                <td style="border-bottom: 1px solid black;">Revisi</td>
+                <td style="border-bottom: 1px solid black;">: 001</td>
+            </tr>
+            <tr>
+                <td style="border-bottom: 1px solid black;">Halaman</td>
+                <td style="border-bottom: 1px solid black;">: 01 Dari 01</td>
             </tr>
         </table>
         <br>
