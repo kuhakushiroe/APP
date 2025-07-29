@@ -133,7 +133,12 @@
         </table>
 
         <div class="photo">
-            Pas Photo<br>3 x 4 cm<br><br>Layar Merah
+            @if ($data->upload_foto == null)
+                Pas Photo<br>3 x 4 cm<br><br>Layar Merah
+            @else
+                <img src="{{ public_path('storage/' . $data->upload_foto) }}" style="width: 3cm; height: 4cm"
+                    alt="">
+            @endif
         </div>
 
         <div class="box-1">
@@ -147,35 +152,35 @@
                     <td style="width: 3%;">1.</td>
                     <td colspan="2" style="width: 25%;">Nama</td>
                     <td style="width: 3%;">:</td>
-                    <td style="width: 67%;">&nbsp;</td>
+                    <td style="width: 67%;">{{ $data->nama }}</td>
                 </tr>
                 <tr>
                     <td width="2%">&nbsp;</td>
                     <td width="1%">2.</td>
                     <td colspan="2">Nomor Induk Karyawan / SN</td>
                     <td>:</td>
-                    <td>&nbsp;</td>
+                    <td>{{ $data->nik }} / {{ $data->nrp }}</td>
                 </tr>
                 <tr>
                     <td width="2%">&nbsp;</td>
                     <td width="1%">3.</td>
                     <td colspan="2">Perusahaan</td>
                     <td>:</td>
-                    <td>&nbsp;</td>
+                    <td>{{ $data->perusahaan }}</td>
                 </tr>
                 <tr>
                     <td width="2%">&nbsp;</td>
                     <td width="1%">4.</td>
                     <td colspan="2">Departemen</td>
                     <td>:</td>
-                    <td>&nbsp;</td>
+                    <td>{{ $data->dept }}</td>
                 </tr>
                 <tr>
                     <td width="2%">&nbsp;</td>
                     <td width="1%">5.</td>
                     <td colspan="2">Jabatan</td>
                     <td>:</td>
-                    <td>&nbsp;</td>
+                    <td>{{ $data->jabatan }}</td>
                 </tr>
                 <tr>
                     <td width="2%">&nbsp;</td>
@@ -251,26 +256,49 @@
                     <td colspan="2">Jenis SIM</td>
                     <td>:</td>
                     <td>
-                        <span class="checkbox"></span> C
-                        <span class="checkbox"></span> A
-                        <span class="checkbox"></span> BI Umum
-                        <span class="checkbox"></span> BII Umum
-                        <span class="checkbox"></span> SIO
+                        <span class="checkbox" style="font-family: DejaVu Sans, sans-serif;">
+                            @if ($data->jenis_sim == 'C')
+                                ✔
+                            @endif
+                        </span> C
+                        <span class="checkbox" style="font-family: DejaVu Sans, sans-serif;">
+                            @if ($data->jenis_sim == 'A')
+                                ✔
+                            @endif
+                        </span>
+                        A
+                        <span class="checkbox" style="font-family: DejaVu Sans, sans-serif;">
+                            @if ($data->jenis_sim == 'B1' || $data->jenis_sim == 'B1 UMUM')
+                                ✔
+                            @endif
+                        </span>
+                        BI Umum
+                        <span class="checkbox" style="font-family: DejaVu Sans, sans-serif;">
+                            @if ($data->jenis_sim == 'B2' || $data->jenis_sim == 'B2 UMUM')
+                                ✔
+                            @endif
+                        </span>
+                        BII Umum
+                        <span class="checkbox" style="font-family: DejaVu Sans, sans-serif;">
+                            @if ($data->jenis_sim == 'SIO')
+                                ✔
+                            @endif
+                        </span> SIO
                     </td>
                 </tr>
                 <tr>
                     <td width="2%">&nbsp;</td>
                     <td width="1%">9.</td>
-                    <td colspan="2">Nomor SIM&nbsp;</td>
+                    <td colspan="2">Nomor SIM</td>
                     <td>:</td>
-                    <td>&nbsp;</td>
+                    <td>{{ $data->no_sim }}</td>
                 </tr>
                 <tr>
                     <td width="2%">&nbsp;</td>
                     <td width="1%">10.</td>
-                    <td colspan="2">Masa Berlaku SIM&nbsp;</td>
+                    <td colspan="2">Masa Berlaku SIM</td>
                     <td>:</td>
-                    <td>&nbsp;</td>
+                    <td>{{ $data->exp_sim }}</td>
                 </tr>
                 <tr>
                     <td width="2%">&nbsp;</td>
@@ -280,9 +308,22 @@
                     <td>
                         <table>
                             <tr>
-                                <td width="20%"><span class="checkbox"></span> Baru</td>
-                                <td width="30%"><span class="checkbox"></span> Perpanjangan</td>
-                                <td><span class="checkbox"></span> Penambahan</td>
+                                <td width="20%"><span class="checkbox" style="font-family: DejaVu Sans, sans-serif;">
+                                        @if ($data->jenis_pengajuan_kimper == 'baru')
+                                            ✔
+                                        @endif
+                                    </span> Baru</td>
+                                <td width="30%"><span class="checkbox"
+                                        style="font-family: DejaVu Sans, sans-serif;">
+                                        @if ($data->jenis_pengajuan_kimper == 'perpanjangan')
+                                            ✔
+                                        @endif
+                                    </span> Perpanjangan</td>
+                                <td><span class="checkbox" style="font-family: DejaVu Sans, sans-serif;">
+                                        @if ($data->jenis_pengajuan_kimper == 'penambahan')
+                                            ✔
+                                        @endif
+                                    </span> Penambahan</td>
                             </tr>
                         </table>
                     </td>
@@ -292,13 +333,35 @@
                     <td>
                         <table>
                             <tr>
-                                <td width="20%"><span class="checkbox"></span> Hilang</td>
-                                <td width="30%"><span class="checkbox"></span> Rusak</td>
-                                <td><span class="checkbox"></span> Pindah Perusahaan</td>
+                                <td width="20%"><span class="checkbox"
+                                        style="font-family: DejaVu Sans, sans-serif;">
+                                        @if ($data->jenis_pengajuan_kimper == 'hilang')
+                                            ✔
+                                        @endif
+                                    </span> Hilang
+                                </td>
+                                <td width="30%"><span class="checkbox"
+                                        style="font-family: DejaVu Sans, sans-serif;">
+                                        @if ($data->jenis_pengajuan_kimper == 'rusak')
+                                            ✔
+                                        @endif
+                                    </span> Rusak
+                                </td>
+                                <td><span class="checkbox" style="font-family: DejaVu Sans, sans-serif;">
+                                        @if ($data->jenis_pengajuan_kimper == 'pindah')
+                                            ✔
+                                        @endif
+                                    </span>
+                                    Pindah
+                                    Perusahaan</td>
                             </tr>
                             <tr>
                                 <td colspan="3">
-                                    <span class="checkbox"></span>
+                                    <span class="checkbox" style="font-family: DejaVu Sans, sans-serif;">
+                                        @if ($data->jenis_pengajuan_kimper == 'lainnya')
+                                            ✔
+                                        @endif
+                                    </span>
                                     Lainnya:___________________________________
                                 </td>
                             </tr>
@@ -307,12 +370,24 @@
                 </tr>
             </table>
             <br>
+            @php
+
+            @endphp
             <table style="width: 100%; border-collapse: collapse;">
                 <tr>
                     <td colspan="4"><b>II. REKOMENDASI KESEHATAN **</b></td>
                     <td>:</td>
                     <td>
-                        <span class="checkbox"></span> Pekerja 6 Bulan <span class="checkbox"></span>
+                        <span class="checkbox" style="font-family: DejaVu Sans, sans-serif;">
+                            @if ($mcu->jenis_pengajuan_mcu == 'Pre Employeed MCU')
+                                ✔
+                            @endif
+                        </span> Pekerja 6 Bulan
+                        <span class="checkbox" style="font-family: DejaVu Sans, sans-serif;">
+                            @if ($mcu->jenis_pengajuan_mcu == 'Annual MCU')
+                                ✔
+                            @endif
+                        </span>
                         Pekerja 1 Tahun
                     </td>
                 </tr>
@@ -321,42 +396,43 @@
                     <td style="width: 3%;">a.</td>
                     <td colspan="2" style="width: 25%;">Tekanan Darah</td>
                     <td style="width: 3%;">:</td>
-                    <td style="width: 67%;">&nbsp;</td>
+                    <td style="width: 67%;">{{ $mcu->sistol }}/{{ $mcu->diastol }}</td>
                 </tr>
                 <tr>
                     <td width="2%">&nbsp;</td>
                     <td width="1%">b.</td>
                     <td colspan="2">EKG</td>
                     <td>:</td>
-                    <td>&nbsp;</td>
+                    <td>{{ $mcu->ekg }}</td>
                 </tr>
                 <tr>
                     <td width="2%">&nbsp;</td>
                     <td width="1%">c.</td>
                     <td colspan="2">Penglihatan</td>
                     <td>:</td>
-                    <td>&nbsp;</td>
+                    <td>OD Jauh:{{ $mcu->OD_jauh }} OD Dekat:{{ $mcu->OD_dekat }} OS Jauh:{{ $mcu->OS_jauh }} OS
+                        Dekat:{{ $mcu->OS_dekat }}</td>
                 </tr>
                 <tr>
                     <td width="2%">&nbsp;</td>
                     <td width="1%">d.</td>
                     <td colspan="2">Buta Warna</td>
                     <td>:</td>
-                    <td>&nbsp;</td>
+                    <td>{{ $mcu->butawarna }}</td>
                 </tr>
                 <tr>
                     <td width="2%">&nbsp;</td>
                     <td width="1%">e.</td>
                     <td colspan="2">Audiometri</td>
                     <td>:</td>
-                    <td>&nbsp;</td>
+                    <td>{{ $mcu->audiometri }}</td>
                 </tr>
                 <tr>
                     <td width="2%">&nbsp;</td>
                     <td width="1%">f.</td>
                     <td colspan="2">Gula Darah</td>
                     <td>:</td>
-                    <td>&nbsp;</td>
+                    <td>Gdp:{{ $mcu->gdp }} gd_2_jpp:{{ $mcu->gd_2_jpp }} hba1c:{{ $mcu->hba1c }}</td>
                 </tr>
                 <tr>
                     <td width="2%">&nbsp;</td>
@@ -364,7 +440,16 @@
                     <td colspan="2"><i>Hasil Pemeriksaan</i></td>
                     <td>:</td>
                     <td>
-                        <span class="checkbox"></span> Fit <span class="checkbox"></span> Un-Fit
+                        <span class="checkbox" style="font-family: DejaVu Sans, sans-serif;">
+                            @if ($mcu->status == 'fit')
+                                ✔
+                            @endif
+                        </span> Fit
+                        <span class="checkbox" style="font-family: DejaVu Sans, sans-serif;">
+                            @if ($mcu->status == 'unfit')
+                                ✔
+                            @endif
+                        </span> Un-Fit
                     </td>
                 </tr>
                 <tr>

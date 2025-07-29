@@ -336,12 +336,12 @@
                             </td>
                         </tr>
                     @endforeach
-                    @for ($i = $versatilities->count(); $i <= 20 - $versatilities->count(); $i++)
+                    @for ($i = $versatilities->count(); $i <= 19 - $versatilities->count(); $i++)
                         @php
                             $access[$i] = rand(1, 4);
                         @endphp
                         <tr style="font-family: Arial, Helvetica, sans-serif;font-size:5pt;">
-                            <td>{{ $i }}</td>
+                            <td>-</td>
                             <td style="text-align: center;">
                                 -
                             </td>

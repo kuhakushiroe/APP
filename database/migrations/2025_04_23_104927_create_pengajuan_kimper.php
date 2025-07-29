@@ -28,7 +28,7 @@ return new class extends Migration
             $table->enum('status_upload_request', [0, 1])->nullable();
             $table->string('catatan_upload_request')->nullable();
 
-            $table->enum('jenis_sim', ['A', 'B', 'B1', 'B1 UMUM', 'B2', 'B2 UMUM',])->nullable();
+            $table->enum('jenis_sim', ['A', 'B', 'B1', 'B1 UMUM', 'B2', 'B2 UMUM', 'SIO'])->nullable();
             $table->string('upload_sim')->nullable();
             $table->string('no_sim')->nullable();
             $table->string('exp_sim')->nullable();

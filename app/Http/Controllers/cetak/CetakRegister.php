@@ -74,8 +74,10 @@ class CetakRegister extends Controller
                 'pengajuan_kimper.*'
             )
             ->where('pengajuan_kimper.id', $id)->first();
+        $mcu = DB::table('mcu')->where('id_karyawan', $data->nrp)->first();
         $pdf = Pdf::loadView('cetak.formulir-kimper', [
             'data' => $data,
+            'mcu' => $mcu,
         ])->setPaper('A4', 'landscape');
         return $pdf->stream('formulir-kimper TEST.pdf');
         //return $pdf->stream('formulir-kimper ' . $data->nrp ?? 'nrp' . '-' . $data->nama ?? 'nama' . '-' . $data->tgl_pengajuan ?? 'tgl_pengajuan' . '.pdf');

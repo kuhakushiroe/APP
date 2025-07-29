@@ -101,11 +101,16 @@
                                             @forelse ($carifilelpo as $filelpo)
                                                 <a href="{{ asset('storage/' . $filelpo->upload_lpo) }}"
                                                     target="_blank" class="btn btn-primary btn-sm">
-                                                    <span class="bi bi-file-earmark-pdf "></span>
+                                                    <span class="bi bi-file-earmark-pdf"></span>
                                                     LPO {{ $filelpo->type_lpo }}
                                                 </a>
                                             @empty
                                             @endforelse
+                                            <a href="{{ route('formulir-kimper', $pengajuan->id_pengajuan) }}"
+                                                target="_blank" class="btn btn-primary btn-sm">
+                                                <span class="bi bi-file-earmark-pdf"></span>
+                                                Register
+                                            </a>
                                         </div>
                                     </td>
                                 </tr>
