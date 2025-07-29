@@ -528,7 +528,9 @@
                     </tr>
                     <tr>
                         <td colspan="2" align="right"><i>2.</i></td>
-                        <td><i>Keterangan yang merupakan pilihan diisi dengan tanda Centang ( √ )</i></td>
+                        <td><i>Keterangan yang merupakan pilihan diisi
+                                dengan tanda Centang</i><i style="font-family: DejaVu Sans, sans-serif;"> ( √ )</i>
+                        </td>
                     </tr>
                     <tr>
                         <td colspan="2" align="right"><i>3.</i></td>
