@@ -218,10 +218,10 @@
                     <td align="center">KTP</td>
                     <td align="center">Surat Kesehatan</td>
                 </tr>
-                @forelse ($data as $index => $item)
+                @forelse ($data as $item)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $item->nama }}</td>
+                        <td>{{ $item->namakaryawan }}</td>
                         <td>{{ $item->upload_foto }}</td>
                         <td>{{ $item->upload_ktp }}</td>
                         <td>{{ $item->upload_skd }}</td>

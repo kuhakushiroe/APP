@@ -49,10 +49,10 @@ class CetakRegister extends Controller
                 'karyawans.jabatan',
                 'karyawans.dept',
                 'karyawans.perusahaan',
-                'pengajuan_kimper.tgl_pengajuan',
-                'pengajuan_kimper.exp_kimper',
-                'pengajuan_kimper.jenis_pengajuan_kimper',
-                'pengajuan_kimper.status_pengajuan'
+                'pengajuan_kimper.upload_sim',
+                'pengajuan_kimper.upload_kimper_lama',
+                'pengajuan_kimper.upload_id',
+
             )
             ->whereNotNull('pengajuan_kimper.exp_kimper')
             ->whereBetween('pengajuan_kimper.updated_at', [$date1, $date2])

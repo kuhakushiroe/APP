@@ -53,6 +53,28 @@
                 <td>Masa Berlaku</td>
                 <td>Nomor</td>
             </tr>
+            @forelse ($data as $kimper => $data1)
+                <tr bgcolor="#BFBFBF">
+                    <td>{{ $kimper + 1 }}</td>
+                    <td>{{ $data1->nama }}</td>
+                    <td>{{ $data1->nrp }}</td>
+                    <td>{{ $data1->perusahaan }}</td>
+                    <td>{{ $data1->dept }}</td>
+                    <td>{{ $data1->jabatan }}</td>
+                    <td>{{ $data1->unit }}</td>
+                    <td>{{ $data1->permit }}</td>
+                    <td>{{ $data1->jenis }}</td>
+                    <td></td>
+                    <td>11</td>
+                    <td>12</td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="12">
+                        Tidak Ada Data
+                    </td>
+                </tr>
+            @endforelse
             <tr bgcolor="#BFBFBF">
                 <td>1</td>
                 <td>2</td>
@@ -66,11 +88,6 @@
                 <td>10</td>
                 <td>11</td>
                 <td>12</td>
-            </tr>
-            <tr>
-                <td colspan="12">
-                    -Tidak Ada Data-
-                </td>
             </tr>
         </table>
         <div style="page-break-before: always;"></div>
@@ -87,7 +104,25 @@
             <tr bgcolor="#92D050">
                 <td>DEPAN & BELAKANG</td>
             </tr>
-            <tr bgcolor="grey">
+            @forelse ($data as $data2 => $item)
+                <tr bgcolor="grey">
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $item->nama }}</td>
+                    <td>{{ $item->nrp }}</td>
+                    <td>{{ $item->upload_foto }}</td>
+                    <td>{{ $item->upload_sim }}</td>
+                    <td>{{ $item->upload_kimper_lama }}</td>
+                    <td></td>
+                    <td>{{ $item->upload_id }}</td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="7">
+                        -Tidak Ada Data-
+                    </td>
+                </tr>
+            @endforelse
+            <tr bgcolor="#BFBFBF">
                 <td>1</td>
                 <td>2</td>
                 <td>3</td>
@@ -96,11 +131,8 @@
                 <td>6</td>
                 <td>7</td>
             </tr>
-            <tr>
-                <td colspan="7">
-                    -Tidak Ada Data-
-                </td>
-            </tr>
+
+
         </table>
     </div>
 </body>

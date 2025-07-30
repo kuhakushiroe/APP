@@ -70,8 +70,36 @@ class Report extends Component
         return $pdf->stream('report-id' . $date1 . 'sampai' . $date2 . '.pdf');
     }
 
-    public function reportKimper($date1, $date2){
-        
+    public function reportKimper($date1, $date2)
+    {
+        $data = DB::table('pengajuan_kimper')
+            ->join('karyawans', 'pengajuan_nrp.nrp', '=', 'karyawans.nrp')
+            ->select(
+                'karyawans.nama',
+                'karyawans.nik',
+                'karyawans.nrp',
+                'karyawans.jabatan',
+                'karyawans.dept',
+                'karyawans.perusahaan',
+                'karyawans.doh',
+                'pengajuan_kimper.upload_foto',
+            )
+            ->whereNotNull('pengajuan_id.exp_id')
+            ->whereBetween('pengajuan_id.updated_at', [$date1, $date2])
+            ->get();
+
+        // $pdf = Pdf::loadView('cetak.report-tarikanId', ['data' => $data, 'date1' => $date1, 'date2' => $date2])
+        //     ->setPaper('A4', 'landscape');
+        // return response()->streamDownload(function () use ($pdf) {
+        //     echo $pdf->stream();
+        // }, 'report-id' . $date1 . 'sampai' . $date2 . '.pdf');
+        $pdf = Pdf::loadView('cetak.report-tarikanId', [
+            'data' => $data,
+            'date1' => $date1,
+            'date2' => $date2
+        ])->setPaper('A4', 'landscape');
+
+        return $pdf->stream('report-id' . $date1 . 'sampai' . $date2 . '.pdf');
     }
 
     public function render()

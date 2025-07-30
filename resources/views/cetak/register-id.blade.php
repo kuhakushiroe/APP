@@ -88,20 +88,20 @@
                 <td>Baru</td>
                 <td>Penggantian</td>
             </tr>
-            @forelse ($data as $dataId => $data)
+            @forelse ($data as $dataId => $item)
                 <tr>
                     <td>{{ $dataId + 1 }}</td>
-                    <td>{{ $data->nama }}</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
+                    <td>{{ $item->nama }}</td>
+                    <td>{{ $item->nik }}</td>
+                    <td>{{ $item->nrp }}</td>
+                    <td>{{ $item->jabatan }}</td>
+                    <td>{{ $item->dept }}</td>
+                    <td>{{ $item->doh ?? '-' }}</td>
+                    <td></td>
+                    <td>{{ $item->perusahaan }}</td>
+                    <td class="center">{{ $item->status_pengajuan == 'baru' ? '✔' : '' }}</td>
+                    <td class="center">{{ $item->status_pengajuan == 'penggantian' ? '✔' : '' }}</td>
+                    <td></td>
                 </tr>
             @empty
                 <tr>
@@ -179,13 +179,20 @@
                 <td>KTP</td>
                 <td>Surat Kesehatan</td>
             </tr>
-            <tr>
-                <td>-No-</td>
-                <td>-database-</td>
-                <td>-database-</td>
-                <td>-database-</td>
-                <td>-database-</td>
-            </tr>
+            @forelse ($data as $data2 => $item)
+                <tr>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $item->nama }}</td>
+                    <td>-{{ $item->upload_foto ?? '-' }}-</td>
+                    <td>-{{ $item->upload_ktp ?? '-'}}-</td>
+                    <td>-{{ $item->upload_skd ?? '-'}}-</td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="5">Tidak Ada Data</td>
+                </tr>
+            @endforelse
+
         </table>
     </div>
 
