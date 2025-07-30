@@ -69,7 +69,8 @@
         </table>
         <br>
         <br>
-        <table width="100%" style="border: 1px solid black; border-collapse: collapse;" border="1">
+        <table width="100%" style="border: 1px solid black; border-collapse: collapse;text-align: center"
+            border="1">
             <tr class="header-row">
                 <td rowspan="2"> No. </td>
                 <td rowspan="2">Nama Karyawan</td>
@@ -99,8 +100,9 @@
                     <td>{{ $item->doh ?? '-' }}</td>
                     <td></td>
                     <td>{{ $item->perusahaan }}</td>
-                    <td class="center">{{ $item->status_pengajuan == 'baru' ? '✔' : '' }}</td>
-                    <td class="center">{{ $item->status_pengajuan == 'penggantian' ? '✔' : '' }}</td>
+                    <td class="center" style="font-family: 'dejaVu Sans';">
+                        {{ $item->jenis_pengajuan_id == 'baru' ? '✔' : '' }}</td>
+                    <td class="center">{{ $item->jenis_pengajuan_id == 'penggantian' ? '✔' : '' }}</td>
                     <td></td>
                 </tr>
             @empty
@@ -116,12 +118,12 @@
                 <td style="vertical-align: top; width: 30%;">
                     <table width="100%" style="border: 1px solid black; border-collapse: collapse;" border="1">
                         <tr>
-                            <td>Nama PJO / PIC</td>
-                            <td>SEPTIAN</td>
+                            <td><b>Nama PJO / PIC</b></td>
+                            <td><b>SEPTIAN</b></td>
                         </tr>
                         <tr>
-                            <td>Nomor Handphone PJO / PIC</td>
-                            <td>085954590940</td>
+                            <td><b>Nomor Handphone PJO / PIC</b></td>
+                            <td><b>085954590940</b></td>
                         </tr>
                     </table>
                     <table>
@@ -171,7 +173,7 @@
         </table>
 
         <div style="page-break-before: always;"></div>
-        <table width="100%" border="1">
+        <table width="100%" border="1" style="text-align: center">
             <tr>
                 <td width="5%">No</td>
                 <td>Nama</td>
@@ -183,9 +185,12 @@
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $item->nama }}</td>
-                    <td>-{{ $item->upload_foto ?? '-' }}-</td>
-                    <td>-{{ $item->upload_ktp ?? '-'}}-</td>
-                    <td>-{{ $item->upload_skd ?? '-'}}-</td>
+                    <td>
+                        <img src="{{ public_path('storage/' . $item->upload_foto) }}" alt=""
+                            style="width: 3cm; height: 4cm">
+                    </td>
+                    <td>{{ $item->upload_ktp ?? '-' }}</td>
+                    <td>{{ $item->upload_skd ?? '-' }}</td>
                 </tr>
             @empty
                 <tr>

@@ -53,28 +53,6 @@
                 <td>Masa Berlaku</td>
                 <td>Nomor</td>
             </tr>
-            @forelse ($data as $kimper => $data1)
-                <tr bgcolor="#BFBFBF">
-                    <td>{{ $kimper + 1 }}</td>
-                    <td>{{ $data1->nama }}</td>
-                    <td>{{ $data1->nrp }}</td>
-                    <td>{{ $data1->perusahaan }}</td>
-                    <td>{{ $data1->dept }}</td>
-                    <td>{{ $data1->jabatan }}</td>
-                    <td>{{ $data1->unit }}</td>
-                    <td>{{ $data1->permit }}</td>
-                    <td>{{ $data1->jenis }}</td>
-                    <td></td>
-                    <td>11</td>
-                    <td>12</td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="12">
-                        Tidak Ada Data
-                    </td>
-                </tr>
-            @endforelse
             <tr bgcolor="#BFBFBF">
                 <td>1</td>
                 <td>2</td>
@@ -89,6 +67,36 @@
                 <td>11</td>
                 <td>12</td>
             </tr>
+            {{ $nrp }}
+            @forelse ($data as $kimper => $data1)
+                <tr>
+                    <td>{{ $kimper + 1 }}</td>
+                    <td>{{ $data1->nama }}</td>
+                    <td>{{ $data1->nrp }}</td>
+                    <td>{{ $data1->perusahaan }}</td>
+                    <td>{{ $data1->dept }}</td>
+                    <td>{{ $data1->jabatan }}</td>
+                    <td>{{ $data1->code_versatility }}/{{ $data1->nama_versatility }}</td>
+                    <td>{{ $data1->klasifikasi }}</td>
+                    <td>{{ $data1->jenis_sim }}</td>
+                    <td>{{ $data1->exp_sim }}</td>
+                    <td>{{ $data1->no_sim }}</td>
+                    <td bgcolor="#92D050">
+                        @if ($data1->klasifikasi == 'F')
+                            FULL ACCESS PERMIT
+                        @else
+                            -
+                        @endif
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="12">
+                        Tidak Ada Data
+                    </td>
+                </tr>
+            @endforelse
+
         </table>
         <div style="page-break-before: always;"></div>
         <table width="100%" border="1" style="text-align: center">
@@ -104,24 +112,6 @@
             <tr bgcolor="#92D050">
                 <td>DEPAN & BELAKANG</td>
             </tr>
-            @forelse ($data as $data2 => $item)
-                <tr bgcolor="grey">
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $item->nama }}</td>
-                    <td>{{ $item->nrp }}</td>
-                    <td>{{ $item->upload_foto }}</td>
-                    <td>{{ $item->upload_sim }}</td>
-                    <td>{{ $item->upload_kimper_lama }}</td>
-                    <td></td>
-                    <td>{{ $item->upload_id }}</td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="7">
-                        -Tidak Ada Data-
-                    </td>
-                </tr>
-            @endforelse
             <tr bgcolor="#BFBFBF">
                 <td>1</td>
                 <td>2</td>
@@ -131,8 +121,26 @@
                 <td>6</td>
                 <td>7</td>
             </tr>
-
-
+            @forelse ($pengajuan_kimper as $data2 => $item)
+                <tr>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $item->nama }}</td>
+                    <td>{{ $item->nrp }}</td>
+                    <td>
+                        <img src="{{ public_path('storage/' . $item->upload_foto) }}" alt=""
+                            style="width: 3cm; height: 4cm">
+                    </td>
+                    <td>{{ $item->upload_sim }}</td>
+                    <td>{{ $item->upload_kimper_lama }}</td>
+                    <td>{{ $item->upload_id }}</td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="7">
+                        -Tidak Ada Data-
+                    </td>
+                </tr>
+            @endforelse
         </table>
     </div>
 </body>
