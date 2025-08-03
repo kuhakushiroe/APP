@@ -202,13 +202,15 @@
                             </ul>
                         </li>
                     @endhasAnyRole
-                    <li class="nav-item">
-                        <a href="{{ route('report') }}"
-                            class="nav-link @if ($routeName == 'report') active @endif">
-                            <i class="nav-icon bi bi-speedometer"></i>
-                            <p>Report / Register</p>
-                        </a>
-                    </li>
+                    @hasAnyRole(['superadmin', 'dokter', 'she'])
+                        <li class="nav-item">
+                            <a href="{{ route('report') }}"
+                                class="nav-link @if ($routeName == 'report') active @endif">
+                                <i class="nav-icon bi bi-speedometer"></i>
+                                <p>Report / Register</p>
+                            </a>
+                        </li>
+                    @endhasAnyRole
                 @endhasAnyRole
             </ul>
             <!--end::Sidebar Menu-->

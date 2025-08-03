@@ -8,32 +8,34 @@
     @else
         <div class="row pt-2">
             <div class="col-md-12">
-                <button class="btn btn-dark btn-sm" wire:click="open">
-                    <span class="bi bi-plus-square"></span>
-                    &nbsp;Karyawan
-                </button>
-                <button class="btn btn-success btn-sm" wire:click="export">
-                    <span class="bi bi-download"></span>
-                    &nbsp;Export
-                </button>
-                @if ($formImport)
-                @else
-                    <button class="btn btn-warning btn-sm" wire:click="openImport">
-                        <span class="bi bi-upload"></span>
-                        &nbsp;Import
+                @hasAnyRole(['superadmin'])
+                    <button class="btn btn-dark btn-sm" wire:click="open">
+                        <span class="bi bi-plus-square"></span>
+                        &nbsp;Karyawan
                     </button>
-                @endif
-                <a href="{{ route('try-export') }}" class="btn btn-success btn-sm">
-                    <span class="bi bi-download"></span>
-                    &nbsp;Export Model Cheklist
-                </a>
-                @if ($formImportCek)
-                @else
-                    <button class="btn btn-warning btn-sm" wire:click="openImportCek">
-                        <span class="bi bi-upload"></span>
-                        &nbsp;Import By Cek
+                    <button class="btn btn-success btn-sm" wire:click="export">
+                        <span class="bi bi-download"></span>
+                        &nbsp;Export
                     </button>
-                @endif
+                    @if ($formImport)
+                    @else
+                        <button class="btn btn-warning btn-sm" wire:click="openImport">
+                            <span class="bi bi-upload"></span>
+                            &nbsp;Import
+                        </button>
+                    @endif
+                    <a href="{{ route('try-export') }}" class="btn btn-success btn-sm">
+                        <span class="bi bi-download"></span>
+                        &nbsp;Export Model Cheklist
+                    </a>
+                    @if ($formImportCek)
+                    @else
+                        <button class="btn btn-warning btn-sm" wire:click="openImportCek">
+                            <span class="bi bi-upload"></span>
+                            &nbsp;Import By Cek
+                        </button>
+                    @endif
+                @endhasAnyRole
             </div>
             <div class="col-md-6 pt-2">
                 @if ($formImport)
