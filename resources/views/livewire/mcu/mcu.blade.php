@@ -10,8 +10,8 @@
     @else
         <div class="row">
             <div class="col-md-5">
-                @hasAnyRole(['admin', 'superadmin', 'dokter'])
-                    @hasAnyRole(['admin', 'superadmin'])
+                @hasAnyRole(['superadmin', 'dokter'])
+                    @hasAnyRole(['superadmin'])
                         <button class="btn btn-dark btn-sm" wire:click="open">
                             <span class="bi bi-plus-square"></span>
                             &nbsp;Mcu
@@ -123,9 +123,13 @@
                                             <tr>
                                                 <td>1</td>
                                                 <td>
-                                                    <a href="{{ Storage::url($data->file_mcu) }}" target="_blank">
-                                                        <span class="bi bi-file-earmark-arrow-down"></span> File MCU
-                                                    </a>
+                                                    @hasAnyRole(['superadmin', 'dokter'])
+                                                        <a href="{{ Storage::url($data->file_mcu) }}" target="_blank">
+                                                            <span class="bi bi-file-earmark-arrow-down"></span> File MCU
+                                                        </a>
+                                                    @else
+                                                        {{ $data->mcuStatus }}
+                                                    @endhasAnyRole
                                                 </td>
                                                 <td>
                                                     {{ \Carbon\Carbon::parse($data->tgl_mcu)->locale('id')->isoFormat('D MMMM YYYY') }}
@@ -317,11 +321,15 @@
                                                 <tr>
                                                     <td>{{ $row++ }}</td>
                                                     <td>
-                                                        <a href="{{ Storage::url($item->file_mcu) }}"
-                                                            target="_blank">
-                                                            <span class="bi bi-file-earmark-arrow-down"></span> File
-                                                            MCU
-                                                        </a>
+                                                        @hasAnyRole(['superadmin', 'dokter'])
+                                                            <a href="{{ Storage::url($item->file_mcu) }}"
+                                                                target="_blank">
+                                                                <span class="bi bi-file-earmark-arrow-down"></span> File
+                                                                MCU
+                                                            </a>
+                                                        @else
+                                                            {{ $item->mcuStatus }}
+                                                        @endhasAnyRole
                                                     </td>
                                                     <td>{{ $item->tgl_mcu }}</td>
                                                     <td>

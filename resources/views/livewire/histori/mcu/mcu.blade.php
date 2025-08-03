@@ -44,20 +44,24 @@
                                 @endphp
                             @endif
                             <div class="d-grid gap-2">
-                                @if (!is_null($data->sub_id))
-                                    @forelse ($subItems as $index => $item)
-                                        <a class="btn btn-outline-primary btn-sm"
-                                            href="{{ Storage::url($item->file_mcu) }}" target="_blank">
-                                            <span class="bi bi-file-earmark-arrow-down"></span> File MCU
-                                            {{ $index + 1 }}
-                                        </a>
-                                    @empty
-                                    @endforelse
-                                @endif
-                                <a class="btn btn-outline-primary btn-sm" href="{{ Storage::url($data->file_mcu) }}"
-                                    target="_blank">
-                                    <span class="bi bi-file-earmark-arrow-down"></span> File MCU Final
-                                </a>
+                                @hasAnyRole(['superadmin', 'dokter'])
+                                    @if (!is_null($data->sub_id))
+                                        @forelse ($subItems as $index => $item)
+                                            <a class="btn btn-outline-primary btn-sm"
+                                                href="{{ Storage::url($item->file_mcu) }}" target="_blank">
+                                                <span class="bi bi-file-earmark-arrow-down"></span> File MCU
+                                                {{ $index + 1 }}
+                                            </a>
+                                        @empty
+                                        @endforelse
+                                    @endif
+                                    <a class="btn btn-outline-primary btn-sm" href="{{ Storage::url($data->file_mcu) }}"
+                                        target="_blank">
+                                        <span class="bi bi-file-earmark-arrow-down"></span> File MCU Final
+                                    </a>
+                                @else
+                                    {{ $data->mcuStatus }}
+                                @endhasAnyRole
                             </div>
                         </td>
                         <td>
@@ -85,18 +89,18 @@
                             {{ \Carbon\Carbon::parse($data->exp_mcu)->locale('id')->translatedFormat('l, d F Y') }}
                         </td>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="6">
-                            <div class="alert alert-danger">
-                                <span class="bi bi-exclamation-circle"></span>
-                                &nbsp;No data
-                            </div>
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+                    @empty
+                        <tr>
+                            <td colspan="6">
+                                <div class="alert alert-danger">
+                                    <span class="bi bi-exclamation-circle"></span>
+                                    &nbsp;No data
+                                </div>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        {{ $historimcus->links() }}
     </div>
-    {{ $historimcus->links() }}
-</div>
