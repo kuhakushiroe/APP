@@ -131,7 +131,7 @@ class Karyawan extends Component
                 'status_perkawinan' => 'required',
                 'perusahaan' => 'nullable|string|max:255',
                 'kontraktor' => 'nullable|string|max:255',
-                'dept' => 'required',
+                'dept' => 'nullable',
                 'jabatan' => 'nullable|string|max:255',
                 'no_hp' => 'nullable',
                 'alamat' => 'nullable|string|max:255',
@@ -155,36 +155,36 @@ class Karyawan extends Component
 
         // Check if folder exists, if not create it
 
-        // if (!Storage::exists($folderPath)) {
-        //     Storage::makeDirectory($folderPath); // Create the directory if it doesn't exist
-        // }
-        // // Handle file upload for 'foto'
-        // if ($this->foto) {
-        //     // Store the photo in the specific folder
-        //     $fotoPath = $this->foto->store($folderPath, 'public');
-        // } else {
-        //     if ($this->fotolama) {
-        //         $fotoPath = $this->fotolama;
-        //     } else {
-        //         $fotoPath = null;
-        //     } // Handle if no file is uploaded (optional)
-        // }
-
-        if (!Storage::disk('s3')->exists($folderPath)) {
-            Storage::disk('s3')->makeDirectory($folderPath);
+        if (!Storage::exists($folderPath)) {
+            Storage::makeDirectory($folderPath); // Create the directory if it doesn't exist
         }
-
         // Handle file upload for 'foto'
         if ($this->foto) {
-            // Store the photo in the specific folder using S3 disk
-            $fotoPath = $this->foto->store($folderPath, 's3');
+            // Store the photo in the specific folder
+            $fotoPath = $this->foto->store($folderPath, 'public');
         } else {
             if ($this->fotolama) {
                 $fotoPath = $this->fotolama;
             } else {
                 $fotoPath = null;
-            }
+            } // Handle if no file is uploaded (optional)
         }
+
+        // if (!Storage::disk('s3')->exists($folderPath)) {
+        //     Storage::disk('s3')->makeDirectory($folderPath);
+        // }
+
+        // // Handle file upload for 'foto'
+        // if ($this->foto) {
+        //     // Store the photo in the specific folder using S3 disk
+        //     $fotoPath = $this->foto->store($folderPath, 's3');
+        // } else {
+        //     if ($this->fotolama) {
+        //         $fotoPath = $this->fotolama;
+        //     } else {
+        //         $fotoPath = null;
+        //     }
+        // }
 
         // Update or create the Karyawan model
 
@@ -274,7 +274,7 @@ class Karyawan extends Component
 
             ]
         );
-        if ($this->status_karyawan != 'temporary') {
+        if ($this->status_karyawan != 'TEMPORARY') {
             User::updateOrCreate(
                 ['username' => $this->nrp],
                 [

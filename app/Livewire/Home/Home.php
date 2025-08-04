@@ -65,23 +65,47 @@ class Home extends Component
         $jumlahKaryawanAktif = Karyawan::where('status', 'aktif')->count();
         $jumlahKaryawanNonAktif = Karyawan::where('status', 'non aktif')->count();
 
+        // Hitung jumlah berdasarkan status (aktif/non aktif)
         $statusCountsKaryawan = Karyawan::select('status', DB::raw('count(*) as total'))
             ->whereIn('status', ['aktif', 'non aktif'])
             ->groupBy('status')
             ->pluck('total', 'status')
             ->toArray();
 
+        // Hitung jumlah berdasarkan kombinasi status_karyawan dan status (aktif/non aktif)
+        $detailStatusKaryawan = Karyawan::select('status_karyawan', 'status', DB::raw('count(*) as total'))
+            ->whereIn('status_karyawan', ['TEMPORARY', 'PERMANEN', 'PKWT'])
+            ->whereIn('status', ['aktif', 'non aktif'])
+            ->groupBy('status_karyawan', 'status')
+            ->get()
+            ->groupBy('status_karyawan');
+
+        // Warna untuk status utama
         $colorKaryawan = [
             'aktif' => 'text-bg-success',        // Hijau
-            'non aktif' => 'text-bg-danger',       // Merah
+            'non aktif' => 'text-bg-danger',     // Merah
         ];
 
+        // Format akhir status aktif/non aktif secara umum
         $finalKaryawanCounts = collect(['aktif', 'non aktif'])
             ->map(function ($status) use ($statusCountsKaryawan, $colorKaryawan) {
                 return [
                     'status' => $status,
                     'total' => $statusCountsKaryawan[$status] ?? 0,
                     'color' => $colorKaryawan[$status] ?? 'text-bg-secondary',
+                ];
+            })
+            ->toArray();
+
+        // Format akhir berdasarkan status_karyawan dan status aktif/non aktif
+        $finalDetailStatusKaryawan = collect(['TEMPORARY', 'PERMANEN', 'PKWT'])
+            ->map(function ($statusKaryawan) use ($detailStatusKaryawan) {
+                $data = $detailStatusKaryawan[$statusKaryawan] ?? collect();
+
+                return [
+                    'status_karyawan' => $statusKaryawan,
+                    'aktif' => $data->firstWhere('status', 'aktif')->total ?? 0,
+                    'non_aktif' => $data->firstWhere('status', 'non aktif')->total ?? 0,
                 ];
             })
             ->toArray();
@@ -193,7 +217,8 @@ class Home extends Component
             // 'jumlahMCUFollowUp' => $jumlahMCUFollowUp,
             // 'jumlahMCUnfit' => $jumlahMCUnfit,
             //'mcuCounts' => $finalmcuCounts,
-            'karyawanCounts' => $finalKaryawanCounts,
+            'finalKaryawanCounts' => $finalKaryawanCounts,
+            'finalDetailStatusKaryawan' => $finalDetailStatusKaryawan,
 
             //'dokter' => $dokter,
             //'dokter2' => $dokter2,

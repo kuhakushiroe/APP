@@ -14,21 +14,52 @@
             </div>
             <!-- /.info-box -->
         </div>
-        @forelse ($karyawanCounts as $datakaryawan)
-            <div class="col-12 col-sm-4 col-md-4">
-                <div class="info-box">
-                    <span class="info-box-icon {{ $datakaryawan['color'] }} shadow-sm">
+        {{-- STATUS UMUM: AKTIF / NON AKTIF --}}
+        @forelse ($finalKaryawanCounts as $datakaryawan)
+            <div class="col-12 col-sm-4 col-md-4 mb-3">
+                <div class="info-box shadow-sm">
+                    <span class="info-box-icon {{ $datakaryawan['color'] }}">
                         <i class="bi bi-person-fill-check"></i>
                     </span>
                     <div class="info-box-content">
-                        <span class="info-box-text">{{ $datakaryawan['status'] }}</span>
+                        <span class="info-box-text text-capitalize">{{ $datakaryawan['status'] }}</span>
                         <span class="info-box-number">{{ $datakaryawan['total'] }}</span>
                     </div>
                 </div>
             </div>
         @empty
-            <p>Tidak ada data</p>
+            <div class="col-12">
+                <div class="alert alert-warning text-center">Tidak ada data status umum</div>
+            </div>
         @endforelse
+
+        {{-- STATUS_KARYAWAN DETAIL --}}
+        @forelse ($finalDetailStatusKaryawan as $item)
+            <div class="col-12 col-sm-4 col-md-4 mb-3">
+                <div class="info-box shadow-sm border-start border-4">
+                    <span class="info-box-icon">
+                        <i class="bi bi-people-fill"></i>
+                    </span>
+                    <div class="info-box-content">
+                        <span class="info-box-text text-uppercase">{{ $item['status_karyawan'] }}</span>
+                        <div class="d-flex justify-content-between">
+                            <small class="text-success">Aktif:</small>
+                            <small>{{ $item['aktif'] }}</small>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <small class="text-danger">Non Aktif:</small>
+                            <small>{{ $item['non_aktif'] }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @empty
+            <div class="col-12">
+                <div class="alert alert-warning text-center">Tidak ada data status_karyawan</div>
+            </div>
+        @endforelse
+
+
         <div class="col-12 col-sm-12 col-md-6">
             <div class="card mb-4 collapsed-card">
                 <div class="card-header">

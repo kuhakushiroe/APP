@@ -17,8 +17,19 @@
                 <form wire:submit.prevent="store">
                     <div class="card-body">
                         <div class="form-group">
-                            @if ($fotolama)
-                            @endif
+                            <label for="status_karyawan">Status Karyawan</label>
+                            <select class="form-control form-control-sm @error('status_karyawan') is-invalid @enderror"
+                                wire:model.live="status_karyawan">
+                                <option value="">Pilih Status Karyawan</option>
+                                <option value="PKWT">PKWT</option>
+                                <option value="PERMANEN">PERMANEN</option>
+                                <option value="TEMPORARY">TEMPORARY</option>
+                            </select>
+                            @error('status_karyawan')
+                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
+                        </div>
+                        <div class="form-group" @if ($status_karyawan === 'TEMPORARY') style="display: none;" @endif>
                             @if ($foto && is_object($foto))
                                 <img src="{{ $foto->temporaryUrl() }}" width="150">
                                 <br>
@@ -87,7 +98,7 @@
                             <label for="nama">Nama</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('nama') is-invalid @enderror"
-                                wire:model="nama" placeholder="Nama User">
+                                wire:model="nama" placeholder="Nama Sesuai KTP">
                             @error('nama')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -162,7 +173,7 @@
                             @enderror
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" @if ($status_karyawan === 'TEMPORARY') style="display: none;" @endif>
                             <label for="perusahaan">Perusahaan</label>
                             <select class="form-control form-control-sm @error('perusahaan') is-invalid @enderror"
                                 wire:model="perusahaan">
@@ -178,8 +189,9 @@
                             @enderror
                         </div>
 
-                        <div class="form-group">
-                            <label for="kontraktor">Mitra Perusahaan</label>
+                        <div class="form-group" @if ($status_karyawan === 'TEMPORARY') style="display: none;" @endif>
+                            <label for="kontraktor">Mitra
+                                Perusahaan</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('kontraktor') is-invalid @enderror"
                                 wire:model="kontraktor" placeholder="Mitra Perusahaan">
@@ -188,7 +200,7 @@
                             @enderror
                         </div>
                         @if (auth()->user()->hasRole('superadmin'))
-                            <div class="form-group">
+                            <div class="form-group" @if ($status_karyawan === 'TEMPORARY') style="display: none;" @endif>
                                 <label for="dept">Departemen</label>
                                 <select class="form-control form-control-sm @error('dept') is-invalid @enderror"
                                     wire:model="dept">
@@ -205,7 +217,7 @@
                                 @enderror
                             </div>
                         @else
-                            <div class="form-group">
+                            <div class="form-group" @if ($status_karyawan === 'TEMPORARY') style="display: none;" @endif>
                                 <label for="dept">Departemen</label>
                                 <input type="text"
                                     class="form-control form-control-sm @error('dept') is-invalid @enderror"
@@ -216,7 +228,7 @@
                                 @enderror
                             </div>
                         @endif
-                        <div class="form-group">
+                        <div class="form-group" @if ($status_karyawan === 'TEMPORARY') style="display: none;" @endif>
                             <label for="jabatan">Jabatan</label>
                             <select class="form-control form-control-sm @error('jabatan') is-invalid @enderror"
                                 wire:model="jabatan">
@@ -231,7 +243,7 @@
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" @if ($status_karyawan === 'TEMPORARY') style="display: none;" @endif>
                             <label for="no_hp">No. HP</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('no_hp') is-invalid @enderror"
@@ -241,7 +253,7 @@
                             @enderror
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" @if ($status_karyawan === 'TEMPORARY') style="display: none;" @endif>
                             <label for="alamat">Alamat</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('alamat') is-invalid @enderror"
@@ -251,7 +263,7 @@
                             @enderror
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" @if ($status_karyawan === 'TEMPORARY') style="display: none;" @endif>
                             <label for="domisili">Domisili</label>
                             <select class="form-control form-control-sm @error('domisili') is-invalid @enderror"
                                 wire:model="domisili">
@@ -264,7 +276,7 @@
                             @enderror
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" @if ($status_karyawan === 'TEMPORARY') style="display: none;" @endif>
                             <label for="status">Status Akun</label>
                             <select class="form-control form-control-sm @error('status') is-invalid @enderror"
                                 wire:model="status">
@@ -273,20 +285,6 @@
                                 <option value="non aktif">Non Aktif</option>
                             </select>
                             @error('status')
-                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                            @enderror
-                        </div>
-                        <div class="form-group">
-                            <label for="status_karyawan">Status Karyawan</label>
-                            <select
-                                class="form-control form-control-sm @error('status_karyawan') is-invalid @enderror"
-                                wire:model="status_karyawan">
-                                <option value="">Pilih Status Karyawan</option>
-                                <option value="PKWT">PKWT</option>
-                                <option value="PERMANEN">PERMANEN</option>
-                                <option value="TEMPORARY">TEMPORARY</option>
-                            </select>
-                            @error('status_karyawan')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
                         </div>
