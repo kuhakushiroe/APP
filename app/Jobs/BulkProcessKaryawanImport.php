@@ -38,7 +38,7 @@ class BulkProcessKaryawanImport implements ShouldQueue
             $nik = $row[12];
             $bpjs_kesehatan = isset($row[15]) ? (string) trim($row[15]) : null;
             $bpjs_tenagakerja = isset($row[16]) ? (string) trim($row[16]) : null;
-
+            $status_karyawan = strtoupper($row[102]);
             $newKendaraan = [];
             foreach ($this->unitList as $index => $unitName) {
                 if (strtoupper($row[$index] ?? '') === 'F') {
@@ -74,6 +74,7 @@ class BulkProcessKaryawanImport implements ShouldQueue
                     'bpjs_kesehatan' => $bpjs_kesehatan,
                     'bpjs_tenagakerja' => $bpjs_tenagakerja,
                     'status' => 'aktif',
+                    'status_karyawan' => $status_karyawan,
                     'domisili' => 'lokal'
                 ])->save();
             } else {
@@ -91,6 +92,7 @@ class BulkProcessKaryawanImport implements ShouldQueue
                     'bpjs_kesehatan' => $bpjs_kesehatan,
                     'bpjs_tenagakerja' => $bpjs_tenagakerja,
                     'status' => 'aktif',
+                    'status_karyawan' => $status_karyawan,
                     'domisili' => 'lokal'
                 ]);
 
@@ -103,22 +105,22 @@ class BulkProcessKaryawanImport implements ShouldQueue
                 }
             }
 
-            if ($user) {
-                $user->update([
-                    'name' => $nama,
-                    'username' => $nrp,
-                    'email' => $nrp . '@example.com',
-                    'role' => 'karyawan',
-                ]);
-            } else {
-                User::create([
-                    'name' => $nama,
-                    'username' => $nrp,
-                    'email' => $nrp . '@example.com',
-                    'password' => Hash::make($nrp),
-                    'role' => 'karyawan',
-                ]);
-            }
+            // if ($user) {
+            //     $user->update([
+            //         'name' => $nama,
+            //         'username' => $nrp,
+            //         'email' => $nrp . '@example.com',
+            //         'role' => 'karyawan',
+            //     ]);
+            // } else {
+            //     User::create([
+            //         'name' => $nama,
+            //         'username' => $nrp,
+            //         'email' => $nrp . '@example.com',
+            //         'password' => Hash::make($nrp),
+            //         'role' => 'karyawan',
+            //     ]);
+            // }
         }
     }
 }

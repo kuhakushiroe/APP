@@ -58,7 +58,7 @@
                             <label for="nrp">NRP</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('nrp') is-invalid @enderror" wire:model="nrp"
-                                placeholder="NRP">
+                                placeholder="NRP / isi dengan NIK jika belum punya NRP">
                             @error('nrp')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -265,7 +265,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="status">Status</label>
+                            <label for="status">Status Akun</label>
                             <select class="form-control form-control-sm @error('status') is-invalid @enderror"
                                 wire:model="status">
                                 <option value="">Pilih Status</option>
@@ -276,7 +276,20 @@
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
                         </div>
-
+                        <div class="form-group">
+                            <label for="status_karyawan">Status Karyawan</label>
+                            <select
+                                class="form-control form-control-sm @error('status_karyawan') is-invalid @enderror"
+                                wire:model="status_karyawan">
+                                <option value="">Pilih Status Karyawan</option>
+                                <option value="PKWT">PKWT</option>
+                                <option value="PERMANEN">PERMANEN</option>
+                                <option value="TEMPORARY">TEMPORARY</option>
+                            </select>
+                            @error('status_karyawan')
+                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
+                        </div>
                         <div class="form-group float-right mt-2">
                             <button type="submit" class="btn btn-primary btn-sm">
                                 <span class="bi bi-save"></span>

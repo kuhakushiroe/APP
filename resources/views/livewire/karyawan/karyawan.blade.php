@@ -105,6 +105,15 @@
                                             <span class="bi bi-exclamation-diamond"></span>
                                         </button>
                                     @endif
+                                    @php
+                                        $cariusers = DB::table('users')->where('username', $datakaryawan->nrp)->first();
+                                    @endphp
+                                    @if (!$cariusers && $datakaryawan->status == 'aktif' && $datakaryawan->status_karyawan !== 'TEMPORARY')
+                                        <button class="btn btn-outline-success btn-sm"
+                                            wire:click="buatakun('{{ $datakaryawan->nrp }}')">
+                                            <span class="bi bi-key"></span><span class="bi bi-person"></span>
+                                        </button>
+                                    @endif
                                     <button class="btn btn-outline-info btn-sm"
                                         wire:click="detail({{ $datakaryawan->id }})">
                                         <span class="bi bi-eye"></span>
@@ -124,13 +133,16 @@
                                     </button>
                                 @endif
                             </td>
-                            <td>{{ $datakaryawan->status }}</td>
+                            <td>
+                                {{ $datakaryawan->status }}<br>
+                                {{ $datakaryawan->status_karyawan }}
+                            </td>
                             <td>
                                 @if ($datakaryawan->foto)
-                                    <img src="{{ Storage::disk('s3')->temporaryUrl($datakaryawan->foto, now()->addMinutes(10)) }}"
-                                        alt="Foto" class="img-fluid" style="max-width: 100px; max-height: 100px;">
-                                    {{-- <img src="{{ Storage::url($datakaryawan->foto) }}" alt="Foto" class="img-fluid"
-                                        style="max-width: 100px; max-height: 100px;"> --}}
+                                    {{-- <img src="{{ Storage::disk('s3')->temporaryUrl($datakaryawan->foto, now()->addMinutes(10)) }}"
+                                        alt="Foto" class="img-fluid" style="max-width: 100px; max-height: 100px;"> --}}
+                                    <img src="{{ Storage::url($datakaryawan->foto) }}" alt="Foto" class="img-fluid"
+                                        style="max-width: 100px; max-height: 100px;">
                                 @else
                                     -
                                 @endif

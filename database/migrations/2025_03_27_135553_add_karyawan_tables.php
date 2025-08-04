@@ -62,6 +62,8 @@ return new class extends Migration
             $table->string('alamat')->nullable();
             $table->enum('domisili', ['lokal', 'non lokal'])->nullable();
             $table->enum('status', ['aktif', 'non aktif'])->nullable();
+            $table->enum('status_karyawan', ['PKWT', 'PERMANEN', 'TEMPORARY'])->nullable(); // ada akun sementara
+
 
             $table->text('versatility')->nullable();
 

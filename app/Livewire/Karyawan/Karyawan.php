@@ -38,7 +38,7 @@ class Karyawan extends Component
     public $formImportCek = false;
     public $id_karyawan, $foto, $fotolama, $nik, $nrp, $doh, $tgl_lahir, $nama, $jenis_kelamin, $nrp_lama, $departemen_lama, $jabatan_lama, $nama_lama;
     public $tempat_lahir, $agama, $gol_darah, $status_perkawinan, $perusahaan;
-    public $kontraktor, $dept, $jabatan, $no_hp, $alamat, $domisili, $status = 'aktif', $file, $fileCek;
+    public $kontraktor, $dept, $jabatan, $no_hp, $alamat, $domisili, $status = 'aktif', $status_karyawan, $file, $fileCek;
     public $dataKaryawan = [];
     public $lihatdetail = false;
     public $perubahan = false;
@@ -88,6 +88,7 @@ class Karyawan extends Component
         $this->alamat = $karyawans->alamat;
         $this->domisili = $karyawans->domisili;
         $this->status = $karyawans->status;
+        $this->status_karyawan = $karyawans->status_karyawan;
         $this->open();
     }
     // Store or update the Karyawan record
@@ -95,15 +96,15 @@ class Karyawan extends Component
     {
         if ($this->id_karyawan) {
             $this->validate([
-                'nik' => 'nullable',
+                'nik' => 'required',
                 'nrp' => 'required|unique:karyawans,nrp,' . $this->id_karyawan,
                 'nama' => 'required|string|max:255',
-                'tgl_lahir' => 'nullable|date',
+                'tgl_lahir' => 'required|date',
                 'jenis_kelamin' => 'nullable',
                 'tempat_lahir' => 'nullable|string|max:255',
-                'agama' => 'nullable',
-                'gol_darah' => 'nullable',
-                'status_perkawinan' => 'nullable',
+                'agama' => 'required',
+                'gol_darah' => 'required',
+                'status_perkawinan' => 'required',
                 'perusahaan' => 'nullable|string|max:255',
                 'kontraktor' => 'nullable|string|max:255',
                 'dept' => 'required',
@@ -114,19 +115,20 @@ class Karyawan extends Component
                 'status' => 'nullable',
                 'foto' => 'nullable',
                 'nrp_lama' => 'nullable',
+                'status_karyawan' => 'required',
             ]);
         } else {
             $this->validate([
-                'nik' => 'nullable',
+                'nik' => 'required',
                 'nrp' => 'required|unique:karyawans,nrp,' . $this->id_karyawan,
                 'nama' => 'required|string|max:255',
                 'doh' => 'required|date',
-                'tgl_lahir' => 'nullable|date',
+                'tgl_lahir' => 'required|date',
                 'jenis_kelamin' => 'nullable',
                 'tempat_lahir' => 'nullable|string|max:255',
-                'agama' => 'nullable',
-                'gol_darah' => 'nullable',
-                'status_perkawinan' => 'nullable',
+                'agama' => 'required',
+                'gol_darah' => 'required',
+                'status_perkawinan' => 'required',
                 'perusahaan' => 'nullable|string|max:255',
                 'kontraktor' => 'nullable|string|max:255',
                 'dept' => 'required',
@@ -135,6 +137,7 @@ class Karyawan extends Component
                 'alamat' => 'nullable|string|max:255',
                 'domisili' => 'nullable',
                 'status' => 'nullable',
+                'status_karyawan' => 'required',
                 'foto' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:1024',
                 'nrp_lama' => 'nullable',
             ]);
@@ -267,18 +270,22 @@ class Karyawan extends Component
                 'alamat' => $this->alamat,
                 'domisili' => $this->domisili,
                 'status' => $this->status,
+                'status_karyawan' => $this->status_karyawan,
+
             ]
         );
-        User::updateOrCreate(
-            ['username' => $this->nrp],
-            [
-                'name' => $this->nama,
-                'password' => Hash::make($this->nrp),
-                'role' => 'karyawan',
-                'subrole' => $this->dept,
-                'email' => $this->nrp . '@email.com',
-            ]
-        );
+        if ($this->status_karyawan != 'temporary') {
+            User::updateOrCreate(
+                ['username' => $this->nrp],
+                [
+                    'name' => $this->nama,
+                    'password' => Hash::make($this->nrp),
+                    'role' => 'karyawan',
+                    'subrole' => $this->dept,
+                    'email' => $this->nrp . '@email.com',
+                ]
+            );
+        }
         // Optionally, reset the form fields after submission
         $jenis = $this->id_karyawan ? 'Edit' : 'Tambah';
         $this->dispatch(
@@ -451,6 +458,7 @@ class Karyawan extends Component
             'alamat' => $karyawan->alamat,
             'domisili' => $karyawan->domisili,
             'status' => $karyawan->status,
+            'status_karyawan' => $karyawan->status_karyawan,
 
             //Kimper
             'exp_id' => $karyawan->exp_id,
@@ -461,6 +469,18 @@ class Karyawan extends Component
 
         ];
         $this->lihatdetail = true;
+    }
+
+    public function buatakun($id)
+    {
+        $karyawan = ModelsKaryawan::where('nrp', $id)->first();
+        User::create([
+            'name' => $karyawan->nama,
+            'username' => $karyawan->nrp,
+            'password' => Hash::make($karyawan->nrp),
+            'email' => $karyawan->nrp . '@mifashe.id',
+            'role' => 'karyawan',
+        ]);
     }
 
     public function render()
