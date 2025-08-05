@@ -257,7 +257,7 @@
                     <table style="width: 100%;text-align: center;">
                         <tr>
                             <td style="width: 50%;">&nbsp;</td>
-                            <td style="text-align: center;">Bungalon,
+                            <td style="text-align: center;">Meulaboh,
                                 {{ \Carbon\Carbon::parse($query->tgl_verifikasi ?? '')->locale('id')->isoFormat('D MMMM Y') }}
                             </td>
                         </tr>
