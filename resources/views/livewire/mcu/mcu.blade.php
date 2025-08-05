@@ -10,8 +10,8 @@
     @else
         <div class="row">
             <div class="col-md-5">
-                @hasAnyRole(['superadmin', 'dokter'])
-                    @hasAnyRole(['superadmin'])
+                @hasAnyRole(['superadmin', 'admin', 'dokter'])
+                    @hasAnyRole(['superadmin', 'admin'])
                         <button class="btn btn-dark btn-sm" wire:click="open">
                             <span class="bi bi-plus-square"></span>
                             &nbsp;Mcu

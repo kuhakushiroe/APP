@@ -8,33 +8,36 @@
     @else
         <div class="row pt-2">
             <div class="col-md-12">
-                @hasAnyRole(['superadmin'])
+                @hasAnyRole(['superadmin', 'admin'])
                     <button class="btn btn-dark btn-sm" wire:click="open">
                         <span class="bi bi-plus-square"></span>
                         &nbsp;Karyawan
                     </button>
-                    <button class="btn btn-success btn-sm" wire:click="export">
-                        <span class="bi bi-download"></span>
-                        &nbsp;Export
-                    </button>
-                    @if ($formImport)
-                    @else
-                        <button class="btn btn-warning btn-sm" wire:click="openImport">
-                            <span class="bi bi-upload"></span>
-                            &nbsp;Import
+                    @hasAnyRole(['superadmin'])
+                        <button class="btn btn-success btn-sm" wire:click="export">
+                            <span class="bi bi-download"></span>
+                            &nbsp;Export
                         </button>
-                    @endif
-                    <a href="{{ route('try-export') }}" class="btn btn-success btn-sm">
-                        <span class="bi bi-download"></span>
-                        &nbsp;Export Model Cheklist
-                    </a>
-                    @if ($formImportCek)
-                    @else
-                        <button class="btn btn-warning btn-sm" wire:click="openImportCek">
-                            <span class="bi bi-upload"></span>
-                            &nbsp;Import By Cek
-                        </button>
-                    @endif
+
+                        @if ($formImport)
+                        @else
+                            <button class="btn btn-warning btn-sm" wire:click="openImport">
+                                <span class="bi bi-upload"></span>
+                                &nbsp;Import
+                            </button>
+                        @endif
+                        <a href="{{ route('try-export') }}" class="btn btn-success btn-sm">
+                            <span class="bi bi-download"></span>
+                            &nbsp;Export Model Cheklist
+                        </a>
+                        @if ($formImportCek)
+                        @else
+                            <button class="btn btn-warning btn-sm" wire:click="openImportCek">
+                                <span class="bi bi-upload"></span>
+                                &nbsp;Import By Cek
+                            </button>
+                        @endif
+                    @endhasAnyRole
                 @endhasAnyRole
             </div>
             <div class="col-md-6 pt-2">
@@ -108,12 +111,14 @@
                                     @php
                                         $cariusers = DB::table('users')->where('username', $datakaryawan->nrp)->first();
                                     @endphp
-                                    @if (!$cariusers && $datakaryawan->status == 'aktif' && $datakaryawan->status_karyawan !== 'TEMPORARY')
-                                        <button class="btn btn-outline-success btn-sm"
-                                            wire:click="buatakun('{{ $datakaryawan->nrp }}')">
-                                            <span class="bi bi-key"></span><span class="bi bi-person"></span>
-                                        </button>
-                                    @endif
+                                    @hasAnyRole(['superadmin'])
+                                        @if (!$cariusers && $datakaryawan->status == 'aktif' && $datakaryawan->status_karyawan !== 'TEMPORARY')
+                                            <button class="btn btn-outline-success btn-sm"
+                                                wire:click="buatakun('{{ $datakaryawan->nrp }}')">
+                                                <span class="bi bi-key"></span><span class="bi bi-person"></span>
+                                            </button>
+                                        @endif
+                                    @endhasAnyRole
                                     <button class="btn btn-outline-info btn-sm"
                                         wire:click="detail({{ $datakaryawan->id }})">
                                         <span class="bi bi-eye"></span>
