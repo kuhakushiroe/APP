@@ -44,9 +44,4 @@ class McuCetak extends Controller
             ->setPaper('a4', 'landscape');
         return $pdf->stream('surat-laik-kerja-' . $carimcu->nik . '-' . date('Y-m-d') . '.pdf');
     }
-<<<<<<< HEAD
-
-    public function reportKimper($date1, $date2) {}
-=======
->>>>>>> 333f8a5b41684bf8bafe251f77769da0efacb202
 }
