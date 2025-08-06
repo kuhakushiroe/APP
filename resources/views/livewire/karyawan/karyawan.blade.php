@@ -123,10 +123,12 @@
                                         wire:click="detail({{ $datakaryawan->id }})">
                                         <span class="bi bi-eye"></span>
                                     </button>
-                                    <button class="btn btn-outline-warning btn-sm"
-                                        wire:click="edit({{ $datakaryawan->id }})">
-                                        <span class="bi bi-pencil"></span>
-                                    </button>
+                                    @hasAnyRole(['superadmin'])
+                                        <button class="btn btn-outline-warning btn-sm"
+                                            wire:click="edit({{ $datakaryawan->id }})">
+                                            <span class="bi bi-pencil"></span>
+                                        </button>
+                                    @endhasAnyRole
                                     <button class="btn btn-outline-danger btn-sm"
                                         wire:click="aktif({{ $datakaryawan->id }})">
                                         <span class="bi bi-trash"></span>

@@ -21,9 +21,11 @@
                             &nbsp;Mcu Multi
                         </button>
                     @endhasAnyRole
-                    <a href="{{ route('export-hasil-mcu') }}" class="btn btn-success btn-sm">
-                        <span class="bi bi-download"></span> Export Excel
-                    </a>
+                    @hasAnyRole(['superadmin'])
+                        <a href="{{ route('export-hasil-mcu') }}" class="btn btn-success btn-sm">
+                            <span class="bi bi-download"></span> Export Excel
+                        </a>
+                    @endhasAnyRole
                 @endhasanyrole
             </div>
             <div class="col-md-4">

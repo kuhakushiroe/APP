@@ -487,12 +487,12 @@ class Karyawan extends Component
     public function render()
     {
         if (in_array(auth()->user()->role, ['superadmin', 'she'])) {
-            $karyawans = ModelsKaryawan::whereAny(['nik', 'nrp', 'nama', 'status', 'dept'], 'LIKE', '%' . $this->search . '%')
+            $karyawans = ModelsKaryawan::whereAny(['nik', 'nrp', 'nama', 'status', 'status_karyawan', 'dept'], 'LIKE', '%' . $this->search . '%')
                 ->orderByRaw("status = 'non aktif' ASC")
                 ->paginate(10)
                 ->withQueryString();
         } else {
-            $karyawans = ModelsKaryawan::whereAny(['nik', 'nrp', 'nama', 'status'], 'LIKE', '%' . $this->search . '%')
+            $karyawans = ModelsKaryawan::whereAny(['nik', 'nrp', 'nama', 'status', 'status_karyawan'], 'LIKE', '%' . $this->search . '%')
                 ->orderByRaw("status = 'non aktif' ASC")
                 ->where('dept', auth()->user()->subrole)
                 ->paginate(10)

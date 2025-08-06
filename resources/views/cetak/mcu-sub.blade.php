@@ -257,7 +257,7 @@
                     <table style="width: 100%;text-align: center;">
                         <tr>
                             <td style="width: 50%;">&nbsp;</td>
-                            <td style="text-align: center;">Bungalon,
+                            <td style="text-align: center;">Meulaboh,
                                 {{ \Carbon\Carbon::parse($query->tgl_verifikasi ?? '')->locale('id')->isoFormat('D MMMM Y') }}
                             </td>
                         </tr>
@@ -268,7 +268,8 @@
                         <tr>
                             <td style="width: 40%;">&nbsp;</td>
                             <td style="text-align: center;">
-                                <img src="{{ public_path('storage/Dokter 1.jpeg') }}" alt="" width="100px">
+                                <img src="{{ public_path('storage/' . $query->verifikator . '.jpg') }}" alt=""
+                                    width="150px">
                             </td>
                         </tr>
                         {{-- <tr>
