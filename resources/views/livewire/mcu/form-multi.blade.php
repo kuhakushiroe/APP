@@ -26,42 +26,46 @@
                                         <option value="MCU Khusus">MCU Khusus</option>
                                         <option value="Exit MCU">Exit MCU</option>
                                     </select>
+                                    @error("forms.$index.jenis_pengajuan_mcu")
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="nrp_{{ $index }}">NRP:</label>
                                     <input type="text" class="form-control form-control-sm"
                                         wire:model.live="forms.{{ $index }}.nrp" placeholder="Masukkan NRP">
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label>Nama:</label>
-                                    <input type="text" class="form-control form-control-sm"
-                                        wire:model="forms.{{ $index }}.nama" readonly>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label for="jenis_kelamin">Jenis Kelamin:</label>
-                                    <select class="form-control form-control-sm"
-                                        wire:model="forms.{{ $index }}.jenis_kelamin" readonly>
-                                        <option value="">-Pilih Jenis Kelamin-</option>
-                                        <option value="laki-laki">Laki - Laki</option>
-                                        <option value="perempuan">Perempuan</option>
-                                    </select>
+                                    @error("forms.$index.nrp")
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
 
                                 <div class="form-group col-md-3">
                                     <label>File MCU:</label>
                                     <input type="file" class="form-control form-control-sm"
                                         wire:model="forms.{{ $index }}.file_mcu">
+                                    @error("forms.$index.file_mcu")
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
+
                                 <div class="form-group col-md-3">
                                     <label>Proveder:</label>
                                     <input type="text" class="form-control form-control-sm"
                                         wire:model="forms.{{ $index }}.proveder">
+                                    @error("forms.$index.proveder")
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
+
                                 <div class="form-group col-md-3">
                                     <label>Tanggal MCU:</label>
                                     <input type="date" class="form-control form-control-sm"
                                         wire:model="forms.{{ $index }}.tgl_mcu">
+                                    @error("forms.$index.tgl_mcu")
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
+
                                 <div class="form-group col-md-3 mt-4">
                                     @if ($loop->index > 0)
                                         <button type="button" class="btn btn-danger btn-sm mt-2"
