@@ -72,7 +72,7 @@
             ->first();
     @endphp
     <div class="kodedoc">
-        AMM-BGE-F-SHE-012A
+        AMM-MIFA-F-SHE-68F
     </div>
     <div class="isi">
         <h2>
