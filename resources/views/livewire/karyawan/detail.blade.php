@@ -25,43 +25,43 @@
                                     <tbody>
                                         <tr>
                                             <th>NIK</th>
-                                            <td>{{ $dataKaryawan['nik'] }}</td>
+                                            <td>{{ $dataKaryawan['nik'] ?? '-' }}</td>
                                         </tr>
                                         <tr>
                                             <th>Nama</th>
-                                            <td>{{ $dataKaryawan['nama'] }}</td>
+                                            <td>{{ $dataKaryawan['nama'] ?? '-' }}</td>
                                         </tr>
                                         <tr>
                                             <th>Tempat Tanggal Lahir</th>
-                                            <td>{{ $dataKaryawan['tgl_lahir'] }}</td>
+                                            <td>{{ $dataKaryawan['tgl_lahir'] ?? '-' }}</td>
                                         </tr>
                                         <tr>
                                             <th>Jenis Kelamin</th>
-                                            <td>{{ $dataKaryawan['jenis_kelamin'] }}</td>
+                                            <td>{{ $dataKaryawan['jenis_kelamin'] ?? '-' }}</td>
                                         </tr>
                                         <tr>
                                             <th>Agama</th>
-                                            <td>{{ $dataKaryawan['agama'] }}</td>
+                                            <td>{{ $dataKaryawan['agama'] ?? '-' }}</td>
                                         </tr>
                                         <tr>
                                             <th>Golongan Darah</th>
-                                            <td>{{ $dataKaryawan['gol_darah'] }}</td>
+                                            <td>{{ $dataKaryawan['gol_darah'] ?? '-' }}</td>
                                         </tr>
                                         <tr>
                                             <th>Status Perkawinan</th>
-                                            <td>{{ $dataKaryawan['status_perkawinan'] }}</td>
+                                            <td>{{ $dataKaryawan['status_perkawinan'] ?? '-' }}</td>
                                         </tr>
                                         <tr>
                                             <th>Alamat</th>
-                                            <td>{{ $dataKaryawan['alamat'] }}</td>
+                                            <td>{{ $dataKaryawan['alamat'] ?? '-' }}</td>
                                         </tr>
                                         <tr>
                                             <th>Domisili</th>
-                                            <td>{{ $dataKaryawan['domisili'] }}</td>
+                                            <td>{{ $dataKaryawan['domisili'] ?? '-' }}</td>
                                         </tr>
                                         <tr>
                                             <th>No Handphone</th>
-                                            <td>{{ $dataKaryawan['no_hp'] }}</td>
+                                            <td>{{ $dataKaryawan['no_hp'] ?? '-' }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -76,27 +76,27 @@
                                     <tbody>
                                         <tr>
                                             <th>Date of Hire</th>
-                                            <td>{{ $dataKaryawan['doh'] }}</td>
+                                            <td>{{ $dataKaryawan['doh'] ?? '-' }}</td>
                                         </tr>
                                         <tr>
                                             <th>Perusahaan</th>
-                                            <td>{{ $dataKaryawan['perusahaan'] }}</td>
+                                            <td>{{ $dataKaryawan['perusahaan'] ?? '-' }}</td>
                                         </tr>
                                         <tr>
                                             <th>Kontraktor</th>
-                                            <td>{{ $dataKaryawan['kontraktor'] }}</td>
+                                            <td>{{ $dataKaryawan['kontraktor'] ?? '-' }}</td>
                                         </tr>
                                         <tr>
                                             <th>Departemen</th>
-                                            <td>{{ $dataKaryawan['dept'] }}</td>
+                                            <td>{{ $dataKaryawan['dept'] ?? '-' }}</td>
                                         </tr>
                                         <tr>
                                             <th>Jabatan</th>
-                                            <td>{{ $dataKaryawan['jabatan'] }}</td>
+                                            <td>{{ $dataKaryawan['jabatan'] ?? '-' }}</td>
                                         </tr>
                                         <tr>
                                             <th>Status</th>
-                                            <td>{{ $dataKaryawan['status'] }}</td>
+                                            <td>{{ $dataKaryawan['status'] ?? '-' }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -113,7 +113,12 @@
                                     <tbody>
                                         <tr>
                                             <td>
-                                                FOTO
+                                                @if (!empty($dataKaryawan['foto']) && Storage::exists($dataKaryawan['foto']))
+                                                    <img src="{{ Storage::url($dataKaryawan['foto']) }}" alt="Foto"
+                                                        class="img-fluid" style="max-width: 100px; max-height: 100px;">
+                                                @else
+                                                    -
+                                                @endif
                                             </td>
                                         </tr>
                                     </tbody>
@@ -137,78 +142,25 @@
                                 <tbody>
                                     <tr>
                                         <th>Expired ID</th>
-                                        <td>{{ $dataKaryawan['exp_mcu'] }}</td>
+                                        <td>{{ $dataKaryawan['exp_mcu'] ?? '-' }}</td>
                                     </tr>
                                     <tr>
                                         <th>Expired Kimper</th>
-                                        <td>{{ $dataKaryawan['exp_kimper'] }}</td>
+                                        <td>{{ $dataKaryawan['exp_kimper'] ?? '-' }}</td>
                                     </tr>
                                     <tr>
                                         <th>Expired Simpo</th>
-                                        <td>{{ $dataKaryawan['exp_simpol'] }}</td>
+                                        <td>{{ $dataKaryawan['exp_simpol'] ?? '-' }}</td>
                                     </tr>
                                     <tr>
                                         <th>Expired Medical Check Up</th>
-                                        <td>{{ $dataKaryawan['exp_mcu'] }}</td>
+                                        <td>{{ $dataKaryawan['exp_mcu'] ?? '-' }}</td>
                                     </tr>
 
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col">
-                            <table class="table">
-                                <thead class="table-info">
-                                    <tr>
-                                        <th colspan="2">Data Pekerjaan</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th>Date of Hire</th>
-                                        <td>{{ $dataKaryawan['doh'] }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Perusahaan</th>
-                                        <td>{{ $dataKaryawan['perusahaan'] }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Kontraktor</th>
-                                        <td>{{ $dataKaryawan['kontraktor'] }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Departemen</th>
-                                        <td>{{ $dataKaryawan['dept'] }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Jabatan</th>
-                                        <td>{{ $dataKaryawan['jabatan'] }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Status</th>
-                                        <td>{{ $dataKaryawan['status'] }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col">
-                            <table class="table">
-                                <thead class="table-info">
-                                    <tr>
-                                        <th>
-                                            Foto
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            FOTO
-                                        </td>
-                                    </tr>
-                                </tbody>
 
-                            </table>
-                        </div>
                     </div>
 
                 </div>

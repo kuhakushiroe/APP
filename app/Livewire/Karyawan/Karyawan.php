@@ -442,6 +442,7 @@ class Karyawan extends Component
             //Data Pribadi dan Data Karyawan
             'nik' => $karyawan->nik,
             'nrp' => $karyawan->nrp,
+            'foto' => $karyawan->foto,
             'doh' => $karyawan->doh,
             'tgl_lahir' => $karyawan->tgl_lahir,
             'nama' => $karyawan->nama,
