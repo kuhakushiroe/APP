@@ -191,11 +191,11 @@
             <table width="100%">
                 <tr rowspan="2">
                     <td width="38%">1. Riwayat Penyakit</td>
-                    <td>: Kehilangan Kesadaran : Yes / No</td>
+                    <td>: Kehilangan Kesadaran : {{ strtoupper($query->kesadaran ?? '-') }}</td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td> Epilepsi : Yes / No</td>
+                    <td> Epilepsi : {{ strtoupper($query->epilepsi ?? '-') }}</td>
                 </tr>
                 <tr>
                     <td>2. Tekanan Darah</td>

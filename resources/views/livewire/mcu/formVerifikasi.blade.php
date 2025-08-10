@@ -652,6 +652,47 @@
                                             role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
                                 </div>
+
+                            </div>
+                        </div>
+                        {{-- Riwayat Penyakit --}}
+                        <div class="card text-start">
+                            <div class="card-header">
+                                <h4 class="card-title">Riwayat Penyakit</h4>
+                            </div>
+                            <div class="card-body row">
+                                <div class="col-sm-6">
+                                    <label for="kesadaran">Kehilangan Kesadaran</label>
+                                    <select
+                                        class="form-control form-control-sm @error('kesadaran') is-invalid @enderror
+                                        @if ($kesadaran === 'yes') border-danger text-danger @else border-success text-success @endif"
+                                        wire:model.live="kesadaran"
+                                        placeholder="Kehilangan Kesadaran"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
+                                        <option value="">Pilih Option</option>
+                                        <option value="yes">yes</option>
+                                        <option value="no">no</option>
+                                    </select>
+                                    @error('kesadaran')
+                                        <span class="invalid-feedback"
+                                            role="alert"><strong>{{ $message }}</strong></span>
+                                    @enderror
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="epilepsi">Epilepsi</label>
+                                    <select
+                                        class="form-control form-control-sm @error('epilepsi') is-invalid @enderror
+                                        @if ($epilepsi === 'yes') border-danger text-danger @else border-success text-success @endif"
+                                        wire:model.live="epilepsi"
+                                        placeholder="Epilepsi"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
+                                        <option value="">Pilih Option</option>
+                                        <option value="yes">yes</option>
+                                        <option value="no">no</option>
+                                    </select>
+                                    @error('epilepsi')
+                                        <span class="invalid-feedback"
+                                            role="alert"><strong>{{ $message }}</strong></span>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
 

@@ -33,6 +33,7 @@ class Mcu extends Component
     public $id_mcu, $sub_id, $proveder, $nrp, $nama, $tgl_mcu, $gol_darah, $jenis_kelamin, $file_mcu, $jenis_pengajuan_mcu;
     public $no_dokumen, $status = NULL, $keterangan_mcu, $saran_mcu, $tgl_verifikasi, $exp_mcu;
     public $riwayat_rokok, $BB, $TB, $LP, $BMI, $Laseq, $reqtal_touche, $sistol, $diastol, $OD_jauh, $OS_jauh, $OD_dekat, $OS_dekat, $butawarna, $gdp, $hba1c, $gd_2_jpp, $ureum, $creatine, $asamurat, $sgot, $sgpt, $hbsag, $anti_hbs, $kolesterol, $hdl, $ldl, $tg, $darah_rutin, $napza, $urin, $ekg, $rontgen, $audiometri, $spirometri, $tredmil_test, $echocardiography, $widal_test, $routin_feces, $kultur_feces;
+    public $kesadaran, $epilepsi;
     public $caridatakaryawan = [];
     public $carikaryawan = [];
     public $status_file_mcu = [];
@@ -679,6 +680,8 @@ class Mcu extends Component
         $this->widal_test = $carimcu->widal_test;
         $this->routin_feces = $carimcu->routin_feces;
         $this->kultur_feces = $carimcu->kultur_feces;
+        $this->kesadaran = $carimcu->kesadaran;
+        $this->epilepsi = $carimcu->epilepsi;
         $this->tgl_verifikasi = date('Y-m-d');
         $this->exp_mcu = now()->addMonth(6)->format('Y-m-d');
     }
@@ -858,6 +861,8 @@ class Mcu extends Component
                 'paramedik' => auth()->user()->username,
                 'paramedik_catatan' => $this->paramedik_catatan,
                 'paramedik_status' => NULL,
+                'kesadaran' => $this->kesadaran,
+                'epilepsi' => $this->epilepsi,
             ]);
             $updateKaryawan = Karyawan::where('nrp', $nrp)->first();
             $updateKaryawan->update([
