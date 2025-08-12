@@ -330,7 +330,7 @@
                                                                 MCU
                                                             </a>
                                                         @else
-                                                            {{ $item->mcuStatus ?? '-' }}
+                                                            {{ $item->status }}
                                                         @endhasAnyRole
                                                     </td>
                                                     <td>{{ $item->tgl_mcu }}</td>
