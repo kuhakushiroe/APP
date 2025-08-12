@@ -960,7 +960,7 @@ class Mcu extends Component
                 ->paginate(10)
                 ->withQueryString();
         } else {
-            $mcus = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu', 'mcu.status as mcuStatus')
+            $mcus = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu')
                 ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
                 ->whereAny(['karyawans.nrp', 'karyawans.nama'], 'like', '%' . $this->search . '%')
                 ->where('mcu.status_', '=', "open")
