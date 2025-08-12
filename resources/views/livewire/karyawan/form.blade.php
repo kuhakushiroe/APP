@@ -47,9 +47,9 @@
                             <input type="hidden" class="form-control form-control-sm" wire:model="id_karyawan">
                             <input type="hidden" class="form-control form-control-sm" wire:model="fotolama">
                             <label for="foto">Foto</label>
-                            <input type="file"
+                            <input type="file" accept=".jpg,.jpeg,.png,.gif"
                                 class="form-control form-control-sm @error('foto') is-invalid @enderror"
-                                wire:model="foto">
+                                wire:model.live="foto">
                             @error('foto')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror

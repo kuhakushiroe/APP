@@ -113,7 +113,7 @@ class Karyawan extends Component
                 'alamat' => 'nullable|string|max:255',
                 'domisili' => 'nullable',
                 'status' => 'nullable',
-                'foto' => 'nullable',
+                'foto' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:1024',
                 'nrp_lama' => 'nullable',
                 'status_karyawan' => 'required',
             ]);
@@ -251,7 +251,7 @@ class Karyawan extends Component
         ModelsKaryawan::updateOrCreate(
             ['id' => $this->id_karyawan], // Unique identifier for update
             [
-                'foto' => $fotoPath,
+                'foto' => $fotoPath ?? null,
                 'nik' => $this->nik,
                 'nrp' => $this->nrp,
                 'doh' => $this->doh,
