@@ -23,6 +23,8 @@
                         <th>Dept / Posisi</th>
                         <th>File MCU</th>
                         <th>Hasil</th>
+                        <th>Hasil Temuan</th>
+                        <th>Histori</th>
                         <th>Exp MCU</th>
                     </tr>
                 </thead>
@@ -103,6 +105,58 @@
                                         </a>
                                     @endif
                                 </div>
+                            </td>
+                            <td>
+                                @php
+                                    if (empty($data->sub_id)) {
+                                        // INDUK: ambil induk + semua anak
+                                        $hasiltemuan = DB::table('mcu')
+                                            ->where('id', $data->id_mcu) // induk
+                                            ->orderByRaw('CASE WHEN id = ? THEN 0 ELSE 1 END', [$data->id_mcu]) // induk dulu
+                                            ->orderBy('tgl_mcu', 'asc')
+                                            ->get();
+                                    } else {
+                                        // ANAK: ambil induk + semua anak dalam grup
+                                        $hasiltemuan = DB::table('mcu')
+                                            ->where('id', $data->sub_id) // induk
+                                            ->orWhere('sub_id', $data->sub_id) // anak-anak
+                                            ->orderByRaw('CASE WHEN id = ? THEN 0 ELSE 1 END', [$data->sub_id]) // induk dulu
+                                            ->orderBy('tgl_mcu', 'asc')
+                                            ->get();
+                                    }
+                                @endphp
+                                @forelse ($hasiltemuan as $datahasiltemuan)
+                                    @if (!empty($datahasiltemuan->upload_hasil_mcu))
+                                        <a href="{{ Storage::url($datahasiltemuan->upload_hasil_mcu) }}"
+                                            class="btn btn-outline-primary btn-sm" target="_blank">FILE HASIL TEMUAN
+                                            {{ $datahasiltemuan->status }}</a>
+                                    @else
+                                        -
+                                    @endif
+                                @empty
+                                    -
+                                @endforelse
+                            </td>
+                            <td>
+                                @php
+                                    if ($data->sub_id === null) {
+                                        $historimcu = DB::table('mcu')
+                                            ->where('id', $data->id)
+                                            ->orderBy('tgl_mcu', 'asc')
+                                            ->get();
+                                    } else {
+                                        $historimcu = DB::table('mcu')
+                                            ->where('sub_id', $data->sub_id)
+                                            ->orWhere('id', $data->sub_id)
+                                            ->orderBy('tgl_mcu', 'asc')
+                                            ->get();
+                                    }
+                                @endphp
+                                @forelse ($historimcu as $datahistori)
+                                    {{ $datahistori->status }}
+                                @empty
+                                    -
+                                @endforelse
                             </td>
                             <td>
                                 {{ \Carbon\Carbon::parse($data->exp_mcu)->locale('id')->translatedFormat('l, d F Y') }}

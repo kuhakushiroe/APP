@@ -726,15 +726,15 @@ class Mcu extends Component
                     [
                         'status' => 'required',
                         'tgl_verifikasi' => 'required',
-                        'upload_file_mcu' => 'required|file|mimes:pdf|max:10240',
+                        'upload_hasil_mcu' => 'required|file|mimes:pdf|max:10240',
                     ],
                     [
                         'status.required' => 'Status harus diisi.',
                         'tgl_verifikasi.required' => 'Tanggal Verifikasi harus diisi.',
-                        'upload_file_mcu.required' => 'File MCU harus diunggah.',
-                        'upload_file_mcu.file' => 'File harus berupa file.',
-                        'upload_file_mcu.mimes' => 'Format file harus PDF.',
-                        'upload_file_mcu.max' => 'Ukuran file maksimal 10MB.',
+                        'upload_hasil_mcu.required' => 'File MCU harus diunggah.',
+                        'upload_hasil_mcu.file' => 'File harus berupa file.',
+                        'upload_hasil_mcu.mimes' => 'Format file harus PDF.',
+                        'upload_hasil_mcu.max' => 'Ukuran file maksimal 10MB.',
                     ]
                 );
 
@@ -751,8 +751,8 @@ class Mcu extends Component
                 }
 
                 // Handle the file upload for 'file_mcu'
-                if ($this->upload_file_mcu) {
-                    $filePath = $this->upload_file_mcu->storeAs($folderPath, $folderKaryawan . "-TEMUAN-MCU-" . time() . ".{$this->file_mcu->getClientOriginalExtension()}", 'public');
+                if ($this->upload_hasil_mcu) {
+                    $filePath = $this->upload_hasil_mcu->storeAs($folderPath, $folderKaryawan . "-TEMUAN-MCU-" . time() . ".{$this->upload_hasil_mcu->getClientOriginalExtension()}", 'public');
                 } else {
                     $filePath = null; // Handle the case where no file is uploaded (optional)
                 }
@@ -770,7 +770,7 @@ class Mcu extends Component
                         'saran_mcu' => $this->saran_mcu,
                         'paramedik_status' => $this->paramedik_status,
                         'paramedik_catatan' => $this->paramedik_catatan,
-                        'upload_file_mcu' => $filePath
+                        'upload_hasil_mcu' => $filePath
                     ]);
                     Karyawan::where('nrp', $mcu->id_karyawan)
                         ->update(['exp_mcu' => $this->exp_mcu]);
@@ -792,7 +792,7 @@ class Mcu extends Component
                             'saran_mcu' => $this->saran_mcu,
                             'paramedik_status' => $this->paramedik_status,
                             'paramedik_catatan' => $this->paramedik_catatan,
-                            'upload_file_mcu' => $filePath
+                            'upload_hasil_mcu' => $filePath
                         ]);
                         $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n Hasil MCU: *$this->status*\n";
                     } else {
@@ -806,7 +806,7 @@ class Mcu extends Component
                             'saran_mcu' => $this->saran_mcu,
                             'paramedik_status' => $this->paramedik_status,
                             'paramedik_catatan' => $this->paramedik_catatan,
-                            'upload_file_mcu' => $filePath
+                            'upload_hasil_mcu' => $filePath
                         ]);
                         $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n Hasil MCU: *$this->status*\n";
                     }
