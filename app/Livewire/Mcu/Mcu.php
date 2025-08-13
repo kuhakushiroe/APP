@@ -34,6 +34,7 @@ class Mcu extends Component
     public $no_dokumen, $status = NULL, $keterangan_mcu, $saran_mcu, $tgl_verifikasi, $exp_mcu;
     public $riwayat_rokok, $BB, $TB, $LP, $BMI, $Laseq, $reqtal_touche, $sistol, $diastol, $OD_jauh, $OS_jauh, $OD_dekat, $OS_dekat, $butawarna, $gdp, $hba1c, $gd_2_jpp, $ureum, $creatine, $asamurat, $sgot, $sgpt, $hbsag, $anti_hbs, $kolesterol, $hdl, $ldl, $tg, $darah_rutin, $napza, $urin, $ekg, $rontgen, $audiometri, $spirometri, $tredmil_test, $echocardiography, $widal_test, $routin_feces, $kultur_feces;
     public $kesadaran, $epilepsi;
+    public $upload_hasil_mcu;
     public $caridatakaryawan = [];
     public $carikaryawan = [];
     public $status_file_mcu = [];
@@ -720,23 +721,42 @@ class Mcu extends Component
                     'paramedik_status' => $this->paramedik_status,
                     'paramedik_catatan' => $this->paramedik_catatan
                 ]);
-                foreach ($info['nomorParamedik'] as $i => $nomor) {
-                    pesan($nomor, $pesanText, $info['token']);
-                    if ($i < count($info['nomorParamedik']) - 1) {
-                        sleep(1);
-                    }
-                }
             } else {
                 $this->validate(
                     [
                         'status' => 'required',
                         'tgl_verifikasi' => 'required',
+                        'upload_file_mcu' => 'required|file|mimes:pdf|max:10240',
                     ],
                     [
                         'status.required' => 'Status harus diisi.',
                         'tgl_verifikasi.required' => 'Tanggal Verifikasi harus diisi.',
+                        'upload_file_mcu.required' => 'File MCU harus diunggah.',
+                        'upload_file_mcu.file' => 'File harus berupa file.',
+                        'upload_file_mcu.mimes' => 'Format file harus PDF.',
+                        'upload_file_mcu.max' => 'Ukuran file maksimal 10MB.',
                     ]
                 );
+
+                $datakaryawan = Karyawan::where('nrp', $this->nrp)->first();
+                $folderDept = strtoupper(Str::slug($datakaryawan->dept, '_'));
+                $folderKaryawan = strtoupper(Str::slug(
+                    $datakaryawan->nrp . '-' . $datakaryawan->nama . '-' . $datakaryawan->dept . '-' . $datakaryawan->jabatan,
+                    '_'
+                ));
+                $folderPath = $folderDept . '/' . $folderKaryawan . '/MCU/TEMUAN';
+
+                if (!Storage::disk('public')->exists($folderPath)) {
+                    Storage::disk('public')->makeDirectory($folderPath);
+                }
+
+                // Handle the file upload for 'file_mcu'
+                if ($this->upload_file_mcu) {
+                    $filePath = $this->upload_file_mcu->storeAs($folderPath, $folderKaryawan . "-TEMUAN-MCU-" . time() . ".{$this->file_mcu->getClientOriginalExtension()}", 'public');
+                } else {
+                    $filePath = null; // Handle the case where no file is uploaded (optional)
+                }
+
                 $indukmcu = ModelsMcu::where('id', $mcu->sub_id)->where('sub_id', NULL)->first();
                 if ($this->status == 'FIT' || $this->status == 'FIT WITH NOTE') {
                     $mcu->update([
@@ -749,7 +769,8 @@ class Mcu extends Component
                         'keterangan_mcu' => $this->keterangan_mcu,
                         'saran_mcu' => $this->saran_mcu,
                         'paramedik_status' => $this->paramedik_status,
-                        'paramedik_catatan' => $this->paramedik_catatan
+                        'paramedik_catatan' => $this->paramedik_catatan,
+                        'upload_file_mcu' => $filePath
                     ]);
                     Karyawan::where('nrp', $mcu->id_karyawan)
                         ->update(['exp_mcu' => $this->exp_mcu]);
@@ -761,7 +782,6 @@ class Mcu extends Component
                     $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n Hasil MCU: *$this->status*\n";
                 } else {
                     if (empty($mcu->sub_id)) {
-
                         $mcu->update([
                             'no_dokumen' => $this->no_dokumen,
                             'status_' => 'open',
@@ -771,7 +791,8 @@ class Mcu extends Component
                             'keterangan_mcu' => $this->keterangan_mcu,
                             'saran_mcu' => $this->saran_mcu,
                             'paramedik_status' => $this->paramedik_status,
-                            'paramedik_catatan' => $this->paramedik_catatan
+                            'paramedik_catatan' => $this->paramedik_catatan,
+                            'upload_file_mcu' => $filePath
                         ]);
                         $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n Hasil MCU: *$this->status*\n";
                     } else {
@@ -784,7 +805,8 @@ class Mcu extends Component
                             'keterangan_mcu' => $this->keterangan_mcu,
                             'saran_mcu' => $this->saran_mcu,
                             'paramedik_status' => $this->paramedik_status,
-                            'paramedik_catatan' => $this->paramedik_catatan
+                            'paramedik_catatan' => $this->paramedik_catatan,
+                            'upload_file_mcu' => $filePath
                         ]);
                         $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n Hasil MCU: *$this->status*\n";
                     }
@@ -946,19 +968,37 @@ class Mcu extends Component
                 ->get();
 
             $prioritasIDs = $carimcu->pluck('sub_id')->filter()->unique()->toArray(); // Ambil nilai sub_id unik dan tidak null
-
-            $mcus = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu')
-                ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
-                ->whereAny(['karyawans.nrp', 'karyawans.nama'], 'like', '%' . $this->search . '%')
-                ->where('mcu.status_', '=', "open")
-                ->whereNull('mcu.sub_id')
-                ->when(!empty($prioritasIDs), function ($query) use ($prioritasIDs) {
-                    $ids = implode(',', $prioritasIDs);
-                    return $query->orderByRaw("FIELD(mcu.id, $ids) DESC");
-                })
-                ->orderBy('mcu.tgl_mcu', 'desc')
-                ->paginate(10)
-                ->withQueryString();
+            if (auth()->user()->subrole === 'verifikator') {
+                $mcus = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu')
+                    ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
+                    ->whereAny(['karyawans.nrp', 'karyawans.nama'], 'like', '%' . $this->search . '%')
+                    ->where('mcu.status_', '=', "open")
+                    ->whereNull('mcu.sub_id')
+                    ->when(!empty($prioritasIDs), function ($query) use ($prioritasIDs) {
+                        $ids = implode(',', $prioritasIDs);
+                        return $query->orderByRaw("FIELD(mcu.id, $ids) DESC");
+                    })
+                    ->where(function ($q) {
+                        $q->whereNull('mcu.verifikator')
+                            ->orWhere('mcu.verifikator', auth()->user()->username);
+                    })
+                    ->orderBy('mcu.tgl_mcu', 'desc')
+                    ->paginate(10)
+                    ->withQueryString();
+            } else {
+                $mcus = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu')
+                    ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
+                    ->whereAny(['karyawans.nrp', 'karyawans.nama'], 'like', '%' . $this->search . '%')
+                    ->where('mcu.status_', '=', "open")
+                    ->whereNull('mcu.sub_id')
+                    ->when(!empty($prioritasIDs), function ($query) use ($prioritasIDs) {
+                        $ids = implode(',', $prioritasIDs);
+                        return $query->orderByRaw("FIELD(mcu.id, $ids) DESC");
+                    })
+                    ->orderBy('mcu.tgl_mcu', 'desc')
+                    ->paginate(10)
+                    ->withQueryString();
+            }
         } else {
             $mcus = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu')
                 ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')

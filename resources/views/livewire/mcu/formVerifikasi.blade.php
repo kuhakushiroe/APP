@@ -793,6 +793,16 @@
                                                 role="alert"><strong>{{ $message }}</strong></span>
                                         @enderror
                                     </div>
+                                    <div class="col-md-12">
+                                        <label for="upload_hasil_mcu">Upload Hasil MCU / Temuan:</label>
+                                        <input type="file"
+                                            class="form-control form-control-sm @error('upload_hasil_mcu') is-invalid @enderror"
+                                            wire:model.live="upload_hasil_mcu"></input>
+                                        @error('upload_hasil_mcu')
+                                            <span class="invalid-feedback"
+                                                role="alert"><strong>{{ $message }}</strong></span>
+                                        @enderror
+                                    </div>
                                 @endif
                             @endif
                         @endif
