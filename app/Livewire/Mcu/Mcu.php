@@ -726,14 +726,13 @@ class Mcu extends Component
                     [
                         'status' => 'required',
                         'tgl_verifikasi' => 'required',
-                        'upload_hasil_mcu' => 'required|file|mimes:pdf|max:10240',
+                        'upload_hasil_mcu' => 'file|mimes:jpg,png,jpeg,pdf|max:10240',
                     ],
                     [
                         'status.required' => 'Status harus diisi.',
                         'tgl_verifikasi.required' => 'Tanggal Verifikasi harus diisi.',
-                        'upload_hasil_mcu.required' => 'File MCU harus diunggah.',
                         'upload_hasil_mcu.file' => 'File harus berupa file.',
-                        'upload_hasil_mcu.mimes' => 'Format file harus PDF.',
+                        'upload_hasil_mcu.mimes' => 'Format file harus jpg, png, jpeg, pdf.',
                         'upload_hasil_mcu.max' => 'Ukuran file maksimal 10MB.',
                     ]
                 );
