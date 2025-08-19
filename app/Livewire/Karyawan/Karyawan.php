@@ -107,7 +107,7 @@ class Karyawan extends Component
                 'status_perkawinan' => 'required',
                 'perusahaan' => 'nullable|string|max:255',
                 'kontraktor' => 'nullable|string|max:255',
-                'dept' => 'required',
+                'dept' => 'nullable',
                 'jabatan' => 'nullable|string|max:255',
                 'no_hp' => 'nullable',
                 'alamat' => 'nullable|string|max:255',

@@ -173,7 +173,7 @@
                             @enderror
                         </div>
 
-                        <div class="form-group" @if ($status_karyawan === 'TEMPORARY') style="display: none;" @endif>
+                        <div class="form-group">
                             <label for="perusahaan">Perusahaan</label>
                             <select class="form-control form-control-sm @error('perusahaan') is-invalid @enderror"
                                 wire:model="perusahaan">
@@ -189,7 +189,7 @@
                             @enderror
                         </div>
 
-                        <div class="form-group" @if ($status_karyawan === 'TEMPORARY') style="display: none;" @endif>
+                        <div class="form-group">
                             <label for="kontraktor">Mitra
                                 Perusahaan</label>
                             <input type="text"
@@ -200,7 +200,7 @@
                             @enderror
                         </div>
                         @if (auth()->user()->hasRole('superadmin'))
-                            <div class="form-group" @if ($status_karyawan === 'TEMPORARY') style="display: none;" @endif>
+                            <div class="form-group">
                                 <label for="dept">Departemen</label>
                                 <select class="form-control form-control-sm @error('dept') is-invalid @enderror"
                                     wire:model="dept">
@@ -217,7 +217,7 @@
                                 @enderror
                             </div>
                         @else
-                            <div class="form-group" @if ($status_karyawan === 'TEMPORARY') style="display: none;" @endif>
+                            <div class="form-group">
                                 <label for="dept">Departemen</label>
                                 <input type="text"
                                     class="form-control form-control-sm @error('dept') is-invalid @enderror"
@@ -228,7 +228,7 @@
                                 @enderror
                             </div>
                         @endif
-                        <div class="form-group" @if ($status_karyawan === 'TEMPORARY') style="display: none;" @endif>
+                        <div class="form-group">
                             <label for="jabatan">Jabatan</label>
                             <select class="form-control form-control-sm @error('jabatan') is-invalid @enderror"
                                 wire:model="jabatan">

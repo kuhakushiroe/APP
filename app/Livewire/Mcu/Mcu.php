@@ -384,7 +384,7 @@ class Mcu extends Component
 
             $info = getUserInfo(); // ambil data user saat dispatch, di konteks request HTTP (user pasti ada)
             if ($status == 1) {
-                $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n*$infoKaryawan*\n Status File MCU: *Diterima* Proses Dokter";
+                $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n*$infoKaryawan*\n Status File MCU: *Diterima* Lanjut Proses Dokter";
             } else {
                 $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n*$infoKaryawan*\n Status File MCU: *Ditolak - $catatan*";
             }
@@ -483,7 +483,7 @@ class Mcu extends Component
         $this->rontgen = $carimcu->rontgen;
         $this->audiometri = $carimcu->audiometri;
         $this->spirometri = $carimcu->spirometri;
-        $this->tredmil_test = $carimcu->tredmil_test;
+        $this->tredmil_test = $carimcu->tredmil_test ?? null;
         $this->widal_test = $carimcu->widal_test;
         $this->routin_feces = $carimcu->routin_feces;
         $this->kultur_feces = $carimcu->kultur_feces;
@@ -576,7 +576,7 @@ class Mcu extends Component
                 'rontgen' => $this->rontgen,
                 'audiometri' => $this->audiometri,
                 'spirometri' => $this->spirometri,
-                'tredmil_test' => $this->tredmil_test,
+                'tredmil_test' => $this->tredmil_test ?? null,
                 'widal_test' => $this->widal_test,
                 'routin_feces' => $this->routin_feces,
                 'kultur_feces' => $this->kultur_feces,
@@ -676,7 +676,7 @@ class Mcu extends Component
         $this->rontgen = $carimcu->rontgen;
         $this->audiometri = $carimcu->audiometri;
         $this->spirometri = $carimcu->spirometri;
-        $this->tredmil_test = $carimcu->tredmil_test;
+        $this->tredmil_test = $carimcu->tredmil_test ?? null;
         $this->echocardiography = $carimcu->echocardiography;
         $this->widal_test = $carimcu->widal_test;
         $this->routin_feces = $carimcu->routin_feces;
@@ -726,12 +726,11 @@ class Mcu extends Component
                     [
                         'status' => 'required',
                         'tgl_verifikasi' => 'required',
-                        'upload_hasil_mcu' => 'file|mimes:jpg,png,jpeg,pdf|max:10240',
+                        'upload_hasil_mcu' => 'nullable|mimes:jpg,png,jpeg,pdf|max:10240',
                     ],
                     [
                         'status.required' => 'Status harus diisi.',
                         'tgl_verifikasi.required' => 'Tanggal Verifikasi harus diisi.',
-                        'upload_hasil_mcu.file' => 'File harus berupa file.',
                         'upload_hasil_mcu.mimes' => 'Format file harus jpg, png, jpeg, pdf.',
                         'upload_hasil_mcu.max' => 'Ukuran file maksimal 10MB.',
                     ]
@@ -873,7 +872,7 @@ class Mcu extends Component
                 'rontgen' => $this->rontgen,
                 'audiometri' => $this->audiometri,
                 'spirometri' => $this->spirometri,
-                'tredmil_test' => $this->tredmil_test,
+                'tredmil_test' => $this->tredmil_test ?? null,
                 'widal_test' => $this->widal_test,
                 'echocardiography' => $this->echocardiography,
                 'routin_feces' => $this->routin_feces,
