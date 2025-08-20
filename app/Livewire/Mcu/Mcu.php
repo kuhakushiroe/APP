@@ -388,7 +388,8 @@ class Mcu extends Component
             } else {
                 $pesanText = "📢 *MIFA-NOTIF - Pengajuan MCU*\n\n*$infoKaryawan*\n Status File MCU: *Ditolak - $catatan*";
             }
-            $nomorGabungan = array_merge($info['nomorAdmins'], $info['nomorParamedik']);
+            //$nomorGabungan = array_merge($info['nomorAdmins'], $info['nomorParamedik']);
+            $nomorGabungan = array_merge($info['nomorAdmins']);
             $token = $info['token'];
             $namaUser = $info['nama'];
             dispatch(new SendNotifMcu($pesanText, $nomorGabungan, $token, $namaUser));
