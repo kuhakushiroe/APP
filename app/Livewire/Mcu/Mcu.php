@@ -187,7 +187,7 @@ class Mcu extends Component
 
             // Kirim notifikasi tiap form
             $infoKaryawan = getInfoKaryawanByNrp($form['nrp']);
-            $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n*$infoKaryawan*";
+            $pesanText = "📢 *MIFA-NOTIF - Pengajuan MCU*\n\n*$infoKaryawan*";
             dispatch(new SendNotifMcu($pesanText, $nomorGabungan, $token, $namaUser));
         }
 
@@ -307,7 +307,7 @@ class Mcu extends Component
                     //'tgl_verifikasi' => $this->tgl_verifikasi, // Store the file path, not the file object
                 ]
             );
-            $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n*Upload File Revisi*";
+            $pesanText = "📢 *MIFA-NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n*Upload File Revisi*";
         } else {
             ModelsMcu::updateOrCreate(
                 ['id' => $this->id_mcu], // Assuming id_mcu is the primary key
@@ -323,7 +323,7 @@ class Mcu extends Component
                     //'tgl_verifikasi' => $this->tgl_verifikasi, // Store the file path, not the file object
                 ]
             );
-            $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*";
+            $pesanText = "📢 *MIFA-NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*";
         }
         $info = getUserInfo(); // ambil data user saat dispatch, di konteks request HTTP (user pasti ada)
         $nomorGabungan = array_merge($info['nomorAdmins'], $info['nomorParamedik']);
@@ -384,9 +384,9 @@ class Mcu extends Component
 
             $info = getUserInfo(); // ambil data user saat dispatch, di konteks request HTTP (user pasti ada)
             if ($status == 1) {
-                $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n*$infoKaryawan*\n Status File MCU: *Diterima* Lanjut Proses Dokter";
+                $pesanText = "📢 *MIFA-NOTIF - Pengajuan MCU*\n\n*$infoKaryawan*\n Status File MCU: *Diterima* Lanjut Proses Dokter";
             } else {
-                $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n*$infoKaryawan*\n Status File MCU: *Ditolak - $catatan*";
+                $pesanText = "📢 *MIFA-NOTIF - Pengajuan MCU*\n\n*$infoKaryawan*\n Status File MCU: *Ditolak - $catatan*";
             }
             $nomorGabungan = array_merge($info['nomorAdmins'], $info['nomorParamedik']);
             $token = $info['token'];
@@ -586,7 +586,7 @@ class Mcu extends Component
         $info = getUserInfo(); // ambil data user saat dispatch, di konteks request HTTP (user pasti ada)
         $infoKaryawan = getInfoKaryawanByNrp($this->nrp);
 
-        $pesanText = "📢 *MIFA-TEST NOTIF - Follow Up MCU*\n\n\n*$infoKaryawan*\n";
+        $pesanText = "📢 *MIFA-NOTIF - Follow Up MCU*\n\n\n*$infoKaryawan*\n";
         $nomorGabungan = array_merge($info['nomorAdmins'], $info['nomorParamedik']);
         $token = $info['token'];
         $namaUser = $info['nama'];
@@ -712,7 +712,7 @@ class Mcu extends Component
                         'paramedik_catatan.required' => 'Catatan harus diisi.',
                     ]
                 );
-                $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n Inputan data MCU: *ditolak* \nKeterangan: *$this->paramedik_catatan*\n";
+                $pesanText = "📢 *MIFA-NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n Inputan data MCU: *ditolak* \nKeterangan: *$this->paramedik_catatan*\n";
 
                 $mcu->update([
                     'tgl_verifikasi' => $this->tgl_verifikasi,
@@ -777,7 +777,7 @@ class Mcu extends Component
                             'status_' => 'close',
                         ]);
                     }
-                    $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n Hasil MCU: *$this->status*\n";
+                    $pesanText = "📢 *MIFA-NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n Hasil MCU: *$this->status*\n";
                 } else {
                     if (empty($mcu->sub_id)) {
                         $mcu->update([
@@ -792,7 +792,7 @@ class Mcu extends Component
                             'paramedik_catatan' => $this->paramedik_catatan,
                             'upload_hasil_mcu' => $filePath
                         ]);
-                        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n Hasil MCU: *$this->status*\n";
+                        $pesanText = "📢 *MIFA-NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n Hasil MCU: *$this->status*\n";
                     } else {
                         $mcu->update([
                             'no_dokumen' => $this->no_dokumen,
@@ -806,7 +806,7 @@ class Mcu extends Component
                             'paramedik_catatan' => $this->paramedik_catatan,
                             'upload_hasil_mcu' => $filePath
                         ]);
-                        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n Hasil MCU: *$this->status*\n";
+                        $pesanText = "📢 *MIFA-NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n Hasil MCU: *$this->status*\n";
                     }
                     if ($indukmcu) {
                         $indukmcu->update([
@@ -826,9 +826,9 @@ class Mcu extends Component
                 ]
             );
             if (empty($mcu->paramedik_catatan)) {
-                $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n *Paramedik Input Hasil MCU* \n";
+                $pesanText = "📢 *MIFA-NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n *Paramedik Input Hasil MCU* \n";
             } else {
-                $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n *Paramedik Input Ulang Hasil MCU*\n";
+                $pesanText = "📢 *MIFA-NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n *Paramedik Input Ulang Hasil MCU*\n";
             }
 
             $mcu->update([

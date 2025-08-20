@@ -143,7 +143,7 @@ class Kimper extends Component
         ]);
 
         $infoKaryawan = getInfoKaryawanByNrp($pengajuan->nrp);
-        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan Kimper*\n\n\n*Versatility Di Proses*\n\n\n$infoKaryawan\n\n\n";
+        $pesanText = "📢 *MIFA-NOTIF - Pengajuan Kimper*\n\n\n*Versatility Di Proses*\n\n\n$infoKaryawan\n\n\n";
         // 3. Update data pengajuan dengan path file
 
         //function Proses kirim pesan
@@ -441,7 +441,7 @@ class Kimper extends Component
         // 3. Update data pengajuan dengan path file
 
         $infoKaryawan = getInfoKaryawanByNrp($this->nrp);
-        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan Kimper*\n\n\n*$this->jenis_pengajuan_kimper*\n\n\n$infoKaryawan\n\n\n";
+        $pesanText = "📢 *MIFA-NOTIF - Pengajuan Kimper*\n\n\n*$this->jenis_pengajuan_kimper*\n\n\n$infoKaryawan\n\n\n";
 
         // 3. Update data pengajuan dengan path file
 
@@ -507,7 +507,7 @@ class Kimper extends Component
         //function Proses kirim pesan
         $info = getUserInfo();
 
-        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan Kimper*\n\n";
+        $pesanText = "📢 *MIFA-NOTIF - Pengajuan Kimper*\n\n";
         $pesanText .= "*Jenis Pengajuan: *\n$pengajuan->jenis_pengajuan_kimper\n\n";
         $pesanText .= "*Info Karyawan:*\n$infoKaryawan\n\n";
 
@@ -710,7 +710,7 @@ class Kimper extends Component
         //function Proses kirim pesan
         $info = getUserInfo();
 
-        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan Kimper*\n\n";
+        $pesanText = "📢 *MIFA-NOTIF - Pengajuan Kimper*\n\n";
         $pesanText .= "*Jenis Pengajuan: *\n$pengajuan->jenis_pengajuan_kimper\n\n";
         $pesanText .= "*Info Karyawan:*\n$infoKaryawan\n\n";
 
@@ -856,7 +856,7 @@ class Kimper extends Component
         $pengajuan->update($data);
 
         $infoKaryawan = getInfoKaryawanByNrp($nrp);
-        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan Kimper*\n\n\n*Berkas Sudah Di Upload Ulang*\n\n\n$infoKaryawan\n\n\n";
+        $pesanText = "📢 *MIFA-NOTIF - Pengajuan Kimper*\n\n\n*Berkas Sudah Di Upload Ulang*\n\n\n$infoKaryawan\n\n\n";
         // 3. Update data pengajuan dengan path file
 
         //function Proses kirim pesan
@@ -905,7 +905,7 @@ class Kimper extends Component
         ]);
 
         $infoKaryawan = getInfoKaryawanByNrp($pengajuan->nrp);
-        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan Kimper*\n\n\n*Lanjut Proses Cetak*\n\n\n$infoKaryawan\n\n\n";
+        $pesanText = "📢 *MIFA-NOTIF - Pengajuan Kimper*\n\n\n*Lanjut Proses Cetak*\n\n\n$infoKaryawan\n\n\n";
         $info = getUserInfo();
 
         $nomorGabungan = array_merge($info['nomorAdmins']);
@@ -937,7 +937,7 @@ class Kimper extends Component
         ]);
 
         $infoKaryawan = getInfoKaryawanByNrp($caripengajuan->nrp);
-        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan Kimper*\n\n\n*Kartu Kimper Telah Tercetak*\n\n\n$infoKaryawan\n\n\n";
+        $pesanText = "📢 *MIFA-NOTIF - Pengajuan Kimper*\n\n\n*Kartu Kimper Telah Tercetak*\n\n\n$infoKaryawan\n\n\n";
         $info = getUserInfo();
 
 

@@ -191,7 +191,7 @@ class Id extends Component
         }
 
         $infoKaryawan = getInfoKaryawanByNrp($this->nrp);
-        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan ID*\n\n\n*$this->jenis_pengajuan_id*\n\n\n$infoKaryawan\n\n\n";
+        $pesanText = "📢 *MIFA-NOTIF - Pengajuan ID*\n\n\n*$this->jenis_pengajuan_id*\n\n\n$infoKaryawan\n\n\n";
         // 3. Update data pengajuan dengan path file
 
         $this->reset();
@@ -322,7 +322,7 @@ class Id extends Component
         $pengajuan->update($data);
 
         $infoKaryawan = getInfoKaryawanByNrp($nrp);
-        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan ID*\n\n\n*Berkas Sudah Di Upload Ulang*\n\n\n$infoKaryawan\n\n\n";
+        $pesanText = "📢 *MIFA-NOTIF - Pengajuan ID*\n\n\n*Berkas Sudah Di Upload Ulang*\n\n\n$infoKaryawan\n\n\n";
         // 3. Update data pengajuan dengan path file
 
         //function Proses kirim pesan
@@ -383,13 +383,13 @@ class Id extends Component
         ]);
 
         $infoKaryawan = getInfoKaryawanByNrp($pengajuan->nrp);
-        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan ID*\n\n\n*$pengajuan->jenis_pengajuan_id*\n\n\n$infoKaryawan\n\n\n";
+        $pesanText = "📢 *MIFA-NOTIF - Pengajuan ID*\n\n\n*$pengajuan->jenis_pengajuan_id*\n\n\n$infoKaryawan\n\n\n";
         // 3. Update data pengajuan dengan path file
 
         //function Proses kirim pesan
         $info = getUserInfo();
 
-        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan ID*\n\n";
+        $pesanText = "📢 *MIFA-NOTIF - Pengajuan ID*\n\n";
         $pesanText .= "*Jenis Pengajuan: *\n$pengajuan->jenis_pengajuan_id\n\n";
         $pesanText .= "*Info Karyawan:*\n$infoKaryawan\n\n";
 
@@ -471,7 +471,7 @@ class Id extends Component
         ]);
 
         $infoKaryawan = getInfoKaryawanByNrp($pengajuan->nrp);
-        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan ID*\n\n\n*Lanjut Proses Cetak*\n\n\n$infoKaryawan\n\n\n";
+        $pesanText = "📢 *MIFA-NOTIF - Pengajuan ID*\n\n\n*Lanjut Proses Cetak*\n\n\n$infoKaryawan\n\n\n";
         //$info = getUserInfo();
 
         $info = getUserInfo(); // ambil data user saat dispatch, di konteks request HTTP (user pasti ada)
@@ -506,7 +506,7 @@ class Id extends Component
             'status_pengajuan' => '2',
         ]);
         $infoKaryawan = getInfoKaryawanByNrp($caripengajuan->nrp);
-        $pesanText = "📢 *MIFA-TEST NOTIF - Pengajuan ID*\n\n\n*Kartu ID Telah Tercetak*\n\n\n$infoKaryawan\n\n\n";
+        $pesanText = "📢 *MIFA-NOTIF - Pengajuan ID*\n\n\n*Kartu ID Telah Tercetak*\n\n\n$infoKaryawan\n\n\n";
         $info = getUserInfo();
 
         //$info = getUserInfo(); // ambil data user saat dispatch, di konteks request HTTP (user pasti ada)
