@@ -105,7 +105,7 @@ class Perusahaan extends Component
     }
     public function render()
     {
-        $perusahaan = ModelsPerusahaan::withTrashed()->paginate(10);
+        $perusahaan = ModelsPerusahaan::withTrashed()->where('nama_perusahaan', 'like', '%' . $this->search . '%')->paginate(10);
         return view('livewire.perusahaan.perusahaan', compact('perusahaan'));
     }
 }

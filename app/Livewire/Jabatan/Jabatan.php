@@ -29,7 +29,7 @@ class Jabatan extends Component
     }
     public function edit($id)
     {
-        $jabatan = ModelsDepartments::find($id);
+        $jabatan = ModelsJabatan::find($id);
         $this->id_jabatan = $jabatan->id;
         $this->nama_jabatan = $jabatan->nama_jabatan;
         $this->keterangan_jabatan = $jabatan->keterangan_jabatan;
@@ -104,7 +104,7 @@ class Jabatan extends Component
     }
     public function render()
     {
-        $jabatan = ModelsJabatan::withTrashed()->paginate(10);
+        $jabatan = ModelsJabatan::withTrashed()->where('nama_jabatan', 'like', '%' . $this->search . '%')->paginate(10);
         return view('livewire.jabatan.jabatan', compact('jabatan'));
     }
 }
