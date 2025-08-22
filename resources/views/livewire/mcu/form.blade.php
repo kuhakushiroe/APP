@@ -53,9 +53,10 @@
                                 class="form-control form-control-sm @error('jenis_pengajuan_mcu') is-invalid @enderror"
                                 wire:model="jenis_pengajuan_mcu" placeholder="Keterangan Perusahaan">
                                 <option value="">Pilih Jenis Pengajuan MCU</option>
-                                <option value="Pre Employeed MCU">Pre Employeed MCU</option>
-                                <option value="Annual MCU">Annual MCU</option>
-                                <option value="MCU Khusus">MCU Khusus</option>
+                                <option value="Pre Employment">Pre Employment</option>
+                                <option value="Annual">Annual</option>
+                                <option value="Temporary">Temporary</option>
+                                <option value="Khusus">Khusus</option>
                                 <option value="Exit MCU">Exit MCU</option>
                             </select>
                             @error('jenis_pengajuan_mcu')

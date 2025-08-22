@@ -21,9 +21,10 @@
                                     <select class="form-control form-control-sm"
                                         wire:model="forms.{{ $index }}.jenis_pengajuan_mcu">
                                         <option value="">Pilih</option>
-                                        <option value="Pre Employeed MCU">Pre Employeed MCU</option>
-                                        <option value="Annual MCU">Annual MCU</option>
-                                        <option value="MCU Khusus">MCU Khusus</option>
+                                        <option value="Pre Employment">Pre Employment</option>
+                                        <option value="Annual">Annual</option>
+                                        <option value="Temporary">Temporary</option>
+                                        <option value="Khusus">Khusus</option>
                                         <option value="Exit MCU">Exit MCU</option>
                                     </select>
                                     @error("forms.$index.jenis_pengajuan_mcu")

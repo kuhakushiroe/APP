@@ -61,11 +61,11 @@
         <table width="100%">
             <tr>
                 <td width="25%">
-                    MCU Pre-Employment
+                    Pre-Employment
                 </td>
                 <td>
                     <p style="font-family: DejaVu Sans, sans-serif;">
-                        @if ($query->jenis_pengajuan_mcu === 'Pre Employeed MCU')
+                        @if ($query->jenis_pengajuan_mcu === 'Pre Employment')
                             &#9746;
                         @else
                             &#9744;
@@ -73,11 +73,23 @@
                     </p>
                 </td>
                 <td width="20%">
-                    MCU Khusus
+                    Khusus
                 </td>
                 <td>
                     <p style="font-family: DejaVu Sans, sans-serif;">
-                        @if ($query->jenis_pengajuan_mcu === 'MCU Khusus')
+                        @if ($query->jenis_pengajuan_mcu === 'Khusus')
+                            &#9746;
+                        @else
+                            &#9744;
+                        @endif
+                    </p>
+                </td>
+                <td width="20%">
+                    Temporary
+                </td>
+                <td>
+                    <p style="font-family: DejaVu Sans, sans-serif;">
+                        @if ($query->jenis_pengajuan_mcu === 'Temporary')
                             &#9746;
                         @else
                             &#9744;
@@ -91,7 +103,7 @@
                 </td>
                 <td>
                     <p style="font-family: DejaVu Sans, sans-serif;">
-                        @if ($query->jenis_pengajuan_mcu === 'MCU Exit')
+                        @if ($query->jenis_pengajuan_mcu === 'Exit MCU')
                             &#9746;
                         @else
                             &#9744;
@@ -99,11 +111,11 @@
                     </p>
                 </td>
                 <td>
-                    MCU Tahunan
+                    Annual
                 </td>
                 <td>
                     <p style="font-family: DejaVu Sans, sans-serif;">
-                        @if ($query->jenis_pengajuan_mcu === 'Annual MCU')
+                        @if ($query->jenis_pengajuan_mcu === 'Annual')
                             &#9746;
                         @else
                             &#9744;

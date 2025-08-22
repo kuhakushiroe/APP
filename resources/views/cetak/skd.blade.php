@@ -71,20 +71,32 @@
                 <td>:</td>
                 <td>
                     <p style="font-family: DejaVu Sans, sans-serif;">
-                        Pre Employed
-                        @if ($query->jenis_pengajuan_mcu === 'Pre Employeed MCU')
+                        Pre Employment
+                        @if ($query->jenis_pengajuan_mcu === 'Pre Employment')
                             &#9746;
                         @else
                             &#9744;
                         @endif
-                        Tahunan
-                        @if ($query->jenis_pengajuan_mcu === 'Annual MCU')
+                        Annual
+                        @if ($query->jenis_pengajuan_mcu === 'Annual')
+                            &#9746;
+                        @else
+                            &#9744;
+                        @endif
+                        Temporary
+                        @if ($query->jenis_pengajuan_mcu === 'Temporary')
                             &#9746;
                         @else
                             &#9744;
                         @endif
                         Khusus
-                        @if ($query->jenis_pengajuan_mcu === 'MCU Khusus')
+                        @if ($query->jenis_pengajuan_mcu === 'Khusus')
+                            &#9746;
+                        @else
+                            &#9744;
+                        @endif
+                        Exit MCU
+                        @if ($query->jenis_pengajuan_mcu === 'Exit MCU')
                             &#9746;
                         @else
                             &#9744;

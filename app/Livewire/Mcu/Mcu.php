@@ -4,6 +4,7 @@ namespace App\Livewire\Mcu;
 
 use App\Exports\mcuExport;
 use App\Jobs\SendNotifMcu;
+use App\Models\FollowupMcu;
 use App\Models\Karyawan;
 use App\Models\Mcu as ModelsMcu;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -34,6 +35,9 @@ class Mcu extends Component
     public $no_dokumen, $status = NULL, $keterangan_mcu, $saran_mcu, $tgl_verifikasi, $exp_mcu;
     public $riwayat_rokok, $BB, $TB, $LP, $BMI, $Laseq, $reqtal_touche, $sistol, $diastol, $OD_jauh, $OS_jauh, $OD_dekat, $OS_dekat, $butawarna, $gdp, $hba1c, $gd_2_jpp, $ureum, $creatine, $asamurat, $sgot, $sgpt, $hbsag, $anti_hbs, $kolesterol, $hdl, $ldl, $tg, $darah_rutin, $napza, $urin, $ekg, $rontgen, $audiometri, $spirometri, $tredmil_test, $echocardiography, $widal_test, $routin_feces, $kultur_feces;
     public $kesadaran, $epilepsi;
+    public $followups = [
+        ['keterangan' => '', 'saran' => '']
+    ];
     public $upload_hasil_mcu;
     public $caridatakaryawan = [];
     public $carikaryawan = [];
@@ -43,6 +47,16 @@ class Mcu extends Component
 
 
     #[Title('MCU')]
+    public function addFollowup()
+    {
+        $this->followups[] = ['keterangan' => '', 'saran' => ''];
+    }
+
+    public function removeFollowup($index)
+    {
+        unset($this->followups[$index]);
+        $this->followups = array_values($this->followups); // reset index array
+    }
     public function updatedNrp($value)
     {
         $caridatakaryawan = Karyawan::where('nrp', $value)
@@ -638,7 +652,7 @@ class Mcu extends Component
         $this->no_dokumen = $carimcu->no_dokumen;
         $this->tgl_mcu = $carimcu->tgl_mcu;
         $this->nama = $carimcu->nama;
-        $this->gol_darah = $carimcu->mcuGolDarah;
+        $this->gol_darah = $carimcu->mcuGolDarah ?? null;
         $this->file_mcu = $carimcu->file_mcu;
         $this->status = $carimcu->mcuStatus;
         $this->id_mcu = $id_mcu;
@@ -780,6 +794,15 @@ class Mcu extends Component
                     }
                     $pesanText = "📢 *MIFA-NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n Hasil MCU: *$this->status*\n";
                 } else {
+                    if ($this->status == 'FOLLOW UP') {
+                        foreach ($this->followups as $item) {
+                            FollowupMcu::create([
+                                'id_mcu'              => $this->id_mcu,
+                                'keterangan_followup' => $item['keterangan'],
+                                'saran_followup'      => $item['saran'],
+                            ]);
+                        }
+                    }
                     if (empty($mcu->sub_id)) {
                         $mcu->update([
                             'no_dokumen' => $this->no_dokumen,

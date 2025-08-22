@@ -177,7 +177,7 @@
                             <label for="perusahaan">Perusahaan</label>
                             <select class="form-control form-control-sm @error('perusahaan') is-invalid @enderror"
                                 wire:model="perusahaan">
-                                <option value="">Pilih Jabatan</option>
+                                <option value="">Pilih Perusahaan</option>
                                 @foreach ($perusahaans as $dataperusahaan)
                                     <option value="{{ $dataperusahaan->nama_perusahaan }}">
                                         {{ $dataperusahaan->nama_perusahaan }}

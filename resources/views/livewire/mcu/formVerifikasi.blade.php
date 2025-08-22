@@ -592,12 +592,13 @@
                                     <label for="tredmil_test">Treadmill Test</label>
                                     <select
                                         class="form-control form-control-sm @error('tredmil_test') is-invalid @enderror
-                                        @if ($tredmil_test === 'Hipertensif Positif') border-danger text-danger @else border-success text-success @endif"
+                                        @if ($tredmil_test === 'Positive Iskemik Respon') border-danger text-danger @else border-success text-success @endif"
                                         wire:model.live="tredmil_test"
                                         placeholder="Treadmill Test"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
-                                        <option value="">Pilih Treadmill Test</option>
-                                        <option value="Hipertensif Positif">Hipertensif Positif</option>
-                                        <option value="Hipertensif Negatif">Hipertensif Negatif</option>
+                                        <option value="">Pilih Hasil</option>
+                                        <option value="Normal">Normal</option>
+                                        <option value="Normal Iskemik Respon">Normal Iskemik Respon</option>
+                                        <option value="Positive Iskemik Respon">Positive Iskemik Respon</option>
                                     </select>
                                     @error('tredmil_test')
                                         <span class="invalid-feedback"
@@ -607,10 +608,15 @@
 
                                 <div class="col-sm-12">
                                     <label for="echocardiography">Echocardiography</label>
-                                    <input type="text"
-                                        class="form-control form-control-sm @error('echocardiography') is-invalid @enderror"
+                                    <select
+                                        class="form-control form-control-sm @error('echocardiography') is-invalid @enderror
+                                        @if ($echocardiography === 'Abnormal') border-danger text-danger @else border-success text-success @endif"
                                         wire:model.live="echocardiography"
-                                        placeholder="Echocardiography"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
+                                        placeholder="Treadmill Test"@if (auth()->user()->subrole === 'verifikator') readonly @endif>
+                                        <option value="">Pilih Hasil</option>
+                                        <option value="Normal">Normal</option>
+                                        <option value="Abnormal">Abnormal</option>
+                                    </select>
                                     @error('echocardiography')
                                         <span class="invalid-feedback"
                                             role="alert"><strong>{{ $message }}</strong></span>
@@ -765,6 +771,34 @@
                                             role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
                                 </div>
+                                @if ($status == 'FOLLOW UP')
+                                    @foreach ($followups as $index => $item)
+                                        <div class="col-md-12 mb-2">
+                                            <label>Keterangan Follow Up {{ $index + 1 }}:</label>
+                                            <textarea class="form-control form-control-sm @error("followups.$index.keterangan") is-invalid @enderror"
+                                                wire:model.live="followups.{{ $index }}.keterangan"></textarea>
+                                            @error("followups.$index.keterangan")
+                                                <span class="invalid-feedback">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+
+                                        <div class="col-md-12 mb-2">
+                                            <label>Saran & Tindakan {{ $index + 1 }}:</label>
+                                            <textarea class="form-control form-control-sm @error("followups.$index.saran") is-invalid @enderror"
+                                                wire:model.live="followups.{{ $index }}.saran"></textarea>
+                                            @error("followups.$index.saran")
+                                                <span class="invalid-feedback">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+
+                                        <button type="button" class="btn btn-danger btn-sm mb-3"
+                                            wire:click="removeFollowup({{ $index }})">Hapus</button>
+                                        <hr>
+                                    @endforeach
+
+                                    <button type="button" class="btn btn-success btn-sm" wire:click="addFollowup">+
+                                        Tambah Follow Up</button>
+                                @endif
                                 @if ($status)
                                     <div class="col-sm">
                                         <label for="exp_mcu">Exp MCU</label>
@@ -776,23 +810,25 @@
                                                 role="alert"><strong>{{ $message }}</strong></span>
                                         @enderror
                                     </div>
-                                    <div class="col-md-12">
-                                        <label for="keterangan_mcu">Keterangan / Hasil / Catatan / Temuan:</label>
-                                        <textarea class="form-control form-control-sm @error('keterangan_mcu') is-invalid @enderror"
-                                            wire:model.live="keterangan_mcu"></textarea>
-                                        @error('keterangan_mcu')
-                                            <span class="invalid-feedback"
-                                                role="alert"><strong>{{ $message }}</strong></span>
-                                        @enderror
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label for="saran_mcu">Saran & tindakan yang harus dilakukan:</label>
-                                        <textarea class="form-control form-control-sm @error('saran_mcu') is-invalid @enderror" wire:model.live="saran_mcu"></textarea>
-                                        @error('saran_mcu')
-                                            <span class="invalid-feedback"
-                                                role="alert"><strong>{{ $message }}</strong></span>
-                                        @enderror
-                                    </div>
+                                    @if ($status == 'FIT')
+                                        <div class="col-md-12">
+                                            <label for="keterangan_mcu">Keterangan / Hasil / Catatan / Temuan:</label>
+                                            <textarea class="form-control form-control-sm @error('keterangan_mcu') is-invalid @enderror"
+                                                wire:model.live="keterangan_mcu"></textarea>
+                                            @error('keterangan_mcu')
+                                                <span class="invalid-feedback"
+                                                    role="alert"><strong>{{ $message }}</strong></span>
+                                            @enderror
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label for="saran_mcu">Saran & tindakan yang harus dilakukan:</label>
+                                            <textarea class="form-control form-control-sm @error('saran_mcu') is-invalid @enderror" wire:model.live="saran_mcu"></textarea>
+                                            @error('saran_mcu')
+                                                <span class="invalid-feedback"
+                                                    role="alert"><strong>{{ $message }}</strong></span>
+                                            @enderror
+                                        </div>
+                                    @endif
                                     <div class="col-md-12">
                                         <label for="upload_hasil_mcu">Upload Hasil MCU / Temuan:</label>
                                         <input type="file"
