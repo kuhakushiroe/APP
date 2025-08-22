@@ -56,7 +56,9 @@
                                 <option value="Pre Employment">Pre Employment</option>
                                 <option value="Annual">Annual</option>
                                 <option value="Temporary">Temporary</option>
-                                <option value="Khusus">Khusus</option>
+                                <option value="Khusus" @if (in_array($jabatan, ['Paramedic', 'Wellder', 'Pramusaji', 'ERT', 'FODP', 'FMDP', 'PLDP'])) selected @endif>
+                                    Khusus
+                                </option>
                                 <option value="Exit MCU">Exit MCU</option>
                             </select>
                             @error('jenis_pengajuan_mcu')

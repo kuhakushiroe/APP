@@ -35,6 +35,7 @@ class Mcu extends Component
     public $no_dokumen, $status = NULL, $keterangan_mcu, $saran_mcu, $tgl_verifikasi, $exp_mcu;
     public $riwayat_rokok, $BB, $TB, $LP, $BMI, $Laseq, $reqtal_touche, $sistol, $diastol, $OD_jauh, $OS_jauh, $OD_dekat, $OS_dekat, $butawarna, $gdp, $hba1c, $gd_2_jpp, $ureum, $creatine, $asamurat, $sgot, $sgpt, $hbsag, $anti_hbs, $kolesterol, $hdl, $ldl, $tg, $darah_rutin, $napza, $urin, $ekg, $rontgen, $audiometri, $spirometri, $tredmil_test, $echocardiography, $widal_test, $routin_feces, $kultur_feces;
     public $kesadaran, $epilepsi;
+    public $jabatan;
     public $followups = [
         ['keterangan' => '', 'saran' => '']
     ];
@@ -66,10 +67,12 @@ class Mcu extends Component
             $this->nama = $caridatakaryawan->nama;
             $this->gol_darah = $caridatakaryawan->gol_darah;
             $this->jenis_kelamin = $caridatakaryawan->jenis_kelamin;
+            $this->jabatan = $caridatakaryawan->jabatan;
         } else {
             $this->nama = null;
             $this->gol_darah = null;
-            $this->jenis_kelamin = null; // Reset field if NIK is not found
+            $this->jenis_kelamin = null;
+            $this->jabatan = null; // Reset field if NIK is not found
         }
     }
     public function updatedForms($value, $key)
@@ -86,10 +89,16 @@ class Mcu extends Component
                 $this->forms[$index]['nama'] = $caridatakaryawan->nama;
                 $this->forms[$index]['gol_darah'] = $caridatakaryawan->gol_darah;
                 $this->forms[$index]['jenis_kelamin'] = $caridatakaryawan->jenis_kelamin;
+                // 🔥 cek jabatan untuk jenis pengajuan khusus
+                $khususList = ['Paramedic', 'Wellder', 'Pramusaji', 'ERT', 'FODP', 'FMDP', 'PLDP'];
+                if (in_array($caridatakaryawan->jabatan, $khususList)) {
+                    $this->forms[$index]['jenis_pengajuan_mcu'] = 'Khusus';
+                }
             } else {
                 $this->forms[$index]['nama'] = null;
                 $this->forms[$index]['gol_darah'] = null;
                 $this->forms[$index]['jenis_kelamin'] = null;
+                $this->forms[$index]['jenis_pengajuan_mcu'] = null;
             }
         }
     }
