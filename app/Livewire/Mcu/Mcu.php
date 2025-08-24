@@ -202,7 +202,7 @@ class Mcu extends Component
                 'jenis_pengajuan_mcu' => $form['jenis_pengajuan_mcu'],
                 'proveder' => $form['proveder'],
                 'tgl_mcu' => $form['tgl_mcu'],
-                'gol_darah' => $form['gol_darah'] ?? null,
+                'gol_darah' => $form['gol_darah'] ?: null,
                 'file_mcu' => $filePath,
                 'status_file_mcu' => null,
                 'status' => null,
@@ -323,7 +323,7 @@ class Mcu extends Component
                     'jenis_pengajuan_mcu' => $this->jenis_pengajuan_mcu,
                     'proveder' => $this->proveder,
                     'tgl_mcu' => $this->tgl_mcu,
-                    'gol_darah' => $this->gol_darah ?? null,
+                    'gol_darah' => $this->gol_darah ?: null,
                     'file_mcu' => $filePath,
                     'status_file_mcu' => NULL,
                     'status' => $this->status,
@@ -339,7 +339,7 @@ class Mcu extends Component
                     'jenis_pengajuan_mcu' => $this->jenis_pengajuan_mcu,
                     'proveder' => $this->proveder,
                     'tgl_mcu' => $this->tgl_mcu,
-                    'gol_darah' => $this->gol_darah ?? null,
+                    'gol_darah' => $this->gol_darah ?: null,
                     'file_mcu' => $filePath,
                     'status' => $this->status,
                     'status_file_mcu' => NULL,
@@ -378,8 +378,8 @@ class Mcu extends Component
         ]);
 
         // Ambil data status dan catatan berdasarkan ID MCU
-        $status = $this->status_file_mcu[$id_mcu] ?? null;
-        $catatan = $this->catatan_file_mcu[$id_mcu] ?? null;
+        $status = $this->status_file_mcu[$id_mcu] ?: null;
+        $catatan = $this->catatan_file_mcu[$id_mcu] ?: null;
 
         // Validasi tambahan: jika status adalah "Ditolak", pastikan catatan ada
         if ($status == 0 && empty($catatan)) {
@@ -479,7 +479,7 @@ class Mcu extends Component
         $this->LP = $carimcu->LP;
         $this->BMI = $carimcu->BMI;
         $this->Laseq = $carimcu->Laseq;
-        $this->reqtal_touche = $carimcu->reqtal_touche ?? null;
+        $this->reqtal_touche = $carimcu->reqtal_touche ?: null;
         $this->sistol = $carimcu->sistol;
         $this->diastol = $carimcu->diastol;
         $this->OD_jauh = $carimcu->OD_jauh;
@@ -507,7 +507,7 @@ class Mcu extends Component
         $this->rontgen = $carimcu->rontgen;
         $this->audiometri = $carimcu->audiometri;
         $this->spirometri = $carimcu->spirometri;
-        $this->tredmil_test = $carimcu->tredmil_test ?? null;
+        $this->tredmil_test = $carimcu->tredmil_test ?: null;
         $this->widal_test = $carimcu->widal_test;
         $this->routin_feces = $carimcu->routin_feces;
         $this->kultur_feces = $carimcu->kultur_feces;
@@ -572,7 +572,7 @@ class Mcu extends Component
                 'LP' => $this->LP,
                 'BMI' => $this->BMI,
                 'Laseq' => $this->Laseq,
-                'reqtal_touche' => $this->reqtal_touche ?? null,
+                'reqtal_touche' => $this->reqtal_touche ?: null,
                 'sistol' => $this->sistol,
                 'diastol' => $this->diastol,
                 'OD_jauh' => $this->OD_jauh,
@@ -600,7 +600,7 @@ class Mcu extends Component
                 'rontgen' => $this->rontgen,
                 'audiometri' => $this->audiometri,
                 'spirometri' => $this->spirometri,
-                'tredmil_test' => $this->tredmil_test ?? null,
+                'tredmil_test' => $this->tredmil_test ?: null,
                 'widal_test' => $this->widal_test,
                 'routin_feces' => $this->routin_feces,
                 'kultur_feces' => $this->kultur_feces,
@@ -661,7 +661,7 @@ class Mcu extends Component
         $this->no_dokumen = $carimcu->no_dokumen;
         $this->tgl_mcu = $carimcu->tgl_mcu;
         $this->nama = $carimcu->nama;
-        $this->gol_darah = $carimcu->mcuGolDarah ?? null;
+        $this->gol_darah = $carimcu->mcuGolDarah ?: null;
         $this->file_mcu = $carimcu->file_mcu;
         $this->status = $carimcu->mcuStatus;
         $this->id_mcu = $id_mcu;
@@ -671,7 +671,7 @@ class Mcu extends Component
         $this->LP = $carimcu->LP;
         //$this->BMI = $carimcu->BMI;
         $this->Laseq = $carimcu->Laseq;
-        $this->reqtal_touche = $carimcu->reqtal_touche ?? null;
+        $this->reqtal_touche = $carimcu->reqtal_touche ?: null;
         $this->sistol = $carimcu->sistol;
         $this->diastol = $carimcu->diastol;
         $this->OD_jauh = $carimcu->OD_jauh;
@@ -700,7 +700,7 @@ class Mcu extends Component
         $this->rontgen = $carimcu->rontgen;
         $this->audiometri = $carimcu->audiometri;
         $this->spirometri = $carimcu->spirometri;
-        $this->tredmil_test = $carimcu->tredmil_test ?? null;
+        $this->tredmil_test = $carimcu->tredmil_test ?: null;
         $this->echocardiography = $carimcu->echocardiography;
         $this->widal_test = $carimcu->widal_test;
         $this->routin_feces = $carimcu->routin_feces;
@@ -853,9 +853,11 @@ class Mcu extends Component
             $this->validate(
                 [
                     'no_dokumen' => 'required',
+                    'reqtal_touche' => 'nullable|in:Ditemukan,Tidak Ditemukan',
                 ],
                 [
                     'no_dokumen.required' => 'No Dokumen harus diisi.',
+                    'reqtal_touche.in' => 'Pilihan salah.',
                 ]
             );
             if (empty($mcu->paramedik_catatan)) {
@@ -866,7 +868,7 @@ class Mcu extends Component
 
             $mcu->update([
                 'no_dokumen' => $this->no_dokumen,
-                'gol_darah' => $this->gol_darah ?? NULL,
+                'gol_darah' => $this->gol_darah ?: null,
                 'status_' => 'open',
                 'status' => $this->status,
                 'tgl_verifikasi' => $this->tgl_verifikasi, // Use Laravel's `now()` helper for current date
@@ -877,7 +879,7 @@ class Mcu extends Component
                 'LP' => $this->LP,
                 'BMI' => $this->BMI,
                 'Laseq' => $this->Laseq,
-                'reqtal_touche' => $this->reqtal_touche ?? null,
+                'reqtal_touche' => $this->reqtal_touche ?: null,
                 'sistol' => $this->sistol,
                 'diastol' => $this->diastol,
                 'OD_jauh' => $this->OD_jauh,
@@ -905,7 +907,7 @@ class Mcu extends Component
                 'rontgen' => $this->rontgen,
                 'audiometri' => $this->audiometri,
                 'spirometri' => $this->spirometri,
-                'tredmil_test' => $this->tredmil_test ?? null,
+                'tredmil_test' => $this->tredmil_test ?: null,
                 'widal_test' => $this->widal_test,
                 'echocardiography' => $this->echocardiography,
                 'routin_feces' => $this->routin_feces,
