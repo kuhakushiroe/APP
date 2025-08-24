@@ -922,7 +922,7 @@ class Mcu extends Component
             $updateKaryawan = Karyawan::where('nrp', $nrp)->first();
             $updateKaryawan->update([
                 'jenis_kelamin' => $this->jenis_kelamin,
-                'gol_darah' => $this->gol_darah,
+                'gol_darah' => $this->gol_darah ?: null,
             ]);
             $nomorDokter = array_merge($info['nomorDokter']);
             dispatch(new SendNotifMcu($pesanText, $nomorDokter, $token, $namaUser));
