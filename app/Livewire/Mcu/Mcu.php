@@ -479,7 +479,7 @@ class Mcu extends Component
         $this->LP = $carimcu->LP;
         $this->BMI = $carimcu->BMI;
         $this->Laseq = $carimcu->Laseq;
-        $this->reqtal_touche = $carimcu->reqtal_touche;
+        $this->reqtal_touche = $carimcu->reqtal_touche ?? null;
         $this->sistol = $carimcu->sistol;
         $this->diastol = $carimcu->diastol;
         $this->OD_jauh = $carimcu->OD_jauh;
@@ -572,7 +572,7 @@ class Mcu extends Component
                 'LP' => $this->LP,
                 'BMI' => $this->BMI,
                 'Laseq' => $this->Laseq,
-                'reqtal_touche' => $this->reqtal_touche,
+                'reqtal_touche' => $this->reqtal_touche ?? null,
                 'sistol' => $this->sistol,
                 'diastol' => $this->diastol,
                 'OD_jauh' => $this->OD_jauh,
@@ -671,7 +671,7 @@ class Mcu extends Component
         $this->LP = $carimcu->LP;
         //$this->BMI = $carimcu->BMI;
         $this->Laseq = $carimcu->Laseq;
-        $this->reqtal_touche = $carimcu->reqtal_touche;
+        $this->reqtal_touche = $carimcu->reqtal_touche ?? null;
         $this->sistol = $carimcu->sistol;
         $this->diastol = $carimcu->diastol;
         $this->OD_jauh = $carimcu->OD_jauh;
@@ -866,7 +866,7 @@ class Mcu extends Component
 
             $mcu->update([
                 'no_dokumen' => $this->no_dokumen,
-                'gol_darah' => $this->gol_darah,
+                'gol_darah' => $this->gol_darah ?? NULL,
                 'status_' => 'open',
                 'status' => $this->status,
                 'tgl_verifikasi' => $this->tgl_verifikasi, // Use Laravel's `now()` helper for current date
@@ -877,7 +877,7 @@ class Mcu extends Component
                 'LP' => $this->LP,
                 'BMI' => $this->BMI,
                 'Laseq' => $this->Laseq,
-                'reqtal_touche' => $this->reqtal_touche,
+                'reqtal_touche' => $this->reqtal_touche ?? null,
                 'sistol' => $this->sistol,
                 'diastol' => $this->diastol,
                 'OD_jauh' => $this->OD_jauh,

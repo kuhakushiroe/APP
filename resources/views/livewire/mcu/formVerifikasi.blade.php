@@ -810,7 +810,7 @@
                                                 role="alert"><strong>{{ $message }}</strong></span>
                                         @enderror
                                     </div>
-                                    @if ($status == 'FIT')
+                                    @if ($status !== 'FOLLOW UP')
                                         <div class="col-md-12">
                                             <label for="keterangan_mcu">Keterangan / Hasil / Catatan / Temuan:</label>
                                             <textarea class="form-control form-control-sm @error('keterangan_mcu') is-invalid @enderror"
