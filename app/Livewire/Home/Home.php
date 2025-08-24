@@ -133,7 +133,7 @@ class Home extends Component
         // Ambil data MCU untuk hari ini, dikelompokkan berdasarkan verifikator dan status
         $mcuData = ModelsMcu::select('verifikator', 'status', DB::raw('count(*) as total'))
             ->whereNotNull('verifikator')
-            ->whereDate('tgl_mcu', $today)
+            ->whereDate('tgl_verifikasi', $today)
             ->groupBy('verifikator', 'status')
             ->get()
             ->groupBy('verifikator');
@@ -151,7 +151,7 @@ class Home extends Component
 
                 // Hitung total MCU untuk verifikator ini pada hari ini
                 $jumlahMcu = ModelsMcu::where('verifikator', $verifikator->username)
-                    ->whereDate('tgl_mcu', $today)
+                    ->whereDate('tgl_verifikasi', $today)
                     ->count();
 
                 // Format status counts dengan semua status (termasuk yang 0)
