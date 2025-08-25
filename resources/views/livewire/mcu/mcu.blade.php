@@ -28,16 +28,26 @@
                     @endhasAnyRole
                 @endhasanyrole
             </div>
-            <div class="col-md-4">
-                &nbsp;
+            <div class="col-md-2">
+                <input type="date" class="form-control form-control-sm" wire:model.live="searchtgl_awal">
+            </div>
+            <div class="col-md-2">
+                <input type="date" class="form-control form-control-sm" wire:model.live="searchtgl_akhir">
             </div>
             <div class="col-md-3">
-                <input type="text"class="form-control form-control-sm" placeholder="Search" wire:model.live="search">
+                <input type="text" class="form-control form-control-sm" placeholder="Search"
+                    wire:model.live="search">
             </div>
         </div>
         <div class="row pt-2">
             <div class="col">
                 @forelse ($mcus as $data)
+                    @php
+                        $punyasubid = DB::table('mcu')
+                            ->where('sub_id', $data->id_mcu)
+                            ->latest('id') // urutkan berdasarkan kolom id paling baru
+                            ->first();
+                    @endphp
                     @php
                         // Ambil induk (parent item)
                         $subItems = DB::table('mcu')
@@ -277,7 +287,8 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td colspan="2" class="text-start">{{ $data->jenis_pengajuan_mcu }}
+                                                <td colspan="2" class="text-start">
+                                                    {{ $data->jenis_pengajuan_mcu }}
                                                 </td>
                                                 <td colspan="2">
                                                     @if (!empty($data->mcuStatus))
