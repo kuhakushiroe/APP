@@ -25,8 +25,8 @@ class Mcu extends Component
     use WithPagination, WithoutUrlPagination, WithFileUploads;
 
     public $search = '';
-    public $searchtgl_awal1;
-    public $searchtgl_akhir2;
+    public $searchtgl_awal;
+    public $searchtgl_akhir;
     protected $updatesQueryString = ['search'];
     public $form = false;
     public $form_multi = false;
