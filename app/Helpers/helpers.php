@@ -111,3 +111,21 @@ if (!function_exists('pesan')) {
         return ['success' => true, 'response' => $response];
     }
 }
+class ExcelHelper
+{
+    /**
+     * Ambil value dari kolom excel
+     * - Jika kosong, return null
+     * - Jika ada, bisa langsung strtoupper atau manipulasi lain
+     */
+    public static function getValue($row, $index, $uppercase = false)
+    {
+        if (!isset($row[$index]) || trim($row[$index]) === '') {
+            return null;
+        }
+
+        $value = trim($row[$index]);
+
+        return $uppercase ? strtoupper($value) : $value;
+    }
+}
