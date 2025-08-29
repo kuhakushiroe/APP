@@ -1,6 +1,8 @@
 <div>
     @if ($editform)
         @include('livewire.histori.mcu.form-edit')
+    @elseif ($editformnilai)
+        @include('livewire.histori.mcu.form-editnilai')
     @else
         <div class="row pt-2">
             <div class="col-md-3">
@@ -37,6 +39,12 @@
                                         <button class="btn btn-outline-warning btn-sm"
                                             wire:click="edit({{ $data->id_mcu }})">
                                             <span class="bi bi-pencil"></span> Tanggal
+                                        </button>
+                                    @endif
+                                    @if (Auth()->user()->username === $data->verifikator)
+                                        <button class="btn btn-outline-warning btn-sm"
+                                            wire:click="editnilai({{ $data->id_mcu }})">
+                                            <span class="bi bi-pencil"></span> Nilai
                                         </button>
                                     @endif
                                 @endhasAnyRole

@@ -38,7 +38,9 @@ class BulkProcessKaryawanImport implements ShouldQueue
             $nik = $row[12];
             $bpjs_kesehatan = isset($row[15]) ? (string) trim($row[15]) : null;
             $bpjs_tenagakerja = isset($row[16]) ? (string) trim($row[16]) : null;
-            $status_karyawan = strtoupper($row[102]);
+            $status_karyawan = isset($row[102]) && trim($row[102]) !== ''
+                ? strtoupper($row[102])
+                : null;
             $newKendaraan = [];
             foreach ($this->unitList as $index => $unitName) {
                 if (strtoupper($row[$index] ?? '') === 'F') {
