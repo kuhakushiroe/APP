@@ -216,6 +216,16 @@ class Mcu extends Component
             $infoKaryawan = getInfoKaryawanByNrp($form['nrp']);
             $pesanText = "📢 *MIFA-NOTIF - Pengajuan MCU*\n\n*$infoKaryawan*";
             dispatch(new SendNotifMcu($pesanText, $nomorGabungan, $token, $namaUser));
+            $dept = getInfoKaryawanByNrpDept($form['nrp']);
+            $deptMap = [
+                'HC' => $info['adminHC'],
+                'ENG' => $info['adminENG'],
+                'PRO' => $info['adminPRO'],
+                'PLT' => $info['adminPLT'],
+            ];
+            if (isset($deptMap[$dept])) {
+                dispatch(new SendNotifMcu($pesanText, $deptMap[$dept], $token, $namaUser));
+            }
         }
 
         // Reset seluruh form
@@ -357,6 +367,16 @@ class Mcu extends Component
         $token = $info['token'];
         $namaUser = $info['nama'];
         dispatch(new SendNotifMcu($pesanText, $nomorGabungan, $token, $namaUser));
+        $dept = getInfoKaryawanByNrpDept($this->nrp);
+        $deptMap = [
+            'HC' => $info['adminHC'],
+            'ENG' => $info['adminENG'],
+            'PRO' => $info['adminPRO'],
+            'PLT' => $info['adminPLT'],
+        ];
+        if (isset($deptMap[$dept])) {
+            dispatch(new SendNotifMcu($pesanText, $deptMap[$dept], $token, $namaUser));
+        }
 
         // Reset the form fields after save
 
@@ -490,7 +510,7 @@ class Mcu extends Component
         $this->OS_jauh = $carimcu->OS_jauh;
         $this->OD_dekat = $carimcu->OD_dekat;
         $this->OS_dekat = $carimcu->OS_dekat;
-        $this->butawarna = $carimcu->butawarna;
+        $this->butawarna = $carimcu->butawarna ?: null;
         $this->gdp = $carimcu->gdp;
         $this->gd_2_jpp = $carimcu->gd_2_jpp;
         $this->ureum = $carimcu->ureum;
@@ -583,7 +603,7 @@ class Mcu extends Component
                 'OS_jauh' => $this->OS_jauh,
                 'OD_dekat' => $this->OD_dekat,
                 'OS_dekat' => $this->OS_dekat,
-                'butawarna' => $this->butawarna,
+                'butawarna' => $this->butawarna ?: null,
                 'gdp' => $this->gdp,
                 'gd_2_jpp' => $this->gd_2_jpp,
                 'ureum' => $this->ureum,
@@ -619,6 +639,16 @@ class Mcu extends Component
         $token = $info['token'];
         $namaUser = $info['nama'];
         dispatch(new SendNotifMcu($pesanText, $nomorGabungan, $token, $namaUser));
+        $dept = getInfoKaryawanByNrpDept($this->nrp);
+        $deptMap = [
+            'HC' => $info['adminHC'],
+            'ENG' => $info['adminENG'],
+            'PRO' => $info['adminPRO'],
+            'PLT' => $info['adminPLT'],
+        ];
+        if (isset($deptMap[$dept])) {
+            dispatch(new SendNotifMcu($pesanText, $deptMap[$dept], $token, $namaUser));
+        }
 
         // Reset the form fields after save
         $this->reset();
@@ -682,7 +712,7 @@ class Mcu extends Component
         $this->OS_jauh = $carimcu->OS_jauh;
         $this->OD_dekat = $carimcu->OD_dekat;
         $this->OS_dekat = $carimcu->OS_dekat;
-        $this->butawarna = $carimcu->butawarna;
+        $this->butawarna = $carimcu->butawarna ?: null;
         $this->gdp = $carimcu->gdp;
         $this->gd_2_jpp = $carimcu->gd_2_jpp;
         $this->hba1c = $carimcu->hba1c;
@@ -890,7 +920,7 @@ class Mcu extends Component
                 'OS_jauh' => $this->OS_jauh,
                 'OD_dekat' => $this->OD_dekat,
                 'OS_dekat' => $this->OS_dekat,
-                'butawarna' => $this->butawarna,
+                'butawarna' => $this->butawarna ?: null,
                 'gdp' => $this->gdp,
                 'gd_2_jpp' => $this->gd_2_jpp,
                 'ureum' => $this->ureum,
@@ -933,6 +963,16 @@ class Mcu extends Component
         }
         $nomorAdmin = array_merge($info['nomorAdmins']);
         dispatch(new SendNotifMcu($pesanText, $nomorAdmin, $token, $namaUser));
+        $dept = getInfoKaryawanByNrpDept($nrp);
+        $deptMap = [
+            'HC' => $info['adminHC'],
+            'ENG' => $info['adminENG'],
+            'PRO' => $info['adminPRO'],
+            'PLT' => $info['adminPLT'],
+        ];
+        if (isset($deptMap[$dept])) {
+            dispatch(new SendNotifMcu($pesanText, $deptMap[$dept], $token, $namaUser));
+        }
 
         $jenis = $this->id_mcu ? 'Verifikasi' : 'Tambah';
         $this->dispatch(

@@ -12,6 +12,18 @@ function cekFile($path)
         return $path . "tidak ada";
     }
 }
+if (!function_exists('getInfoKaryawanByNrpDept')) {
+    function getInfoKaryawanByNrpDept($nrp): ?string
+    {
+        $karyawan = Karyawan::where('nrp', $nrp)->first();
+
+        if (!$karyawan) {
+            return null; // atau bisa return 'NRP tidak ditemukan' jika ingin hard fail
+        }
+
+        return "{$karyawan->dept}";
+    }
+}
 if (!function_exists('getInfoKaryawanByNrp')) {
     function getInfoKaryawanByNrp($nrp): ?string
     {
@@ -42,6 +54,18 @@ if (!function_exists('getUserInfo')) {
         return [
             'nama' => $nama,
             'waktu' => $waktu,
+            'adminENG' => [
+                '082276297441'
+            ],
+            'adminPRO' => [
+                '081117049395'
+            ],
+            'adminPLT' => [
+                '081117049394'
+            ],
+            'adminHC' => [
+                '08116890789'
+            ],
             'nomorAdmins' => [
                 '088212543694', //saya
                 //'085954590940', // yazid
