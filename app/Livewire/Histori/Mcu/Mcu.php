@@ -182,6 +182,7 @@ class Mcu extends Component
         $this->reset();
         return;
     }
+
     public function render()
     {
         if (in_array(auth()->user()->role, ['superadmin', 'she', 'dokter'])) {

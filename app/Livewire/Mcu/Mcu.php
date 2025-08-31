@@ -9,6 +9,7 @@ use App\Models\Karyawan;
 use App\Models\Mcu as ModelsMcu;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Container\Attributes\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -19,6 +20,7 @@ use Livewire\WithFileUploads;
 use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpParser\Node\Expr\AssignOp\Mod;
 
 class Mcu extends Component
 {
@@ -47,7 +49,7 @@ class Mcu extends Component
     public $status_file_mcu = [];
     public $catatan_file_mcu = [];
     public $paramedik, $paramedik_status, $paramedik_catatan;
-
+    protected $listeners = ['delete'];
 
     #[Title('MCU')]
     public function addFollowup()
@@ -991,6 +993,65 @@ class Mcu extends Component
         $this->tgl_mcu = date('Y-m-d');
         $this->tgl_verifikasi = date('Y-m-d');
     }
+    public function deleteConfirm($id)
+    {
+        $this->dispatch(
+            'confirm',
+            id: $id
+        );
+    }
+    public function delete(int $id)
+    {
+        $mcu = ModelsMcu::find($id);
+
+        Log::info('Delete MCU triggered', [
+            'clicked_id' => $id,
+            'mcu' => $mcu,
+        ]);
+
+        if ($mcu) {
+            if ($mcu->sub_id) {
+                // Log::info('Data yang diklik adalah anak', [
+                //     'sub_id' => $mcu->sub_id,
+                // ]);
+
+                // yang diklik anak → hapus induknya & semua anak
+                $deletedInduk = ModelsMcu::where('id', $mcu->sub_id)->delete();
+                $deletedAnak = ModelsMcu::where('sub_id', $mcu->sub_id)->delete();
+
+                // Log::info('Delete result (anak case)', [
+                //     'deleted_induk' => $deletedInduk,
+                //     'deleted_anak' => $deletedAnak,
+                // ]);
+            } else {
+                // Log::info('Data yang diklik adalah induk', [
+                //     'id' => $id,
+                // ]);
+
+                // yang diklik induk → hapus induk & semua anak
+                $deletedInduk = ModelsMcu::where('id', $id)->delete();
+                $deletedAnak = ModelsMcu::where('sub_id', $id)->delete();
+
+                // Log::info('Delete result (induk case)', [
+                //     'deleted_induk' => $deletedInduk,
+                //     'deleted_anak' => $deletedAnak,
+                // ]);
+            }
+        } else {
+            Log::warning('MCU tidak ditemukan', ['id' => $id]);
+        }
+
+        $this->dispatch(
+            'alert',
+            type: 'success',
+            title: 'Berhasil',
+            text: 'Berhasil Hapus Data',
+            position: 'center',
+            confirm: true,
+            redirect: '/mcu',
+        );
+    }
+
     public function render()
     {
 

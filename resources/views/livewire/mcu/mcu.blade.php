@@ -66,10 +66,16 @@
                         // Hanya bisa upload jika induk sudah diverifikasi dan semua subitem juga sudah diverifikasi
                         $canUpload = $indukVerified && $allSubVerified;
                     @endphp
-                    <div class="card card-primary card-outline mb-4" wire:poll.5s>
+                    <div class="card card-primary card-outline mb-4" wire:poll.60s>
                         <div class="card-header">
                             <div class="card-title">
                                 {{ $data->nama }}
+                                @if (auth()->user()->role === 'superadmin' || auth()->user()->subrole === 'verifikator')
+                                    <button class="btn btn-outline-danger btn-sm"
+                                        wire:click="deleteConfirm({{ $data->id_mcu }})">
+                                        <span class="bi bi-trash"></span>
+                                    </button>
+                                @endif
                             </div>
                         </div>
                         <div class="card-body">

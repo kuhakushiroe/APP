@@ -25,8 +25,8 @@ window.addEventListener('confirm', (event) => {
     let data = event.detail;
     Swal.fire({
         title: "Are you sure?",
-        // text: `You won't be able to revert this! Item ID: ${data.id}`,
-        text: `You won't be able to revert this!`,
+        text: `hapus Item ID: ${data.id}`,
+        //text: `Hapus data ini?`,
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
