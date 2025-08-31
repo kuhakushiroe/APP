@@ -37,11 +37,13 @@ class Kimper extends Component
     public $id_pengajuan_kimper, $id_versatility, $klasifikasi;
     public $form_lpo = 1;
     public $type_lpo = [];
+    public $type_point = [];
     public $upload_lpo = [];
     public $instrumen_panel = [];
     public $safety_operasi = [];
     public $metode_operasi = [];
     public $perawatan = [];
+    public $main_power = [];
     public $nilai_total = [];
     public $status_lpo = [];
     public $catatan_lpo = []; // array tipe yang dipilih untuk tiap form
@@ -211,20 +213,20 @@ class Kimper extends Component
     public function updated($propertyName)
     {
         foreach (range(1, $this->form_lpo) as $i) {
+            $power = (float) ($this->main_power[$i] ?? 0);
             $panel = (float) ($this->instrumen_panel[$i] ?? 0);
             $safety = (float) ($this->safety_operasi[$i] ?? 0);
             $metode = (float) ($this->metode_operasi[$i] ?? 0);
             $perawatan = (float) ($this->perawatan[$i] ?? 0);
-
-            $this->nilai_total[$i] = $panel + $safety + $metode + $perawatan;
+            $this->nilai_total[$i] = $panel + $safety + $metode + $perawatan + $power;
         }
         if ($this->id_pengajuan) {
+            $power = (float) ($this->main_power[$i] ?? 0);
             $panel = (float) ($this->edit_instrumen_panel ?? 0);
             $safety = (float) ($this->edit_safety_operasi ?? 0);
             $metode = (float) ($this->edit_metode_operasi ?? 0);
             $perawatan = (float) ($this->edit_perawatan ?? 0);
-
-            $this->edit_nilai_total = $panel + $safety + $metode + $perawatan;
+            $this->edit_nilai_total = $panel + $safety + $metode + $perawatan + $power;
         }
     }
     public function store()
@@ -235,36 +237,38 @@ class Kimper extends Component
 
             for ($i = 1; $i <= $this->form_lpo; $i++) {
                 $rules["type_lpo.$i"] = 'required';
-                $rules["upload_lpo.$i"] = 'required|file|mimes:pdf,jpg,png|max:2048';
-                $rules["instrumen_panel.$i"] = 'required|numeric|min:0|max:25';
-                $rules["safety_operasi.$i"] = 'required|numeric|min:0|max:25';
-                $rules["metode_operasi.$i"] = 'required|numeric|min:0|max:25';
-                $rules["perawatan.$i"] = 'required|numeric|min:0|max:25';
+                $rules["type_point.$i"] = 'required';
+                $rules["upload_lpo.$i"] = 'required|file|mimes:pdf,jpg,png,xls,xlsx|max:2048';
+                $rules["main_power.$i"] = 'required|numeric|min:0';
+                $rules["instrumen_panel.$i"] = 'required|numeric|min:0';
+                $rules["safety_operasi.$i"] = 'required|numeric|min:0';
+                $rules["metode_operasi.$i"] = 'required|numeric|min:0';
+                $rules["perawatan.$i"] = 'required|numeric|min:0';
 
                 $messages["type_lpo.$i.required"] = "Type LPO [$i] wajib diisi.";
                 $messages["upload_lpo.$i.required"] = "File LPO [$i] wajib diunggah.";
                 $messages["upload_lpo.$i.mimes"] = "File LPO [$i] harus berformat PDF, JPG, atau PNG.";
                 $messages["upload_lpo.$i.max"] = "Ukuran file LPO [$i] maksimal 2MB.";
 
+                $messages["main_power.$i.required"] = "Nilai Main Power [$i] wajib diisi.";
+                $messages["main_power.$i.numeric"] = "Nilai Main Power [$i] harus berupa angka.";
+                $messages["main_power.$i.min"] = "Nilai Main Power [$i] minimal 0.";
+
                 $messages["instrumen_panel.$i.required"] = "Nilai Instrumen Panel [$i] wajib diisi.";
                 $messages["instrumen_panel.$i.numeric"] = "Nilai Instrumen Panel [$i] harus berupa angka.";
                 $messages["instrumen_panel.$i.min"] = "Nilai Instrumen Panel [$i] minimal 0.";
-                $messages["instrumen_panel.$i.max"] = "Nilai Instrumen Panel [$i] maksimal 25.";
 
                 $messages["safety_operasi.$i.required"] = "Nilai Safety Operasi [$i] wajib diisi.";
                 $messages["safety_operasi.$i.numeric"] = "Nilai Safety Operasi [$i] harus berupa angka.";
                 $messages["safety_operasi.$i.min"] = "Nilai Safety Operasi [$i] minimal 0.";
-                $messages["safety_operasi.$i.max"] = "Nilai Safety Operasi [$i] maksimal 25.";
 
                 $messages["metode_operasi.$i.required"] = "Nilai Metode dan Teknik Operasi [$i] wajib diisi.";
                 $messages["metode_operasi.$i.numeric"] = "Nilai Metode dan Teknik Operasi [$i] harus berupa angka.";
                 $messages["metode_operasi.$i.min"] = "Nilai Metode dan Teknik Operasi [$i] minimal 0.";
-                $messages["metode_operasi.$i.max"] = "Nilai Metode dan Teknik Operasi [$i] maksimal 25.";
 
                 $messages["perawatan.$i.required"] = "Nilai Perawatan [$i] wajib diisi.";
                 $messages["perawatan.$i.numeric"] = "Nilai Perawatan [$i] harus berupa angka.";
                 $messages["perawatan.$i.min"] = "Nilai Perawatan [$i] minimal 0.";
-                $messages["perawatan.$i.max"] = "Nilai Perawatan [$i] maksimal 25.";
             }
         }
 
@@ -363,6 +367,7 @@ class Kimper extends Component
 
                 // Hitung nilai total
                 $total =
+                    (float) $this->main_power[$i] +
                     (float) $this->instrumen_panel[$i] +
                     (float) $this->safety_operasi[$i] +
                     (float) $this->metode_operasi[$i] +
@@ -373,6 +378,7 @@ class Kimper extends Component
                     'id_pengajuan_kimper' => $pengajuan->id,
                     'type_lpo'         => $this->type_lpo[$i],
                     'upload_lpo'  => $filePath,
+                    'main_power'       => $this->main_power[$i],
                     'instrumen_panel'  => $this->instrumen_panel[$i],
                     'safety_operasi'   => $this->safety_operasi[$i],
                     'metode_operasi'   => $this->metode_operasi[$i],

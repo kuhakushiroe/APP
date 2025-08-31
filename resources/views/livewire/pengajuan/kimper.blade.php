@@ -138,6 +138,7 @@
                                                     <th style="width: 10px">#</th>
                                                     <th>Type</th>
                                                     <th>File</th>
+                                                    <th>Main Power</th>
                                                     <th>Instrumen</th>
                                                     <th>Safety</th>
                                                     <th>Metode</th>
@@ -182,9 +183,10 @@
                                                                 <i class="bi bi-file-earmark-pdf"></i> File LPO
                                                             </a>
                                                         </td>
-                                                        <td>{{ $lpo->instrumen_panel }}</td>
-                                                        <td>{{ $lpo->safety_operasi }}</td>
-                                                        <td>{{ $lpo->metode_operasi }}</td>
+                                                        <td>{{ $lpo->nilai_main_power }}</td>
+                                                        <td>{{ $lpo->nilai_instrumen_panel }}</td>
+                                                        <td>{{ $lpo->nilai_safety_operasi }}</td>
+                                                        <td>{{ $lpo->nilai_metode_operasi }}</td>
                                                         <td>{{ $lpo->perawatan }}</td>
                                                         <td>{{ $lpo->nilai_total }}</td>
                                                     </tr>

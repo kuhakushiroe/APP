@@ -286,66 +286,104 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-6">
                                     <div class="form-group">
-                                        <label for="nilai_1" class="form-label">Nilai Instrument
-                                            Panel & Kontrol{{ '[' . $i . ']' }}</label>
-                                        <input
-                                            class="form-control form-control-sm @error('instrumen_panel.' . $i) is-invalid @enderror"
-                                            type="number" id="instrumen_panel"
-                                            wire:model.live='instrumen_panel.{{ $i }}'>
-                                        @error('instrumen_panel.' . $i)
+                                        <label for="type_point" class="form-label">Point Nilai
+                                            [{{ $i }}]</label>
+                                        <select class="form-control form-control-sm"
+                                            wire:model.live="type_point.{{ $i }}">
+                                            <option value="">-Point Nilai-</option>
+                                            <option value='4'>4 Point</option>
+                                            <option value='5'>5 Point</option>
+                                        </select>
+                                        @error('type_point.' . $i)
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="col-3">
-                                    <div class="form-group">
-                                        <label for="safety_operasi" class="form-label">Safety
-                                            Operasi{{ '[' . $i . ']' }}</label>
-                                        <input
-                                            class="form-control form-control-sm @error('safety_operasi.' . $i) is-invalid @enderror"
-                                            type="number" id="safety_operasi"
-                                            wire:model.live='safety_operasi.{{ $i }}'>
-                                        @error('safety_operasi.' . $i)
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
+                                @if (!empty($type_point[$i]))
+                                    <div class="col-3">
+                                        <div class="form-group">
+                                            <label for="instrumen_panel" class="form-label">Nilai Instrument
+                                                Panel & Kontrol{{ '[' . $i . ']' }}</label>
+                                            <input
+                                                class="form-control form-control-sm @error('instrumen_panel.' . $i) is-invalid @enderror"
+                                                type="number" id="instrumen_panel"
+                                                wire:model.live='instrumen_panel.{{ $i }}'
+                                                placeholder="Nilai Instrument Panel & Kontrol">
+                                            @error('instrumen_panel.' . $i)
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="form-group">
-                                        <label for="metode_operasi" class="form-label">Metode dan Teknik
-                                            Operasi{{ '[' . $i . ']' }}</label>
-                                        <input
-                                            class="form-control form-control-sm @error('metode_operasi.' . $i) is-invalid @enderror"
-                                            type="number" id="metode_operasi"
-                                            wire:model.live='metode_operasi.{{ $i }}'>
-                                        @error('metode_operasi.' . $i)
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
+                                    @if ($type_point[$i] == 5)
+                                        <div class="col-3">
+                                            <div class="form-group">
+                                                <label for="main_power" class="form-label">Nilai
+                                                    Main Power{{ '[' . $i . ']' }}</label>
+                                                <input
+                                                    class="form-control form-control-sm @error('main_power.' . $i) is-invalid @enderror"
+                                                    type="number" id="main_power"
+                                                    wire:model.live='main_power.{{ $i }}'
+                                                    placeholder="Nilai Main Power">
+                                                @error('main_power.' . $i)
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    @endif
+                                    <div class="col-3">
+                                        <div class="form-group">
+                                            <label for="safety_operasi" class="form-label">Safety
+                                                Operasi{{ '[' . $i . ']' }}</label>
+                                            <input
+                                                class="form-control form-control-sm @error('safety_operasi.' . $i) is-invalid @enderror"
+                                                type="number" id="safety_operasi"
+                                                wire:model.live='safety_operasi.{{ $i }}'
+                                                placeholder="Nilai Safety Operasi">
+                                            @error('safety_operasi.' . $i)
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="form-group">
-                                        <label for="perawatan"
-                                            class="form-label">Perawatan{{ '[' . $i . ']' }}</label>
-                                        <input
-                                            class="form-control form-control-sm @error('perawatan.' . $i) is-invalid @enderror"
-                                            type="number" id="perawatan"
-                                            wire:model.live='perawatan.{{ $i }}'>
-                                        @error('perawatan.' . $i)
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
+                                    <div class="col-3">
+                                        <div class="form-group">
+                                            <label for="metode_operasi" class="form-label">Metode dan Teknik
+                                                Operasi{{ '[' . $i . ']' }}</label>
+                                            <input
+                                                class="form-control form-control-sm @error('metode_operasi.' . $i) is-invalid @enderror"
+                                                type="number" id="metode_operasi"
+                                                wire:model.live='metode_operasi.{{ $i }}'
+                                                placeholder="Nilai Metode dan Teknik Operasi">
+                                            @error('metode_operasi.' . $i)
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <label for="nilai_total" class="form-label">Nilai
-                                            Total{{ '[' . $i . ']' }}</label>
-                                        <input class="form-control form-control-sm" type="number" id="nilai_total"
-                                            wire:model='nilai_total.{{ $i }}' readonly>
+                                    <div class="col-3">
+                                        <div class="form-group">
+                                            <label for="perawatan"
+                                                class="form-label">Perawatan{{ '[' . $i . ']' }}</label>
+                                            <input
+                                                class="form-control form-control-sm @error('perawatan.' . $i) is-invalid @enderror"
+                                                type="number" id="perawatan"
+                                                wire:model.live='perawatan.{{ $i }}'
+                                                placeholder="Nilai Perawatan">
+                                            @error('perawatan.' . $i)
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
                                     </div>
-                                </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="nilai_total" class="form-label">Nilai
+                                                Total{{ '[' . $i . ']' }}</label>
+                                            <input class="form-control form-control-sm" type="number"
+                                                id="nilai_total" wire:model='nilai_total.{{ $i }}'
+                                                readonly>
+                                        </div>
+                                    </div>
+                                @endif
                             @endfor
                             <div class="col-12 pt-2">
                                 <div class="form-group">
