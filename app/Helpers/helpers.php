@@ -66,6 +66,9 @@ if (!function_exists('getUserInfo')) {
             'adminHC' => [
                 '08116890789'
             ],
+            'adminCOE' => [
+                '08116830966'
+            ],
             'nomorAdmins' => [
                 '088212543694', //saya
                 //'085954590940', // yazid

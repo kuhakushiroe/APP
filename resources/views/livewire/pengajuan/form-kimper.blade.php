@@ -320,12 +320,12 @@
                                         <div class="col-3">
                                             <div class="form-group">
                                                 <label for="main_power" class="form-label">Nilai
-                                                    Main Power{{ '[' . $i . ']' }}</label>
+                                                    Power Train{{ '[' . $i . ']' }}</label>
                                                 <input
                                                     class="form-control form-control-sm @error('main_power.' . $i) is-invalid @enderror"
                                                     type="number" id="main_power"
                                                     wire:model.live='main_power.{{ $i }}'
-                                                    placeholder="Nilai Main Power">
+                                                    placeholder="Nilai Power Train">
                                                 @error('main_power.' . $i)
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror

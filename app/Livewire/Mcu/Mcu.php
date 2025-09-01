@@ -222,6 +222,7 @@ class Mcu extends Component
                 'ENG' => $info['adminENG'],
                 'PRO' => $info['adminPRO'],
                 'PLT' => $info['adminPLT'],
+                'COE' => $info['adminCOE'],
             ];
             if (isset($deptMap[$dept])) {
                 dispatch(new SendNotifMcu($pesanText, $deptMap[$dept], $token, $namaUser));
@@ -373,6 +374,7 @@ class Mcu extends Component
             'ENG' => $info['adminENG'],
             'PRO' => $info['adminPRO'],
             'PLT' => $info['adminPLT'],
+            'COE' => $info['adminCOE'],
         ];
         if (isset($deptMap[$dept])) {
             dispatch(new SendNotifMcu($pesanText, $deptMap[$dept], $token, $namaUser));
@@ -645,6 +647,7 @@ class Mcu extends Component
             'ENG' => $info['adminENG'],
             'PRO' => $info['adminPRO'],
             'PLT' => $info['adminPLT'],
+            'COE' => $info['adminCOE'],
         ];
         if (isset($deptMap[$dept])) {
             dispatch(new SendNotifMcu($pesanText, $deptMap[$dept], $token, $namaUser));
@@ -969,6 +972,7 @@ class Mcu extends Component
             'ENG' => $info['adminENG'],
             'PRO' => $info['adminPRO'],
             'PLT' => $info['adminPLT'],
+            'COE' => $info['adminCOE'],
         ];
         if (isset($deptMap[$dept])) {
             dispatch(new SendNotifMcu($pesanText, $deptMap[$dept], $token, $namaUser));

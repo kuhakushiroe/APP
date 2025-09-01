@@ -323,7 +323,7 @@
                 <!-- /.card-header -->
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-12">
+                        {{-- <div class="col-12">
                             <div class="info-box">
                                 <span class="info-box-icon shadow-sm">
                                     <i class="bi bi-person-fill-check"></i>
@@ -333,7 +333,7 @@
                                     <span class="info-box-number">{{ $gulanormal }}</span>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="col-12">
                             <div class="info-box">
                                 <span class="info-box-icon shadow-sm">

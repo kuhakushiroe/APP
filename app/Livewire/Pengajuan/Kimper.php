@@ -48,7 +48,7 @@ class Kimper extends Component
     public $status_lpo = [];
     public $catatan_lpo = []; // array tipe yang dipilih untuk tiap form
     public $type_versatility_list = [];
-    public $edit_type_lpo, $edit_upload_lpo, $edit_instrumen_panel, $edit_safety_operasi, $edit_metode_operasi, $edit_perawatan, $edit_nilai_total;
+    public $edit_type_lpo, $edit_upload_lpo, $edit_main_power, $edit_instrumen_panel, $edit_safety_operasi, $edit_metode_operasi, $edit_perawatan, $edit_nilai_total;
 
     public function tambahLpo()
     {
@@ -221,7 +221,7 @@ class Kimper extends Component
             $this->nilai_total[$i] = $panel + $safety + $metode + $perawatan + $power;
         }
         if ($this->id_pengajuan) {
-            $power = (float) ($this->main_power[$i] ?? 0);
+            $power = (float) ($this->edit_main_power[$i] ?? 0);
             $panel = (float) ($this->edit_instrumen_panel ?? 0);
             $safety = (float) ($this->edit_safety_operasi ?? 0);
             $metode = (float) ($this->edit_metode_operasi ?? 0);
@@ -239,7 +239,7 @@ class Kimper extends Component
                 $rules["type_lpo.$i"] = 'required';
                 $rules["type_point.$i"] = 'required';
                 $rules["upload_lpo.$i"] = 'required|file|mimes:pdf,jpg,png,xls,xlsx|max:2048';
-                $rules["main_power.$i"] = 'required|numeric|min:0';
+                $rules["main_power.$i"] = 'numeric|min:0';
                 $rules["instrumen_panel.$i"] = 'required|numeric|min:0';
                 $rules["safety_operasi.$i"] = 'required|numeric|min:0';
                 $rules["metode_operasi.$i"] = 'required|numeric|min:0';
@@ -250,7 +250,6 @@ class Kimper extends Component
                 $messages["upload_lpo.$i.mimes"] = "File LPO [$i] harus berformat PDF, JPG, atau PNG.";
                 $messages["upload_lpo.$i.max"] = "Ukuran file LPO [$i] maksimal 2MB.";
 
-                $messages["main_power.$i.required"] = "Nilai Main Power [$i] wajib diisi.";
                 $messages["main_power.$i.numeric"] = "Nilai Main Power [$i] harus berupa angka.";
                 $messages["main_power.$i.min"] = "Nilai Main Power [$i] minimal 0.";
 

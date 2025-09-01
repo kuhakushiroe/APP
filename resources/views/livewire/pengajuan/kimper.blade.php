@@ -138,7 +138,7 @@
                                                     <th style="width: 10px">#</th>
                                                     <th>Type</th>
                                                     <th>File</th>
-                                                    <th>Main Power</th>
+                                                    <th>Power Train</th>
                                                     <th>Instrumen</th>
                                                     <th>Safety</th>
                                                     <th>Metode</th>
