@@ -102,12 +102,14 @@
                                             ->where('id_karyawan', $datakaryawan->id)
                                             ->get();
                                     @endphp
-                                    @if ($cariperubahan->count() > 0)
-                                        <button class="btn btn-outline-warning btn-sm"
-                                            wire:click="openPerubahan({{ $datakaryawan->id }})">
-                                            <span class="bi bi-exclamation-diamond"></span>
-                                        </button>
-                                    @endif
+                                    @hasAnyRole(['superadmin'])
+                                        @if ($cariperubahan->count() > 0)
+                                            <button class="btn btn-outline-warning btn-sm"
+                                                wire:click="openPerubahan({{ $datakaryawan->id }})">
+                                                <span class="bi bi-exclamation-diamond"></span>
+                                            </button>
+                                        @endif
+                                    @endhasAnyRole
                                     @php
                                         $cariusers = DB::table('users')->where('username', $datakaryawan->nrp)->first();
                                     @endphp
@@ -118,11 +120,11 @@
                                                 <span class="bi bi-key"></span><span class="bi bi-person"></span>
                                             </button>
                                         @endif
+                                        <button class="btn btn-outline-info btn-sm"
+                                            wire:click="detail({{ $datakaryawan->id }})">
+                                            <span class="bi bi-eye"></span>
+                                        </button>
                                     @endhasAnyRole
-                                    <button class="btn btn-outline-info btn-sm"
-                                        wire:click="detail({{ $datakaryawan->id }})">
-                                        <span class="bi bi-eye"></span>
-                                    </button>
                                     @hasAnyRole(['superadmin'])
                                         <button class="btn btn-outline-warning btn-sm"
                                             wire:click="edit({{ $datakaryawan->id }})">
@@ -154,8 +156,33 @@
                                     -
                                 @endif
                             </td>
-                            <td>{{ $datakaryawan->nik }}</td>
-                            <td>{{ $datakaryawan->nrp }}</td>
+                            @php
+                                $nik = $datakaryawan->nik;
+                                $maskedNik =
+                                    strlen($nik) > 6
+                                        ? substr($nik, 0, 4) . str_repeat('x', strlen($nik) - 6) . substr($nik, -2)
+                                        : $nik;
+                            @endphp
+                            <td>
+                                @if (auth()->user()->role === 'superadmin')
+                                    {{ $datakaryawan->nik }}
+                                @else
+                                    {{ $maskedNik }}
+                                    {{-- {{ maskMiddle($datakaryawan->nik) }} --}}
+                                    {{-- {{ \Illuminate\Support\Str::mask($datakaryawan->nik, 'x', 4) }} --}}
+                                    {{-- {{ strlen($datakaryawan->nik) > 4 ? substr($datakaryawan->nik, 0, 4) . 'xxxx' : $datakaryawan->nik }} --}}
+                                @endif
+                            </td>
+                            <td>
+                                @if ($datakaryawan->nik === $datakaryawan->nrp)
+                                    {{ $maskedNik }}
+                                    {{-- {{maskMiddle($datakaryawan->nik)}} --}}
+                                    {{-- {{ \Illuminate\Support\Str::mask($datakaryawan->nik, 'x', 4) }} --}}
+                                    {{-- {{ strlen($datakaryawan->nrp) > 4 ? substr($datakaryawan->nrp, 0, 4) . 'xxxx' : $datakaryawan->nrp }} --}}
+                                @else
+                                    {{ $datakaryawan->nrp }}
+                                @endif
+                            </td>
                             <td>{{ $datakaryawan->nama }}</td>
                             <td>{{ $datakaryawan->perusahaan }}</td>
                             <td>{{ $datakaryawan->dept }}</td>

@@ -20,7 +20,7 @@ class Users extends Component
     #[Title('Users')]
     public $search = '';
     public $form = false;
-    public $edit_Password=false;
+    public $edit_Password = false;
     public $username, $name, $email, $password, $role, $subrole, $id_user, $wa;
     public function open()
     {
@@ -35,7 +35,7 @@ class Users extends Component
         // Validasi input
         $this->validate([
             'name' => 'required',
-            'username' => 'required|unique:users,username,' . $this->id_user,  // Menambahkan pengecualian untuk edit
+            'username' => 'required|regex:/^[a-zA-Z0-9]+$/|min:4|max:20|unique:users,username,' . $this->id_user,  // Menambahkan pengecualian untuk edit
             'email' => 'required|email|unique:users,email,' . $this->id_user,  // Menambahkan pengecualian untuk edit
             'password' => $this->id_user ? 'nullable' : 'required',  // Password wajib diisi saat store
             'role' => 'required',
@@ -45,6 +45,9 @@ class Users extends Component
             'name.required' => 'Name Harus Diisi',
             'username.required' => 'Username Harus Diisi',
             'username.unique' => 'Username sudah digunakan, silakan pilih yang lain',
+            'username.regex' => 'Username hanya boleh mengandung huruf dan angka',
+            'username.min' => 'Username minimal 4 karakter',
+            'username.max' => 'Username maksimal 20 karakter',
             'email.required' => 'Email Harus Diisi',
             'email.email' => 'Email tidak valid',
             'email.unique' => 'Email sudah digunakan, silakan pilih yang lain',
@@ -169,18 +172,17 @@ class Users extends Component
 
     public function editPassword($id_user)
     {
-        if  (auth()->user()->hasRole('superadmin')) {
+        if (auth()->user()->hasRole('superadmin')) {
             $this->open();
         }
         $user = User::find($id_user);
         $this->edit_Password = true;
         $this->id_user = $id_user;
         $this->form = true;
-
-
     }
 
-    public function updatePassword(){
+    public function updatePassword()
+    {
         $user = User::find($this->id_user);
         $user->update([
             'password' => Hash::make($this->password)

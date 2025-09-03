@@ -25,7 +25,8 @@
                     </div>
                     <div class="input-group mb-3">
                         <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
-                            placeholder="Password" name="password" required autocomplete="current-password" />
+                            placeholder="Password" name="password" required autocomplete="current-password"
+                            oninput="this.value = this.value.replace(/\s/g, '')" />
                         <div class="input-group-text"><span class="bi bi-lock-fill"></span></div>
                         @error('password')
                             <span class="invalid-feedback" role="alert">

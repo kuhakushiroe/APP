@@ -17,7 +17,8 @@
                             <input type="password"
                                 class="form-control form-control-sm
                             @error('password') is-invalid @enderror"
-                                wire:model="password" placeholder="password">
+                                wire:model="password" placeholder="password"
+                                oninput="this.value = this.value.replace(/\s/g, '')">
                             @error('password')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror

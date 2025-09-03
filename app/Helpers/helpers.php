@@ -4,6 +4,23 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Karyawan;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * Masking string tengah
+ */
+function maskMiddle($value, $visibleStart = 4, $visibleEnd = 2, $maskChar = 'x')
+{
+    $length = strlen($value);
+
+    if ($length <= ($visibleStart + $visibleEnd)) {
+        return $value;
+    }
+
+    $start = substr($value, 0, $visibleStart);
+    $end   = substr($value, -$visibleEnd);
+    $mask  = str_repeat($maskChar, $length - ($visibleStart + $visibleEnd));
+
+    return $start . $mask . $end;
+}
 function cekFile($path)
 {
     if ($path && Storage::disk('public')->exists($path)) {
