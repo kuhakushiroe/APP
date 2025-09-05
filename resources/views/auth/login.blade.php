@@ -14,8 +14,9 @@
                     @csrf
                     <div class="input-group mb-3">
                         <input id="email" type="text" class="form-control @error('email') is-invalid @enderror"
-                            placeholder="Email / Username / NRP" name="email" value="{{ old('email') }}" required
-                            autocomplete="email" autofocus />
+                            placeholder="Email / Username / NRP"
+                            oninput="this.value = this.value.replace(/[^a-zA-Z0-9@\-_\.]/g, '')" name="email"
+                            value="{{ old('email') }}" required autocomplete="email" autofocus />
                         <div class="input-group-text"><span class="bi bi-people"></span></div>
                         @error('email')
                             <span class="invalid-feedback" role="alert">

@@ -41,7 +41,13 @@
                         <i class="bi bi-people-fill"></i>
                     </span>
                     <div class="info-box-content">
-                        <span class="info-box-text text-uppercase">{{ $item['status_karyawan'] }}</span>
+                        <span class="info-box-text text-uppercase">
+                            @if ($item['status_karyawan'] == 'TEMPORARY')
+                                TEMPORARY / NEW HIRE
+                            @else
+                                {{ $item['status_karyawan'] }}
+                            @endif
+                        </span>
                         <div class="d-flex justify-content-between">
                             <small class="text-success">Aktif:</small>
                             <small>{{ $item['aktif'] }}</small>
