@@ -3,6 +3,7 @@
 namespace App\Livewire\Cetak;
 
 use App\Models\Karyawan;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
@@ -28,6 +29,9 @@ class Id extends Component
                 ->paginate(10)
                 ->withQueryString();
         }
-        return view('livewire.cetak.id', compact('karyawans'));
+        $departments = DB::table('departments')
+            ->pluck('description_department', 'name_department')
+            ->toArray();
+        return view('livewire.cetak.id', compact('karyawans', 'departments'));
     }
 }

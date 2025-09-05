@@ -4,6 +4,7 @@ namespace App\Livewire\Cetak;
 
 use Livewire\Component;
 use App\Models\Karyawan;
+use Illuminate\Support\Facades\DB;
 use Livewire\WithPagination;
 use Livewire\Attributes\Title;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
@@ -30,8 +31,12 @@ class Kimper extends Component
                 ->paginate(10)
                 ->withQueryString();
         }
+        $departments = DB::table('departments')
+            ->pluck('description_department', 'name_department')
+            ->toArray();
         return view('livewire.cetak.kimper', [
-            'karyawans' => $karyawans
+            'karyawans' => $karyawans,
+            'departments' => $departments
         ]);
     }
 }

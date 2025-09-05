@@ -180,11 +180,6 @@
                     <b>{{ Str::upper($karyawans->nama ?? 'Nama Karyawan') }}</b>
                 </p>
                 <p style="font-size: 8pt; padding-top:10px; padding-bottom:100px;">
-                    @php
-                        $departments = DB::table('departments')
-                            ->pluck('description_department', 'name_department')
-                            ->toArray();
-                    @endphp{{-- <b>{{ $karyawans->dept ?? 'Departemen' }}</b> --}}
                     <b>{{ $departments[$karyawans->dept] ?? 'Departemen' }}</b>
                 </p>
                 <table style="width: 100%">
