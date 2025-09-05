@@ -180,7 +180,7 @@
                     <b>{{ Str::upper($karyawans->nama ?? 'Nama Karyawan') }}</b>
                 </p>
                 <p style="font-size: 8pt; padding-top:10px; padding-bottom:180px;">
-                    <b>{{ $karyawans->jabatan ?? 'Jabatan' }}</b>
+                    <b>{{ $karyawans->dept ?? 'Departemen' }}</b>
                 </p>
                 <table style="width: 100%">
                     <tr>
@@ -219,7 +219,7 @@
                                     <td colspan="4">
                                         <p style="font-size: 8pt;">Berlaku Sampai:</p>
                                         <p style="font-size: 8pt;">
-                                            <b>{{ \Carbon\Carbon::parse($karyawans->exp_id ?? '')->locale('id')->isoFormat('D MMMM Y') }}</b>
+                                            <b>{{ \Carbon\Carbon::parse($karyawans->exp_mcu ?? '')->locale('id')->isoFormat('D MMMM Y') }}</b>
                                         </p>
                                     </td>
                                 </tr>

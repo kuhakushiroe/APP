@@ -90,7 +90,7 @@ class Id extends Component
             ],
             'jenis_pengajuan_id' => 'required',
             'tgl_pengajuan' => 'required',
-            'upload_request' => 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240',
+            'upload_request' => 'required|mimes:jpeg,png,jpg,gif,pdf,xls,xlsx|max:10240',
         ];
 
         if ($this->jenis_pengajuan_id === 'perpanjangan') {
@@ -202,6 +202,17 @@ class Id extends Component
         $namaUser = $info['nama'];
         dispatch(new SendNotifMcu($pesanText, $nomorGabungan, $token, $namaUser));
 
+        $dept = getInfoKaryawanByNrpDept($this->nrp);
+        $deptMap = [
+            'HC' => $info['adminHC'],
+            'ENG' => $info['adminENG'],
+            'PRO' => $info['adminPRO'],
+            'PLT' => $info['adminPLT'],
+            'COE' => $info['adminCOE'],
+        ];
+        if (isset($deptMap[$dept])) {
+            dispatch(new SendNotifMcu($pesanText, $deptMap[$dept], $token, $namaUser));
+        }
         //function Proses kirim pesan
         // $info = getUserInfo();
         // foreach ($info['nomorAdmins'] as $i => $nomor) {
@@ -341,7 +352,17 @@ class Id extends Component
         // }
 
 
-
+        $dept = getInfoKaryawanByNrpDept($nrp);
+        $deptMap = [
+            'HC' => $info['adminHC'],
+            'ENG' => $info['adminENG'],
+            'PRO' => $info['adminPRO'],
+            'PLT' => $info['adminPLT'],
+            'COE' => $info['adminCOE'],
+        ];
+        if (isset($deptMap[$dept])) {
+            dispatch(new SendNotifMcu($pesanText, $deptMap[$dept], $token, $namaUser));
+        }
         $this->reset();
         // Determine whether it's an edit or a new entry
         $this->dispatch(
@@ -428,6 +449,17 @@ class Id extends Component
         $namaUser = $info['nama'];
         dispatch(new SendNotifMcu($pesanText, $nomorGabungan, $token, $namaUser));
 
+        $dept = getInfoKaryawanByNrpDept($pengajuan->nrp);
+        $deptMap = [
+            'HC' => $info['adminHC'],
+            'ENG' => $info['adminENG'],
+            'PRO' => $info['adminPRO'],
+            'PLT' => $info['adminPLT'],
+            'COE' => $info['adminCOE'],
+        ];
+        if (isset($deptMap[$dept])) {
+            dispatch(new SendNotifMcu($pesanText, $deptMap[$dept], $token, $namaUser));
+        }
         // foreach ($info['nomorAdmins'] as $i => $nomor) {
         //     pesan($nomor, $pesanText, $info['token']);
         //     if ($i < count($info['nomorAdmins']) - 1) {
@@ -486,7 +518,17 @@ class Id extends Component
         //         sleep(1);
         //     }
         // }
-
+        $dept = getInfoKaryawanByNrpDept($pengajuan->nrp);
+        $deptMap = [
+            'HC' => $info['adminHC'],
+            'ENG' => $info['adminENG'],
+            'PRO' => $info['adminPRO'],
+            'PLT' => $info['adminPLT'],
+            'COE' => $info['adminCOE'],
+        ];
+        if (isset($deptMap[$dept])) {
+            dispatch(new SendNotifMcu($pesanText, $deptMap[$dept], $token, $namaUser));
+        }
         $this->reset('expired_id', 'tgl_induksi'); // reset hanya properti ini
 
         $this->dispatch(
@@ -515,6 +557,17 @@ class Id extends Component
         $namaUser = $info['nama'];
         dispatch(new SendNotifMcu($pesanText, $nomorGabungan, $token, $namaUser));
 
+        $dept = getInfoKaryawanByNrpDept($caripengajuan->nrp);
+        $deptMap = [
+            'HC' => $info['adminHC'],
+            'ENG' => $info['adminENG'],
+            'PRO' => $info['adminPRO'],
+            'PLT' => $info['adminPLT'],
+            'COE' => $info['adminCOE'],
+        ];
+        if (isset($deptMap[$dept])) {
+            dispatch(new SendNotifMcu($pesanText, $deptMap[$dept], $token, $namaUser));
+        }
         // foreach ($info['nomorAdmins'] as $i => $nomor) {
         //     pesan($nomor, $pesanText, $info['token']);
         //     if ($i < count($info['nomorAdmins']) - 1) {
@@ -542,8 +595,17 @@ class Id extends Component
             ->get();
         $caripengajuanid = ModelPengajuanID::where('status_pengajuan', '!=', '1')->get();
         foreach ($caripengajuanid as $item) {
-            $this->expired_id[$item->id] = Carbon::now()->addYear()->format('Y-m-d');
-            //$this->tgl_induksi[$item->id] = Carbon::now();
+            // $this->expired_id[$item->id] = Carbon::now()->addYear()->format('Y-m-d');
+            // //$this->tgl_induksi[$item->id] = Carbon::now();
+            $karyawan = Karyawan::where('nrp', $item->nrp)->first();
+
+            if ($karyawan) {
+                // simpan exp_mcu dari tabel karyawan
+                $this->expired_id[$item->id] = $karyawan->exp_mcu;
+            } else {
+                // fallback kalau tidak ditemukan
+                $this->expired_id[$item->id] = null;
+            }
         }
     }
     public function render()

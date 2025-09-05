@@ -154,7 +154,17 @@ class Kimper extends Component
         $token = $info['token'];
         $namaUser = $info['nama'];
         dispatch(new SendNotifMcu($pesanText, $nomorGabungan, $token, $namaUser));
-
+        $dept = getInfoKaryawanByNrpDept($pengajuan->nrp);
+        $deptMap = [
+            'HC' => $info['adminHC'],
+            'ENG' => $info['adminENG'],
+            'PRO' => $info['adminPRO'],
+            'PLT' => $info['adminPLT'],
+            'COE' => $info['adminCOE'],
+        ];
+        if (isset($deptMap[$dept])) {
+            dispatch(new SendNotifMcu($pesanText, $deptMap[$dept], $token, $namaUser));
+        }
         // foreach ($info['nomorAdmins'] as $i => $nomor) {
         //     pesan($nomor, $pesanText, $info['token']);
         //     if ($i < count($info['nomorAdmins']) - 1) {
@@ -294,7 +304,7 @@ class Kimper extends Component
         $rules['jenis_sim'] = 'required';
         $rules['exp_sim'] = 'required';
         $rules['upload_sim'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
-        $rules['upload_request'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
+        $rules['upload_request'] = 'required|mimes:jpeg,png,jpg,gif,pdf,xls,xlsx|max:10240';
         $rules['tgl_pengajuan'] = 'required';
         $rules['upload_sertifikat'] = 'required';
         if ($this->jenis_pengajuan_kimper == 'baru') {
@@ -465,9 +475,19 @@ class Kimper extends Component
         $token = $info['token'];
         $namaUser = $info['nama'];
         dispatch(new SendNotifMcu($pesanText, $nomorGabungan, $token, $namaUser));
+
+        $dept = getInfoKaryawanByNrpDept($this->nrp);
+        $deptMap = [
+            'HC' => $info['adminHC'],
+            'ENG' => $info['adminENG'],
+            'PRO' => $info['adminPRO'],
+            'PLT' => $info['adminPLT'],
+            'COE' => $info['adminCOE'],
+        ];
+        if (isset($deptMap[$dept])) {
+            dispatch(new SendNotifMcu($pesanText, $deptMap[$dept], $token, $namaUser));
+        }
         $this->reset();
-
-
         $this->dispatch(
             'alert',
             type: 'success',
@@ -555,7 +575,17 @@ class Kimper extends Component
         //         sleep(1);
         //     }
         // }
-
+        $dept = getInfoKaryawanByNrpDept($pengajuan->nrp);
+        $deptMap = [
+            'HC' => $info['adminHC'],
+            'ENG' => $info['adminENG'],
+            'PRO' => $info['adminPRO'],
+            'PLT' => $info['adminPLT'],
+            'COE' => $info['adminCOE'],
+        ];
+        if (isset($deptMap[$dept])) {
+            dispatch(new SendNotifMcu($pesanText, $deptMap[$dept], $token, $namaUser));
+        }
         $this->dispatch(
             'alert',
             type: 'success',
@@ -737,6 +767,18 @@ class Kimper extends Component
         $token = $info['token'];
         $namaUser = $info['nama'];
         dispatch(new SendNotifMcu($pesanText, $nomorGabungan, $token, $namaUser));
+
+        $dept = getInfoKaryawanByNrpDept($pengajuan->nrp);
+        $deptMap = [
+            'HC' => $info['adminHC'],
+            'ENG' => $info['adminENG'],
+            'PRO' => $info['adminPRO'],
+            'PLT' => $info['adminPLT'],
+            'COE' => $info['adminCOE'],
+        ];
+        if (isset($deptMap[$dept])) {
+            dispatch(new SendNotifMcu($pesanText, $deptMap[$dept], $token, $namaUser));
+        }
         $this->dispatch(
             'alert',
             type: 'success',
@@ -877,7 +919,17 @@ class Kimper extends Component
         //         sleep(1);
         //     }
         // }
-
+        $dept = getInfoKaryawanByNrpDept($nrp);
+        $deptMap = [
+            'HC' => $info['adminHC'],
+            'ENG' => $info['adminENG'],
+            'PRO' => $info['adminPRO'],
+            'PLT' => $info['adminPLT'],
+            'COE' => $info['adminCOE'],
+        ];
+        if (isset($deptMap[$dept])) {
+            dispatch(new SendNotifMcu($pesanText, $deptMap[$dept], $token, $namaUser));
+        }
         $this->reset();
         // Determine whether it's an edit or a new entry
         $this->dispatch(
@@ -924,6 +976,17 @@ class Kimper extends Component
         //         sleep(1);
         //     }
         // }
+        $dept = getInfoKaryawanByNrpDept($pengajuan->nrp);
+        $deptMap = [
+            'HC' => $info['adminHC'],
+            'ENG' => $info['adminENG'],
+            'PRO' => $info['adminPRO'],
+            'PLT' => $info['adminPLT'],
+            'COE' => $info['adminCOE'],
+        ];
+        if (isset($deptMap[$dept])) {
+            dispatch(new SendNotifMcu($pesanText, $deptMap[$dept], $token, $namaUser));
+        }
         $this->dispatch(
             'alert',
             type: 'success',
@@ -956,6 +1019,17 @@ class Kimper extends Component
         //         sleep(1);
         //     }
         // }
+        $dept = getInfoKaryawanByNrpDept($caripengajuan->nrp);
+        $deptMap = [
+            'HC' => $info['adminHC'],
+            'ENG' => $info['adminENG'],
+            'PRO' => $info['adminPRO'],
+            'PLT' => $info['adminPLT'],
+            'COE' => $info['adminCOE'],
+        ];
+        if (isset($deptMap[$dept])) {
+            dispatch(new SendNotifMcu($pesanText, $deptMap[$dept], $token, $namaUser));
+        }
 
         $this->dispatch(
             'alert',
