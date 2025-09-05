@@ -183,17 +183,17 @@
                                                                 <i class="bi bi-file-earmark-pdf"></i> File LPO
                                                             </a>
                                                         </td>
-                                                        <td>{{ $lpo->nilai_main_power }}</td>
-                                                        <td>{{ $lpo->nilai_instrumen_panel }}</td>
-                                                        <td>{{ $lpo->nilai_safety_operasi }}</td>
-                                                        <td>{{ $lpo->nilai_metode_operasi }}</td>
+                                                        <td>{{ $lpo->main_power }}</td>
+                                                        <td>{{ $lpo->instrumen_panel }}</td>
+                                                        <td>{{ $lpo->safety_operasi }}</td>
+                                                        <td>{{ $lpo->metode_operasi }}</td>
                                                         <td>{{ $lpo->perawatan }}</td>
                                                         <td>{{ $lpo->nilai_total }}</td>
                                                     </tr>
                                                 @empty
                                                 @endforelse
                                                 <tr>
-                                                    <td colspan="8">
+                                                    <td colspan="9">
                                                         @if ($pengajuan->status_upload_lpo == '0' || $pengajuan->status_upload_lpo == null)
                                                             <a href="#" class="btn btn-outline-primary btn-sm"
                                                                 wire:click="kunciLpo({{ $pengajuan->id_pengajuan }})">

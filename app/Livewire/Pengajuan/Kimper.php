@@ -373,26 +373,29 @@ class Kimper extends Component
                 // Simpan file
                 //$filePath = $this->upload_lpo[$i]->store('lpo', 'public');
                 $filePath = $this->upload_lpo[$i]->storeAs($folderPath, $folderKaryawan . "-LPO-" . $this->type_lpo[$i] . "-" . time() . ".{$this->upload_lpo[$i]->getClientOriginalExtension()}", 'public');
-
+                $main_power     = $this->main_power[$i]     ?? 0;
+                $instrumen_panel = $this->instrumen_panel[$i] ?? 0;
+                $safety_operasi = $this->safety_operasi[$i] ?? 0;
+                $metode_operasi = $this->metode_operasi[$i] ?? 0;
+                $perawatan      = $this->perawatan[$i]      ?? 0;
                 // Hitung nilai total
-                $total =
-                    (float) $this->main_power[$i] +
-                    (float) $this->instrumen_panel[$i] +
-                    (float) $this->safety_operasi[$i] +
-                    (float) $this->metode_operasi[$i] +
-                    (float) $this->perawatan[$i];
+                $total = (float) $main_power +
+                    (float) $instrumen_panel +
+                    (float) $safety_operasi +
+                    (float) $metode_operasi +
+                    (float) $perawatan;
 
                 // Simpan ke database (contoh model Lpo)
                 PengajuanKimperLpo::create([
                     'id_pengajuan_kimper' => $pengajuan->id,
-                    'type_lpo'         => $this->type_lpo[$i],
-                    'upload_lpo'  => $filePath,
-                    'main_power'       => $this->main_power[$i],
-                    'instrumen_panel'  => $this->instrumen_panel[$i],
-                    'safety_operasi'   => $this->safety_operasi[$i],
-                    'metode_operasi'   => $this->metode_operasi[$i],
-                    'perawatan'        => $this->perawatan[$i],
-                    'nilai_total'      => $total,
+                    'type_lpo'            => $this->type_lpo[$i],
+                    'upload_lpo'          => $filePath,
+                    'main_power'          => $main_power,
+                    'instrumen_panel'     => $instrumen_panel,
+                    'safety_operasi'      => $safety_operasi,
+                    'metode_operasi'      => $metode_operasi,
+                    'perawatan'           => $perawatan,
+                    'nilai_total'         => $total,
                 ]);
             }
         }
@@ -602,6 +605,7 @@ class Kimper extends Component
         $caripengajuanlpo = PengajuanKimperLpo::findOrFail($id);
         $this->id_pengajuan = $id;
         $this->edit_type_lpo = $caripengajuanlpo->type_lpo;
+        $this->edit_main_power = $caripengajuanlpo->main_power;
         $this->edit_instrumen_panel = $caripengajuanlpo->instrumen_panel;
         $this->edit_safety_operasi = $caripengajuanlpo->safety_operasi;
         $this->edit_metode_operasi = $caripengajuanlpo->metode_operasi;
@@ -651,6 +655,7 @@ class Kimper extends Component
             $caripengajuanlpo->update([
                 'status_lpo' => null,
                 'type_lpo' => $this->edit_type_lpo,
+                'main_power' => $this->edit_main_power,
                 'instrumen_panel' => $this->edit_instrumen_panel,
                 'safety_operasi' => $this->edit_safety_operasi,
                 'metode_operasi' => $this->edit_metode_operasi,
@@ -696,6 +701,7 @@ class Kimper extends Component
         $this->lpoUpload = false;
         $this->reset(
             'edit_type_lpo',
+            'edit_main_power',
             'edit_instrumen_panel',
             'edit_safety_operasi',
             'edit_metode_operasi',

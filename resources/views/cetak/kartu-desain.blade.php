@@ -151,11 +151,6 @@
                     </tr>
                 </table>
             </div>
-            <div class="card-title" style="padding-top:100  px;">
-                <p>
-                    <b>PT ANTAREJA MAHADA MAKMUR</b>
-                </p>
-            </div>
             <div class="card-body">
                 {{-- @php
                     $jabatan = $karyawans->jabatan;
@@ -171,18 +166,20 @@
                         {{ Str::upper($jabatan) }}
                     </p>
                 </div> --}}
-
                 <div
                     style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(0, 0, 0, 0.2); font-weight: bold; pointer-events: none;">
                     <p
-                        style="font-family: 'Oswald', sans-serif; font-size: 60px; transform: scaleY(5.0); display: inline-block;">
+                        style="font-family: 'Oswald', sans-serif; font-size: 55px; transform: scaleY(5.0); display: inline-block;">
                         KONTRAKTOR
                     </p>
                 </div>
+                <p style="font-size: 8pt; padding-top:150px;">
+                    <b>PT ANTAREJA MAHADA MAKMUR</b>
+                </p>
                 <p style="font-size: 8pt; padding-top:30px;">
                     <b>{{ Str::upper($karyawans->nama ?? 'Nama Karyawan') }}</b>
                 </p>
-                <p style="font-size: 8pt; padding-top:10px; padding-bottom:200px;">
+                <p style="font-size: 8pt; padding-top:10px; padding-bottom:100px;">
                     <b>{{ $karyawans->dept ?? 'Departemen' }}</b>
                 </p>
                 <table style="width: 100%">
@@ -239,7 +236,7 @@
                 <div
                     style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(0, 0, 0, 0.2); font-weight: bold; pointer-events: none;">
                     <p
-                        style="font-family: 'Oswald', sans-serif; font-size: 60px; transform: scaleY(5.0); display: inline-block;">
+                        style="font-family: 'Oswald', sans-serif; font-size: 55px; transform: scaleY(5.0); display: inline-block;">
                         KONTRAKTOR
                     </p>
                 </div>
@@ -261,13 +258,6 @@
                     <p>Meulaboh,
                         {{ \Carbon\Carbon::parse($karyawans->tgl_cetak ?? '')->locale('id')->isoFormat('D MMMM Y') }}
                     </p>
-                    <div
-                        style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(0, 0, 0, 0.2); font-weight: bold; pointer-events: none;">
-                        <p
-                            style="font-family: 'Oswald', sans-serif; font-size: 60px; transform: scaleY(5.0); display: inline-block;">
-                            KONTRAKTOR
-                        </p>
-                    </div>
                     <img src="{{ public_path('/storage/TTD.png') }}" alt="Signature"
                         style="transform: scaleY(5.0); display: inline-block; width: 100px;">
                     <p style="margin-top: 20px;">___________________________</p>
