@@ -4,6 +4,7 @@ namespace App\Livewire\Mcu;
 
 use App\Exports\mcuExport;
 use App\Jobs\SendNotifMcu;
+use App\Models\cutiDokter;
 use App\Models\FollowupMcu;
 use App\Models\Karyawan;
 use App\Models\Mcu as ModelsMcu;
@@ -50,8 +51,34 @@ class Mcu extends Component
     public $catatan_file_mcu = [];
     public $paramedik, $paramedik_status, $paramedik_catatan;
     protected $listeners = ['delete'];
+    public $isOn = false;
 
     #[Title('MCU')]
+    public function toggleCuti()
+    {
+        $cuti = cutiDokter::first();
+
+        if ($cuti) {
+            // Kalau sudah ada → toggle
+            $newStatus = $cuti->status === 'on' ? 'off' : 'on';
+            $cuti->update(['status' => $newStatus]);
+
+            $this->isOn = $newStatus === 'on';
+        } else {
+            // Kalau belum ada → buat baru dengan default on
+            $cuti = cutiDokter::create(['status' => 'on']);
+            $this->isOn = true;
+        }
+        $this->dispatch(
+            'alert',
+            type: 'success',
+            title: 'Berhasil',
+            text: 'Tombol Cuti Dokter ' . ($this->isOn ? 'ON' : 'OFF'),
+            position: 'center',
+            confirm: true,
+            redirect: '/mcu',
+        );
+    }
     public function addFollowup()
     {
         $this->followups[] = ['keterangan' => '', 'saran' => ''];
@@ -1036,6 +1063,8 @@ class Mcu extends Component
         // Menetapkan tanggal
         $this->tgl_mcu = date('Y-m-d');
         $this->tgl_verifikasi = date('Y-m-d');
+        $cuti = cutiDokter::first();
+        $this->isOn = $cuti && $cuti->status === 'on';
     }
     public function deleteConfirm($id)
     {
@@ -1138,35 +1167,61 @@ class Mcu extends Component
             }
 
             if (auth()->user()->subrole === 'verifikator') {
-                $mcus = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu')
-                    ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
-                    ->whereAny(['karyawans.nrp', 'karyawans.nama'], 'like', '%' . $this->search . '%')
-                    ->where('mcu.status_', '=', "open")
-                    ->whereNull('mcu.sub_id')
-                    ->when($this->searchtgl_awal && $this->searchtgl_akhir, function ($query) {
-                        $query->whereBetween('mcu.tgl_mcu', [$this->searchtgl_awal, $this->searchtgl_akhir]);
-                    })
-                    ->when($this->searchtgl_awal && !$this->searchtgl_akhir, function ($query) {
-                        $query->whereDate('mcu.tgl_mcu', '>=', $this->searchtgl_awal);
-                    })
-                    ->when(!$this->searchtgl_awal && $this->searchtgl_akhir, function ($query) {
-                        $query->whereDate('mcu.tgl_mcu', '<=', $this->searchtgl_akhir);
-                    })
-                    ->when(!empty($indukPrioritas), function ($query) use ($indukPrioritas) {
-                        $ids = implode(',', $indukPrioritas);
-                        return $query->orderByRaw("FIELD(mcu.id, $ids) DESC");
-                    })
-                    // ->when(!empty($prioritasIDs), function ($query) use ($prioritasIDs) {
-                    //     $ids = implode(',', $prioritasIDs);
-                    //     return $query->orderByRaw("FIELD(mcu.id, $ids) DESC");
-                    // })
-                    ->where(function ($q) {
-                        $q->whereNull('mcu.verifikator')
-                            ->orWhere('mcu.verifikator', auth()->user()->username);
-                    })
-                    // ->orderBy('mcu.tgl_mcu', 'desc')
-                    ->paginate(10)
-                    ->withQueryString();
+                $cuti_dokter = cutiDokter::where('status', 'on')->first();
+                if ($cuti_dokter) {
+                    $mcus = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu')
+                        ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
+                        ->whereAny(['karyawans.nrp', 'karyawans.nama'], 'like', '%' . $this->search . '%')
+                        ->where('mcu.status_', '=', "open")
+                        ->whereNull('mcu.sub_id')
+                        ->when($this->searchtgl_awal && $this->searchtgl_akhir, function ($query) {
+                            $query->whereBetween('mcu.tgl_mcu', [$this->searchtgl_awal, $this->searchtgl_akhir]);
+                        })
+                        ->when($this->searchtgl_awal && !$this->searchtgl_akhir, function ($query) {
+                            $query->whereDate('mcu.tgl_mcu', '>=', $this->searchtgl_awal);
+                        })
+                        ->when(!$this->searchtgl_awal && $this->searchtgl_akhir, function ($query) {
+                            $query->whereDate('mcu.tgl_mcu', '<=', $this->searchtgl_akhir);
+                        })
+                        ->when(!empty($indukPrioritas), function ($query) use ($indukPrioritas) {
+                            $ids = implode(',', $indukPrioritas);
+                            return $query->orderByRaw("FIELD(mcu.id, $ids) DESC");
+                        })
+                        ->paginate(10)
+                        ->withQueryString();
+                } else {
+                    $mcus = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu')
+                        ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
+                        ->whereAny(['karyawans.nrp', 'karyawans.nama'], 'like', '%' . $this->search . '%')
+                        ->where('mcu.status_', '=', "open")
+                        ->whereNull('mcu.sub_id')
+                        ->when($this->searchtgl_awal && $this->searchtgl_akhir, function ($query) {
+                            $query->whereBetween('mcu.tgl_mcu', [$this->searchtgl_awal, $this->searchtgl_akhir]);
+                        })
+                        ->when($this->searchtgl_awal && !$this->searchtgl_akhir, function ($query) {
+                            $query->whereDate('mcu.tgl_mcu', '>=', $this->searchtgl_awal);
+                        })
+                        ->when(!$this->searchtgl_awal && $this->searchtgl_akhir, function ($query) {
+                            $query->whereDate('mcu.tgl_mcu', '<=', $this->searchtgl_akhir);
+                        })
+                        ->when(!empty($indukPrioritas), function ($query) use ($indukPrioritas) {
+                            $ids = implode(',', $indukPrioritas);
+                            return $query->orderByRaw("FIELD(mcu.id, $ids) DESC");
+                        })
+                        // ->when(!empty($prioritasIDs), function ($query) use ($prioritasIDs) {
+                        //     $ids = implode(',', $prioritasIDs);
+                        //     return $query->orderByRaw("FIELD(mcu.id, $ids) DESC");
+                        // })
+                        //batas kunci untuk dokter
+                        ->where(function ($q) {
+                            $q->whereNull('mcu.verifikator')
+                                ->orWhere('mcu.verifikator', auth()->user()->username);
+                        })
+                        //batas kunci untuk dokter
+                        // ->orderBy('mcu.tgl_mcu', 'desc')
+                        ->paginate(10)
+                        ->withQueryString();
+                }
             } else {
                 $mcus = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu')
                     ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')

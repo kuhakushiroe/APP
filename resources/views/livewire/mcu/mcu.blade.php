@@ -22,6 +22,10 @@
                         </button>
                     @endhasAnyRole
                     @hasAnyRole(['superadmin'])
+                        <button class="btn btn-sm {{ $isOn ? 'btn-success' : 'btn-danger' }}" wire:click="toggleCuti">
+                            <i class="bi {{ $isOn ? 'bi-toggle-on' : 'bi-toggle-off' }}"></i>
+                            {{ $isOn ? 'ON CUTI' : 'OFF CUTI' }}
+                        </button>
                         <a href="{{ route('export-hasil-mcu') }}" class="btn btn-success btn-sm">
                             <span class="bi bi-download"></span> Export Excel
                         </a>
