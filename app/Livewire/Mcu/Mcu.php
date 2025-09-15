@@ -175,16 +175,41 @@ class Mcu extends Component
     public function storeMulti()
     {
         // Validasi seluruh array forms
-        $validatedData = Validator::make(
+        // $validatedData = Validator::make(
+        //     ['forms' => $this->forms],
+        //     [
+        //         'forms.*.jenis_pengajuan_mcu' => 'required',
+        //         'forms.*.proveder' => 'required',
+        //         'forms.*.nrp' => [
+        //             'required',
+        //             Rule::exists('karyawans', 'nrp')->where(function ($query) {
+        //                 $query->where('status', 'aktif');
+        //             }),
+        //         ],
+        //         'forms.*.tgl_mcu' => 'required|date',
+        //         'forms.*.file_mcu' => 'required|file|mimes:pdf|max:10240',
+        //     ],
+        //     [
+        //         'forms.*.proveder.required' => 'Proveder harus diisi.',
+        //         'forms.*.nrp.required' => 'NRP harus diisi.',
+        //         'forms.*.nrp.exists' => 'NRP tidak ditemukan atau karyawan tidak aktif.',
+        //         'forms.*.tgl_mcu.required' => 'Tanggal MCU harus diisi.',
+        //         'forms.*.tgl_mcu.date' => 'Tanggal MCU harus format tanggal valid.',
+        //         'forms.*.file_mcu.required' => 'File MCU harus diunggah.',
+        //         'forms.*.file_mcu.file' => 'File harus berupa file.',
+        //         'forms.*.file_mcu.mimes' => 'Format file harus PDF.',
+        //         'forms.*.file_mcu.max' => 'Ukuran file maksimal 10MB.',
+        //     ]
+        // )->validate();
+
+        $validator = Validator::make(
             ['forms' => $this->forms],
             [
                 'forms.*.jenis_pengajuan_mcu' => 'required',
                 'forms.*.proveder' => 'required',
                 'forms.*.nrp' => [
                     'required',
-                    Rule::exists('karyawans', 'nrp')->where(function ($query) {
-                        $query->where('status', 'aktif');
-                    }),
+                    Rule::exists('karyawans', 'nrp')->where(fn($q) => $q->where('status', 'aktif')),
                 ],
                 'forms.*.tgl_mcu' => 'required|date',
                 'forms.*.file_mcu' => 'required|file|mimes:pdf|max:10240',
@@ -200,7 +225,27 @@ class Mcu extends Component
                 'forms.*.file_mcu.mimes' => 'Format file harus PDF.',
                 'forms.*.file_mcu.max' => 'Ukuran file maksimal 10MB.',
             ]
-        )->validate();
+        );
+
+        $validator->after(function ($validator) {
+            foreach ($this->forms as $i => $form) {
+                $cek = ModelsMcu::where('id_karyawan', $form['nrp'])
+                    ->where('status_', '!=', 'close')
+                    ->first();
+
+                if ($cek) {
+                    if ($cek->status === 'follow up' && empty($form['sub_id'] ?? null)) {
+                        $validator->errors()->add("forms.$i.nrp", "NRP {$form['nrp']} masih follow up, hanya boleh input sebagai sub (sub_id wajib).");
+                    }
+
+                    if ($cek->status !== 'follow up') {
+                        $validator->errors()->add("forms.$i.nrp", "NRP {$form['nrp']} masih ada pengajuan yang belum close.");
+                    }
+                }
+            }
+        });
+
+        $validator->validate();
 
         $info = getUserInfo();
         $token = $info['token'];
@@ -270,8 +315,6 @@ class Mcu extends Component
             redirect: '/mcu',
         );
     }
-
-
     //MULTI MCU
     public function edit($id_mcu)
     {
@@ -305,30 +348,79 @@ class Mcu extends Component
     public function store()
     {
         // Validate the form inputs
-        $this->validate([
-            'jenis_pengajuan_mcu' => 'required',
-            'proveder' => 'required',
-            'nrp' => [
-                'required',
-                Rule::exists('karyawans', 'nrp')->where(function ($query) {
-                    $query->where('status', 'aktif');
-                }),
+        // $this->validate([
+        //     'jenis_pengajuan_mcu' => 'required',
+        //     'proveder' => 'required',
+        //     'nrp' => [
+        //         'required',
+        //         Rule::exists('karyawans', 'nrp')->where(function ($query) {
+        //             $query->where('status', 'aktif');
+        //         }),
+        //     ],
+        //     'tgl_mcu' => 'required|date',
+        //     //'gol_darah' => 'required',
+        //     'file_mcu' => 'required|file|mimes:pdf|max:10240', // max 10MB
+        // ], [
+        //     'proveder.required' => 'Proveder harus diisi.',
+        //     'nrp.required' => 'NRP harus diisi.',
+        //     'nrp.exists' => 'NRP tidak ditemukan atau karyawan tidak aktif.',
+        //     'tgl_mcu.required' => 'Tanggal MCU harus diisi.',
+        //     'tgl_mcu.date' => 'Tanggal MCU harus dalam format yang valid.',
+        //     //'gol_darah.required' => 'Golongan Darah harus diisi.',
+        //     'file_mcu.required' => 'File MCU harus diunggah.',
+        //     'file_mcu.file' => 'File harus berupa file.',
+        //     'file_mcu.mimes' => 'Format file harus PDF.',
+        //     'file_mcu.max' => 'Ukuran file maksimal 10MB.',
+        // ]);
+
+        $validator = Validator::make(
+            [
+                'jenis_pengajuan_mcu' => $this->jenis_pengajuan_mcu,
+                'proveder' => $this->proveder,
+                'nrp' => $this->nrp,
+                'tgl_mcu' => $this->tgl_mcu,
+                'file_mcu' => $this->file_mcu,
             ],
-            'tgl_mcu' => 'required|date',
-            //'gol_darah' => 'required',
-            'file_mcu' => 'required|file|mimes:pdf|max:10240', // max 10MB
-        ], [
-            'proveder.required' => 'Proveder harus diisi.',
-            'nrp.required' => 'NRP harus diisi.',
-            'nrp.exists' => 'NRP tidak ditemukan atau karyawan tidak aktif.',
-            'tgl_mcu.required' => 'Tanggal MCU harus diisi.',
-            'tgl_mcu.date' => 'Tanggal MCU harus dalam format yang valid.',
-            //'gol_darah.required' => 'Golongan Darah harus diisi.',
-            'file_mcu.required' => 'File MCU harus diunggah.',
-            'file_mcu.file' => 'File harus berupa file.',
-            'file_mcu.mimes' => 'Format file harus PDF.',
-            'file_mcu.max' => 'Ukuran file maksimal 10MB.',
-        ]);
+            [
+                'jenis_pengajuan_mcu' => 'required',
+                'proveder' => 'required',
+                'nrp' => [
+                    'required',
+                    Rule::exists('karyawans', 'nrp')->where(fn($q) => $q->where('status', 'aktif')),
+                ],
+                'tgl_mcu' => 'required|date',
+                'file_mcu' => 'required|file|mimes:pdf|max:10240',
+            ],
+            [
+                'proveder.required' => 'Proveder harus diisi.',
+                'nrp.required' => 'NRP harus diisi.',
+                'nrp.exists' => 'NRP tidak ditemukan atau karyawan tidak aktif.',
+                'tgl_mcu.required' => 'Tanggal MCU harus diisi.',
+                'tgl_mcu.date' => 'Tanggal MCU harus format tanggal valid.',
+                'file_mcu.required' => 'File MCU harus diunggah.',
+                'file_mcu.file' => 'File harus berupa file.',
+                'file_mcu.mimes' => 'Format file harus PDF.',
+                'file_mcu.max' => 'Ukuran file maksimal 10MB.',
+            ]
+        );
+
+        $validator->after(function ($validator) {
+            $cek = ModelsMcu::where('id_karyawan', $this->nrp)
+                ->where('status_', '!=', 'close')
+                ->first();
+
+            if ($cek) {
+                if ($cek->status === 'follow up' && empty($this->sub_id)) {
+                    $validator->errors()->add('nrp', "NRP {$this->nrp} masih follow up, hanya boleh input sebagai sub (sub_id wajib).");
+                }
+
+                if ($cek->status !== 'follow up') {
+                    $validator->errors()->add('nrp', "NRP {$this->nrp} masih ada pengajuan yang belum close.");
+                }
+            }
+        });
+
+        $validator->validate();
 
         $datakaryawan = Karyawan::where('nrp', $this->nrp)->first();
         $folderDept = strtoupper(Str::slug($datakaryawan->dept, '_'));
