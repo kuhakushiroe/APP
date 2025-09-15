@@ -228,6 +228,17 @@ class Mcu extends Component
         );
 
         $validator->after(function ($validator) {
+            // 🔸 Cek NRP duplikat dalam 1 kali input
+            $nrps = array_column($this->forms, 'nrp');
+            $duplicates = array_diff_assoc($nrps, array_unique($nrps));
+
+            if (!empty($duplicates)) {
+                foreach ($duplicates as $i => $dupNrp) {
+                    $validator->errors()->add("forms.$i.nrp", "NRP {$dupNrp} tidak boleh diinput lebih dari sekali dalam satu pengajuan.");
+                }
+            }
+
+            // 🔸 Cek status pengajuan existing
             foreach ($this->forms as $i => $form) {
                 $cek = ModelsMcu::where('id_karyawan', $form['nrp'])
                     ->where('status_', '!=', 'close')
