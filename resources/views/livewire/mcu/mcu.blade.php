@@ -161,6 +161,9 @@
                                                         @if (empty($data->paramedik))
                                                             @if (auth()->user()->role === 'dokter' && in_array(auth()->user()->subrole, ['paramedik']))
                                                                 @if ($data->status_file_mcu === null)
+                                                                    <p class="text-danger">
+                                                                        {{ $data->catatan_file_mcu ?? '' }}
+                                                                    </p>
                                                                     <form action=""
                                                                         wire:submit.prevent="kirimStatusFileMCU({{ $data->id_mcu }})">
                                                                         <select
@@ -360,6 +363,9 @@
                                                             @if (empty($item->paramedik))
                                                                 @if (auth()->user()->role === 'dokter' && in_array(auth()->user()->subrole, ['paramedik']))
                                                                     @if ($item->status_file_mcu === null)
+                                                                        <p class="text-danger">
+                                                                            {{ $item->catatan_file_mcu ?? '' }}
+                                                                        </p>
                                                                         <form action=""
                                                                             wire:submit.prevent="kirimStatusFileMCU({{ $item->id }})">
                                                                             <select

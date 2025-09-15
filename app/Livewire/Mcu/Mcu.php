@@ -1279,6 +1279,7 @@ class Mcu extends Component
                             $ids = implode(',', $indukPrioritas);
                             return $query->orderByRaw("FIELD(mcu.id, $ids) DESC");
                         })
+                        ->orderBy('mcu.tgl_mcu', 'asc')
                         ->paginate(10)
                         ->withQueryString();
                 } else {
@@ -1310,7 +1311,7 @@ class Mcu extends Component
                                 ->orWhere('mcu.verifikator', auth()->user()->username);
                         })
                         //batas kunci untuk dokter
-                        // ->orderBy('mcu.tgl_mcu', 'desc')
+                        ->orderBy('mcu.tgl_mcu', 'asc')
                         ->paginate(10)
                         ->withQueryString();
                 }
