@@ -206,12 +206,12 @@ class Users extends Component
     {
         $departments = Departments::all();
         if (auth()->user()->hasRole('admin')) {
-            $users = User::whereAny(['name', 'username', 'email'], 'like', '%' . $this->search . '%')
+            $users = User::whereAny(['name', 'username', 'email', 'role', 'subrole'], 'like', '%' . $this->search . '%')
                 ->where('subrole', '=', auth()->user()->subrole)
                 ->withTrashed()
                 ->paginate(10);
         } else {
-            $users = User::whereAny(['name', 'username', 'email'], 'like', '%' . $this->search . '%')->withTrashed()->paginate(10);
+            $users = User::whereAny(['name', 'username', 'email', 'role', 'subrole'], 'like', '%' . $this->search . '%')->withTrashed()->paginate(10);
         }
         return view('livewire.users.users', [
             'users' => $users,
