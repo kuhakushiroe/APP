@@ -39,7 +39,7 @@ class Users extends Component
             'email' => 'required|email|unique:users,email,' . $this->id_user,  // Menambahkan pengecualian untuk edit
             'password' => $this->id_user ? 'nullable' : 'required',  // Password wajib diisi saat store
             'role' => 'required',
-            'subrole' => 'required_if:role,admin',
+            'subrole' => 'required_if:role,admin,pimpinan',
             'wa' => 'required',
         ], [
             'name.required' => 'Name Harus Diisi',
@@ -53,7 +53,7 @@ class Users extends Component
             'email.unique' => 'Email sudah digunakan, silakan pilih yang lain',
             'password.required' => 'Password Harus Diisi',
             'role.required' => 'Role Harus Diisi',
-            'subrole.required_if' => 'Subrole Harus Diisi jika Role adalah Admin',
+            'subrole.required_if' => 'Subrole Harus Diisi jika Role adalah Admin / Pimpinan',
             'wa.required' => 'No Handphone Harus Diisi dengan format nomor',
         ]);
 

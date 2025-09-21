@@ -76,7 +76,7 @@
                                         role="alert"><strong>{{ $message }}</strong></span>
                                 @enderror
                             </div>
-                            @if ($role === 'admin')
+                            @if (in_array($role, ['admin', 'pimpinan']))
                                 <div class="form-group">
                                     <label for="subrole">Sub Role</label>
                                     <select class="form-control form-control-sm @error('subrole') is-invalid @enderror"
