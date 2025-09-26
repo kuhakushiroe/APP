@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Exports\mcuExport;
+use App\Exports\mcuExportDept;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 use Maatwebsite\Excel\Excel;
@@ -27,34 +28,66 @@ class Report extends Component
     }
     public function mcuReport($date_mcu1, $date_mcu2)
     {
+        $role = auth()->user()->role;
+        $sub_role = auth()->user()->subrole;
         $filename = 'Register_MCU_' . $date_mcu1 . '_' . $date_mcu2 . '.xlsx';
-        return FacadesExcel::download(new mcuExport($date_mcu1, $date_mcu2), $filename);
+        if ($role === 'pimpinan') {
+            return FacadesExcel::download(new mcuExportDept($date_mcu1, $date_mcu2, $sub_role), $filename);
+        } else {
+            return FacadesExcel::download(new mcuExport($date_mcu1, $date_mcu2), $filename);
+        }
     }
 
     public function reportId($date1, $date2)
     {
         // $data = ModelPengajuanID::whereBetween('tgl_mcu', [$date1, $date2])->get();
-        $data = DB::table('pengajuan_id')
-            ->join('karyawans', 'pengajuan_id.nrp', '=', 'karyawans.nrp')
-            ->select(
-                'karyawans.nama',
-                'karyawans.nik',
-                'karyawans.nrp',
-                'karyawans.jabatan',
-                'karyawans.dept',
-                'karyawans.perusahaan',
-                'karyawans.doh',
-                'pengajuan_id.upload_foto',
-                'pengajuan_id.upload_ktp',
-                'pengajuan_id.upload_skd',
-                'pengajuan_id.tgl_pengajuan',
-                'pengajuan_id.exp_id',
-                'pengajuan_id.jenis_pengajuan_id',
-                'pengajuan_id.status_pengajuan'
-            )
-            ->whereNotNull('pengajuan_id.exp_id')
-            ->whereBetween('pengajuan_id.updated_at', [$date1, $date2])
-            ->get();
+        if (auth()->user()->role === 'pimpinan') {
+            $data = DB::table('pengajuan_id')
+                ->join('karyawans', 'pengajuan_id.nrp', '=', 'karyawans.nrp')
+                ->select(
+                    'karyawans.nama',
+                    'karyawans.nik',
+                    'karyawans.nrp',
+                    'karyawans.jabatan',
+                    'karyawans.dept',
+                    'karyawans.perusahaan',
+                    'karyawans.doh',
+                    'pengajuan_id.upload_foto',
+                    'pengajuan_id.upload_ktp',
+                    'pengajuan_id.upload_skd',
+                    'pengajuan_id.tgl_pengajuan',
+                    'pengajuan_id.exp_id',
+                    'pengajuan_id.jenis_pengajuan_id',
+                    'pengajuan_id.status_pengajuan'
+                )
+                ->where('karyawans.dept', auth()->user()->subrole)
+                ->whereNotNull('pengajuan_id.exp_id')
+                ->whereBetween('pengajuan_id.updated_at', [$date1, $date2])
+                ->get();
+        } else {
+            $data = DB::table('pengajuan_id')
+                ->join('karyawans', 'pengajuan_id.nrp', '=', 'karyawans.nrp')
+                ->select(
+                    'karyawans.nama',
+                    'karyawans.nik',
+                    'karyawans.nrp',
+                    'karyawans.jabatan',
+                    'karyawans.dept',
+                    'karyawans.perusahaan',
+                    'karyawans.doh',
+                    'pengajuan_id.upload_foto',
+                    'pengajuan_id.upload_ktp',
+                    'pengajuan_id.upload_skd',
+                    'pengajuan_id.tgl_pengajuan',
+                    'pengajuan_id.exp_id',
+                    'pengajuan_id.jenis_pengajuan_id',
+                    'pengajuan_id.status_pengajuan'
+                )
+                ->whereNotNull('pengajuan_id.exp_id')
+                ->whereBetween('pengajuan_id.updated_at', [$date1, $date2])
+                ->get();
+        }
+
 
         // $pdf = Pdf::loadView('cetak.report-tarikanId', ['data' => $data, 'date1' => $date1, 'date2' => $date2])
         //     ->setPaper('A4', 'landscape');
@@ -72,21 +105,40 @@ class Report extends Component
 
     public function reportKimper($date1, $date2)
     {
-        $data = DB::table('pengajuan_kimper')
-            ->join('karyawans', 'pengajuan_nrp.nrp', '=', 'karyawans.nrp')
-            ->select(
-                'karyawans.nama',
-                'karyawans.nik',
-                'karyawans.nrp',
-                'karyawans.jabatan',
-                'karyawans.dept',
-                'karyawans.perusahaan',
-                'karyawans.doh',
-                'pengajuan_kimper.upload_foto',
-            )
-            ->whereNotNull('pengajuan_id.exp_id')
-            ->whereBetween('pengajuan_id.updated_at', [$date1, $date2])
-            ->get();
+        if (auth()->user()->role === 'pimpinan') {
+            $data = DB::table('pengajuan_kimper')
+                ->join('karyawans', 'pengajuan_nrp.nrp', '=', 'karyawans.nrp')
+                ->select(
+                    'karyawans.nama',
+                    'karyawans.nik',
+                    'karyawans.nrp',
+                    'karyawans.jabatan',
+                    'karyawans.dept',
+                    'karyawans.perusahaan',
+                    'karyawans.doh',
+                    'pengajuan_kimper.upload_foto',
+                )
+                ->where('karyawans.dept', auth()->user()->subrole)
+                ->whereNotNull('pengajuan_id.exp_id')
+                ->whereBetween('pengajuan_id.updated_at', [$date1, $date2])
+                ->get();
+        } else {
+            $data = DB::table('pengajuan_kimper')
+                ->join('karyawans', 'pengajuan_nrp.nrp', '=', 'karyawans.nrp')
+                ->select(
+                    'karyawans.nama',
+                    'karyawans.nik',
+                    'karyawans.nrp',
+                    'karyawans.jabatan',
+                    'karyawans.dept',
+                    'karyawans.perusahaan',
+                    'karyawans.doh',
+                    'pengajuan_kimper.upload_foto',
+                )
+                ->whereNotNull('pengajuan_id.exp_id')
+                ->whereBetween('pengajuan_id.updated_at', [$date1, $date2])
+                ->get();
+        }
 
         // $pdf = Pdf::loadView('cetak.report-tarikanId', ['data' => $data, 'date1' => $date1, 'date2' => $date2])
         //     ->setPaper('A4', 'landscape');

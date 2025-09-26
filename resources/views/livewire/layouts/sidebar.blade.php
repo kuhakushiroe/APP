@@ -34,10 +34,10 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
-                @hasAnyRole(['superadmin', 'admin', 'dokter', 'she'])
+                @hasAnyRole(['superadmin', 'admin', 'dokter', 'she', 'pimpinan'])
 
                     {{-- MASTER DATA --}}
-                    @hasAnyRole(['superadmin', 'admin', 'she'])
+                    @hasAnyRole(['superadmin', 'admin', 'she', 'pimpinan'])
                         @php
                             $isMasterActive = Str::startsWith($routeName, [
                                 'users',
@@ -89,7 +89,7 @@
                                         </a>
                                     </li>
                                 @endhasAnyRole
-                                @hasAnyRole(['superadmin', 'admin', 'she'])
+                                @hasAnyRole(['superadmin', 'admin', 'she', 'pimpinan'])
                                     <li class="nav-item">
                                         <a href="/karyawan" class="nav-link @if ($routeName == 'karyawan') active @endif">
                                             <i class="nav-icon bi {{ iconActive('karyawan', 'circle') }}"></i>
@@ -120,7 +120,7 @@
                                     <p>MCU</p>
                                 </a>
                             </li>
-                            @hasAnyRole(['admin', 'superadmin', 'she'])
+                            @hasAnyRole(['admin', 'superadmin', 'she', 'pimpinan'])
                                 <li class="nav-item">
                                     <a href="pengajuan-id" class="nav-link @if ($routeName == 'pengajuan-id') active @endif">
                                         <i class="nav-icon bi {{ iconActive('pengajuan-id', 'circle') }}"></i>
@@ -156,7 +156,7 @@
                                     <p>MCU</p>
                                 </a>
                             </li>
-                            @hasAnyRole(['admin', 'superadmin'])
+                            @hasAnyRole(['admin', 'superadmin', 'she', 'pimpinan'])
                                 <li class="nav-item">
                                     <a href="histori-id" class="nav-link @if ($routeName == 'histori-id') active @endif">
                                         <i class="nav-icon bi {{ iconActive('histori-id', 'circle') }}"></i>
@@ -202,7 +202,7 @@
                             </ul>
                         </li>
                     @endhasAnyRole
-                    @hasAnyRole(['superadmin', 'dokter', 'she'])
+                    @hasAnyRole(['superadmin', 'dokter', 'she', 'pimpinan'])
                         <li class="nav-item">
                             <a href="{{ route('report') }}"
                                 class="nav-link @if ($routeName == 'report') active @endif">

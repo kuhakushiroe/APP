@@ -101,16 +101,18 @@
                                             <span class="bi bi-download"></span>
                                             Download Verifikasi Final {{ $data->mcuStatus }}
                                         </a>
-                                        <a href="cetak-laik/{{ $data->id_mcu }}" class="btn btn-outline-success btn-sm"
-                                            target="_blank">
-                                            <span class="bi bi-download"></span>
-                                            Download Surat Laik Kerja {{ $data->mcuStatus }}
-                                        </a>
-                                        <a href="cetak-skd/{{ $data->id_mcu }}" class="btn btn-outline-success btn-sm"
-                                            target="_blank">
-                                            <span class="bi bi-download"></span>
-                                            Download SKD {{ $data->mcuStatus }}
-                                        </a>
+                                        @if (auth()->user()->role !== 'pimpinan')
+                                            <a href="cetak-laik/{{ $data->id_mcu }}"
+                                                class="btn btn-outline-success btn-sm" target="_blank">
+                                                <span class="bi bi-download"></span>
+                                                Download Surat Laik Kerja {{ $data->mcuStatus }}
+                                            </a>
+                                            <a href="cetak-skd/{{ $data->id_mcu }}"
+                                                class="btn btn-outline-success btn-sm" target="_blank">
+                                                <span class="bi bi-download"></span>
+                                                Download SKD {{ $data->mcuStatus }}
+                                            </a>
+                                        @endif
                                     @endif
                                 </div>
                             </td>

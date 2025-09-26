@@ -37,7 +37,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('histori-mcu', McuMcu::class)->name('histori-mcu');
     Route::get('report', Report::class)->name('report');
 
-    Route::group(['middleware' => ['role:superadmin,admin,she']], function () {
+    Route::group(['middleware' => ['role:superadmin,admin,she,pimpinan']], function () {
         //master data
         Route::get('karyawan', Karyawan::class)->name('karyawan');
         Route::get('pengajuan-id', Id::class)->name('pengajuan-id');
@@ -70,7 +70,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('cetak-skd/{id}', [McuCetak::class, 'skd']);
         Route::get('cetak-laik/{id}', [McuCetak::class, 'cetakLaik']);
     });
-    Route::group(['middleware' => ['role:admin,superadmin']], function () {
+    Route::group(['middleware' => ['role:admin,superadmin,pimpinan']], function () {
         //Cetak MCU
         Route::get('report-mcu/{date_mcu1}/{date_mcu2}', [Report::class, 'mcuReport'])->name('report-mcu');
         //Cetak Register

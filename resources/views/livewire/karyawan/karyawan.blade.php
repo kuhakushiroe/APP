@@ -131,10 +131,12 @@
                                             <span class="bi bi-pencil"></span>
                                         </button>
                                     @endhasAnyRole
-                                    <button class="btn btn-outline-danger btn-sm"
-                                        wire:click="aktif({{ $datakaryawan->id }})">
-                                        <span class="bi bi-trash"></span>
-                                    </button>
+                                    @hasAnyRole(['admin', 'superadmin'])
+                                        <button class="btn btn-outline-danger btn-sm"
+                                            wire:click="aktif({{ $datakaryawan->id }})">
+                                            <span class="bi bi-trash"></span>
+                                        </button>
+                                    @endhasAnyRole
                                 @else
                                     <button class="btn btn-outline-success btn-sm"
                                         wire:click="nonAktif({{ $datakaryawan->id }})">

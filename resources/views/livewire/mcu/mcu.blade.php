@@ -331,12 +331,15 @@
                                                         </div>
 
                                                         <div>
-                                                            <a href="{{ asset('storage/surat jawaban konsul.docx') }}"
-                                                                target="_blank"
-                                                                class="btn btn-outline-warning btn-sm">
-                                                                <i class="bi bi-download"></i> Download Surat Jawaban
-                                                                Konsul
-                                                            </a>
+                                                            @if (auth()->user()->role !== 'pimpinan')
+                                                                <a href="{{ asset('storage/surat jawaban konsul.docx') }}"
+                                                                    target="_blank"
+                                                                    class="btn btn-outline-warning btn-sm">
+                                                                    <i class="bi bi-download"></i> Download Surat
+                                                                    Jawaban
+                                                                    Konsul
+                                                                </a>
+                                                            @endif
                                                         </div>
                                                     @endif
                                                 </td>
@@ -540,12 +543,14 @@
                                                             </div>
 
                                                             <div>
-                                                                <a href="{{ asset('storage/surat jawaban konsul.docx') }}"
-                                                                    target="_blank"
-                                                                    class="btn btn-outline-warning btn-sm">
-                                                                    <i class="bi bi-download"></i> Download Surat
-                                                                    Jawaban Konsul
-                                                                </a>
+                                                                @if (auth()->user()->role !== 'pimpinan')
+                                                                    <a href="{{ asset('storage/surat jawaban konsul.docx') }}"
+                                                                        target="_blank"
+                                                                        class="btn btn-outline-warning btn-sm">
+                                                                        <i class="bi bi-download"></i> Download Surat
+                                                                        Jawaban Konsul
+                                                                    </a>
+                                                                @endif
                                                             </div>
                                                         @endif
                                                     </td>
