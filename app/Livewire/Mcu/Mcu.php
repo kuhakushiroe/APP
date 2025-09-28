@@ -563,7 +563,7 @@ class Mcu extends Component
 
             $info = getUserInfo(); // ambil data user saat dispatch, di konteks request HTTP (user pasti ada)
             if ($status == 1) {
-                $pesanText = "📢 *MIFA-NOTIF - Pengajuan MCU*\n\n*$infoKaryawan*\n Status File MCU: *Diterima* Lanjut Proses Input Parameter MCU";
+                $pesanText = "📢 *MIFA-NOTIF - Pengajuan MCU*\n\n*$infoKaryawan*\n Status File MCU: *Diterima* Lanjut Proses Penginputan Data Medis";
             } else {
                 $pesanText = "📢 *MIFA-NOTIF - Pengajuan MCU*\n\n*$infoKaryawan*\n Status File MCU: *Ditolak - $catatan*";
             }
@@ -1028,9 +1028,9 @@ class Mcu extends Component
                 ]
             );
             if (empty($mcu->paramedik_catatan)) {
-                $pesanText = "📢 *MIFA-NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n *Paramedik Input Hasil MCU* \n";
+                $pesanText = "📢 *MIFA-NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n *Paramedik Input Data Medis* \n";
             } else {
-                $pesanText = "📢 *MIFA-NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n *Paramedik Input Ulang Hasil MCU*\n";
+                $pesanText = "📢 *MIFA-NOTIF - Pengajuan MCU*\n\n\n*$infoKaryawan*\n *Paramedik Input Data Medis*\n";
             }
 
             $mcu->update([
