@@ -129,14 +129,26 @@ class Home extends Component
 
         //MCU belum di acc
         $today = $this->tanggal;
-        $mcuNoAcc = ModelsMcu::whereNull(['status', 'verifikator'])->count();
+        if (auth()->user()->role == 'pimpinan' || auth()->user()->role == 'admin') {
+            $mcuNoAcc = ModelsMcu::join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')->where('karyawans.dept', auth()->user()->dept)->whereNull(['mcu.status', 'mcu.verifikator'])->whereNull('deleted_at')->count();
+            $mcuData = ModelsMcu::join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')->select('mcu.verifikator', 'mcu.status', DB::raw('count(*) as total'))
+                ->whereNotNull('verifikator')
+                ->whereDate('tgl_verifikasi', $today)
+                ->groupBy('verifikator', 'status')
+                ->get()
+                ->groupBy('verifikator');
+        } else {;
+            $mcuNoAcc = ModelsMcu::whereNull(['status', 'verifikator'])->whereNull('deleted_at')->count();
+            $mcuData = ModelsMcu::select('verifikator', 'status', DB::raw('count(*) as total'))
+                ->whereNotNull('verifikator')
+                ->whereDate('tgl_verifikasi', $today)
+                ->groupBy('verifikator', 'status')
+                ->get()
+                ->groupBy('verifikator');
+        }
+        //dd($mcuNoAcc);
         // Ambil data MCU untuk hari ini, dikelompokkan berdasarkan verifikator dan status
-        $mcuData = ModelsMcu::select('verifikator', 'status', DB::raw('count(*) as total'))
-            ->whereNotNull('verifikator')
-            ->whereDate('tgl_verifikasi', $today)
-            ->groupBy('verifikator', 'status')
-            ->get()
-            ->groupBy('verifikator');
+
 
         //dd($mcuData);
         // Ambil semua verifikator dengan role dokter dan subrole verifikator
@@ -165,6 +177,8 @@ class Home extends Component
                     })
                     ->toArray();
 
+                //dd($jumlahMcu);
+
                 return [
                     'username' => $verifikator->username,
                     'nama' => $verifikator->name,
@@ -182,6 +196,8 @@ class Home extends Component
             ->toArray();
 
         $totalSemuaStatus = collect($verifikators)->sum('status_total');
+
+        //dd($totalSemuaStatus);
 
 
         //Rumus Gula Darah di google
@@ -203,6 +219,29 @@ class Home extends Component
             $query->where('gdp', '>=', 126)
                 ->orWhere('gd_2_jpp', '>=', 200);
         })->count();
+
+        $oneMonthLater = Carbon::today()->addMonth();
+
+        if (auth()->user()->role == 'pimpinan' || auth()->user()->role == 'admin') {
+            $expmcukaryawan = Karyawan::where('status', 'aktif')->where('dept', auth()->user()->subrole)->where(function ($q) use ($today, $oneMonthLater) {
+                $q->where('exp_mcu', '<', $today)                    // expired
+                    ->orWhereBetween('exp_mcu', [$today, $oneMonthLater]) // akan habis ≤ 1 bulan
+                    ->orWhereNull('exp_mcu');                          // belum punya
+            })
+                ->orderByRaw('exp_mcu IS NULL') // NULL terakhir
+                ->orderBy('exp_mcu', 'asc')     // urutkan exp_mcu terdekat (expired dulu, lalu yang akan habis)
+                ->get();
+        } else {
+            $expmcukaryawan = Karyawan::where('status', 'aktif')->where(function ($q) use ($today, $oneMonthLater) {
+                $q->where('exp_mcu', '<', $today)                    // expired
+                    ->orWhereBetween('exp_mcu', [$today, $oneMonthLater]) // akan habis ≤ 1 bulan
+                    ->orWhereNull('exp_mcu');                          // belum punya
+            })
+                ->orderByRaw('exp_mcu IS NULL') // NULL terakhir
+                ->orderBy('exp_mcu', 'asc')     // urutkan exp_mcu terdekat (expired dulu, lalu yang akan habis)
+                ->get();
+        }
+
 
         return view('livewire.home.home', [
             'departments' => $departments,
@@ -228,6 +267,7 @@ class Home extends Component
             'diabetes' => $diabetes,
             'gulanormal' => $gulanormal,
             'totalSemuaStatus' => $totalSemuaStatus,
+            'expmcukaryawan' => $expmcukaryawan
         ]);
     }
 }

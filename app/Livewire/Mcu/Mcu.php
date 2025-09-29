@@ -534,8 +534,8 @@ class Mcu extends Component
         ]);
 
         // Ambil data status dan catatan berdasarkan ID MCU
-        $status = $this->status_file_mcu[$id_mcu] ?: null;
-        $catatan = $this->catatan_file_mcu[$id_mcu] ?: null;
+        $status = $this->status_file_mcu[$id_mcu] ?? null;
+        $catatan = $this->catatan_file_mcu[$id_mcu] ?? null;
 
         // Validasi tambahan: jika status adalah "Ditolak", pastikan catatan ada
         if ($status == 0 && empty($catatan)) {
@@ -1242,14 +1242,15 @@ class Mcu extends Component
 
             // Cari induk yang punya anak dengan paramedik null
             if (auth()->user()->subrole === 'verifikator') {
-                $indukPrioritas = ModelsMcu::whereNull('verifikator')
-                    ->whereNotNull('paramedik')
+                $indukPrioritas = ModelsMcu::whereNotNull('paramedik')
+                    ->whereNull('status')
                     ->get()
                     ->map(function ($item) {
                         return $item->sub_id ?? $item->id; // kalau sub_id null, ambil id
                     })
                     ->unique()
                     ->toArray();
+                // dd($indukPrioritas);
             } else if (auth()->user()->role === 'superadmin') {
                 $indukPrioritas = ModelsMcu::whereNotNull('status')
                     ->get()
@@ -1260,7 +1261,6 @@ class Mcu extends Component
                     ->toArray();
             } else {
                 $indukPrioritas = ModelsMcu::whereNull('paramedik')
-                    ->whereNull('verifikator')
                     ->get()
                     ->map(function ($item) {
                         return $item->sub_id ?? $item->id; // kalau sub_id null, ambil id
@@ -1287,8 +1287,9 @@ class Mcu extends Component
                             $query->whereDate('mcu.tgl_mcu', '<=', $this->searchtgl_akhir);
                         })
                         ->when(!empty($indukPrioritas), function ($query) use ($indukPrioritas) {
-                            $ids = implode(',', $indukPrioritas);
-                            return $query->orderByRaw("FIELD(mcu.id, $ids) DESC");
+                            //$ids = implode(',', $indukPrioritas);
+                            // return $query->orderByRaw("FIELD(mcu.id, $ids) DESC");
+                            return $query->wherein('mcu.id', $indukPrioritas);
                         })
                         ->orderBy('mcu.tgl_mcu', 'asc')
                         ->paginate(10)
@@ -1309,8 +1310,9 @@ class Mcu extends Component
                             $query->whereDate('mcu.tgl_mcu', '<=', $this->searchtgl_akhir);
                         })
                         ->when(!empty($indukPrioritas), function ($query) use ($indukPrioritas) {
-                            $ids = implode(',', $indukPrioritas);
-                            return $query->orderByRaw("FIELD(mcu.id, $ids) DESC");
+                            //$ids = implode(',', $indukPrioritas);
+                            //return $query->orderByRaw("FIELD(mcu.id, $ids) DESC");
+                            return $query->wherein('mcu.id', $indukPrioritas);
                         })
                         // ->when(!empty($prioritasIDs), function ($query) use ($prioritasIDs) {
                         //     $ids = implode(',', $prioritasIDs);
@@ -1342,8 +1344,9 @@ class Mcu extends Component
                         $query->whereDate('mcu.tgl_mcu', '<=', $this->searchtgl_akhir);
                     })
                     ->when(!empty($indukPrioritas), function ($query) use ($indukPrioritas) {
-                        $ids = implode(',', $indukPrioritas);
-                        return $query->orderByRaw("FIELD(mcu.id, $ids) DESC");
+                        // $ids = implode(',', $indukPrioritas);
+                        // return $query->orderByRaw("FIELD(mcu.id, $ids) DESC");
+                        return $query->wherein('mcu.id', $indukPrioritas);
                     })
                     // ->when(!empty($prioritasIDs), function ($query) use ($prioritasIDs) {
                     //     $ids = implode(',', $prioritasIDs);
@@ -1354,18 +1357,43 @@ class Mcu extends Component
                     ->withQueryString();
             }
         } else {
-            $indukPrioritas = ModelsMcu::whereNotNull('status')
-                ->get()
-                ->map(function ($item) {
-                    return $item->sub_id ?? $item->id; // kalau sub_id null, ambil id
-                })
-                ->unique()
+            $indukPrioritas = ModelsMcu::whereNull('sub_id')
+                ->where('status_', 'open')
+                ->where('status', 'FOLLOW UP')
+                ->pluck('id')
                 ->toArray();
+
+            $subPrioritas = ModelsMcu::whereIn('sub_id', $indukPrioritas)
+                ->where('status_', 'open')
+                ->pluck('sub_id')
+                ->toArray();
+
+            $indukDitolak = ModelsMcu::whereNull('sub_id')
+                ->where('status_file_mcu', '0')
+                ->pluck('id')
+                ->toArray();
+
+            $subDitolak = ModelsMcu::where('status_file_mcu', '0')
+                ->pluck('sub_id')
+                ->toArray();
+
+            // cari irisan (duplikat antara induk dan sub)
+            $duplikat = array_intersect($indukPrioritas, $subPrioritas);
+
+            // buang semua nilai duplikat dari induk dan sub
+            $indukBersih = array_diff($indukPrioritas, $duplikat);
+            $subBersih   = array_diff($subPrioritas, $duplikat);
+
+            // gabungkan semua hasil
+            $hasilAkhir = array_unique(array_merge($indukBersih, $subBersih, $indukDitolak, $subDitolak));
+
+            //dd($subDitolak);
+
             $mcus = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu')
                 ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
                 ->whereAny(['karyawans.nrp', 'karyawans.nama'], 'like', '%' . $this->search . '%')
                 ->where('mcu.status_', '=', "open")
-                ->where('mcu.sub_id', NULL)
+                ->whereNull('mcu.sub_id')
                 ->when($this->searchtgl_awal && $this->searchtgl_akhir, function ($query) {
                     $query->whereBetween('mcu.tgl_mcu', [$this->searchtgl_awal, $this->searchtgl_akhir]);
                 })
@@ -1375,15 +1403,216 @@ class Mcu extends Component
                 ->when(!$this->searchtgl_awal && $this->searchtgl_akhir, function ($query) {
                     $query->whereDate('mcu.tgl_mcu', '<=', $this->searchtgl_akhir);
                 })
-                ->when(!empty($indukPrioritas), function ($query) use ($indukPrioritas) {
-                    $ids = implode(',', $indukPrioritas);
+                ->when(!empty($hasilAkhir), function ($query) use ($hasilAkhir) {
+                    $ids = implode(',', $hasilAkhir);
                     return $query->orderByRaw("FIELD(mcu.id, $ids) DESC");
+                    //return $query->whereIn('mcu.id', $indukPrioritas);
                 })
                 ->where('karyawans.dept', auth()->user()->subrole)
                 ->orderBy('mcu.tgl_mcu', 'desc')
                 ->paginate(10)
                 ->withQueryString();
         }
+        // if (in_array(auth()->user()->role, ['superadmin', 'dokter', 'she'])) {
+        //     $carimcu = ModelsMcu::select('sub_id', 'verifikator')
+        //         ->whereNull('verifikator')
+        //         ->get();
+        //     $prioritasIDs = $carimcu->pluck('sub_id')->filter()->unique()->toArray();
+
+        //     Cari induk yang punya anak dengan paramedik null
+        //     if (auth()->user()->subrole === 'verifikator') {
+        //         $indukPrioritas = ModelsMcu::whereNull('verifikator')
+        //             ->whereNotNull('verifikator')
+        //             ->whereNotNull('paramedik')
+        //             ->whereNull('status')
+        //             ->get()
+        //             ->map(fn($item) => $item->sub_id ?? $item->id)
+        //             ->unique()
+        //             ->toArray();
+        //         dd($indukPrioritas);
+        //     } else if (auth()->user()->subrole === 'paramedik') {
+        //         $indukPrioritas = ModelsMcu::whereNull('paramedik')
+        //             ->whereNull('status_file_mcu')
+        //             ->get()
+        //             ->map(fn($item) => $item->sub_id ?? $item->id)
+        //             ->unique()
+        //             ->toArray();
+        //     } else if (auth()->user()->role === 'superadmin') {
+        //         $indukPrioritas = ModelsMcu::whereNotNull('status')
+        //             ->get()
+        //             ->map(fn($item) => $item->sub_id ?? $item->id)
+        //             ->unique()
+        //             ->toArray();
+        //     } else {
+        //         $indukPrioritas = ModelsMcu::whereNull('paramedik')
+        //             ->whereNull('verifikator')
+        //             ->get()
+        //             ->map(fn($item) => $item->sub_id ?? $item->id)
+        //             ->unique()
+        //             ->toArray();
+        //     }
+
+        //     if (auth()->user()->subrole === 'verifikator') {
+        //         $cuti_dokter = cutiDokter::where('status', 'on')->first();
+
+        //         $query = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu')
+        //             ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
+        //             ->whereAny(['karyawans.nrp', 'karyawans.nama'], 'like', '%' . $this->search . '%')
+        //             ->where('mcu.status_', '=', "open")
+        //             ->whereNotNull('paramedik')
+        //             ->whereNull('verifikator')
+        //             ->whereNull('mcu.sub_id');
+        //         $query->when(
+        //             $this->searchtgl_awal && $this->searchtgl_akhir,
+        //             fn($q) =>
+        //             $q->whereBetween('mcu.tgl_mcu', [$this->searchtgl_awal, $this->searchtgl_akhir])
+        //         );
+        //         $query->when(
+        //             $this->searchtgl_awal && !$this->searchtgl_akhir,
+        //             fn($q) =>
+        //             $q->whereDate('mcu.tgl_mcu', '>=', $this->searchtgl_awal)
+        //         );
+        //         $query->when(
+        //             !$this->searchtgl_awal && $this->searchtgl_akhir,
+        //             fn($q) =>
+        //             $q->whereDate('mcu.tgl_mcu', '<=', $this->searchtgl_akhir)
+        //         );
+        //         $query->when(!empty($indukPrioritas), function ($q) use ($indukPrioritas) {
+        //             $ids = implode(',', $indukPrioritas);
+        //             return $q->orderByRaw("FIELD(mcu.id, $ids) DESC");
+        //             return $q->whereIn('mcu.id', $indukPrioritas)
+        //                 ->orderBy('mcu.tgl_mcu', 'asc');
+        //         });
+        //         dd($indukPrioritas);
+
+        //         if (!$cuti_dokter) {
+        //             $query->where(function ($q) {
+        //                 $q->whereNull('mcu.verifikator')
+        //                     ->orWhere('mcu.verifikator', auth()->user()->username);
+        //             });
+        //         }
+
+        //         $total = $query->count();
+        //         $perPage = max(1, ceil($total / 2)); // biar aman, minimal 1
+        //         $mcus = $query->orderBy('mcu.tgl_mcu', 'asc')
+        //             ->paginate(200)
+        //             ->withQueryString();
+        //     } else if (auth()->user()->subrole === 'paramedik') {
+        //         $cuti_dokter = cutiDokter::where('status', 'on')->first();
+
+        //         $query = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu')
+        //             ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
+        //             ->whereAny(['karyawans.nrp', 'karyawans.nama'], 'like', '%' . $this->search . '%')
+        //             ->where('mcu.status_', '=', "open")
+        //             ->whereNull('paramedik')
+        //             ->whereNull('mcu.sub_id')
+        //             ->orderBy('mcu.tgl_mcu', 'asc');
+
+        //         $query->when(
+        //             $this->searchtgl_awal && $this->searchtgl_akhir,
+        //             fn($q) =>
+        //             $q->whereBetween('mcu.tgl_mcu', [$this->searchtgl_awal, $this->searchtgl_akhir])
+        //         );
+        //         $query->when(
+        //             $this->searchtgl_awal && !$this->searchtgl_akhir,
+        //             fn($q) =>
+        //             $q->whereDate('mcu.tgl_mcu', '>=', $this->searchtgl_awal)
+        //         );
+        //         $query->when(
+        //             !$this->searchtgl_awal && $this->searchtgl_akhir,
+        //             fn($q) =>
+        //             $q->whereDate('mcu.tgl_mcu', '<=', $this->searchtgl_akhir)
+        //         );
+        //         $query->when(!empty($indukPrioritas), function ($q) use ($indukPrioritas) {
+        //             $ids = implode(',', $indukPrioritas);
+        //             return $q->orderByRaw("FIELD(mcu.id, $ids) DESC");
+        //         });
+
+        //         if (!$cuti_dokter) {
+        //             $query->where(function ($q) {
+        //                 $q->whereNull('mcu.verifikator')
+        //                     ->orWhere('mcu.verifikator', auth()->user()->username);
+        //             });
+        //         }
+
+        //         $total = $query->count();
+        //         $perPage = max(1, ceil($total / 2)); // biar aman, minimal 1
+        //         $mcus = $query->orderBy('mcu.tgl_mcu', 'asc')
+        //             ->paginate($perPage)
+        //             ->withQueryString();
+        //     } else {
+        //         $query = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu')
+        //             ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
+        //             ->whereAny(['karyawans.nrp', 'karyawans.nama'], 'like', '%' . $this->search . '%')
+        //             ->where('mcu.status_', '=', "open")
+        //             ->whereNull('mcu.sub_id');
+
+        //         $query->when(
+        //             $this->searchtgl_awal && $this->searchtgl_akhir,
+        //             fn($q) =>
+        //             $q->whereBetween('mcu.tgl_mcu', [$this->searchtgl_awal, $this->searchtgl_akhir])
+        //         );
+        //         $query->when(
+        //             $this->searchtgl_awal && !$this->searchtgl_akhir,
+        //             fn($q) =>
+        //             $q->whereDate('mcu.tgl_mcu', '>=', $this->searchtgl_awal)
+        //         );
+        //         $query->when(
+        //             !$this->searchtgl_awal && $this->searchtgl_akhir,
+        //             fn($q) =>
+        //             $q->whereDate('mcu.tgl_mcu', '<=', $this->searchtgl_akhir)
+        //         );
+        //         $query->when(!empty($indukPrioritas), function ($q) use ($indukPrioritas) {
+        //             $ids = implode(',', $indukPrioritas);
+        //             return $q->orderByRaw("FIELD(mcu.id, $ids) DESC");
+        //         });
+
+        //         $total = $query->count();
+        //         $perPage = max(1, ceil($total / 2));
+        //         $mcus = $query->orderBy('mcu.tgl_mcu', 'asc')
+        //             ->paginate($perPage)
+        //             ->withQueryString();
+        //     }
+        // } else {
+        //     $indukPrioritas = ModelsMcu::whereNotNull('status')
+        //         ->get()
+        //         ->map(fn($item) => $item->sub_id ?? $item->id)
+        //         ->unique()
+        //         ->toArray();
+
+        //     $query = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu')
+        //         ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
+        //         ->whereAny(['karyawans.nrp', 'karyawans.nama'], 'like', '%' . $this->search . '%')
+        //         ->where('mcu.status_', '=', "open")
+        //         ->whereNull('mcu.sub_id')
+        //         ->where('karyawans.dept', auth()->user()->subrole);
+
+        //     $query->when(
+        //         $this->searchtgl_awal && $this->searchtgl_akhir,
+        //         fn($q) =>
+        //         $q->whereBetween('mcu.tgl_mcu', [$this->searchtgl_awal, $this->searchtgl_akhir])
+        //     );
+        //     $query->when(
+        //         $this->searchtgl_awal && !$this->searchtgl_akhir,
+        //         fn($q) =>
+        //         $q->whereDate('mcu.tgl_mcu', '>=', $this->searchtgl_awal)
+        //     );
+        //     $query->when(
+        //         !$this->searchtgl_awal && $this->searchtgl_akhir,
+        //         fn($q) =>
+        //         $q->whereDate('mcu.tgl_mcu', '<=', $this->searchtgl_akhir)
+        //     );
+        //     $query->when(!empty($indukPrioritas), function ($q) use ($indukPrioritas) {
+        //         $ids = implode(',', $indukPrioritas);
+        //         return $q->orderByRaw("FIELD(mcu.id, $ids) DESC");
+        //     });
+
+        //     $total = $query->count();
+        //     $perPage = max(1, ceil($total / 2));
+        //     $mcus = $query->orderBy('mcu.tgl_mcu', 'desc')
+        //         ->paginate($perPage)
+        //         ->withQueryString();
+        // }
 
         foreach ($mcus as $data) {
             if (!isset($this->status_file_mcu[$data->id_mcu])) {

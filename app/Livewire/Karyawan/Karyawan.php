@@ -339,6 +339,7 @@ class Karyawan extends Component
             return;
         } catch (\Exception $e) {
             // On error, show error message
+            //\Log::error('Import Karyawan Error: ' . $e->getMessage());
             $this->dispatch(
                 'alert',
                 type: 'error',

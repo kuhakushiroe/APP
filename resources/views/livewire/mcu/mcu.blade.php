@@ -253,7 +253,7 @@
                                                                             <span
                                                                                 class="spinner-border spinner-border-sm"
                                                                                 aria-hidden="true"></span>
-                                                                            <span role="status">Paramedik</span>
+                                                                            <span role="status">Paramediks</span>
                                                                         </button>
                                                                     @endif
                                                                 @endif
@@ -360,7 +360,8 @@
                                                             {{ $item->status }}
                                                         @endhasAnyRole
                                                     </td>
-                                                    <td>{{ $item->tgl_mcu }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($item->tgl_mcu)->locale('id')->isoFormat('D MMMM YYYY') }}
+                                                    </td>
                                                     <td>
                                                         @if (empty($item->status))
                                                             @if (empty($item->paramedik))
@@ -563,7 +564,7 @@
                                                             <button class="btn btn-outline-danger btn-sm"
                                                                 wire:click="uploadMCU({{ $data->id_mcu }})">
                                                                 <span class="bi bi-plus"></span>
-                                                                Upload MCU
+                                                                Upload FOLLOW UP
                                                             </button>
                                                         @endhasanyrole
                                                     </td>

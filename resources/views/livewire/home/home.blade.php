@@ -1,124 +1,175 @@
 <div>
     <div class="row">
         <!-- /.col -->
-        <div class="col-12 col-sm-4 col-md-4">
-            <div class="info-box">
-                <span class="info-box-icon text-bg-primary shadow-sm">
-                    <i class="bi bi-people-fill"></i>
-                </span>
-                <div class="info-box-content">
-                    <span class="info-box-text">Karyawan</span>
-                    <span class="info-box-number">{{ $jumlahKaryawan }}</span>
-                </div>
-                <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-        </div>
-        {{-- STATUS UMUM: AKTIF / NON AKTIF --}}
-        @forelse ($finalKaryawanCounts as $datakaryawan)
-            <div class="col-12 col-sm-4 col-md-4 mb-3">
-                <div class="info-box shadow-sm">
-                    <span class="info-box-icon {{ $datakaryawan['color'] }}">
-                        <i class="bi bi-person-fill-check"></i>
-                    </span>
-                    <div class="info-box-content">
-                        <span class="info-box-text text-capitalize">{{ $datakaryawan['status'] }}</span>
-                        <span class="info-box-number">{{ $datakaryawan['total'] }}</span>
-                    </div>
-                </div>
-            </div>
-        @empty
-            <div class="col-12">
-                <div class="alert alert-warning text-center">Tidak ada data status umum</div>
-            </div>
-        @endforelse
+        @if (auth()->user()->role !== 'admin')
 
-        {{-- STATUS_KARYAWAN DETAIL --}}
-        @forelse ($finalDetailStatusKaryawan as $item)
-            <div class="col-12 col-sm-4 col-md-4 mb-3">
-                <div class="info-box shadow-sm border-start border-4">
-                    <span class="info-box-icon">
+            <div class="col-12 col-sm-4 col-md-4">
+                <div class="info-box">
+                    <span class="info-box-icon text-bg-primary shadow-sm">
                         <i class="bi bi-people-fill"></i>
                     </span>
                     <div class="info-box-content">
-                        <span class="info-box-text text-uppercase">
-                            @if ($item['status_karyawan'] == 'TEMPORARY')
-                                TEMPORARY / NEW HIRE
-                            @else
-                                {{ $item['status_karyawan'] }}
-                            @endif
+                        <span class="info-box-text">Karyawan</span>
+                        <span class="info-box-number">{{ $jumlahKaryawan }}</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            {{-- STATUS UMUM: AKTIF / NON AKTIF --}}
+            @forelse ($finalKaryawanCounts as $datakaryawan)
+                <div class="col-12 col-sm-4 col-md-4 mb-3">
+                    <div class="info-box shadow-sm">
+                        <span class="info-box-icon {{ $datakaryawan['color'] }}">
+                            <i class="bi bi-person-fill-check"></i>
                         </span>
-                        <div class="d-flex justify-content-between">
-                            <small class="text-success">Aktif:</small>
-                            <small>{{ $item['aktif'] }}</small>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <small class="text-danger">Non Aktif:</small>
-                            <small>{{ $item['non_aktif'] }}</small>
+                        <div class="info-box-content">
+                            <span class="info-box-text text-capitalize">{{ $datakaryawan['status'] }}</span>
+                            <span class="info-box-number">{{ $datakaryawan['total'] }}</span>
                         </div>
                     </div>
                 </div>
-            </div>
-        @empty
-            <div class="col-12">
-                <div class="alert alert-warning text-center">Tidak ada data status_karyawan</div>
-            </div>
-        @endforelse
+            @empty
+                <div class="col-12">
+                    <div class="alert alert-warning text-center">Tidak ada data status umum</div>
+                </div>
+            @endforelse
+
+            {{-- STATUS_KARYAWAN DETAIL --}}
+            @forelse ($finalDetailStatusKaryawan as $item)
+                <div class="col-12 col-sm-4 col-md-4 mb-3">
+                    <div class="info-box shadow-sm border-start border-4">
+                        <span class="info-box-icon">
+                            <i class="bi bi-people-fill"></i>
+                        </span>
+                        <div class="info-box-content">
+                            <span class="info-box-text text-uppercase">
+                                @if ($item['status_karyawan'] == 'TEMPORARY')
+                                    TEMPORARY / NEW HIRE
+                                @else
+                                    {{ $item['status_karyawan'] }}
+                                @endif
+                            </span>
+                            <div class="d-flex justify-content-between">
+                                <small class="text-success">Aktif:</small>
+                                <small>{{ $item['aktif'] }}</small>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <small class="text-danger">Non Aktif:</small>
+                                <small>{{ $item['non_aktif'] }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <div class="col-12">
+                    <div class="alert alert-warning text-center">Tidak ada data status_karyawan</div>
+                </div>
+            @endforelse
 
 
-        <div class="col-12 col-sm-12 col-md-6">
-            <div class="card mb-4 collapsed-card">
-                <div class="card-header">
-                    <h3 class="card-title">Karyawan Aktif</h3>
+            <div class="col-12 col-sm-12 col-md-6">
+                <div class="card mb-4 collapsed-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Karyawan Aktif</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
+                                <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+                                <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <!--begin::Row-->
+                        <div class="row">
+                            <div class="col-12">
+                                <div id="pie-chart-aktif"></div>
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <!--end::Row-->
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6">
+                <div class="card mb-4 collapsed-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Karyawan Non Aktif</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
+                                <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+                                <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <!--begin::Row-->
+                        <div class="row">
+                            <div class="col-12">
+                                <div id="pie-chart-non-aktif"></div>
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <!--end::Row-->
+                    </div>
+                </div>
+            </div>
+        @endif
+        <!-- expMCUKaryawan -->
+
+        <div class="col-md-12">
+            <div class="card mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="card-title">DATA KARYAWAN BELUM MEMILIKI MCU / EXP MCU
+                        ({{ auth()->user()->subrole ?? '' }})</h5>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
-                            <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
                             <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+                            <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
                         </button>
                     </div>
                 </div>
                 <!-- /.card-header -->
-                <div class="card-body">
-                    <!--begin::Row-->
-                    <div class="row">
-                        <div class="col-12">
-                            <div id="pie-chart-aktif"></div>
-                        </div>
-                        <!-- /.col -->
-                    </div>
-                    <!--end::Row-->
+                <div class="card-body table-responsive" style="max-height: 300px; overflow-y: auto;">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama</th>
+                                <th>Departemen</th>
+                                <th>Jabatan</th>
+                                <th>Exp MCU</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($expmcukaryawan as $item)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $item['nama'] }}</td>
+                                    <td>{{ $item['dept'] }}</td>
+                                    <td>{{ $item['jabatan'] }}</td>
+                                    <td>{{ $item['exp_mcu'] ?? '-Tidak Memiliki MCU-' }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="text-center">Tidak ada data</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
-            </div>
-        </div>
-        <div class="col-12 col-sm-12 col-md-6">
-            <div class="card mb-4 collapsed-card">
-                <div class="card-header">
-                    <h3 class="card-title">Karyawan Non Aktif</h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
-                            <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
-                            <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
-                        </button>
-                    </div>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                    <!--begin::Row-->
-                    <div class="row">
-                        <div class="col-12">
-                            <div id="pie-chart-non-aktif"></div>
-                        </div>
-                        <!-- /.col -->
-                    </div>
-                    <!--end::Row-->
-                </div>
+                <!-- ./card-body -->
+
+                <!-- /.card-footer -->
             </div>
         </div>
 
         <div class="col-md-9">
             <div class="card mb-4">
                 <div class="card-header bg-secondary text-white">
-                    <h5 class="card-title">Verifikator MCU</h5>
+                    <h5 class="card-title">Verifikator MCU {{ auth()->user()->subrole ?? '' }}</h5>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
                             <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
@@ -193,7 +244,8 @@
                                                 : 0;
                                     @endphp
                                     <div class="progress progress-sm" style="height: 20px">
-                                        <div class="progress-bar text-bg-success" style="width: {{ $persenFit }}%">
+                                        <div class="progress-bar text-bg-success"
+                                            style="width: {{ $persenFit }}%">
                                             {{ number_format($persenFit, 2) }} %
                                         </div>
                                     </div>
@@ -370,6 +422,8 @@
             </div>
             <!-- /.card -->
         </div>
+
+
         <!-- /.col -->
     </div>
 

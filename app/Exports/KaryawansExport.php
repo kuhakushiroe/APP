@@ -27,7 +27,7 @@ class KaryawansExport implements FromCollection, WithHeadings
                 'alamat',
                 'domisili',
                 'status',
-                'versatility',
+                'exp_mcu',
                 'exp_id',
                 'exp_kimper'
             )->get();
@@ -45,7 +45,7 @@ class KaryawansExport implements FromCollection, WithHeadings
                 'alamat',
                 'domisili',
                 'status',
-                'versatility',
+                'exp_mcu',
                 'exp_id',
                 'exp_kimper'
             )->where('dept', auth()->user()->subrole)->get();
@@ -66,7 +66,7 @@ class KaryawansExport implements FromCollection, WithHeadings
             'alamat',
             'domisili',
             'status',
-            'versatility',
+            'exp_mcu',
             'exp_id',
             'exp_kimper'
         ];
