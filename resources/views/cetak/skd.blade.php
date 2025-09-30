@@ -183,12 +183,12 @@
                 <tr>
                     <td>6.</td>
                     <td>Tinggi Badan</td>
-                    <td>: {{ $query->TB }}</td>
+                    <td>: {{ $query->TB }} cm</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>Berat Badan</td>
-                    <td>: {{ $query->BB }}</td>
+                    <td>: {{ $query->BB }} kg</td>
                 </tr>
             </table>
         </div>
