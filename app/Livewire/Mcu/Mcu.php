@@ -1328,6 +1328,33 @@ class Mcu extends Component
                         ->paginate(10)
                         ->withQueryString();
                 }
+            } else if (auth()->user()->subrole === 'paramedik') {
+                $mcus = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu')
+                    ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
+                    ->whereAny(['karyawans.nrp', 'karyawans.nama'], 'like', '%' . $this->search . '%')
+                    ->where('mcu.status_', '=', "open")
+                    ->whereNull('mcu.sub_id')
+                    ->when($this->searchtgl_awal && $this->searchtgl_akhir, function ($query) {
+                        $query->whereBetween('mcu.tgl_mcu', [$this->searchtgl_awal, $this->searchtgl_akhir]);
+                    })
+                    ->when($this->searchtgl_awal && !$this->searchtgl_akhir, function ($query) {
+                        $query->whereDate('mcu.tgl_mcu', '>=', $this->searchtgl_awal);
+                    })
+                    ->when(!$this->searchtgl_awal && $this->searchtgl_akhir, function ($query) {
+                        $query->whereDate('mcu.tgl_mcu', '<=', $this->searchtgl_akhir);
+                    })
+                    ->when(!empty($indukPrioritas), function ($query) use ($indukPrioritas) {
+                        //$ids = implode(',', $indukPrioritas);
+                        //return $query->orderByRaw("FIELD(mcu.id, $ids) DESC");
+                        return $query->wherein('mcu.id', $indukPrioritas);
+                    })
+                    // ->when(!empty($prioritasIDs), function ($query) use ($prioritasIDs) {
+                    //     $ids = implode(',', $prioritasIDs);
+                    //     return $query->orderByRaw("FIELD(mcu.id, $ids) DESC");
+                    // })
+                    // ->orderBy('mcu.tgl_mcu', 'desc')
+                    ->paginate(10)
+                    ->withQueryString();
             } else {
                 $mcus = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu')
                     ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
@@ -1344,9 +1371,9 @@ class Mcu extends Component
                         $query->whereDate('mcu.tgl_mcu', '<=', $this->searchtgl_akhir);
                     })
                     ->when(!empty($indukPrioritas), function ($query) use ($indukPrioritas) {
-                        // $ids = implode(',', $indukPrioritas);
-                        // return $query->orderByRaw("FIELD(mcu.id, $ids) DESC");
-                        return $query->wherein('mcu.id', $indukPrioritas);
+                        $ids = implode(',', $indukPrioritas);
+                        return $query->orderByRaw("FIELD(mcu.id, $ids) DESC");
+                        //return $query->wherein('mcu.id', $indukPrioritas);
                     })
                     // ->when(!empty($prioritasIDs), function ($query) use ($prioritasIDs) {
                     //     $ids = implode(',', $prioritasIDs);
