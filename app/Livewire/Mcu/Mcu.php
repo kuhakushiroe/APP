@@ -1451,7 +1451,7 @@ class Mcu extends Component
             }
 
             // --- paginate ---
-            $mcus = $mcus->paginate(10)->withQueryString();
+            $mcus = $mcus->paginate(100)->withQueryString();
         }
         // if (in_array(auth()->user()->role, ['superadmin', 'dokter', 'she'])) {
         //     $carimcu = ModelsMcu::select('sub_id', 'verifikator')
