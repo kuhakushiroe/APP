@@ -20,7 +20,6 @@ class KaryawanImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         if (auth()->user()->hasRole('superadmin')) {
-
             // Konversi exp_mcu
             $expMcu = null;
             if (!empty($row['exp_mcu'])) {
@@ -35,16 +34,16 @@ class KaryawanImport implements ToModel, WithHeadingRow
 
             $karyawan = Karyawan::updateOrCreate(
                 [
-                    'nik' => $row['nik'] ?? null,
-                    'nrp' => $row['nrp'] ?? null,
+                    'nrp' => (string) $row['nrp'],
                 ],
                 [
-                    'nama'       => $row['nama'] ?? null,
-                    'perusahaan' => $row['perusahaan'] ?? null,
-                    'dept'       => $row['dept'] ?? null,
-                    'jabatan'    => $row['jabatan'] ?? null,
+                    'nama'       => (string) $row['nama'] ?? null,
+                    'perusahaan' => (string) $row['perusahaan'] ?? null,
+                    'dept'       => (string) $row['dept'] ?? null,
+                    'jabatan'    => (string) $row['jabatan'] ?? null,
                     'exp_id'     => $row['exp_id'] ?? null,
                     'exp_kimper' => $row['exp_kimper'] ?? null,
+                    'doh'    => $row['doh'] ?? now()
                 ]
             );
 
@@ -58,9 +57,8 @@ class KaryawanImport implements ToModel, WithHeadingRow
                     'exp_mcu' => $expMcu,
                 ]);
             }
-            Mcu::where('nrp', $row['nrp'])
+            Mcu::where('id_karyawan', (string) $row['nrp'])
                 ->update(['status_' => 'close']);
-            return $karyawan;
         }
 
         return null;
