@@ -133,6 +133,19 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive" style="max-height: 300px; overflow-y: auto;">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <a href="#" wire:click="export" rel="noopener noreferrer"
+                                class="btn btn-primary btn-sm">
+                                <span class="bi bi-printer"></span>
+                                Download
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" wire:model.live="search" class="form-control form-control-sm"
+                                placeholder="Cari Nama / NRP">
+                        </div>
+                    </div>
                     <table class="table table-striped">
                         <thead>
                             <tr>

@@ -29,6 +29,7 @@ class Users extends Component
     public function close()
     {
         $this->form = false;
+        $this->reset();
     }
     public function store()
     {

@@ -1287,9 +1287,9 @@ class Mcu extends Component
                             $query->whereDate('mcu.tgl_mcu', '<=', $this->searchtgl_akhir);
                         })
                         ->when(!empty($indukPrioritas), function ($query) use ($indukPrioritas) {
-                            //$ids = implode(',', $indukPrioritas);
-                            // return $query->orderByRaw("FIELD(mcu.id, $ids) DESC");
-                            return $query->wherein('mcu.id', $indukPrioritas);
+                            $ids = implode(',', $indukPrioritas);
+                            return $query->orderByRaw("FIELD(mcu.id, $ids) DESC");
+                            //return $query->wherein('mcu.id', $indukPrioritas);
                         })
                         ->orderBy('mcu.tgl_mcu', 'asc')
                         ->paginate(10)
@@ -1404,19 +1404,26 @@ class Mcu extends Component
                 ->pluck('sub_id')
                 ->toArray();
 
-            // cari irisan (duplikat antara induk dan sub)
-            $duplikat = array_intersect($indukPrioritas, $subPrioritas);
-
-            // buang semua nilai duplikat dari induk dan sub
+            // cari irisan
+            $duplikat    = array_intersect($indukPrioritas, $subPrioritas);
             $indukBersih = array_diff($indukPrioritas, $duplikat);
             $subBersih   = array_diff($subPrioritas, $duplikat);
 
-            // gabungkan semua hasil
-            $hasilAkhir = array_unique(array_merge($indukBersih, $subBersih, $indukDitolak, $subDitolak));
+            // gabungkan semua hasil (pastikan integer dan unik)
+            $hasilAkhir = array_values(array_unique(array_map('intval', array_merge(
+                $indukBersih,
+                $subBersih,
+                $indukDitolak,
+                $subDitolak
+            ))));
 
-            //dd($subDitolak);
-
-            $mcus = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu')
+            // --- query utama ---
+            $mcus = ModelsMcu::select(
+                'mcu.*',
+                'karyawans.*',
+                'mcu.status as mcuStatus',
+                'mcu.id as id_mcu'
+            )
                 ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
                 ->whereAny(['karyawans.nrp', 'karyawans.nama'], 'like', '%' . $this->search . '%')
                 ->where('mcu.status_', '=', "open")
@@ -1430,15 +1437,21 @@ class Mcu extends Component
                 ->when(!$this->searchtgl_awal && $this->searchtgl_akhir, function ($query) {
                     $query->whereDate('mcu.tgl_mcu', '<=', $this->searchtgl_akhir);
                 })
-                ->when(!empty($hasilAkhir), function ($query) use ($hasilAkhir) {
-                    $ids = implode(',', $hasilAkhir);
-                    return $query->orderByRaw("FIELD(mcu.id, $ids) DESC");
-                    //return $query->whereIn('mcu.id', $indukPrioritas);
-                })
-                ->where('karyawans.dept', auth()->user()->subrole)
-                ->orderBy('mcu.tgl_mcu', 'desc')
-                ->paginate(10)
-                ->withQueryString();
+                ->where('karyawans.dept', auth()->user()->subrole);
+
+            // --- sorting ---
+            if (!empty($hasilAkhir)) {
+                // ada prioritas → urutkan sesuai FIELD
+                $ids = implode(',', $hasilAkhir);
+                $mcus = $mcus->orderByRaw("FIELD(mcu.id, $ids) DESC")
+                    ->orderBy('mcu.tgl_mcu', 'desc');
+            } else {
+                // tidak ada prioritas → urut tanggal saja
+                $mcus = $mcus->orderBy('mcu.tgl_mcu', 'desc');
+            }
+
+            // --- paginate ---
+            $mcus = $mcus->paginate(10)->withQueryString();
         }
         // if (in_array(auth()->user()->role, ['superadmin', 'dokter', 'she'])) {
         //     $carimcu = ModelsMcu::select('sub_id', 'verifikator')

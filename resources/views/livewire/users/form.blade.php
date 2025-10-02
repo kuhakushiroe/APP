@@ -154,10 +154,6 @@
                         </div>
                     </form>
                 @endif
-
-
-
-
             </div>
             <!--end::Quick Example-->
         </div>

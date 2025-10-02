@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Home;
 
+use App\Exports\mcuExp;
 use Carbon\Carbon;
 use App\Models\User;
 use Livewire\Component;
@@ -10,10 +11,12 @@ use App\Models\Departments;
 use App\Models\Mcu as ModelsMcu;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Excel;
 
 class Home extends Component
 {
     public $tanggal;
+    public $search = '';
     //public $files = [];
     public function onchangeTanggal()
     {
@@ -22,6 +25,18 @@ class Home extends Component
     public function mount()
     {
         $this->tanggal = date('Y-m-d');
+    }
+    public function export()
+    {
+        $excel = app(Excel::class);
+        if (auth()->user()->hasRole('superadmin')) {
+            return $excel->download(new mcuExp, 'EXP MCU-' . date('Y-m-d') . time() . '.xlsx');
+            //return Excel::download(new KaryawansExport, 'karyawans-MIFA' . date('Y-m-d') . time() . '.xlsx');
+        }
+        if (auth()->user()->hasRole('admin')) {
+            return $excel->download(new mcuExp, 'EXP MCU-' . auth()->user()->subrole . '-' . date('Y-m-d') . time() . '.xlsx');
+            //return Excel::download(new KaryawansExport, 'karyawans-MIFA' . date('Y-m-d') . time() . '.xlsx');
+        }
     }
     public function render()
     {
@@ -223,20 +238,25 @@ class Home extends Component
         $oneMonthLater = Carbon::today()->addMonth();
 
         if (auth()->user()->role == 'pimpinan' || auth()->user()->role == 'admin') {
-            $expmcukaryawan = Karyawan::where('status', 'aktif')->where('dept', auth()->user()->subrole)->where(function ($q) use ($today, $oneMonthLater) {
-                $q->where('exp_mcu', '<', $today)                    // expired
-                    ->orWhereBetween('exp_mcu', [$today, $oneMonthLater]) // akan habis ≤ 1 bulan
-                    ->orWhereNull('exp_mcu');                          // belum punya
-            })
+            $expmcukaryawan = Karyawan::whereAny(['nik', 'nrp', 'nama'], 'LIKE', '%' . $this->search . '%')
+                ->where('status', 'aktif')
+                ->where('dept', auth()->user()->subrole)
+                ->where(function ($q) use ($today, $oneMonthLater) {
+                    $q->where('exp_mcu', '<', $today)                    // expired
+                        ->orWhereBetween('exp_mcu', [$today, $oneMonthLater]) // akan habis ≤ 1 bulan
+                        ->orWhereNull('exp_mcu');                          // belum punya
+                })
                 ->orderByRaw('exp_mcu IS NULL') // NULL terakhir
                 ->orderBy('exp_mcu', 'asc')     // urutkan exp_mcu terdekat (expired dulu, lalu yang akan habis)
                 ->get();
         } else {
-            $expmcukaryawan = Karyawan::where('status', 'aktif')->where(function ($q) use ($today, $oneMonthLater) {
-                $q->where('exp_mcu', '<', $today)                    // expired
-                    ->orWhereBetween('exp_mcu', [$today, $oneMonthLater]) // akan habis ≤ 1 bulan
-                    ->orWhereNull('exp_mcu');                          // belum punya
-            })
+            $expmcukaryawan = Karyawan::whereAny(['nik', 'nrp', 'nama'], 'LIKE', '%' . $this->search . '%')
+                ->where('status', 'aktif')
+                ->where(function ($q) use ($today, $oneMonthLater) {
+                    $q->where('exp_mcu', '<', $today)                    // expired
+                        ->orWhereBetween('exp_mcu', [$today, $oneMonthLater]) // akan habis ≤ 1 bulan
+                        ->orWhereNull('exp_mcu');                          // belum punya
+                })
                 ->orderByRaw('exp_mcu IS NULL') // NULL terakhir
                 ->orderBy('exp_mcu', 'asc')     // urutkan exp_mcu terdekat (expired dulu, lalu yang akan habis)
                 ->get();
