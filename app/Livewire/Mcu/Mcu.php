@@ -1236,6 +1236,7 @@ class Mcu extends Component
             ->first();
         if (in_array(auth()->user()->role, ['superadmin', 'dokter', 'she'])) {
             $carimcu = ModelsMcu::select('sub_id', 'verifikator')
+                ->where('status_', 'open')
                 ->whereNull('verifikator')
                 ->get();
             $prioritasIDs = $carimcu->pluck('sub_id')->filter()->unique()->toArray();
@@ -1243,6 +1244,7 @@ class Mcu extends Component
             // Cari induk yang punya anak dengan paramedik null
             if (auth()->user()->subrole === 'verifikator') {
                 $indukPrioritas = ModelsMcu::whereNotNull('paramedik')
+                    ->where('status_', 'open')
                     ->whereNull('status')
                     ->get()
                     ->map(function ($item) {
@@ -1253,6 +1255,7 @@ class Mcu extends Component
                 // dd($indukPrioritas);
             } else if (auth()->user()->role === 'superadmin') {
                 $indukPrioritas = ModelsMcu::whereNotNull('status')
+                    ->where('status_', 'open')
                     ->get()
                     ->map(function ($item) {
                         return $item->sub_id ?? $item->id; // kalau sub_id null, ambil id
@@ -1261,6 +1264,7 @@ class Mcu extends Component
                     ->toArray();
             } else {
                 $indukPrioritas = ModelsMcu::whereNull('paramedik')
+                    ->where('status_', 'open')
                     ->get()
                     ->map(function ($item) {
                         return $item->sub_id ?? $item->id; // kalau sub_id null, ambil id
@@ -1426,8 +1430,8 @@ class Mcu extends Component
             )
                 ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
                 ->whereAny(['karyawans.nrp', 'karyawans.nama'], 'like', '%' . $this->search . '%')
-                ->where('mcu.status_', '=', "open")
                 ->whereNull('mcu.sub_id')
+                ->where('mcu.status_', '=', "open")
                 ->when($this->searchtgl_awal && $this->searchtgl_akhir, function ($query) {
                     $query->whereBetween('mcu.tgl_mcu', [$this->searchtgl_awal, $this->searchtgl_akhir]);
                 })

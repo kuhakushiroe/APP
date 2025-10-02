@@ -145,15 +145,22 @@ class Home extends Component
         //MCU belum di acc
         $today = $this->tanggal;
         if (auth()->user()->role == 'pimpinan' || auth()->user()->role == 'admin') {
-            $mcuNoAcc = ModelsMcu::join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')->where('karyawans.dept', auth()->user()->subrole)->whereNull(['mcu.status', 'mcu.verifikator'])->whereNull('deleted_at')->count();
-            $mcuData = ModelsMcu::join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')->select('mcu.verifikator', 'mcu.status', DB::raw('count(*) as total'))
+            $mcuNoAcc = ModelsMcu::join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
+                ->where('karyawans.dept', auth()->user()->subrole)
+                ->whereNull(['mcu.status'])
+                ->where('status_', 'open')
+                ->count();
+            $mcuData = ModelsMcu::join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
+                ->select('mcu.verifikator', 'mcu.status', DB::raw('count(*) as total'))
                 ->whereNotNull('verifikator')
                 ->whereDate('tgl_verifikasi', $today)
                 ->groupBy('verifikator', 'status')
                 ->get()
                 ->groupBy('verifikator');
         } else {;
-            $mcuNoAcc = ModelsMcu::whereNull(['status', 'verifikator'])->whereNull('deleted_at')->count();
+            $mcuNoAcc = ModelsMcu::whereNull(['status'])
+                ->where('status_', 'open')
+                ->count();
             $mcuData = ModelsMcu::select('verifikator', 'status', DB::raw('count(*) as total'))
                 ->whereNotNull('verifikator')
                 ->whereDate('tgl_verifikasi', $today)
