@@ -121,6 +121,13 @@
                                             <td>Tanggal Pengajuan</td>
                                             <td>:</td>
                                             <td>
+                                                {{ \Carbon\Carbon::parse($data->tglPengajuan)->locale('id')->isoFormat('D MMMM YYYY') }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tanggal MCU</td>
+                                            <td>:</td>
+                                            <td>
                                                 {{ \Carbon\Carbon::parse($data->tgl_mcu)->locale('id')->isoFormat('D MMMM YYYY') }}
                                             </td>
                                         </tr>

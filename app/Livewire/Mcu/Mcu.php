@@ -947,7 +947,7 @@ class Mcu extends Component
                 }
 
                 $indukmcu = ModelsMcu::where('id', $mcu->sub_id)->where('sub_id', NULL)->first();
-                if ($this->status == 'FIT' || $this->status == 'FIT WITH NOTE') {
+                if ($this->status == 'FIT' || $this->status == 'FIT WITH NOTE' || $this->status == 'UNFIT' || $this->status == 'TEMPORARY UNFIT') {
                     $mcu->update([
                         'no_dokumen' => $this->no_dokumen,
                         'status_' => 'close',
@@ -1276,7 +1276,7 @@ class Mcu extends Component
             if (auth()->user()->subrole === 'verifikator') {
                 $cuti_dokter = cutiDokter::where('status', 'on')->first();
                 if ($cuti_dokter) {
-                    $mcus = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu')
+                    $mcus = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu', 'mcu.created_at as tglPengajuan')
                         ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
                         ->whereAny(['karyawans.nrp', 'karyawans.nama'], 'like', '%' . $this->search . '%')
                         ->where('mcu.status_', '=', "open")
@@ -1299,7 +1299,7 @@ class Mcu extends Component
                         ->paginate(10)
                         ->withQueryString();
                 } else {
-                    $mcus = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu')
+                    $mcus = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu', 'mcu.created_at as tglPengajuan')
                         ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
                         ->whereAny(['karyawans.nrp', 'karyawans.nama'], 'like', '%' . $this->search . '%')
                         ->where('mcu.status_', '=', "open")
@@ -1333,7 +1333,7 @@ class Mcu extends Component
                         ->withQueryString();
                 }
             } else if (auth()->user()->subrole === 'paramedik') {
-                $mcus = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu')
+                $mcus = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu', 'mcu.created_at as tglPengajuan')
                     ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
                     ->whereAny(['karyawans.nrp', 'karyawans.nama'], 'like', '%' . $this->search . '%')
                     ->where('mcu.status_', '=', "open")
@@ -1360,7 +1360,7 @@ class Mcu extends Component
                     ->paginate(10)
                     ->withQueryString();
             } else {
-                $mcus = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu')
+                $mcus = ModelsMcu::select('mcu.*', 'karyawans.*', 'mcu.status as mcuStatus', 'mcu.id as id_mcu', 'mcu.created_at as tglPengajuan')
                     ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
                     ->whereAny(['karyawans.nrp', 'karyawans.nama'], 'like', '%' . $this->search . '%')
                     ->where('mcu.status_', '=', "open")
@@ -1426,7 +1426,9 @@ class Mcu extends Component
                 'mcu.*',
                 'karyawans.*',
                 'mcu.status as mcuStatus',
-                'mcu.id as id_mcu'
+                'mcu.id as id_mcu',
+                'mcu.created_at as tglPengajuan'
+
             )
                 ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
                 ->whereAny(['karyawans.nrp', 'karyawans.nama'], 'like', '%' . $this->search . '%')

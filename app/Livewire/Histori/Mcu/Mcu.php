@@ -23,8 +23,66 @@ class Mcu extends Component
     public $riwayat_rokok, $BB, $TB, $LP, $BMI, $Laseq, $reqtal_touche, $sistol, $diastol, $OD_jauh, $OS_jauh, $OD_dekat, $OS_dekat, $butawarna, $gdp, $hba1c, $gd_2_jpp, $ureum, $creatine, $asamurat, $sgot, $sgpt, $hbsag, $anti_hbs, $kolesterol, $hdl, $ldl, $tg, $darah_rutin, $napza, $urin, $ekg, $rontgen, $audiometri, $spirometri, $tredmil_test, $echocardiography, $widal_test, $routin_feces, $kultur_feces;
     public $kesadaran, $epilepsi, $keterangan_mcu, $saran_mcu;
     public $jenis_pengajuan_mcu, $no_dokumen, $nama, $gol_darah, $file_mcu, $status, $sub_id, $proveder, $id_karyawan;
-
+    protected $listeners = ['delete'];
     #[Title('Histori MCU')]
+    public function deleteConfirm($id)
+    {
+        $this->dispatch(
+            'confirm',
+            id: $id
+        );
+    }
+    public function delete(int $id)
+    {
+        $mcu = ModelsMcu::find($id);
+
+        // Log::info('Delete MCU triggered', [
+        //     'clicked_id' => $id,
+        //     'mcu' => $mcu,
+        // ]);
+
+        if ($mcu) {
+            if ($mcu->sub_id) {
+                // Log::info('Data yang diklik adalah anak', [
+                //     'sub_id' => $mcu->sub_id,
+                // ]);
+
+                // yang diklik anak → hapus induknya & semua anak
+                $deletedInduk = ModelsMcu::where('id', $mcu->sub_id)->delete();
+                $deletedAnak = ModelsMcu::where('sub_id', $mcu->sub_id)->delete();
+
+                // Log::info('Delete result (anak case)', [
+                //     'deleted_induk' => $deletedInduk,
+                //     'deleted_anak' => $deletedAnak,
+                // ]);
+            } else {
+                // Log::info('Data yang diklik adalah induk', [
+                //     'id' => $id,
+                // ]);
+
+                // yang diklik induk → hapus induk & semua anak
+                $deletedInduk = ModelsMcu::where('id', $id)->delete();
+                $deletedAnak = ModelsMcu::where('sub_id', $id)->delete();
+
+                // Log::info('Delete result (induk case)', [
+                //     'deleted_induk' => $deletedInduk,
+                //     'deleted_anak' => $deletedAnak,
+                // ]);
+            }
+        } else {
+            // Log::warning('MCU tidak ditemukan', ['id' => $id]);
+        }
+
+        $this->dispatch(
+            'alert',
+            type: 'success',
+            title: 'Berhasil',
+            text: 'Berhasil Hapus Data',
+            position: 'center',
+            confirm: true,
+            redirect: '/histori-mcu',
+        );
+    }
     public function close()
     {
         $this->editform = false;
@@ -191,8 +249,9 @@ class Mcu extends Component
                     ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
                     ->whereAny(['karyawans.nrp', 'karyawans.nama', 'karyawans.jabatan', 'karyawans.dept'], 'like', '%' . $this->search . '%')
                     ->where('mcu.status_', '=', "close")
+                    ->whereIn('mcu.status', ['FIT', 'UNFIT'])
                     ->where('mcu.verifikator', auth()->user()->username)
-                    ->whereNotNull('mcu.exp_mcu')
+                    //->whereNotNull('mcu.exp_mcu')
                     ->where('mcu.tgl_verifikasi', '!=', null)
                     ->orderBy('mcu.tgl_mcu', 'desc')
                     ->paginate(10);
@@ -201,7 +260,8 @@ class Mcu extends Component
                     ->join('karyawans', 'karyawans.nrp', '=', 'mcu.id_karyawan')
                     ->whereAny(['karyawans.nrp', 'karyawans.nama', 'karyawans.jabatan', 'karyawans.dept'], 'like', '%' . $this->search . '%')
                     ->where('mcu.status_', '=', "close")
-                    ->whereNotNull('mcu.exp_mcu')
+                    ->whereIn('mcu.status', ['FIT', 'UNFIT'])
+                    //->whereNotNull('mcu.exp_mcu')
                     ->orderBy('mcu.tgl_mcu', 'desc')
                     ->paginate(10);
             }
@@ -211,7 +271,7 @@ class Mcu extends Component
                 ->whereAny(['karyawans.nrp', 'karyawans.nama', 'karyawans.jabatan', 'karyawans.dept'], 'like', '%' . $this->search . '%')
                 ->where('karyawans.dept', auth()->user()->subrole)
                 ->where('mcu.status_', '=', "close")
-                ->whereNotNull('mcu.exp_mcu')
+                //->whereNotNull('mcu.exp_mcu')
                 ->orderBy('mcu.tgl_mcu', 'desc')
                 ->paginate(10);
         }

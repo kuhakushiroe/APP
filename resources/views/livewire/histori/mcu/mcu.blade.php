@@ -47,6 +47,14 @@
                                             <span class="bi bi-pencil"></span> Nilai
                                         </button>
                                     @endif
+                                    @if ($data->mcuStatus === 'UNFIT')
+                                        @if (auth()->user()->role === 'superadmin' || auth()->user()->subrole === 'verifikator')
+                                            <button class="btn btn-outline-danger btn-sm"
+                                                wire:click="deleteConfirm({{ $data->id_mcu }})">
+                                                <span class="bi bi-trash"></span> Hapus
+                                            </button>
+                                        @endif
+                                    @endif
                                 @endhasAnyRole
                             </td>
                             <td>
@@ -85,8 +93,8 @@
                                                 </a>
                                             @endforeach
                                         @endif
-                                        <a class="btn btn-outline-primary btn-sm" href="{{ Storage::url($data->file_mcu) }}"
-                                            target="_blank">
+                                        <a class="btn btn-outline-primary btn-sm"
+                                            href="{{ Storage::url($data->file_mcu) }}" target="_blank">
                                             <span class="bi bi-file-earmark-arrow-down"></span> File MCU Final
                                         </a>
                                         {{ $data->mcuStatus }}
@@ -174,7 +182,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7">
+                            <td colspan="10">
                                 <div class="alert alert-danger">
                                     <span class="bi bi-exclamation-circle"></span>
                                     &nbsp;No data
