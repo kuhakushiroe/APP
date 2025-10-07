@@ -27,6 +27,8 @@
                 <thead>
                     <tr>
                         <th style="width: 10px">#</th>
+                        <th>Jenis</th>
+                        <th>Kode</th>
                         <th>Nama</th>
                         <th>Keterangan</th>
                     </tr>
@@ -51,6 +53,8 @@
                                     </button>
                                 @endif
                             </td>
+
+                            <td>{{ $data->type_versatility }}</td>
                             <td>
                                 @if ($data->deleted_at)
                                     <i class="text-decoration-line-through">
@@ -61,6 +65,7 @@
                                     {{ $data->versatility }}
                                 @endif
                             </td>
+                            <td>{{ $data->code_versatility }}</td>
                             <td>{{ $data->description }}</td>
                         </tr>
                     @empty

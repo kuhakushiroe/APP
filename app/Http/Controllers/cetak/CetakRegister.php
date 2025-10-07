@@ -85,7 +85,8 @@ class CetakRegister extends Controller
             ->join('karyawans', 'pengajuan_kimper.nrp', '=', 'karyawans.nrp')
             ->select(
                 'karyawans.*',
-                'pengajuan_kimper.*'
+                'pengajuan_kimper.*',
+                'pengajuan_kimper.id as id_pengajuan_kimper',
             )
             ->where('pengajuan_kimper.id', $id)->first();
         $mcu = DB::table('mcu')->where('id_karyawan', $data->nrp)->first();

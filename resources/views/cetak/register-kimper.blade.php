@@ -127,8 +127,11 @@
                     <td>{{ $item->nama }}</td>
                     <td>{{ $item->nrp }}</td>
                     <td>
-                        <img src="{{ public_path('storage/' . $item->upload_foto) }}" alt=""
-                            style="width: 3cm; height: 4cm">
+                        @if (!empty($item->upload_foto))
+                            <img src="{{ public_path('storage/' . $item->upload_foto) }}" alt=""
+                                style="width: 3cm; height: 4cm">
+                        @else
+                        @endif
                     </td>
                     <td>{{ $item->upload_sim }}</td>
                     <td>{{ $item->upload_kimper_lama }}</td>

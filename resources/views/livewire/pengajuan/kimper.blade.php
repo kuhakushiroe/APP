@@ -228,180 +228,185 @@
                                     in_array(auth()->user()->role, ['admin', 'superadmin']))
                                 <div class="alert alert-warning">
                                     <form wire:submit.prevent="updateUpload({{ $pengajuan->id_pengajuan }})">
-
-                                        @if ($pengajuan->status_upload_request == '0')
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label for="upload_request" class="form-label">Upload Form
-                                                        Request</label>
-                                                    <input
-                                                        class="form-control form-control-sm @error('upload_request') is-invalid @enderror"
-                                                        type="file" id="upload_request" wire:model='upload_request'>
-                                                    @error('upload_request')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
-                                                    <div class="text-danger">
-                                                        {{ $pengajuan->catatan_upload_request }}
+                                        <div class="row">
+                                            @if ($pengajuan->status_upload_request == '0')
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="upload_request" class="form-label">Upload Form
+                                                            Request</label>
+                                                        <input
+                                                            class="form-control form-control-sm @error('upload_request') is-invalid @enderror"
+                                                            type="file" id="upload_request"
+                                                            wire:model='upload_request'>
+                                                        @error('upload_request')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                        <div class="text-danger">
+                                                            {{ $pengajuan->catatan_upload_request }}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        @endif
-                                        @if ($pengajuan->status_upload_id == '0')
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label for="upload_id" class="form-label">Upload ID Aktif</label>
-                                                    <input
-                                                        class="form-control form-control-sm @error('upload_id') is-invalid @enderror"
-                                                        type="file" id="upload_id" wire:model='upload_id'>
-                                                    @error('upload_id')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
-                                                    <div class="text-danger">
-                                                        {{ $pengajuan->catatan_upload_id }}
+                                            @endif
+                                            @if ($pengajuan->status_upload_id == '0')
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="upload_id" class="form-label">Upload ID
+                                                            Aktif</label>
+                                                        <input
+                                                            class="form-control form-control-sm @error('upload_id') is-invalid @enderror"
+                                                            type="file" id="upload_id" wire:model='upload_id'>
+                                                        @error('upload_id')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                        <div class="text-danger">
+                                                            {{ $pengajuan->catatan_upload_id }}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        @endif
-                                        @if ($pengajuan->status_upload_sim == '0')
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label for="upload_sim" class="form-label">Upload SIM</label>
-                                                    <input
-                                                        class="form-control form-control-sm @error('upload_sim') is-invalid @enderror"
-                                                        type="file" id="upload_sim" wire:model='upload_sim'>
-                                                    @error('upload_sim')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
-                                                    <div class="text-danger">
-                                                        {{ $pengajuan->catatan_upload_sim }}
+                                            @endif
+                                            @if ($pengajuan->status_upload_sim == '0')
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="upload_sim" class="form-label">Upload SIM</label>
+                                                        <input
+                                                            class="form-control form-control-sm @error('upload_sim') is-invalid @enderror"
+                                                            type="file" id="upload_sim" wire:model='upload_sim'>
+                                                        @error('upload_sim')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                        <div class="text-danger">
+                                                            {{ $pengajuan->catatan_upload_sim }}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        @endif
-                                        @if ($pengajuan->status_upload_kimper_lama == '0')
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label for="upload_kimper_lama" class="form-label">Upload ID
-                                                        Lama</label>
-                                                    <input
-                                                        class="form-control form-control-sm @error('upload_kimper_lama') is-invalid @enderror"
-                                                        type="file" id="upload_kimper_lama"
-                                                        wire:model='upload_kimper_lama'>
-                                                    @error('upload_kimper_lama')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
-                                                    <div class="text-danger">
-                                                        {{ $pengajuan->catatan_upload_kimper_lama }}
+                                            @endif
+                                            @if ($pengajuan->status_upload_kimper_lama == '0')
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="upload_kimper_lama" class="form-label">Upload
+                                                            Kimper
+                                                            Lama</label>
+                                                        <input
+                                                            class="form-control form-control-sm @error('upload_kimper_lama') is-invalid @enderror"
+                                                            type="file" id="upload_kimper_lama"
+                                                            wire:model='upload_kimper_lama'>
+                                                        @error('upload_kimper_lama')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                        <div class="text-danger">
+                                                            {{ $pengajuan->catatan_upload_kimper_lama }}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        @endif
-                                        @if ($pengajuan->status_upload_foto == '0')
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label for="upload_foto" class="form-label">Upload FOTO</label>
-                                                    <input
-                                                        class="form-control form-control-sm @error('upload_foto') is-invalid @enderror"
-                                                        type="file" id="upload_foto" wire:model='upload_foto'>
-                                                    @error('upload_foto')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
-                                                    <div class="text-danger">
-                                                        {{ $pengajuan->catatan_upload_foto }}
+                                            @endif
+                                            @if ($pengajuan->status_upload_foto == '0')
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="upload_foto" class="form-label">Upload
+                                                            FOTO</label>
+                                                        <input
+                                                            class="form-control form-control-sm @error('upload_foto') is-invalid @enderror"
+                                                            type="file" id="upload_foto" wire:model='upload_foto'>
+                                                        @error('upload_foto')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                        <div class="text-danger">
+                                                            {{ $pengajuan->catatan_upload_foto }}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        @endif
-                                        @if ($pengajuan->status_upload_ktp == '0')
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label for="upload_ktp" class="form-label">Upload KTP</label>
-                                                    <input
-                                                        class="form-control form-control-sm @error('upload_ktp') is-invalid @enderror"
-                                                        type="file" id="upload_ktp" wire:model='upload_ktp'>
-                                                    @error('upload_ktp')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
-                                                    <div class="text-danger">
-                                                        {{ $pengajuan->catatan_upload_ktp }}
+                                            @endif
+                                            @if ($pengajuan->status_upload_ktp == '0')
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="upload_ktp" class="form-label">Upload KTP</label>
+                                                        <input
+                                                            class="form-control form-control-sm @error('upload_ktp') is-invalid @enderror"
+                                                            type="file" id="upload_ktp" wire:model='upload_ktp'>
+                                                        @error('upload_ktp')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                        <div class="text-danger">
+                                                            {{ $pengajuan->catatan_upload_ktp }}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        @endif
-                                        @if ($pengajuan->status_upload_skd == '0')
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label for="upload_skd" class="form-label">Upload SKD</label>
-                                                    <input
-                                                        class="form-control form-control-sm @error('upload_skd') is-invalid @enderror"
-                                                        type="file" id="upload_skd" wire:model='upload_skd'>
-                                                    @error('upload_skd')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
-                                                    <div class="text-danger">
-                                                        {{ $pengajuan->catatan_upload_skd }}
+                                            @endif
+                                            @if ($pengajuan->status_upload_skd == '0')
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="upload_skd" class="form-label">Upload SKD</label>
+                                                        <input
+                                                            class="form-control form-control-sm @error('upload_skd') is-invalid @enderror"
+                                                            type="file" id="upload_skd" wire:model='upload_skd'>
+                                                        @error('upload_skd')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                        <div class="text-danger">
+                                                            {{ $pengajuan->catatan_upload_skd }}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        @endif
-                                        @if ($pengajuan->status_upload_bpjs_kes == '0')
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label for="upload_bpjs_kes" class="form-label">Upload
-                                                        BPJS KESEHATAN</label>
-                                                    <input
-                                                        class="form-control form-control-sm @error('upload_bpjs_kes') is-invalid @enderror"
-                                                        type="file" id="upload_bpjs_kes"
-                                                        wire:model='upload_bpjs_kes'>
-                                                    @error('upload_bpjs_kes')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
-                                                    <div class="text-danger">
-                                                        {{ $pengajuan->catatan_upload_bpjs_kes }}
+                                            @endif
+                                            @if ($pengajuan->status_upload_bpjs_kes == '0')
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="upload_bpjs_kes" class="form-label">Upload
+                                                            BPJS KESEHATAN</label>
+                                                        <input
+                                                            class="form-control form-control-sm @error('upload_bpjs_kes') is-invalid @enderror"
+                                                            type="file" id="upload_bpjs_kes"
+                                                            wire:model='upload_bpjs_kes'>
+                                                        @error('upload_bpjs_kes')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                        <div class="text-danger">
+                                                            {{ $pengajuan->catatan_upload_bpjs_kes }}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        @endif
-                                        @if ($pengajuan->status_upload_bpjs_ker == '0')
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label for="upload_bpjs_ker" class="form-label">Upload
-                                                        BPJS KETENAGAKEJAAN</label>
-                                                    <input
-                                                        class="form-control form-control-sm @error('upload_bpjs_ker') is-invalid @enderror"
-                                                        type="file" id="upload_bpjs_ker"
-                                                        wire:model='upload_bpjs_ker'>
-                                                    @error('upload_bpjs_ker')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
-                                                    <div class="text-danger">
-                                                        {{ $pengajuan->catatan_upload_bpjs_ker }}
+                                            @endif
+                                            @if ($pengajuan->status_upload_bpjs_ker == '0')
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="upload_bpjs_ker" class="form-label">Upload
+                                                            BPJS KETENAGAKEJAAN</label>
+                                                        <input
+                                                            class="form-control form-control-sm @error('upload_bpjs_ker') is-invalid @enderror"
+                                                            type="file" id="upload_bpjs_ker"
+                                                            wire:model='upload_bpjs_ker'>
+                                                        @error('upload_bpjs_ker')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                        <div class="text-danger">
+                                                            {{ $pengajuan->catatan_upload_bpjs_ker }}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        @endif
-                                        @if ($pengajuan->status_upload_sertifikat == '0')
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label for="upload_sertifikat" class="form-label">Upload
-                                                        Sertifikat</label>
-                                                    <input
-                                                        class="form-control form-control-sm @error('upload_sertifikat') is-invalid @enderror"
-                                                        type="file" id="upload_sertifikat"
-                                                        wire:model='upload_sertifikat'>
-                                                    @error('upload_sertifikat')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
-                                                    <div class="text-danger">
-                                                        {{ $pengajuan->catatan_upload_sertifikat }}
+                                            @endif
+                                            @if ($pengajuan->status_upload_sertifikat == '0')
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="upload_sertifikat" class="form-label">Upload
+                                                            Sertifikat</label>
+                                                        <input
+                                                            class="form-control form-control-sm @error('upload_sertifikat') is-invalid @enderror"
+                                                            type="file" id="upload_sertifikat"
+                                                            wire:model='upload_sertifikat'>
+                                                        @error('upload_sertifikat')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                        <div class="text-danger">
+                                                            {{ $pengajuan->catatan_upload_sertifikat }}
+                                                        </div>
                                                     </div>
                                                 </div>
+                                            @endif
+                                            <div class="col-12 pt-2">
+                                                <button type="submit" class="btn btn-primary btn-sm">
+                                                    <span class="bi bi-save"></span> Simpan
+                                                </button>
                                             </div>
-                                        @endif
-                                        <div class="col-12 pt-2">
-                                            <button type="submit" class="btn btn-primary btn-sm">
-                                                <span class="bi bi-save"></span> Simpan
-                                            </button>
                                         </div>
                                     </form>
                                 </div>

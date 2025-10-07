@@ -213,7 +213,56 @@
                         </table>
                     </td>
                 </tr>
+                @php
+                    // Ambil data kendaraan dari database
+                    $vehicles = DB::table('pengajuan_kimper_versatility')
+                        ->join('versatility', 'pengajuan_kimper_versatility.id_versatility', '=', 'versatility.id')
+                        ->where('pengajuan_kimper_versatility.id_pengajuan_kimper', $data->id_pengajuan_kimper)
+                        ->select(
+                            'versatility.type_versatility',
+                            'versatility.versatility',
+                            'pengajuan_kimper_versatility.klasifikasi',
+                        )
+                        ->get();
+
+                    // Buat array 12 slot (isi data yang ada, sisanya null)
+                    $maxSlot = 12;
+                    $display = [];
+
+                    for ($i = 0; $i < $maxSlot; $i++) {
+                        $display[$i] = $vehicles[$i] ?? null;
+                    }
+                @endphp
                 <tr>
+                    <td width="2%">&nbsp;</td>
+                    <td width="1%" style="vertical-align: top;">7.</td>
+                    <td colspan="2" style="vertical-align: top;">Kendaraan/Unit yang Dioperasikan</td>
+                    <td style="vertical-align: top;">:</td>
+                    <td>
+                        <table>
+                            @for ($row = 0; $row < 4; $row++)
+                                <tr>
+                                    @for ($col = 0; $col < 3; $col++)
+                                        @php
+                                            $index = $row * 3 + $col;
+                                            $item = $display[$index];
+                                        @endphp
+                                        <td width="30%">
+                                            {{ $index + 1 }}.
+                                            @if ($item)
+                                                {{ $item->type_versatility }} {{ $item->versatility }}
+                                                ({{ $item->klasifikasi }})
+                                            @else
+                                                __________
+                                            @endif
+                                        </td>
+                                    @endfor
+                                </tr>
+                            @endfor
+                        </table>
+                    </td>
+                </tr>
+                {{-- <tr>
                     <td width="2%">&nbsp;</td>
                     <td width="1%">7.</td>
                     <td colspan="2">Kendaraan/Unit yang Dioperasikan</td>
@@ -249,7 +298,7 @@
                             </tr>
                         </table>
                     </td>
-                </tr>
+                </tr> --}}
                 <tr>
                     <td width="2%">&nbsp;</td>
                     <td width="1%">8.</td>
@@ -313,8 +362,7 @@
                                             ✔
                                         @endif
                                     </span> Baru</td>
-                                <td width="30%"><span class="checkbox"
-                                        style="font-family: DejaVu Sans, sans-serif;">
+                                <td width="30%"><span class="checkbox" style="font-family: DejaVu Sans, sans-serif;">
                                         @if ($data->jenis_pengajuan_kimper == 'perpanjangan')
                                             ✔
                                         @endif
@@ -379,12 +427,12 @@
                     <td>:</td>
                     <td>
                         <span class="checkbox" style="font-family: DejaVu Sans, sans-serif;">
-                            @if ($mcu->jenis_pengajuan_mcu == 'Pre Employeed MCU')
+                            @if (isset($mcu->jenis_pengajuan_mcu) === 'Pre Employment')
                                 ✔
                             @endif
                         </span> Pekerja 6 Bulan
                         <span class="checkbox" style="font-family: DejaVu Sans, sans-serif;">
-                            @if ($mcu->jenis_pengajuan_mcu == 'Annual MCU')
+                            @if (isset($mcu->jenis_pengajuan_mcu) === 'Annual')
                                 ✔
                             @endif
                         </span>
@@ -396,43 +444,45 @@
                     <td style="width: 3%;">a.</td>
                     <td colspan="2" style="width: 25%;">Tekanan Darah</td>
                     <td style="width: 3%;">:</td>
-                    <td style="width: 67%;">{{ $mcu->sistol }}/{{ $mcu->diastol }}</td>
+                    <td style="width: 67%;">{{ $mcu->sistol ?? '-' }}/{{ $mcu->diastol ?? '-' }}</td>
                 </tr>
                 <tr>
                     <td width="2%">&nbsp;</td>
                     <td width="1%">b.</td>
                     <td colspan="2">EKG</td>
                     <td>:</td>
-                    <td>{{ $mcu->ekg }}</td>
+                    <td>{{ $mcu->ekg ?? '-' }}</td>
                 </tr>
                 <tr>
                     <td width="2%">&nbsp;</td>
                     <td width="1%">c.</td>
                     <td colspan="2">Penglihatan</td>
                     <td>:</td>
-                    <td>OD Jauh:{{ $mcu->OD_jauh }} OD Dekat:{{ $mcu->OD_dekat }} OS Jauh:{{ $mcu->OS_jauh }} OS
-                        Dekat:{{ $mcu->OS_dekat }}</td>
+                    <td>OD Jauh:{{ $mcu->OD_jauh ?? '-' }} OD Dekat:{{ $mcu->OD_dekat ?? '-' }} OS
+                        Jauh:{{ $mcu->OS_jauh ?? '-' }} OS
+                        Dekat:{{ $mcu->OS_dekat ?? '-' }}</td>
                 </tr>
                 <tr>
                     <td width="2%">&nbsp;</td>
                     <td width="1%">d.</td>
                     <td colspan="2">Buta Warna</td>
                     <td>:</td>
-                    <td>{{ $mcu->butawarna }}</td>
+                    <td>{{ $mcu->butawarna ?? '-' }}</td>
                 </tr>
                 <tr>
                     <td width="2%">&nbsp;</td>
                     <td width="1%">e.</td>
                     <td colspan="2">Audiometri</td>
                     <td>:</td>
-                    <td>{{ $mcu->audiometri }}</td>
+                    <td>{{ $mcu->audiometri ?? '-' }}</td>
                 </tr>
                 <tr>
                     <td width="2%">&nbsp;</td>
                     <td width="1%">f.</td>
                     <td colspan="2">Gula Darah</td>
                     <td>:</td>
-                    <td>Gdp:{{ $mcu->gdp }} gd_2_jpp:{{ $mcu->gd_2_jpp }} hba1c:{{ $mcu->hba1c }}</td>
+                    <td>Gdp:{{ $mcu->gdp ?? '-' }} gd_2_jpp:{{ $mcu->gd_2_jpp ?? '-' }}
+                        hba1c:{{ $mcu->hba1c ?? '-' }}</td>
                 </tr>
                 <tr>
                     <td width="2%">&nbsp;</td>
@@ -441,12 +491,12 @@
                     <td>:</td>
                     <td>
                         <span class="checkbox" style="font-family: DejaVu Sans, sans-serif;">
-                            @if ($mcu->status == 'fit')
+                            @if (isset($mcu->status) == 'fit')
                                 ✔
                             @endif
                         </span> Fit
                         <span class="checkbox" style="font-family: DejaVu Sans, sans-serif;">
-                            @if ($mcu->status == 'unfit')
+                            @if (isset($mcu->status) == 'unfit')
                                 ✔
                             @endif
                         </span> Un-Fit

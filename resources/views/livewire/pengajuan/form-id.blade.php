@@ -148,17 +148,6 @@
                             </div>
                             <div class="col-4">
                                 <div class="form-group">
-                                    <label for="upload_skd" class="form-label">Upload SKD</label>
-                                    <input
-                                        class="form-control form-control-sm @error('upload_skd') is-invalid @enderror"
-                                        type="file" id="upload_skd" wire:model='upload_skd'>
-                                    @error('upload_skd')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="form-group">
                                     <label for="upload_bpjs_kes" class="form-label">Upload BPJS Kesehatan</label>
                                     <input
                                         class="form-control form-control-sm @error('upload_bpjs_kes') is-invalid @enderror"
@@ -213,6 +202,16 @@
                                 </div>
                             </div>
                         @endif
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="upload_skd" class="form-label">Upload SKD</label>
+                                <input class="form-control form-control-sm @error('upload_skd') is-invalid @enderror"
+                                    type="file" id="upload_skd" wire:model='upload_skd'>
+                                @error('upload_skd')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
                         <div class="col-12">
                             <div class="form-group">
                                 <label for="tgl pengajuan" class="form-label">Tanggal Pengajuan</label>

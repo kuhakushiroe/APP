@@ -61,7 +61,7 @@
                                 @php
                                     $verifikator = DB::table('users')->where('username', $data->verifikator)->first();
                                 @endphp
-                                {{ $verifikator->name }}
+                                {{ $verifikator->name ?? '-CLOSE By HCGA-' }}
                             </td>
                             <td>
                                 {{ $data->nrp }}

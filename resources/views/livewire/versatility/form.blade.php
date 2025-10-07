@@ -14,8 +14,26 @@
                 </div>
                 <form wire:submit.prevent="store">
                     <div class="card-body">
+                        <input type="hidden" class="form-control form-control-sm" wire:model="id_versatility">
                         <div class="form-group">
-                            <input type="hidden" class="form-control form-control-sm" wire:model="id_versatility">
+                            <label for="type_versatility">Jenis Kendaraan</label>
+                            <input type="text"
+                                class="form-control form-control-sm @error('type_versatility') is-invalid @enderror"
+                                wire:model="type_versatility" placeholder="Jenis Kendaraan">
+                            @error('type_versatility')
+                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="code_versatility">Kode Versatility</label>
+                            <input type="text"
+                                class="form-control form-control-sm @error('code_versatility') is-invalid @enderror"
+                                wire:model="code_versatility" placeholder="Kode Versatility">
+                            @error('code_versatility')
+                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
+                        </div>
+                        <div class="form-group">
                             <label for="versatility">Nama</label>
                             <input type="text"
                                 class="form-control form-control-sm @error('versatility') is-invalid @enderror"

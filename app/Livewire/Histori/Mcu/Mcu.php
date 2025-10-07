@@ -271,6 +271,7 @@ class Mcu extends Component
                 ->whereAny(['karyawans.nrp', 'karyawans.nama', 'karyawans.jabatan', 'karyawans.dept'], 'like', '%' . $this->search . '%')
                 ->where('karyawans.dept', auth()->user()->subrole)
                 ->where('mcu.status_', '=', "close")
+                ->whereIn('mcu.status', ['FIT', 'UNFIT'])
                 //->whereNotNull('mcu.exp_mcu')
                 ->orderBy('mcu.tgl_mcu', 'desc')
                 ->paginate(10);

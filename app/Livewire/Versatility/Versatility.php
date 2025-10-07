@@ -13,7 +13,7 @@ class Versatility extends Component
     use WithPagination, WithoutUrlPagination;
     public $search = '';
     public $form = false;
-    public $id_versatility, $versatility, $description;
+    public $id_versatility, $type_versatility, $versatility, $code_versatility, $description;
     protected $listeners = ['delete'];
 
     #[Title('Versatility')]
@@ -26,23 +26,31 @@ class Versatility extends Component
     {
         $this->form = false;
         $this->id_versatility = '';
+        $this->type_versatility = '';
         $this->versatility = '';
+        $this->code_versatility = '';
         $this->description = '';
     }
     public function edit($id)
     {
         $data = ModelsVersatility::find($id);
         $this->id_versatility = $data->id;
+        $this->type_versatility = $data->type_versatility;
         $this->versatility = $data->versatility;
+        $this->code_versatility = $data->code_versatility;
         $this->description = $data->description;
         $this->open();
     }
     public function store()
     {
         $this->validate([
+            'type_versatility' => 'required',
+            'code_versatility' => 'required',
             'versatility' => 'required|min:2',
             'description' => 'required',
         ], [
+            'type_versatility.required' => 'Type Versatility Harus Diisi',
+            'code_versatility.required' => 'Code Versatility Harus Diisi',
             'versatility.required' => 'Versatility Harus Diisi',
             'versatility.min' => 'Versatility Minimal 8 Karakter',
             'description.required' => 'Description Harus Diisi',
@@ -52,6 +60,8 @@ class Versatility extends Component
         ModelsVersatility::updateOrCreate([
             'id' => $this->id_versatility,
         ], [
+            'type_versatility' => $this->type_versatility,
+            'code_versatility' => $this->code_versatility,
             'versatility' => $this->versatility,
             'description' => $this->description,
         ]);

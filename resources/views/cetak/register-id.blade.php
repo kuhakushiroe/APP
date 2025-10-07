@@ -102,12 +102,15 @@
                     <td>{{ $item->perusahaan }}</td>
                     <td class="center" style="font-family: 'dejaVu Sans';">
                         {{ $item->jenis_pengajuan_id == 'baru' ? '✔' : '' }}</td>
-                    <td class="center">{{ $item->jenis_pengajuan_id == 'penggantian' ? '✔' : '' }}</td>
+                    <td class="center" style="font-family: 'dejaVu Sans';">
+                        {{ $item->jenis_pengajuan_id == 'penggantian' || $item->jenis_pengajuan_id == 'perpanjangan' ? '✔' : '' }}
+                    </td>
                     <td></td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="12">-Tidak Ada Data-</td>
+                    <td colspan="12">
+                        -Tidak Ada Data-</td>
                 </tr>
             @endforelse
         </table>
@@ -186,8 +189,11 @@
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $item->nama }}</td>
                     <td>
-                        <img src="{{ public_path('storage/' . $item->upload_foto) }}" alt=""
-                            style="width: 3cm; height: 4cm">
+                        @if (!empty($item->upload_foto))
+                            <img src="{{ public_path('storage/' . $item->upload_foto) }}" alt=""
+                                style="width: 3cm; height: 4cm">
+                        @else
+                        @endif
                     </td>
                     <td>{{ $item->upload_ktp ?? '-' }}</td>
                     <td>{{ $item->upload_skd ?? '-' }}</td>
