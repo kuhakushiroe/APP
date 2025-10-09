@@ -183,7 +183,14 @@
                     <b>{{ Str::upper($karyawans->nama ?? 'Nama Karyawan') }}</b>
                 </p>
                 <p style="font-size: 8pt; padding-top:10px; padding-bottom:60px;">
-                    <b>{{ $departments[$karyawans->dept] ?? 'Departemen' }}</b>
+                    @php
+                        $departments = DB::table('departments')
+                            ->select('name_department', 'description_department')
+                            ->get()
+                            ->keyBy('name_department')
+                            ->toArray();
+                    @endphp
+                    <b>{{ $departments[$karyawans->dept]->description_department ?? 'Departemen' }}</b>
                 </p>
                 <table style="width: 100%">
                     <tr>

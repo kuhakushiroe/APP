@@ -180,7 +180,14 @@
                     <b>{{ Str::upper($karyawans->nama ?? 'Nama Karyawan') }}</b>
                 </p>
                 <p style="font-size: 8pt; padding-top:10px; padding-bottom:100px;">
-                    <b>{{ $departments[$karyawans->dept] ?? 'Departemen' }}</b>
+                    @php
+                        $departments = DB::table('departments')
+                            ->select('name_department', 'description_department')
+                            ->get()
+                            ->keyBy('name_department')
+                            ->toArray();
+                    @endphp
+                    <b>{{ $departments[$karyawans->dept]->description_department ?? 'Departemen' }}</b>
                 </p>
                 <table style="width: 100%">
                     <tr>
@@ -189,7 +196,16 @@
                                 $carifoto = DB::table('pengajuan_id')->where('nrp', $karyawans->nrp)->first();
                             @endphp
                             @if ($carifoto)
-                                <img src="{{ public_path('/storage/' . $carifoto->upload_foto) }}" class="profile-pic">
+                                @php
+                                    $fotoPath = public_path('storage/' . $carifoto->upload_foto);
+                                @endphp
+
+                                @if ($carifoto->upload_foto && file_exists($fotoPath))
+                                    <img src="{{ asset('storage/' . $carifoto->upload_foto) }}" class="profile-pic">
+                                @else
+                                    <img src="{{ public_path('/storage/fotos/6408045201970004wHqpIXoAJOqwyVXNrU0IJsVewkhMrNJxgxm0jbAa.jpg') }}"
+                                        class="profile-pic">
+                                @endif
                             @else
                                 <img src="{{ public_path('/storage/fotos/6408045201970004wHqpIXoAJOqwyVXNrU0IJsVewkhMrNJxgxm0jbAa.jpg') }}"
                                     class="profile-pic">

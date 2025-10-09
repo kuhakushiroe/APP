@@ -150,10 +150,10 @@
                             </td>
                             <td>
                                 @if ($datakaryawan->foto)
-                                    {{-- <img src="{{ Storage::disk('s3')->temporaryUrl($datakaryawan->foto, now()->addMinutes(10)) }}"
-                                        alt="Foto" class="img-fluid" style="max-width: 100px; max-height: 100px;"> --}}
-                                    <img src="{{ Storage::url($datakaryawan->foto) }}" alt="Foto" class="img-fluid"
-                                        style="max-width: 100px; max-height: 100px;">
+                                    <img src="{{ Storage::disk('s3')->temporaryUrl($datakaryawan->foto, now()->addMinutes(10)) }}"
+                                        alt="Foto" class="img-fluid" style="max-width: 100px; max-height: 100px;">
+                                    {{-- <img src="{{ Storage::url($datakaryawan->foto) }}" alt="Foto" class="img-fluid"
+                                        style="max-width: 100px; max-height: 100px;"> --}}
                                 @else
                                     -
                                 @endif

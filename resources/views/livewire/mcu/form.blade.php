@@ -10,7 +10,7 @@
                             <span class="bi bi-arrow-left"></span>
                         </button>
                         @if ($id_mcu)
-                            Pengajuan Ulang MCU
+                            Pengajuan Ulang MCU {{ $this->id_mcu }}
                         @else
                             Pengajuan MCU
                         @endif

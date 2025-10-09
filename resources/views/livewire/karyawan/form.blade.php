@@ -35,8 +35,8 @@
                                 <br>
                             @else
                                 @if ($fotolama)
-                                    <img src="{{ Storage::url($fotolama) }}" alt="Foto" class="img-fluid"
-                                        style="max-width: 100px; max-height: 100px;">
+                                    <img src="{{ Storage::disk('s3')->temporaryUrl($fotolama, now()->addMinutes(10)) }}"
+                                        alt="Foto" class="img-fluid" style="max-width: 100px; max-height: 100px;">
                                     <br>
                                 @endif
                             @endif

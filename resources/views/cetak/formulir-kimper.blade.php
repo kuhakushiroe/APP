@@ -250,8 +250,7 @@
                                         <td width="30%">
                                             {{ $index + 1 }}.
                                             @if ($item)
-                                                {{ $item->type_versatility }} {{ $item->versatility }}
-                                                ({{ $item->klasifikasi }})
+                                                {{ $item->versatility }}
                                             @else
                                                 __________
                                             @endif
@@ -491,12 +490,12 @@
                     <td>:</td>
                     <td>
                         <span class="checkbox" style="font-family: DejaVu Sans, sans-serif;">
-                            @if (isset($mcu->status) == 'fit')
+                            @if (isset($mcu->status) === 'FIT')
                                 ✔
                             @endif
                         </span> Fit
                         <span class="checkbox" style="font-family: DejaVu Sans, sans-serif;">
-                            @if (isset($mcu->status) == 'unfit')
+                            @if (isset($mcu->status) === 'UNFIT')
                                 ✔
                             @endif
                         </span> Un-Fit

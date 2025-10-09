@@ -72,19 +72,19 @@ if (!function_exists('getUserInfo')) {
             'nama' => $nama,
             'waktu' => $waktu,
             'adminENG' => [
-                '082276297441'
+                //'082276297441'
             ],
             'adminPRO' => [
-                '081117049395'
+                //'081117049395'
             ],
             'adminPLT' => [
-                '081117049394'
+                //'081117049394'
             ],
             'adminHC' => [
-                '08116890789'
+                //'08116890789'
             ],
             'adminCOE' => [
-                '08116830966'
+                //'08116830966'
             ],
             'nomorAdmins' => [
                 '088212543694', //saya
@@ -153,6 +153,23 @@ if (!function_exists('pesan')) {
         }
 
         return ['success' => true, 'response' => $response];
+    }
+}
+if (!function_exists('storeToPublicAndS3')) {
+    function storeToPublicAndS3($file, $path, $name)
+    {
+        // Simpan ke storage lokal (public)
+        $file->storeAs($path, $name, 'public');
+
+        // Simpan juga ke AWS S3
+        return $file->storeAs($path, $name, 's3');
+    }
+}
+if (!function_exists('dualStore')) {
+    function dualStore($file, $path)
+    {
+        $file->store($path, 'public');
+        return $file->store($path, 's3');
     }
 }
 class ExcelHelper

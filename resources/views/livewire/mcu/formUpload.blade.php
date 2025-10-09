@@ -16,6 +16,8 @@
                     <div class="card-body">
                         <div class="form-group">
                             <input type="hidden" class="form-control form-control-sm" wire:model="sub_id" readonly>
+                            <input type="hidden" class="form-control form-control-sm" wire:model="jenis_pengajuan_mcu"
+                                readonly>
                             <input type="hidden" class="form-control form-control-sm" wire:model="riwayat_rokok"
                                 readonly>
                             <input type="hidden" class="form-control form-control-sm" wire:model="BB" readonly>

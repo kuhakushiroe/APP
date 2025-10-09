@@ -283,6 +283,8 @@ class Mcu extends Component
                 $folderKaryawan . "-MCU-" . time() . ".{$uploadedFile->getClientOriginalExtension()}",
                 'public'
             );
+            //$fileName = $folderKaryawan . "-MCU-" . time() . ".{$uploadedFile->getClientOriginalExtension()}";
+            //$filePath = storeToPublicAndS3($uploadedFile, $folderPath, $fileName);
 
             ModelsMcu::create([
                 'id_karyawan' => $form['nrp'],
@@ -416,6 +418,12 @@ class Mcu extends Component
         );
 
         $validator->after(function ($validator) {
+            // Kalau ini update (id_mcu ada), lewati validasi
+            if (!empty($this->id_mcu)) {
+                return;
+            }
+
+            // Kalau ini input baru (id_mcu kosong), lakukan pengecekan
             $cek = ModelsMcu::where('id_karyawan', $this->nrp)
                 ->where('status_', '!=', 'close')
                 ->first();
@@ -445,15 +453,22 @@ class Mcu extends Component
             Storage::disk('public')->makeDirectory($folderPath);
         }
 
+        // if (!Storage::disk('s3')->exists($folderPath)) {
+        //     Storage::disk('s3')->makeDirectory($folderPath);
+        // }
+
         // Handle the file upload for 'file_mcu'
         if ($this->file_mcu) {
             // Store the file in the specific folder
             if (!empty($this->id_mcu)) {
                 $filePath = $this->file_mcu->storeAs($folderPath, $folderKaryawan . "-MCU-REVISI-" . time() . ".{$this->file_mcu->getClientOriginalExtension()}", 'public');
+                //$fileName = $folderKaryawan . "-MCU-REVISI-" . time() . "." . $this->file_mcu->getClientOriginalExtension()}";
+                //$filePath = storeToPublicAndS3($this->file_mcu, $folderPath, $fileName);
             } else {
                 $filePath = $this->file_mcu->storeAs($folderPath, $folderKaryawan . "-MCU-" . time() . ".{$this->file_mcu->getClientOriginalExtension()}", 'public');
+                //$fileName = $folderKaryawan . "-MCU-" . time() . ".{$this->file_mcu->getClientOriginalExtension()}";
+                //$filePath = storeToPublicAndS3($this->file_mcu, $folderPath, $fileName);
             }
-            // $filePath = $this->file_mcu->store($folderPath, 'public');
         } else {
             $filePath = null; // Handle the case where no file is uploaded (optional)
         }
@@ -667,6 +682,7 @@ class Mcu extends Component
         $this->widal_test = $carimcu->widal_test;
         $this->routin_feces = $carimcu->routin_feces;
         $this->kultur_feces = $carimcu->kultur_feces;
+        $this->jenis_pengajuan_mcu = $carimcu->jenis_pengajuan_mcu;
 
         $this->tgl_verifikasi = date('Y-m-d');
         $this->exp_mcu = now()->addMonth(6)->format('Y-m-d');
@@ -708,6 +724,7 @@ class Mcu extends Component
         if ($this->file_mcu) {
             // Store the file in the specific folder
             $filePath = $this->file_mcu->store($folderPath, 'public');
+            //$filePath = $this->file_mcu->dualStore($this->file_mcu, $folderPath);
         } else {
             $filePath = null; // Handle the case where no file is uploaded (optional)
         }
@@ -716,6 +733,7 @@ class Mcu extends Component
         ModelsMcu::create(
             [
                 'id_karyawan' => $this->nrp,
+                'jenis_pengajuan_mcu' => $this->jenis_pengajuan_mcu,
                 'no_dokumen' => $this->no_dokumen,
                 'sub_id' => $this->sub_id,
                 'proveder' => $this->proveder,
@@ -942,6 +960,8 @@ class Mcu extends Component
                 // Handle the file upload for 'file_mcu'
                 if ($this->upload_hasil_mcu) {
                     $filePath = $this->upload_hasil_mcu->storeAs($folderPath, $folderKaryawan . "-TEMUAN-MCU-" . time() . ".{$this->upload_hasil_mcu->getClientOriginalExtension()}", 'public');
+                    //$fileName = $folderKaryawan . "-TEMUAN-MCU-" . time() . ".{$this->upload_hasil_mcu->getClientOriginalExtension()}";
+                    //$filePath = storeToPublicAndS3($this->upload_hasil_mcu, $folderPath, $fileName);
                 } else {
                     $filePath = null; // Handle the case where no file is uploaded (optional)
                 }
