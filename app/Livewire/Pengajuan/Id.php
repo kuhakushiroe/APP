@@ -103,7 +103,7 @@ class Id extends Component
             $rules['upload_bpjs_kes'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
             $rules['upload_bpjs_ker'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
             $rules['upload_spdk'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
-            $rules['upload_induksi'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
+            //$rules['upload_induksi'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
         }
 
         $messages = [

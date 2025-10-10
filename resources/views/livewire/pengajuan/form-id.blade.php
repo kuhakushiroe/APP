@@ -100,7 +100,7 @@
                             <fieldset>Berkas Upload</fieldset>
                             <hr>
                         </div>
-                        <div class="col-4">
+                        {{-- <div class="col-4">
                             <div class="form-group">
                                 <label for="upload_request" class="form-label">Upload Form Request</label>
                                 <input
@@ -110,7 +110,7 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-                        </div>
+                        </div> --}}
                         @if ($jenis_pengajuan_id == 'perpanjangan')
                             <div class="col-4">
                                 <div class="form-group">
