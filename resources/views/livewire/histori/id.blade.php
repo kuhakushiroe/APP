@@ -30,7 +30,7 @@
                                         <div class="d-flex flex-wrap gap-2">
                                             @php
                                                 $dokumenLinks = [
-                                                    'upload_request' => 'Form Request',
+                                                    //'upload_request' => 'Form Request',
                                                     'upload_induksi' => 'Form Induksi',
                                                     'upload_foto' => 'Foto',
                                                     'upload_ktp' => 'KTP',
@@ -61,6 +61,17 @@
                                                     </a>
                                                 @endif
                                             @endforeach
+                                            @php
+                                                $date_id1 = date('Y-m-d', strtotime($pengajuan->tglaccept));
+                                                $date_id2 = date('Y-m-d', strtotime($pengajuan->tglaccept));
+                                            @endphp
+                                            <div class="col-md-4 text-md-start text-end">
+                                                <a class="btn btn-success btn-sm"
+                                                    href="{{ route('cetak-register-id', ['date_id1' => $date_id1, 'date_id2' => $date_id2]) }}"
+                                                    target="_blank" rel="noopener noreferrer">
+                                                    <span class="bi bi-download"></span> Form Request
+                                                </a>
+                                            </div>
                                         </div>
 
                                     </td>

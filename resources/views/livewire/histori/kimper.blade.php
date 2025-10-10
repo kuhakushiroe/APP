@@ -60,7 +60,7 @@
                                         <div class="d-flex flex-wrap gap-2">
                                             @php
                                                 $dokumenLinks = [
-                                                    'upload_request' => 'Form Request',
+                                                    //'upload_request' => 'Form Request',
                                                     'upload_foto' => 'Foto',
                                                     'upload_ktp' => 'KTP',
                                                     'upload_skd' => 'SKD',
@@ -109,8 +109,19 @@
                                             <a href="{{ route('formulir-kimper', $pengajuan->id_pengajuan) }}"
                                                 target="_blank" class="btn btn-primary btn-sm">
                                                 <span class="bi bi-file-earmark-pdf"></span>
-                                                Register
+                                                Form Request
                                             </a>
+                                            @php
+                                                $date_kimper1 = date('Y-m-d', strtotime($pengajuan->tglaccept));
+                                                $date_kimper2 = date('Y-m-d', strtotime($pengajuan->tglaccept));
+                                            @endphp
+                                            <div class="col-md-4 text-md-start text-end">
+                                                <a class="btn btn-success btn-sm"
+                                                    href="{{ route('cetak-register-kimper', ['date_kimper1' => $date_kimper1, 'date_kimper2' => $date_kimper2]) }}"
+                                                    target="_blank" rel="noopener noreferrer">
+                                                    <span class="bi bi-download"></span> Register
+                                                </a>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>

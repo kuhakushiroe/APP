@@ -195,8 +195,15 @@
                         @else
                         @endif
                     </td>
-                    <td>{{ $item->upload_ktp ?? '-' }}</td>
-                    <td>{{ $item->upload_skd ?? '-' }}</td>
+                    <td>
+                        @if (!empty($item->upload_ktp))
+                            <img src="{{ public_path('storage/' . $item->upload_ktp) }}" alt=""
+                                style="width: 3cm; height: 4cm">
+                        @else
+                            Terlampir
+                        @endif
+                    </td>
+                    <td>{{ $item->upload_skd ?? 'Terlampir' }}</td>
                 </tr>
             @empty
                 <tr>

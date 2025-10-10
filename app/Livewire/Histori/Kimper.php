@@ -14,14 +14,14 @@ class Kimper extends Component
     {
         if (auth()->user()->role === 'superadmin') {
             $pengajuankimper = DB::table('pengajuan_kimper')
-                ->select('pengajuan_kimper.*', 'karyawans.*', 'pengajuan_kimper.id as id_pengajuan')
+                ->select('pengajuan_kimper.*', 'karyawans.*', 'pengajuan_kimper.id as id_pengajuan', 'pengajuan_kimper.updated_at as tglaccept')
                 ->join('karyawans', 'karyawans.nrp', '=', 'pengajuan_kimper.nrp')
                 ->where('pengajuan_kimper.status_pengajuan', '=', '2')
                 ->whereAny(['karyawans.nik', 'karyawans.nrp', 'karyawans.nama'], 'LIKE', '%' . $this->search . '%')
                 ->paginate(10);
         } else if (auth()->user()->role === 'karyawan') {
             $pengajuankimper = DB::table('pengajuan_kimper')
-                ->select('pengajuan_kimper.*', 'karyawans.*', 'pengajuan_kimper.id as id_pengajuan')
+                ->select('pengajuan_kimper.*', 'karyawans.*', 'pengajuan_kimper.id as id_pengajuan', 'pengajuan_kimper.updated_at as tglaccept')
                 ->join('karyawans', 'karyawans.nrp', '=', 'pengajuan_kimper.nrp')
                 ->where('pengajuan_kimper.nrp', auth()->user()->username)
                 ->where('pengajuan_kimper.status_pengajuan', '=', '2')
@@ -29,7 +29,7 @@ class Kimper extends Component
                 ->paginate(10);
         } else {
             $pengajuankimper = DB::table('pengajuan_kimper')
-                ->select('pengajuan_kimper.*', 'karyawans.*', 'pengajuan_kimper.id as id_pengajuan')
+                ->select('pengajuan_kimper.*', 'karyawans.*', 'pengajuan_kimper.id as id_pengajuan', 'pengajuan_kimper.updated_at as tglaccept')
                 ->join('karyawans', 'karyawans.nrp', '=', 'pengajuan_kimper.nrp')
                 ->where('karyawans.dept', auth()->user()->subrole)
                 ->where('pengajuan_kimper.status_pengajuan', '=', '2')

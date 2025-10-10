@@ -303,15 +303,15 @@ class Kimper extends Component
         $rules['no_sim'] = 'required';
         $rules['jenis_sim'] = 'required';
         $rules['exp_sim'] = 'required';
-        $rules['upload_sim'] = 'required|mimes:jpeg,png,jpg,gif,pdf|max:10240';
-        $rules['upload_request'] = 'required|mimes:jpeg,png,jpg,gif,pdf,xls,xlsx|max:10240';
+        $rules['upload_sim'] = 'required|mimes:jpeg,png,jpg,gif|max:10240';
+        //$rules['upload_request'] = 'required|mimes:jpeg,png,jpg,gif,pdf,xls,xlsx|max:10240';
         $rules['tgl_pengajuan'] = 'required';
-        $rules['upload_sertifikat'] = 'required';
+        //$rules['upload_sertifikat'] = 'required';
         if ($this->jenis_pengajuan_kimper == 'baru') {
-            $rules['upload_id'] = 'required';
+            $rules['upload_id'] = 'required|mimes:jpeg,png,jpg,gif|max:10240';
         }
         if ($this->jenis_pengajuan_kimper == 'perpanjangan' || $this->jenis_pengajuan_kimper == 'penambahan') {
-            $rules['upload_kimper_lama'] = 'required';
+            $rules['upload_kimper_lama'] = 'required|mimes:jpeg,png,jpg,gif|max:10240';
         }
         // ✅ Jalankan validasi keseluruhan
         $this->validate($rules, $messages);
@@ -339,7 +339,7 @@ class Kimper extends Component
             Storage::disk('public')->makeDirectory($folderPath);
         }
 
-        $requestPath = $this->upload_request->storeAs($folderPath, $folderKaryawan . "-REQUEST-" . time() . ".{$this->upload_request->getClientOriginalExtension()}", 'public');
+        //$requestPath = $this->upload_request->storeAs($folderPath, $folderKaryawan . "-REQUEST-" . time() . ".{$this->upload_request->getClientOriginalExtension()}", 'public');
         //$lpoPath = $this->upload_lpo->storeAs($folderPath, $folderKaryawan . "-LPO-" . time() . ".{$this->upload_lpo->getClientOriginalExtension()}", 'public');
 
         $sertifikatPath = $this->upload_sertifikat->storeAs($folderPath, $folderKaryawan . "-SERTIFIKAT-" . time() . ".{$this->upload_sertifikat->getClientOriginalExtension()}", 'public');
@@ -357,7 +357,7 @@ class Kimper extends Component
         if ($this->jenis_pengajuan_kimper === 'baru') {
             $caridataid = ModelPengajuanID::where('nrp', $this->nrp)->orderBy('created_at', 'desc')->first();
             $pengajuan->update([
-                'upload_request' => $requestPath,
+                //'upload_request' => $requestPath,
                 'upload_foto' => $caridataid->upload_foto ?? null,
                 'upload_ktp' => $caridataid->upload_ktp ?? null,
                 'upload_skd' => $caridataid->upload_skd ?? null,
@@ -417,7 +417,7 @@ class Kimper extends Component
             $idPath = $caridatalama->upload_id ?? null;
 
             $pengajuan->update([
-                'upload_request' => $requestPath,
+                //'upload_request' => $requestPath,
                 'upload_foto' => $fotoPath,
                 'upload_ktp' => $ktpPath,
                 'upload_skd' => $skdPath,
@@ -506,7 +506,7 @@ class Kimper extends Component
         $pengajuan = ModelPengajuanKimper::findOrFail($id);
 
         $pengajuan->update([
-            'status_upload_request' => $this->status_upload_request[$id] ?? $pengajuan->status_upload_request,
+            //'status_upload_request' => $this->status_upload_request[$id] ?? $pengajuan->status_upload_request,
             'status_upload_id' => $this->status_upload_id[$id] ?? $pengajuan->status_upload_id,
             'status_upload_sim' => $this->status_upload_sim[$id] ?? $pengajuan->status_upload_sim,
             'status_upload_kimper_lama' => $this->status_upload_kimper_lama[$id] ?? $pengajuan->status_upload_kimper_lama,
@@ -518,7 +518,7 @@ class Kimper extends Component
             //'status_upload_lpo' => $this->status_upload_lpo[$id] ?? $pengajuan->status_upload_lpo,
             'status_upload_sertifikat' => $this->status_upload_sertifikat[$id] ?? $pengajuan->status_upload_sertifikat,
 
-            'catatan_upload_request' => $this->catatan_upload_request[$id] ?? null,
+            //'catatan_upload_request' => $this->catatan_upload_request[$id] ?? null,
             'catatan_upload_id' => $this->catatan_upload_id[$id] ?? $pengajuan->catatan_upload_id,
             'catatan_upload_sim' => $this->catatan_upload_sim[$id] ?? $pengajuan->catatan_upload_sim,
             'catatan_upload_kimper_lama' => $this->catatan_upload_kimper_lama[$id] ?? null,
@@ -541,7 +541,7 @@ class Kimper extends Component
 
         // Siapkan daftar status upload sesuai jenis pengajuan
         $statusList = [
-            'Request' => ['status' => $this->status_upload_request[$id] ?? $pengajuan->status_upload_request, 'catatan' => $this->catatan_upload_request[$id] ?? null],
+            //'Request' => ['status' => $this->status_upload_request[$id] ?? $pengajuan->status_upload_request, 'catatan' => $this->catatan_upload_request[$id] ?? null],
             'ID AKTIF' => ['status' => $this->status_upload_id[$id] ?? $pengajuan->status_upload_id, 'catatan' => $this->catatan_upload_id[$id] ?? null],
             'Foto' => ['status' => $this->status_upload_foto[$id] ?? $pengajuan->status_upload_foto, 'catatan' => $this->catatan_upload_foto[$id] ?? null],
             'KTP' => ['status' => $this->status_upload_ktp[$id] ?? $pengajuan->status_upload_ktp, 'catatan' => $this->catatan_upload_ktp[$id] ?? null],
@@ -817,14 +817,14 @@ class Kimper extends Component
             Storage::disk('public')->makeDirectory($folderPath);
         }
 
-        if ($pengajuan->status_upload_request == '0') {
-            $this->validate([
-                'upload_request' => 'required|file|mimes:pdf,jpg,png|max:10240'
-            ]);
-            $requestPath = $this->upload_request->storeAs($folderPath, $folderKaryawan . "-REQUEST-REVISI-" . time() . ".{$this->upload_request->getClientOriginalExtension()}", 'public');
-            $data['upload_request'] = $requestPath;
-            $data['status_upload_request'] = NULL;
-        }
+        // if ($pengajuan->status_upload_request == '0') {
+        //     $this->validate([
+        //         'upload_request' => 'required|file|mimes:pdf,jpg,png|max:10240'
+        //     ]);
+        //     $requestPath = $this->upload_request->storeAs($folderPath, $folderKaryawan . "-REQUEST-REVISI-" . time() . ".{$this->upload_request->getClientOriginalExtension()}", 'public');
+        //     $data['upload_request'] = $requestPath;
+        //     $data['status_upload_request'] = NULL;
+        // }
         if ($pengajuan->status_upload_sim == '0') {
             $this->validate([
                 'upload_sim' => 'required|file|mimes:pdf,jpg,png|max:10240'
@@ -1066,7 +1066,7 @@ class Kimper extends Component
             ->first();
         if (in_array(auth()->user()->role, ['superadmin', 'she'])) {
             $kimpers = DB::table('pengajuan_kimper')
-                ->select('pengajuan_kimper.*', 'karyawans.*', 'pengajuan_kimper.id as id_pengajuan', 'pengajuan_kimper.versatility as status_versatility')
+                ->select('pengajuan_kimper.*', 'karyawans.*', 'pengajuan_kimper.id as id_pengajuan', 'pengajuan_kimper.versatility as status_versatility', 'pengajuan_kimper.updated_at as tglaccept')
                 ->join('karyawans', 'karyawans.nrp', '=', 'pengajuan_kimper.nrp')
                 ->whereAny(['karyawans.nik', 'karyawans.nrp', 'karyawans.nama'], 'LIKE', '%' . $this->search . '%')
                 ->where('pengajuan_kimper.status_pengajuan', '!=', '2')
@@ -1074,7 +1074,7 @@ class Kimper extends Component
                 ->paginate(10);
         } else if (auth()->user()->role === 'karyawan') {
             $kimpers = DB::table('pengajuan_kimper')
-                ->select('pengajuan_kimper.*', 'karyawans.*', 'pengajuan_kimper.id as id_pengajuan', 'pengajuan_kimper.versatility as status_versatility')
+                ->select('pengajuan_kimper.*', 'karyawans.*', 'pengajuan_kimper.id as id_pengajuan', 'pengajuan_kimper.versatility as status_versatility', 'pengajuan_kimper.updated_at as tglaccept')
                 ->join('karyawans', 'karyawans.nrp', '=', 'pengajuan_kimper.nrp')
                 ->whereAny(['karyawans.nik', 'karyawans.nrp', 'karyawans.nama'], 'LIKE', '%' . $this->search . '%')
                 ->where('pengajuan_kimper.nrp', auth()->user()->username)
@@ -1083,7 +1083,7 @@ class Kimper extends Component
                 ->paginate(10);
         } else {
             $kimpers = DB::table('pengajuan_kimper')
-                ->select('pengajuan_kimper.*', 'karyawans.*', 'pengajuan_kimper.id as id_pengajuan', 'pengajuan_kimper.versatility as status_versatility')
+                ->select('pengajuan_kimper.*', 'karyawans.*', 'pengajuan_kimper.id as id_pengajuan', 'pengajuan_kimper.versatility as status_versatility', 'pengajuan_kimper.updated_at as tglaccept')
                 ->join('karyawans', 'karyawans.nrp', '=', 'pengajuan_kimper.nrp')
                 ->whereAny(['karyawans.nik', 'karyawans.nrp', 'karyawans.nama'], 'LIKE', '%' . $this->search . '%')
                 ->where('karyawans.dept', auth()->user()->subrole)
@@ -1095,7 +1095,7 @@ class Kimper extends Component
             $id = $item->id_pengajuan;
             $this->catatan_upload_id[$id] = $item->catatan_upload_id;
             $this->catatan_upload_sim[$id] = $item->catatan_upload_sim;
-            $this->catatan_upload_request[$id] = $item->catatan_upload_request;
+            //$this->catatan_upload_request[$id] = $item->catatan_upload_request;
             $this->catatan_upload_foto[$id] = $item->catatan_upload_foto;
             $this->catatan_upload_ktp[$id] = $item->catatan_upload_ktp;
             $this->catatan_upload_skd[$id] = $item->catatan_upload_skd;
@@ -1106,7 +1106,7 @@ class Kimper extends Component
 
             $this->status_upload_id[$id] = $item->status_upload_id ?? '1';
             $this->status_upload_sim[$id] = $item->status_upload_sim ?? '1';
-            $this->status_upload_request[$id] = $item->status_upload_request ?? '1';
+            //$this->status_upload_request[$id] = $item->status_upload_request ?? '1';
             $this->status_upload_foto[$id] = $item->status_upload_foto ?? '1';
             $this->status_upload_ktp[$id] = $item->status_upload_ktp ?? '1';
             $this->status_upload_skd[$id] = $item->status_upload_skd ?? '1';

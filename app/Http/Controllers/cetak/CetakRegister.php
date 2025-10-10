@@ -25,7 +25,7 @@ class CetakRegister extends Controller
                 'pengajuan_id.tgl_pengajuan',
                 'pengajuan_id.exp_id',
                 'pengajuan_id.jenis_pengajuan_id',
-                'pengajuan_id.status_pengajuan'
+                'pengajuan_id.status_pengajuan',
             )
             ->whereNotNull('pengajuan_id.exp_id')
             ->whereBetween('pengajuan_id.updated_at', [$date1 . ' 00:00:00', $date2 . ' 23:59:59'])
@@ -77,7 +77,7 @@ class CetakRegister extends Controller
             'date2' => $date2
         ])->setPaper('A4', 'landscape');
 
-        return $pdf->stream('register-id' . $date1 . 'sampai' . $date2 . '.pdf');
+        return $pdf->stream('register-kimper' . $date1 . 'sampai' . $date2 . '.pdf');
     }
     public function formulirKImper($id)
     {

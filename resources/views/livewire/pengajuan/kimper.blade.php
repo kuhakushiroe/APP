@@ -90,7 +90,7 @@
                                 <div class="row g-2">
                                     @php
                                         $files = [
-                                            'Form Request' => $pengajuan->upload_request,
+                                            //'Form Request' => $pengajuan->upload_request,
                                             'ID Aktif' => $pengajuan->upload_id,
                                             'Foto' => $pengajuan->upload_foto,
                                             'KTP' => $pengajuan->upload_ktp,
@@ -214,8 +214,8 @@
                                 </div>
                             @endif
                             @if (
-                                ($pengajuan->status_upload_request == '0' ||
-                                    $pengajuan->status_upload_id == '0' ||
+                                //$pengajuan->status_upload_request == '0' ||
+                                ($pengajuan->status_upload_id == '0' ||
                                     $pengajuan->status_upload_sim == '0' ||
                                     $pengajuan->status_upload_kimper_lama == '0' ||
                                     $pengajuan->status_upload_foto == '0' ||
@@ -229,7 +229,7 @@
                                 <div class="alert alert-warning">
                                     <form wire:submit.prevent="updateUpload({{ $pengajuan->id_pengajuan }})">
                                         <div class="row">
-                                            @if ($pengajuan->status_upload_request == '0')
+                                            {{-- @if ($pengajuan->status_upload_request == '0')
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label for="upload_request" class="form-label">Upload Form
@@ -246,7 +246,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            @endif
+                                            @endif --}}
                                             @if ($pengajuan->status_upload_id == '0')
                                                 <div class="col-md-3">
                                                     <div class="form-group">
@@ -414,7 +414,7 @@
                             @php
                                 $isIncomplete =
                                     in_array(null, [
-                                        $pengajuan->status_upload_request,
+                                        //$pengajuan->status_upload_request,
                                         $pengajuan->status_upload_id,
                                         $pengajuan->status_upload_sim,
                                         $pengajuan->status_upload_foto,
@@ -426,7 +426,6 @@
                                         $pengajuan->status_upload_sertifikat,
                                     ]) ||
                                     in_array(0, [
-                                        $pengajuan->status_upload_request,
                                         $pengajuan->status_upload_id,
                                         $pengajuan->status_upload_sim,
                                         $pengajuan->status_upload_foto,
@@ -447,8 +446,7 @@
                                 }
                             @endphp
                             @if (
-                                ($pengajuan->status_upload_request == '0' ||
-                                    $pengajuan->status_upload_id == '0' ||
+                                ($pengajuan->status_upload_id == '0' ||
                                     $pengajuan->status_upload_kimper_lama == '0' ||
                                     $pengajuan->status_upload_sim == '0' ||
                                     $pengajuan->status_upload_foto == '0' ||
@@ -475,7 +473,7 @@
                                                 <tbody>
                                                     @php
                                                         $dokumenList = [
-                                                            'upload_request' => 'Form Request',
+                                                            //'upload_request' => 'Form Request',
                                                             'upload_id' => 'ID Aktif',
                                                             'upload_sim' => 'SIM',
                                                             'upload_foto' => 'Foto',

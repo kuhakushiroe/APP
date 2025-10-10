@@ -99,7 +99,7 @@
                             </div>
                         </div>
 
-                        <div class="@if ($jenis_pengajuan_kimper === '' || $jenis_pengajuan_kimper === null) col-12 @else col-6 @endif">
+                        {{-- <div class="@if ($jenis_pengajuan_kimper === '' || $jenis_pengajuan_kimper === null) col-12 @else col-6 @endif">
                             <div class="form-group">
                                 <label for="upload_request" class="form-label">Upload Form Request</label>
                                 <input
@@ -109,10 +109,10 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-                        </div>
+                        </div> --}}
 
                         @if ($jenis_pengajuan_kimper == 'baru')
-                            <div class="col-6">
+                            <div class="col-12">
                                 <div class="form-group">
                                     <label for="upload_id" class="form-label">Upload ID Aktif</label>
                                     <input class="form-control form-control-sm @error('upload_id') is-invalid @enderror"
@@ -144,7 +144,7 @@
                             </div>
                         </div> --}}
                         @if ($jenis_pengajuan_kimper == 'perpanjangan' || $jenis_pengajuan_kimper == 'penambahan')
-                            <div class="col-6">
+                            <div class="col-12">
                                 <div class="form-group">
                                     <label for="upload_kimper_lama" class="form-label">Upload Kimper Lama</label>
                                     <input

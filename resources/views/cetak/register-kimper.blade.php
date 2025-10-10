@@ -133,9 +133,27 @@
                         @else
                         @endif
                     </td>
-                    <td>{{ $item->upload_sim }}</td>
-                    <td>{{ $item->upload_kimper_lama }}</td>
-                    <td>{{ $item->upload_id }}</td>
+                    <td>
+                        @if (!empty($item->upload_foto))
+                            <img src="{{ public_path('storage/' . $item->upload_sim) }}" alt=""
+                                style="width: 3cm; height: 4cm">
+                        @else
+                        @endif
+                    </td>
+                    <td>
+                        @if (!empty($item->upload_kimper_lama))
+                            <img src="{{ public_path('storage/' . $item->upload_kimper_lama) }}" alt=""
+                                style="width: 3cm; height: 4cm">
+                        @else
+                        @endif
+                    </td>
+                    <td>
+                        @if (!empty($item->upload_id))
+                            <img src="{{ public_path('storage/' . $item->upload_id) }}" alt=""
+                                style="width: 3cm; height: 4cm">
+                        @else
+                        @endif
+                    </td>
                 </tr>
             @empty
                 <tr>

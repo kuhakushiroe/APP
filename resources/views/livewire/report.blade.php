@@ -3,7 +3,7 @@
         <div class="col-md-12">
             <div class="card text-start">
                 <div class="card-header">
-                    <h4 class="card-title">MCU</h4>
+                    <h4 class="card-title">MCU report</h4>
                 </div>
                 <div class="card-body">
                     <form class="row g-2 align-items-center">
@@ -28,7 +28,7 @@
         <div class="col-md-12 pt-2">
             <div class="card text-start">
                 <div class="card-header">
-                    <h4 class="card-title">ID</h4>
+                    <h4 class="card-title">ID Request</h4>
                 </div>
                 <div class="card-body">
                     <form class="row g-2 align-items-center">
@@ -53,7 +53,7 @@
         <div class="col-md-12 pt-2">
             <div class="card text-start">
                 <div class="card-header">
-                    <h4 class="card-title">KIMPER</h4>
+                    <h4 class="card-title">KIMPER Register</h4>
                 </div>
                 <div class="card-body">
                     <form class="row g-2 align-items-center">
